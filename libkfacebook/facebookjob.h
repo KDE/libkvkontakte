@@ -16,25 +16,31 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef FRIENDLISTJOB_H
-#define FRIENDLISTJOB_H
+#ifndef FACEBOOKJOB_H
+#define FACEBOOKJOB_H
 
-#include "userinfo.h"
-#include "facebookjob.h"
+#include "libkfacebook_export.h"
+#include <KJob>
+#include <QStringList>
 
-/// Get a list of friends of the user
-class LIBKFACEBOOK_EXPORT FriendListJob : public FacebookJob
+class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
 {
   Q_OBJECT
   public:
-    FriendListJob( const QString &accessToken );
-    QList<UserInfoPtr> friends() const;
+    FacebookJob( const QString &path, const QString &accessToken );
+    void setFields( const QStringList &fields );
+    virtual void start();
 
   protected:
-    virtual void handleData( const QVariant& data );
-  private:
-    QList<UserInfoPtr> mFriends;
-};
+    virtual void handleData( const QVariant &data ) = 0;
 
+  private slots:
+    void getJobFinished( KJob *job );
+
+  private:
+    QString mAccessToken;
+    QString mPath;
+    QStringList mFields;
+};
 
 #endif

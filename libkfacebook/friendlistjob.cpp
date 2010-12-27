@@ -18,29 +18,11 @@
 */
 #include "friendlistjob.h"
 
-#include <qjson/parser.h>
 #include <qjson/qobjecthelper.h>
 
-#include <KIO/Job>
-#include <KDebug>
-#include <KLocale>
-
 FriendListJob::FriendListJob( const QString& accessToken )
-  : mAccessToken( accessToken )
+  : FacebookJob( "/me/friends", accessToken )
 {
-}
-
-void FriendListJob::start()
-{
-  KUrl url;
-  url.setProtocol( "https" );
-  url.setHost( "graph.facebook.com" );
-  url.setPath( "/me/friends" );
-  url.addQueryItem( "access_token", mAccessToken );
-  url.addQueryItem( "fields", "name" );
-  KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
-  connect( job, SIGNAL(result(KJob*)), this, SLOT(getJobFinished(KJob*)) );
-  job->start();
 }
 
 QList< UserInfoPtr > FriendListJob::friends() const
@@ -48,33 +30,14 @@ QList< UserInfoPtr > FriendListJob::friends() const
   return mFriends;
 }
 
-void FriendListJob::getJobFinished( KJob* job )
+void FriendListJob::handleData( const QVariant& root )
 {
-  KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
-  Q_ASSERT( transferJob );
-  if ( transferJob->error() ) {
-    setError( transferJob->error() );
-    setErrorText( transferJob->errorText() );
-    kWarning() << "Job error: " << transferJob->errorText();
-  } else {
-    kDebug() << "Got data: " << QString::fromAscii( transferJob->data().data() );
-    QJson::Parser parser;
-    bool ok;
-    const QVariant root = parser.parse( transferJob->data(), &ok );
-    if ( ok ) {
-      const QVariant data = root.toMap()["data"];
-      foreach( const QVariant &user, data.toList() ) {
-        UserInfoPtr userInfo( new UserInfo() );
-        QJson::QObjectHelper::qvariant2qobject( user.toMap(), userInfo.data() );
-        mFriends.append( userInfo );
-      }
-    } else {
-      kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
-      setError( KJob::UserDefinedError );
-      setErrorText( i18n( "Unable to parse data returned by the Facebook server." ) + "\n\n" + parser.errorString() );
-    }
+  const QVariant data = root.toMap()["data"];
+  foreach( const QVariant &user, data.toList() ) {
+    UserInfoPtr userInfo( new UserInfo() );
+    QJson::QObjectHelper::qvariant2qobject( user.toMap(), userInfo.data() );
+    mFriends.append( userInfo );
   }
-  emitResult();
 }
 
 #include "friendlistjob.moc"

@@ -5,6 +5,7 @@ set(libkfacebook_SRCS
   userinfojob.cpp
   userinfo.cpp
   friendlistjob.cpp
+  facebookjob.cpp
 )
 
 kde4_add_library(libkfacebook SHARED ${libkfacebook_SRCS})

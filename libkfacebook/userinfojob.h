@@ -20,23 +20,20 @@
 #define USERINFOJOB_H
 
 #include "userinfo.h"
-
-#include <KJob>
+#include "facebookjob.h"
 
 /// Gets information about the user that is authenticated
-class LIBKFACEBOOK_EXPORT UserInfoJob : public KJob
+class LIBKFACEBOOK_EXPORT UserInfoJob : public FacebookJob
 {
   Q_OBJECT
   public:
     UserInfoJob( const QString &accessToken );
-    virtual void start();
     UserInfoPtr userInfo() const;
 
-  private slots:
-    void getJobFinished( KJob *job );
+  protected:
+    virtual void handleData( const QVariant& data );
 
   private:
-    QString mAccessToken;
     UserInfoPtr mUserInfo;
 };
 
