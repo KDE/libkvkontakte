@@ -37,3 +37,83 @@ void UserInfo::setId(const QString& id)
 {
   mId = id;
 }
+
+QDate UserInfo::birthday() const
+{
+  return mBirthday;
+}
+
+QString UserInfo::birthdayAsString() const
+{
+  return mBirthday.toString();
+}
+
+QString UserInfo::firstName() const
+{
+  return mFirstName;
+}
+
+QString UserInfo::lastName() const
+{
+  return mLastName;
+}
+
+void UserInfo::setBirthday(const QString& birthday)
+{
+  mBirthday = QDate::fromString( birthday, "MM/dd/yyyy" );
+  if ( !mBirthday.isValid() ) {
+    // Some users don't tell the year of their birthday.
+    // TODO: Is there support for "year not set" in KABC? Now it is just 1900
+    mBirthday = QDate::fromString( birthday, "MM/dd" );
+  }
+}
+
+void UserInfo::setFirstName(const QString& firstName)
+{
+  mFirstName = firstName;
+}
+
+void UserInfo::setLastName(const QString& lastName)
+{
+  mLastName = lastName;
+}
+
+void UserInfo::setWebsite(const QString& website)
+{
+  // TODO: Facebook supports multiple websites, what to do with them?
+  mWebsite = website;
+}
+
+void UserInfo::setCity(const QString& city)
+{
+  mCity = city;
+}
+
+void UserInfo::setCountry(const QString& country)
+{
+  mCountry = country;
+}
+
+
+QString UserInfo::website() const
+{
+  return mWebsite;
+}
+
+KABC::Addressee UserInfo::toAddressee() const
+{
+  KABC::Addressee addressee;
+  addressee.setGivenName( firstName() );
+  addressee.setFamilyName( lastName() );
+  addressee.setFormattedName( name() );
+  addressee.setUrl( website() );
+  addressee.setBirthday( QDateTime( birthday() ) );
+  if ( !mCity.isEmpty() || !mCountry.isEmpty() ) {
+    KABC::Address address;
+    address.setCountry( mCountry );
+    address.setLocality( mCity );
+    addressee.insertAddress( address );
+  }
+  return addressee;
+}
+

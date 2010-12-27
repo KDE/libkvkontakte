@@ -21,23 +21,50 @@
 
 #include "libkfacebook_export.h"
 
+#include <KABC/Addressee>
 #include <QSharedPointer>
+#include <QDate>
 
 class LIBKFACEBOOK_EXPORT UserInfo : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(QString id READ id WRITE setId)
-  Q_PROPERTY(QString name READ name WRITE setName)
-
+  Q_PROPERTY(QString id WRITE setId READ id)
+  Q_PROPERTY(QString name WRITE setName READ name)
+  Q_PROPERTY(QString first_name WRITE setFirstName READ firstName)
+  Q_PROPERTY(QString last_name WRITE setLastName READ lastName)
+  Q_PROPERTY(QString birthday WRITE setBirthday READ birthdayAsString)
+  Q_PROPERTY(QString website WRITE setWebsite READ website)
+  // TODO: SO
+  // TODO: timezone
+  // TODO: Organization
   public:
     void setId( const QString &id );
     QString id() const;
     void setName( const QString &name );
     QString name() const;
+    void setFirstName( const QString &firstName );
+    QString firstName() const;
+    void setLastName( const QString &lastName );
+    QString lastName() const;
+    void setBirthday( const QString &birthday );
+    QString birthdayAsString() const;
+    QDate birthday() const;
+    void setWebsite( const QString &website );
+    QString website() const;
+    void setCity( const QString &city );
+    void setCountry( const QString &country );
+
+    KABC::Addressee toAddressee() const;
 
   private:
     QString mId;
     QString mName;
+    QString mFirstName;
+    QString mLastName;
+    QDate mBirthday;
+    QString mWebsite;
+    QString mCountry;
+    QString mCity;
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;

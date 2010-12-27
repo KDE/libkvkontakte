@@ -58,18 +58,10 @@ void SettingsDialog::setupWidgets()
 void SettingsDialog::showAuthenticationDialog()
 {
   QStringList permissions;
-  permissions << "create_event"
-              << "rsvp_event"
-              << "offline_access"
-              << "user_about_me"
-              << "friends_about_me"
-              << "user_birthday"
+  permissions << "offline_access"
               << "friends_birthday"
-              << "user_events"
-              << "user_website"
               << "friends_website"
-              << "read_friendlists"
-              << "read_mailbox";
+              << "friends_location";
   AuthenticationDialog * const authDialog = new AuthenticationDialog( this );
   authDialog->setAppId( Settings::self()->appID() );
   authDialog->setPermissions( permissions );

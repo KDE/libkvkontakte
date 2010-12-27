@@ -1,9 +1,14 @@
 Todo
 ----
 
-- Show user name under which the authentication was done in the settings
+- fetch full friend info on inital sync
+    - retrieveItem() on each friend is way too slow
 - Proper lib versioning
 - translations
+- status messages
+- progress rebort
+- implement cancel
+- offline support / cache policies / parts
 
 Bugs
 ----

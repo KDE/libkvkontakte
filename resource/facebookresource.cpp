@@ -21,6 +21,7 @@
 #include "settingsdialog.h"
 
 #include <libkfacebook/friendlistjob.h>
+#include <libkfacebook/friendjob.h>
 #include <Akonadi/EntityDisplayAttribute>
 
 using namespace Akonadi;
@@ -99,11 +100,29 @@ void FacebookResource::friendListJobFinished( KJob* job )
 
 bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByteArray> &parts )
 {
-  Q_UNUSED( item );
   Q_UNUSED( parts );
-  emit error( i18n( "Not Implemented." ) );
-  return false;
+  // FIXME: This is not called if an item changes on Facebook, even after calling retrieveItems()!
+  // TODO: Picture support
+  FriendJob * const friendJob = new FriendJob( item.remoteId(), Settings::self()->accessToken() );
+  friendJob->setProperty( "Item", QVariant::fromValue( item ) );
+  connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );
+  friendJob->start();
+  return true;
 }
+
+void FacebookResource::friendJobFinished(KJob* job)
+{
+  FriendJob * const friendJob = dynamic_cast<FriendJob*>( job );
+  Q_ASSERT( friendJob );
+  if ( friendJob->error() ) {
+    cancelTask( i18n( "Unable to get information about friend from server: %1", friendJob->errorText() ) );
+  } else {
+    Item user = friendJob->property( "Item" ).value<Item>();
+    user.setPayload<KABC::Addressee>( friendJob->friendInfo()->toAddressee() );
+    itemRetrieved( user );
+  }
+}
+
 
 void FacebookResource::retrieveCollections()
 {

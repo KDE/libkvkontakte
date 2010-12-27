@@ -16,38 +16,24 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef FACEBOOKRESOURCE_H
-#define FACEBOOKRESOURCE_H
+#ifndef FRIENDJOB_H
+#define FRIENDJOB_H
 
-#include <Akonadi/ResourceBase>
+#include "facebookjob.h"
+#include "userinfo.h"
 
-class FacebookResource : public Akonadi::ResourceBase,
-                         public Akonadi::AgentBase::Observer
+class LIBKFACEBOOK_EXPORT FriendJob : public FacebookJob
 {
   Q_OBJECT
-
   public:
-    FacebookResource( const QString &id );
-    ~FacebookResource();
-
-  public Q_SLOTS:
-    virtual void configure( WId windowId );
-
-  protected Q_SLOTS:
-    void retrieveCollections();
-    void retrieveItems( const Akonadi::Collection &col );
-    bool retrieveItem( const Akonadi::Item &item, const QSet<QByteArray> &parts );
+    FriendJob( const QString &friendId, const QString &accessToken );
+    UserInfoPtr friendInfo() const;
 
   protected:
+    virtual void handleData( const QVariant& data );
 
-    virtual void aboutToQuit();
-
-  private Q_SLOTS:
-
-    void slotAbortRequested();
-    void configurationChanged();
-    void friendListJobFinished( KJob *job );
-    void friendJobFinished( KJob *job );
+  private:
+    UserInfoPtr mFriendInfo;
 };
 
 #endif

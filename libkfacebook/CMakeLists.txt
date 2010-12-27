@@ -6,6 +6,7 @@ set(libkfacebook_SRCS
   userinfo.cpp
   friendlistjob.cpp
   facebookjob.cpp
+  friendjob.cpp
 )
 
 kde4_add_library(libkfacebook SHARED ${libkfacebook_SRCS})
@@ -18,6 +19,7 @@ target_link_libraries(libkfacebook
   ${KDE4_KDEWEBKIT_LIBS}
   ${KDE4_KIO_LIBS}
   ${QJSON_LIBRARIES}
+  ${KDEPIMLIBS_KABC_LIBS}
 )
 
 set_target_properties(libkfacebook PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
