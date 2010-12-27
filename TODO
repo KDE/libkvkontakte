@@ -23,7 +23,7 @@ Todo
 Bugs
 ----
 
+- If only the city is set in the address, KAddressbook shows a superflous comma
 - The country is not always a country, find a better field? (e.g. Ontaria instead of Canada in one case)
-- changed items not updated on the client side
 - Size of facebook webpage doesn't fit dialog and scrollbars are shown
 - No support for "year not set" in KAddressbook -> birthday appears in year 1900
