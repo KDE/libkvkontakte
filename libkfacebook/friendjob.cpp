@@ -21,7 +21,8 @@
 #include <qjson/qobjecthelper.h>
 
 FriendJob::FriendJob( const QString& friendId, const QString& accessToken )
-  : FacebookJob( friendId, accessToken )
+  : FacebookJob( '/' + friendId, accessToken),
+    mMultiQuery( false )
 {
   QStringList fields;
   fields << "first_name"
@@ -35,15 +36,32 @@ FriendJob::FriendJob( const QString& friendId, const QString& accessToken )
   setFields( fields );
 }
 
-UserInfoPtr FriendJob::friendInfo() const
+FriendJob::FriendJob( const QStringList& friendIds, const QString& accessToken )
+  : FacebookJob( accessToken ),
+    mMultiQuery( true )
+{
+  QStringList fields;
+  fields << "first_name"
+         << "last_name"
+         << "name"
+         << "birthday"
+         << "email"
+         << "website"
+         << "location"
+         << "significant_other";
+  setFields( fields );
+  setIds( friendIds );
+}
+
+QList<UserInfoPtr> FriendJob::friendInfo() const
 {
   return mFriendInfo;
 }
 
-void FriendJob::handleData( const QVariant& data )
+UserInfoPtr FriendJob::handleSingleUser(const QVariant& data)
 {
-  mFriendInfo = UserInfoPtr( new UserInfo() );
-  QJson::QObjectHelper::qvariant2qobject( data.toMap(), mFriendInfo.data() );
+  UserInfoPtr friendInfo( new UserInfo() );
+  QJson::QObjectHelper::qvariant2qobject( data.toMap(), friendInfo.data() );
   const QVariant location = data.toMap()["location"];
   if ( location.isValid() ) {
     const QVariant nameVariant = location.toMap()["name"];
@@ -51,11 +69,23 @@ void FriendJob::handleData( const QVariant& data )
     if ( !name.isEmpty() ) {
       if ( name.contains( ',' ) && name.count( ',' ) == 1 ) {
         QStringList parts = name.split( ',' );
-        mFriendInfo->setCity( parts[0].simplified() );
-        mFriendInfo->setCountry( parts[1].simplified() );
+        friendInfo->setCity( parts[0].simplified() );
+        friendInfo->setCountry( parts[1].simplified() );
       } else {
-        mFriendInfo->setCity( name );
+        friendInfo->setCity( name );
       }
+    }
+  }
+  return friendInfo;
+}
+
+void FriendJob::handleData( const QVariant& data )
+{
+  if ( !mMultiQuery ) {
+    mFriendInfo.append( handleSingleUser( data ) );
+  } else {
+    foreach( const QVariant &user, data.toMap() ) {
+      mFriendInfo.append( handleSingleUser( user ) );
     }
   }
 }

@@ -87,11 +87,30 @@ void FacebookResource::friendListJobFinished( KJob* job )
   if ( friendListJob->error() ) {
     cancelTask( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ) );
   } else {
-    QList<Item> friends;
+    QStringList friendIds;
     foreach( const UserInfoPtr &user, friendListJob->friends() ) {
+      friendIds << user->id();
+    }
+    FriendJob * const friendJob = new FriendJob( friendIds, Settings::self()->accessToken() );
+    connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(detailedFriendListJobFinished(KJob*)) );
+    friendJob->start();
+  }
+}
+
+void FacebookResource::detailedFriendListJobFinished( KJob* job )
+{
+  FriendJob * const friendJob = dynamic_cast<FriendJob*>( job );
+  Q_ASSERT( friendJob );
+
+  if ( friendJob->error() ) {
+    cancelTask( i18n( "Unable to retrieve friends' information from server: %1", friendJob->errorText() ) );
+  } else {
+    QList<Item> friends;
+    foreach( const UserInfoPtr &user, friendJob->friendInfo() ) {
       Item newUser;
       newUser.setRemoteId( user->id() );
       newUser.setMimeType( "text/directory" );
+      newUser.setPayload<KABC::Addressee>( user->toAddressee() );
       friends << newUser;
     }
     itemsRetrieved( friends );
@@ -101,7 +120,8 @@ void FacebookResource::friendListJobFinished( KJob* job )
 bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByteArray> &parts )
 {
   Q_UNUSED( parts );
-  FriendJob * const friendJob = new FriendJob( item.remoteId(), Settings::self()->accessToken() );
+  FriendJob * const friendJob = new FriendJob( item.remoteId(),
+                                               Settings::self()->accessToken() );
   friendJob->setProperty( "Item", QVariant::fromValue( item ) );
   connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );
   friendJob->start();
@@ -112,11 +132,12 @@ void FacebookResource::friendJobFinished(KJob* job)
 {
   FriendJob * const friendJob = dynamic_cast<FriendJob*>( job );
   Q_ASSERT( friendJob );
+  Q_ASSERT( friendJob->friendInfo().size() == 1 );
   if ( friendJob->error() ) {
     cancelTask( i18n( "Unable to get information about friend from server: %1", friendJob->errorText() ) );
   } else {
     Item user = friendJob->property( "Item" ).value<Item>();
-    user.setPayload<KABC::Addressee>( friendJob->friendInfo()->toAddressee() );
+    user.setPayload<KABC::Addressee>( friendJob->friendInfo().first()->toAddressee() );
     itemRetrieved( user );
   }
 }

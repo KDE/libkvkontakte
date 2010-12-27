@@ -26,14 +26,18 @@ class LIBKFACEBOOK_EXPORT FriendJob : public FacebookJob
 {
   Q_OBJECT
   public:
+    FriendJob( const QStringList &friendIds, const QString &accessToken );
     FriendJob( const QString &friendId, const QString &accessToken );
-    UserInfoPtr friendInfo() const;
+    QList<UserInfoPtr> friendInfo() const;
 
   protected:
     virtual void handleData( const QVariant& data );
 
   private:
-    UserInfoPtr mFriendInfo;
+    UserInfoPtr handleSingleUser( const QVariant& data );
+
+    QList<UserInfoPtr> mFriendInfo;
+    bool mMultiQuery;
 };
 
 #endif
