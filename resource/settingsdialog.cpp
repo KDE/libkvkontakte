@@ -109,7 +109,7 @@ void SettingsDialog::resetAuthentication()
 void SettingsDialog::loadSettings()
 {
   if ( mParentResource->name() == mParentResource->identifier() )
-    mParentResource->setName( i18n( "Faceboook Account") );
+    mParentResource->setName( i18n( "Faceboook" ) );
 
   nameEdit->setText( mParentResource->name() );
   nameEdit->setFocus();
