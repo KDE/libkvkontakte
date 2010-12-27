@@ -46,6 +46,7 @@ class FacebookResource : public Akonadi::ResourceBase,
 
     void slotAbortRequested();
     void configurationChanged();
+    void friendListJobFinished( KJob *job );
 };
 
 #endif

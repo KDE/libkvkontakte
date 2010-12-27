@@ -20,7 +20,12 @@
 #include "settings.h"
 #include "settingsdialog.h"
 
+#include <libkfacebook/friendlistjob.h>
+#include <Akonadi/EntityDisplayAttribute>
+
 using namespace Akonadi;
+
+static const char * friendsRID = "friends";
 
 FacebookResource::FacebookResource( const QString &id )
     : ResourceBase( id )
@@ -69,20 +74,49 @@ void FacebookResource::configure( WId windowId )
 void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
 {
   Q_UNUSED( collection );
-  kDebug();
+  FriendListJob * const friendListJob = new FriendListJob( Settings::self()->accessToken() );
+  connect( friendListJob, SIGNAL(result(KJob*)), this, SLOT(friendListJobFinished(KJob*)) );
+  friendListJob->start();
+}
+
+void FacebookResource::friendListJobFinished( KJob* job )
+{
+  FriendListJob * const friendListJob = dynamic_cast<FriendListJob*>( job );
+  Q_ASSERT( friendListJob );
+  if ( friendListJob->error() ) {
+    cancelTask( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ) );
+  } else {
+    QList<Item> friends;
+    foreach( const UserInfoPtr &user, friendListJob->friends() ) {
+      Item newUser;
+      newUser.setRemoteId( user->id() );
+      newUser.setMimeType( "text/directory" );
+      friends << newUser;
+    }
+    itemsRetrieved( friends );
+  }
 }
 
 bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByteArray> &parts )
 {
   Q_UNUSED( item );
   Q_UNUSED( parts );
-  kDebug();
+  emit error( i18n( "Not Implemented." ) );
   return false;
 }
 
 void FacebookResource::retrieveCollections()
 {
-  kDebug();
+  Collection friends;
+  friends.setRemoteId( friendsRID );
+  friends.setName( i18n( "Friends" ) );
+  friends.setParentCollection( Akonadi::Collection::root() );
+  friends.setContentMimeTypes( QStringList() << "text/directory" );
+  friends.setRights( Collection::ReadOnly );
+  EntityDisplayAttribute *displayAttribute = new EntityDisplayAttribute();
+  displayAttribute->setIconName( "facebookresource" );
+  friends.addAttribute( displayAttribute );
+  collectionsRetrieved( Collection::List() << friends );
 }
 
 AKONADI_RESOURCE_MAIN( FacebookResource )
