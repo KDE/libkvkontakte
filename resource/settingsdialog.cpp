@@ -19,7 +19,7 @@
 #include "settingsdialog.h"
 #include "facebookresource.h"
 #include "settings.h"
-#include "authenticationwidget.h"
+#include <libkfacebook/authenticationdialog.h>
 
 #include <KWindowSystem>
 
@@ -54,13 +54,28 @@ void SettingsDialog::setupWidgets()
 
 void SettingsDialog::showAuthenticationDialog()
 {
+  QStringList permissions;
+  permissions << "create_event"
+              << "rsvp_event"
+              << "offline_access"
+              << "user_about_me"
+              << "friends_about_me"
+              << "user_birthday"
+              << "friends_birthday"
+              << "user_events"
+              << "user_website"
+              << "friends_website"
+              << "read_friendlists"
+              << "read_mailbox";
   AuthenticationDialog *authDialog = new AuthenticationDialog( this );
+  authDialog->setAppId( Settings::self()->appID() );
+  authDialog->setPermissions( permissions );
   connect( authDialog, SIGNAL(authenticated(QString)),
            this, SLOT(authenticationDone(QString)) );
   connect( authDialog, SIGNAL(canceled()),
            this, SLOT(authenticationCanceled()) );
-  authDialog->show();
   authenticateButton->setEnabled( false );
+  authDialog->start();
 }
 
 void SettingsDialog::authenticationCanceled()

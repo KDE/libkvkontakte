@@ -19,16 +19,21 @@
 #ifndef AUTHENTICATIONWIDGET_H
 #define AUTHENTICATIONWIDGET_H
 
+#include "libkfacebook_export.h"
+
 #include <KDialog>
 
 class KWebView;
 class QProgressBar;
 
-class AuthenticationDialog : public KDialog
+class LIBKFACEBOOK_EXPORT AuthenticationDialog : public KDialog
 {
   Q_OBJECT
   public:
     AuthenticationDialog( QWidget *parent );
+    void setAppId( const QString &appId );
+    void setPermissions( const QStringList &permissions );
+    void start();
 
   signals:
     void authenticated( const QString &accessToken );
@@ -40,6 +45,8 @@ class AuthenticationDialog : public KDialog
     void showErrorDialog();
 
   private:
+    QString mAppId;
+    QStringList mPermissions;
     KWebView *mWebView;
     QProgressBar *mProgressBar;
     QString mError;

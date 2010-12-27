@@ -16,13 +16,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "authenticationwidget.h"
-
-#include "settings.h"
+#include "authenticationdialog.h"
 
 #include <KLocale>
 #include <KWebView>
 #include <KMessageBox>
+#include <KDebug>
 #include <QVBoxLayout>
 #include <QTimer>
 #include <QLabel>
@@ -43,26 +42,6 @@ AuthenticationDialog::AuthenticationDialog( QWidget* parent )
   layout->setMargin( 0 );
   setMainWidget( widget );
   mWebView = new KWebView( this );
-  QStringList permissions;
-  permissions << "create_event"
-              << "rsvp_event"
-              << "offline_access"
-              << "user_about_me"
-              << "friends_about_me"
-              << "user_birthday"
-              << "friends_birthday"
-              << "user_events"
-              << "user_website"
-              << "friends_website"
-              << "read_friendlists"
-              << "read_mailbox";
-  const QString url = QString( "https://graph.facebook.com/oauth/authorize?"
-                               "client_id=%1&"
-                               "redirect_uri=http://www.facebook.com/connect/login_success.html&"
-                               "type=user_agent&"
-                               "scope=%2" ).arg( Settings::self()->appID() )
-                                           .arg( permissions.join( "," ) );
-  mWebView->setUrl( QUrl::fromUserInput( url ) );
 
   mProgressBar = new QProgressBar( this );
   mProgressBar->setRange( 0, 100 );
@@ -78,6 +57,30 @@ AuthenticationDialog::AuthenticationDialog( QWidget* parent )
   connect( mWebView, SIGNAL(loadStarted()), progressWidget, SLOT(show()) );
   connect( mWebView, SIGNAL(loadFinished(bool)), progressWidget, SLOT(hide()) );
   connect( mWebView, SIGNAL(loadProgress(int)), mProgressBar, SLOT(setValue(int)) );
+}
+
+void AuthenticationDialog::setAppId( const QString& appId )
+{
+  mAppId = appId;
+}
+
+void AuthenticationDialog::setPermissions( const QStringList& permissions )
+{
+  mPermissions = permissions;
+}
+
+void AuthenticationDialog::start()
+{
+  Q_ASSERT( !mAppId.isEmpty() );
+
+  const QString url = QString( "https://graph.facebook.com/oauth/authorize?"
+                               "client_id=%1&"
+                               "redirect_uri=http://www.facebook.com/connect/login_success.html&"
+                               "type=user_agent&"
+                               "scope=%2" ).arg( mAppId )
+                                           .arg( mPermissions.join( "," ) );
+  mWebView->setUrl( QUrl::fromUserInput( url ) );
+  show();
 }
 
 void AuthenticationDialog::showErrorDialog()
@@ -116,4 +119,4 @@ void AuthenticationDialog::urlChanged( const QUrl& url )
 }
 
 
-#include "authenticationwidget.moc"
+#include "authenticationdialog.moc"
