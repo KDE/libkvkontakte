@@ -1,2 +1,11 @@
+Todo
+----
+
+- Show user name under which the authentication was done in the settings
 - Proper lib versioning
 - translations
+
+Bugs
+----
+
+- Size of facebook webpage doesn't fit dialog and scrollbars are shown

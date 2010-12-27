@@ -63,3 +63,19 @@ void Settings::setResourceId( const QString &resourceIdentifier )
 {
   mResourceId = resourceIdentifier;
 }
+
+QString Settings::apiKey() const
+{
+  return "9c41511dae89d7dfb4cde6be07365475";
+}
+
+QString Settings::appID() const
+{
+  return "175243235841602";
+}
+
+QString Settings::appSecret() const
+{
+  return "57b6eadd130bb9ecff7dcb701558833d";
+}
+

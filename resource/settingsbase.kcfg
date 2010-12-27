@@ -5,6 +5,10 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile/>
-  <group name="General">
+  <group name="Authentication">
+    <entry name="AccessToken" type="String">
+    </entry>
+    <entry name="UserName" type="String">
+    </entry>
   </group>
 </kcfg>

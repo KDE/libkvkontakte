@@ -20,6 +20,7 @@ set( facebookresource_SRCS
   facebookresource.cpp
   settings.cpp
   settingsdialog.cpp
+  authenticationwidget.cpp
 )
 
 install( FILES facebookresource.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents" )
@@ -45,6 +46,7 @@ target_link_libraries( akonadi_facebook_resource
   ${QT_QTGUI_LIBRARY}
   ${QT_QTDBUS_LIBRARY}
   ${KDE4_KDECORE_LIBS}
+  ${KDE4_KDEWEBKIT_LIBS}
   libkfacebook
 )
 

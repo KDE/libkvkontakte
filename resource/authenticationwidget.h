@@ -16,30 +16,35 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef AUTHENTICATIONWIDGET_H
+#define AUTHENTICATIONWIDGET_H
 
-#include "settingsbase.h"
+#include <KDialog>
 
-#include <qwindowdefs.h>
+class KWebView;
+class QProgressBar;
 
-class Settings : public SettingsBase
+class AuthenticationDialog : public KDialog
 {
   Q_OBJECT
-  Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Facebook.ExtendedSettings" )
   public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
+    AuthenticationDialog( QWidget *parent );
 
-    QString appID() const;
-    QString apiKey() const;
-    QString appSecret() const;
+  signals:
+    void authenticated( const QString &accessToken );
+    void canceled();
+
+  private slots:
+
+    void urlChanged( const QUrl &url );
+    void showErrorDialog();
 
   private:
-    WId mWinId;
-    QString mResourceId;
+    KWebView *mWebView;
+    QProgressBar *mProgressBar;
+    QString mError;
+    QString mErrorReason;
+    QString mErrorDescription;
 };
 
 #endif

@@ -19,6 +19,7 @@
 #include "settingsdialog.h"
 #include "facebookresource.h"
 #include "settings.h"
+#include "authenticationwidget.h"
 
 #include <KWindowSystem>
 
@@ -46,6 +47,48 @@ void SettingsDialog::setupWidgets()
   QWidget *page = new QWidget( this );
   setupUi( page );
   setMainWidget( page );
+  updateAuthenticationWidgets();
+  connect( resetButton, SIGNAL(clicked(bool)), this, SLOT(resetAuthentication()) );
+  connect( authenticateButton, SIGNAL(clicked(bool)), this, SLOT(showAuthenticationDialog()) );
+}
+
+void SettingsDialog::showAuthenticationDialog()
+{
+  AuthenticationDialog *authDialog = new AuthenticationDialog( this );
+  connect( authDialog, SIGNAL(authenticated(QString)),
+           this, SLOT(authenticationDone(QString)) );
+  connect( authDialog, SIGNAL(canceled()),
+           this, SLOT(authenticationCanceled()) );
+  authDialog->show();
+  authenticateButton->setEnabled( false );
+}
+
+void SettingsDialog::authenticationCanceled()
+{
+  authenticateButton->setEnabled( true );
+}
+
+void SettingsDialog::authenticationDone(const QString& accessToken)
+{
+  Settings::self()->setAccessToken( accessToken );
+  updateAuthenticationWidgets();
+}
+
+void SettingsDialog::updateAuthenticationWidgets()
+{
+  if ( Settings::self()->accessToken().isEmpty() ) {
+    authenticationStack->setCurrentIndex( 0 );
+  } else {
+    authenticationStack->setCurrentIndex( 1 );
+    //authenticationLabel->setText( i18n( "Authenticated as <b>%1</b>.", Settings::self()->userName() ) );
+    authenticationLabel->setText( i18n( "Authenticated." ) );
+  }
+}
+
+void SettingsDialog::resetAuthentication()
+{
+  Settings::self()->setAccessToken( QString() );
+  updateAuthenticationWidgets();
 }
 
 void SettingsDialog::loadSettings()

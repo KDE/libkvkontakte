@@ -33,11 +33,16 @@ class SettingsDialog : public KDialog, private Ui::SettingsDialog
 
   private slots:
     virtual void slotButtonClicked( int button );
+    void resetAuthentication();
+    void showAuthenticationDialog();
+    void authenticationDone( const QString &accessToken );
+    void authenticationCanceled();
 
   private:
     void setupWidgets();
     void loadSettings();
     void saveSettings();
+    void updateAuthenticationWidgets();
 
     FacebookResource *mParentResource;
 };
