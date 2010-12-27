@@ -16,38 +16,48 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGSDIALOG_H
-#define SETTINGSDIALOG_H
+#ifndef USERINFOJOB_H
+#define USERINFOJOB_H
 
-#include "ui_settingsdialog.h"
+#include "libkfacebook_export.h"
 
-class FacebookResource;
-class KJob;
+#include <KJob>
+#include <QSharedPointer>
 
-class SettingsDialog : public KDialog, private Ui::SettingsDialog
+class LIBKFACEBOOK_EXPORT UserInfo : public QObject
 {
   Q_OBJECT
+  Q_PROPERTY(QString id READ id WRITE setId)
+  Q_PROPERTY(QString name READ name WRITE setName)
 
   public:
-    SettingsDialog( FacebookResource *parentResource, WId parentWindow );
-    ~SettingsDialog();
-
-  private slots:
-    virtual void slotButtonClicked( int button );
-    void resetAuthentication();
-    void showAuthenticationDialog();
-    void authenticationDone( const QString &accessToken );
-    void authenticationCanceled();
-    void userInfoJobDone( KJob *job );
+    void setId( const QString &id );
+    QString id() const;
+    void setName( const QString &name );
+    QString name() const;
 
   private:
-    void setupWidgets();
-    void loadSettings();
-    void saveSettings();
-    void updateAuthenticationWidgets();
-    void updateUserName();
+    QString mId;
+    QString mName;
+};
 
-    FacebookResource *mParentResource;
+typedef QSharedPointer<UserInfo> UserInfoPtr;
+
+/// Gets information about the user that is authenticated
+class LIBKFACEBOOK_EXPORT UserInfoJob : public KJob
+{
+  Q_OBJECT
+  public:
+    UserInfoJob( const QString &accessToken );
+    virtual void start();
+    UserInfoPtr userInfo() const;
+
+  private slots:
+    void getJobFinished( KJob *job );
+
+  private:
+    QString mAccessToken;
+    UserInfoPtr mUserInfo;
 };
 
 #endif

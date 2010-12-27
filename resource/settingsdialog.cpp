@@ -19,7 +19,9 @@
 #include "settingsdialog.h"
 #include "facebookresource.h"
 #include "settings.h"
+
 #include <libkfacebook/authenticationdialog.h>
+#include <libkfacebook/userinfojob.h>
 
 #include <KWindowSystem>
 
@@ -48,6 +50,7 @@ void SettingsDialog::setupWidgets()
   setupUi( page );
   setMainWidget( page );
   updateAuthenticationWidgets();
+  updateUserName();
   connect( resetButton, SIGNAL(clicked(bool)), this, SLOT(resetAuthentication()) );
   connect( authenticateButton, SIGNAL(clicked(bool)), this, SLOT(showAuthenticationDialog()) );
 }
@@ -87,6 +90,7 @@ void SettingsDialog::authenticationDone(const QString& accessToken)
 {
   Settings::self()->setAccessToken( accessToken );
   updateAuthenticationWidgets();
+  updateUserName();
 }
 
 void SettingsDialog::updateAuthenticationWidgets()
@@ -95,15 +99,40 @@ void SettingsDialog::updateAuthenticationWidgets()
     authenticationStack->setCurrentIndex( 0 );
   } else {
     authenticationStack->setCurrentIndex( 1 );
-    //authenticationLabel->setText( i18n( "Authenticated as <b>%1</b>.", Settings::self()->userName() ) );
-    authenticationLabel->setText( i18n( "Authenticated." ) );
+    if ( Settings::self()->userName().isEmpty() ) {
+      authenticationLabel->setText( i18n( "Authenticated." ) );
+    } else {
+      authenticationLabel->setText( i18n( "Authenticated as <b>%1</b>.", Settings::self()->userName() ) );
+    }
   }
 }
 
 void SettingsDialog::resetAuthentication()
 {
   Settings::self()->setAccessToken( QString() );
+  Settings::self()->setUserName( QString() );
   updateAuthenticationWidgets();
+}
+
+void SettingsDialog::updateUserName()
+{
+  if ( Settings::self()->userName().isEmpty() && ! Settings::self()->accessToken().isEmpty() ) {
+    UserInfoJob *job = new UserInfoJob( Settings::self()->accessToken() );
+    connect( job, SIGNAL(result(KJob*)), this, SLOT(userInfoJobDone(KJob*)) );
+    job->start();
+  }
+}
+
+void SettingsDialog::userInfoJobDone( KJob* job )
+{
+  UserInfoJob *userInfoJob = dynamic_cast<UserInfoJob*>( job );
+  Q_ASSERT( userInfoJob );
+  if ( !userInfoJob->error() ) {
+    Settings::self()->setUserName( userInfoJob->userInfo()->name() );
+    updateAuthenticationWidgets();
+  } else {
+    kWarning() << "Can't get user info: " << userInfoJob->errorText();
+  }
 }
 
 void SettingsDialog::loadSettings()
