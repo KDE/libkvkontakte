@@ -28,6 +28,17 @@ FacebookJob::FacebookJob( const QString& path, const QString& accessToken )
   : mAccessToken( accessToken ),
     mPath( path )
 {
+  Q_ASSERT( mPath.startsWith( '/' ) );
+}
+
+FacebookJob::FacebookJob( const QString& accessToken )
+  : mAccessToken( accessToken )
+{
+}
+
+void FacebookJob::setIds( const QStringList& ids )
+{
+  mIds = ids;
 }
 
 void FacebookJob::setFields( const QStringList& fields )
@@ -37,14 +48,21 @@ void FacebookJob::setFields( const QStringList& fields )
 
 void FacebookJob::start()
 {
+  Q_ASSERT( mIds.isEmpty() ^ mPath.isEmpty() );
   KUrl url;
   url.setProtocol( "https" );
   url.setHost( "graph.facebook.com" );
-  url.setPath( mPath );
+  if ( !mPath.isEmpty() ) {
+    url.setPath( mPath );
+  } else {
+    url.setPath( "/" );
+    url.addQueryItem( "ids", mIds.join( "," ) );
+  }
   url.addQueryItem( "access_token", mAccessToken );
   if ( !mFields.isEmpty() ) {
     url.addQueryItem( "fields", mFields.join( "," ) );
   }
+  kDebug() << "Starting query" << url;
   KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
   connect( job, SIGNAL(result(KJob*)), this, SLOT(getJobFinished(KJob*)) );
   job->start();

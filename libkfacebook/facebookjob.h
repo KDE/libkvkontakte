@@ -28,7 +28,12 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
   Q_OBJECT
   public:
     FacebookJob( const QString &path, const QString &accessToken );
+    explicit FacebookJob( const QString &accessToken );
     void setFields( const QStringList &fields );
+
+    // If ids are set, the path is ignored.
+    void setIds( const QStringList &ids );
+
     virtual void start();
 
   protected:
@@ -43,6 +48,7 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
     QString mAccessToken;
     QString mPath;
     QStringList mFields;
+    QStringList mIds;
 };
 
 #endif
