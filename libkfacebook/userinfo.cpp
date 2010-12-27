@@ -16,28 +16,24 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef USERINFOJOB_H
-#define USERINFOJOB_H
-
 #include "userinfo.h"
 
-#include <KJob>
-
-/// Gets information about the user that is authenticated
-class LIBKFACEBOOK_EXPORT UserInfoJob : public KJob
+QString UserInfo::name() const
 {
-  Q_OBJECT
-  public:
-    UserInfoJob( const QString &accessToken );
-    virtual void start();
-    UserInfoPtr userInfo() const;
+  return mName;
+}
 
-  private slots:
-    void getJobFinished( KJob *job );
+QString UserInfo::id() const
+{
+  return mId;
+}
 
-  private:
-    QString mAccessToken;
-    UserInfoPtr mUserInfo;
-};
+void UserInfo::setName(const QString& name)
+{
+  mName = name;
+}
 
-#endif
+void UserInfo::setId(const QString& id)
+{
+  mId = id;
+}

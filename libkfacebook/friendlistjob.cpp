@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "userinfojob.h"
+#include "friendlistjob.h"
 
 #include <qjson/parser.h>
 #include <qjson/qobjecthelper.h>
@@ -25,17 +25,17 @@
 #include <KDebug>
 #include <KLocale>
 
-UserInfoJob::UserInfoJob( const QString& accessToken )
+FriendListJob::FriendListJob( const QString& accessToken )
   : mAccessToken( accessToken )
 {
 }
 
-void UserInfoJob::start()
+void FriendListJob::start()
 {
   KUrl url;
   url.setProtocol( "https" );
   url.setHost( "graph.facebook.com" );
-  url.setPath( "/me" );
+  url.setPath( "/me/friends" );
   url.addQueryItem( "access_token", mAccessToken );
   url.addQueryItem( "fields", "name" );
   KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
@@ -43,12 +43,12 @@ void UserInfoJob::start()
   job->start();
 }
 
-UserInfoPtr UserInfoJob::userInfo() const
+QList< UserInfoPtr > FriendListJob::friends() const
 {
-  return mUserInfo;
+  return mFriends;
 }
 
-void UserInfoJob::getJobFinished( KJob* job )
+void FriendListJob::getJobFinished( KJob* job )
 {
   KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
   Q_ASSERT( transferJob );
@@ -60,10 +60,14 @@ void UserInfoJob::getJobFinished( KJob* job )
     kDebug() << "Got data: " << QString::fromAscii( transferJob->data().data() );
     QJson::Parser parser;
     bool ok;
-    const QVariant userInfoVariant = parser.parse( transferJob->data(), &ok );
+    const QVariant root = parser.parse( transferJob->data(), &ok );
     if ( ok ) {
-      mUserInfo = UserInfoPtr( new UserInfo() );
-      QJson::QObjectHelper::qvariant2qobject( userInfoVariant.toMap(), mUserInfo.data() );
+      const QVariant data = root.toMap()["data"];
+      foreach( const QVariant &user, data.toList() ) {
+        UserInfoPtr userInfo( new UserInfo() );
+        QJson::QObjectHelper::qvariant2qobject( user.toMap(), userInfo.data() );
+        mFriends.append( userInfo );
+      }
     } else {
       kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
       setError( KJob::UserDefinedError );
@@ -73,5 +77,6 @@ void UserInfoJob::getJobFinished( KJob* job )
   emitResult();
 }
 
-#include "userinfojob.moc"
+#include "friendlistjob.moc"
+
 

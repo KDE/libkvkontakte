@@ -16,28 +16,30 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef USERINFOJOB_H
-#define USERINFOJOB_H
+#ifndef USERINFO_H
+#define USERINFO_H
 
-#include "userinfo.h"
+#include "libkfacebook_export.h"
 
-#include <KJob>
+#include <QSharedPointer>
 
-/// Gets information about the user that is authenticated
-class LIBKFACEBOOK_EXPORT UserInfoJob : public KJob
+class LIBKFACEBOOK_EXPORT UserInfo : public QObject
 {
   Q_OBJECT
-  public:
-    UserInfoJob( const QString &accessToken );
-    virtual void start();
-    UserInfoPtr userInfo() const;
+  Q_PROPERTY(QString id READ id WRITE setId)
+  Q_PROPERTY(QString name READ name WRITE setName)
 
-  private slots:
-    void getJobFinished( KJob *job );
+  public:
+    void setId( const QString &id );
+    QString id() const;
+    void setName( const QString &name );
+    QString name() const;
 
   private:
-    QString mAccessToken;
-    UserInfoPtr mUserInfo;
+    QString mId;
+    QString mName;
 };
+
+typedef QSharedPointer<UserInfo> UserInfoPtr;
 
 #endif

@@ -16,28 +16,28 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef USERINFOJOB_H
-#define USERINFOJOB_H
+#ifndef FRIENDLISTJOB_H
+#define FRIENDLISTJOB_H
 
+#include "libkfacebook_export.h"
 #include "userinfo.h"
-
 #include <KJob>
 
-/// Gets information about the user that is authenticated
-class LIBKFACEBOOK_EXPORT UserInfoJob : public KJob
+class LIBKFACEBOOK_EXPORT FriendListJob : public KJob
 {
   Q_OBJECT
   public:
-    UserInfoJob( const QString &accessToken );
+    FriendListJob( const QString &accessToken );
     virtual void start();
-    UserInfoPtr userInfo() const;
+    QList<UserInfoPtr> friends() const;
 
   private slots:
     void getJobFinished( KJob *job );
 
   private:
     QString mAccessToken;
-    UserInfoPtr mUserInfo;
+    QList<UserInfoPtr> mFriends;
 };
+
 
 #endif

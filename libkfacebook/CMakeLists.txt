@@ -3,6 +3,8 @@ project(libkfacebook)
 set(libkfacebook_SRCS
   authenticationdialog.cpp
   userinfojob.cpp
+  userinfo.cpp
+  friendlistjob.cpp
 )
 
 kde4_add_library(libkfacebook SHARED ${libkfacebook_SRCS})
