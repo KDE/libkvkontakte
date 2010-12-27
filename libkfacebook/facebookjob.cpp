@@ -64,14 +64,29 @@ void FacebookJob::getJobFinished( KJob* job )
     bool ok;
     const QVariant data = parser.parse( transferJob->data(), &ok );
     if ( ok ) {
-      handleData( data );
+      const QVariant error = data.toMap()["error"];
+      if ( error.isValid() ) {
+        handleError( error );
+      } else {
+        handleData( data );
+      }
     } else {
       kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
       setError( KJob::UserDefinedError );
-      setErrorText( i18n( "Unable to parse data returned by the Facebook server." ) + "\n\n" + parser.errorString() );
+      setErrorText( i18n( "Unable to parse data returned by the Facebook server: %1", parser.errorString() ) );
     }
   }
   emitResult();
 }
+
+void FacebookJob::handleError( const QVariant& data )
+{
+  const QVariantMap errorMap = data.toMap();
+  const QString type = errorMap["type"].toString();
+  const QString message = errorMap["message"].toString();
+  setError( KJob::UserDefinedError );
+  setErrorText( i18n( "The Facebook server returned an error of type <i>%1</i>: %2" , type, message ) );
+}
+
 
 #include "facebookjob.moc"

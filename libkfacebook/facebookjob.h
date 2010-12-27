@@ -38,6 +38,8 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
     void getJobFinished( KJob *job );
 
   private:
+    void handleError( const QVariant &data );
+
     QString mAccessToken;
     QString mPath;
     QStringList mFields;
