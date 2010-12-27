@@ -1,7 +1,6 @@
 project(libkfacebook)
 
 set(libkfacebook_SRCS
-  facebook.cpp
   authenticationdialog.cpp
 )
 
