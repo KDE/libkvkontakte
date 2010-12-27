@@ -101,8 +101,6 @@ void FacebookResource::friendListJobFinished( KJob* job )
 bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByteArray> &parts )
 {
   Q_UNUSED( parts );
-  // FIXME: This is not called if an item changes on Facebook, even after calling retrieveItems()!
-  // TODO: Picture support
   FriendJob * const friendJob = new FriendJob( item.remoteId(), Settings::self()->accessToken() );
   friendJob->setProperty( "Item", QVariant::fromValue( item ) );
   connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );

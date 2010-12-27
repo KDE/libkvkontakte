@@ -32,7 +32,6 @@ FriendJob::FriendJob( const QString& friendId, const QString& accessToken )
          << "website"
          << "location"
          << "significant_other";
-  // TODO: connections: picture, events, inbox, outbox, friendlists
   setFields( fields );
 }
 

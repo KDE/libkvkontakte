@@ -63,7 +63,6 @@ void UserInfo::setBirthday(const QString& birthday)
   mBirthday = QDate::fromString( birthday, "MM/dd/yyyy" );
   if ( !mBirthday.isValid() ) {
     // Some users don't tell the year of their birthday.
-    // TODO: Is there support for "year not set" in KABC? Now it is just 1900
     mBirthday = QDate::fromString( birthday, "MM/dd" );
   }
 }
