@@ -79,8 +79,12 @@ void UserInfo::setLastName(const QString& lastName)
 
 void UserInfo::setWebsite(const QString& website)
 {
-  // TODO: Facebook supports multiple websites, what to do with them?
-  mWebsite = website;
+  if ( website.contains ( "\r\n" ) ) {
+    const QStringList websites = website.split( "\r\n" );
+    mWebsite = websites[0];
+  } else {
+    mWebsite = website;
+  }
 }
 
 void UserInfo::setCity(const QString& city)
