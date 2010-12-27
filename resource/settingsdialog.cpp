@@ -46,7 +46,7 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::setupWidgets()
 {
-  QWidget *page = new QWidget( this );
+  QWidget * const page = new QWidget( this );
   setupUi( page );
   setMainWidget( page );
   updateAuthenticationWidgets();
@@ -70,7 +70,7 @@ void SettingsDialog::showAuthenticationDialog()
               << "friends_website"
               << "read_friendlists"
               << "read_mailbox";
-  AuthenticationDialog *authDialog = new AuthenticationDialog( this );
+  AuthenticationDialog * const authDialog = new AuthenticationDialog( this );
   authDialog->setAppId( Settings::self()->appID() );
   authDialog->setPermissions( permissions );
   connect( authDialog, SIGNAL(authenticated(QString)),
@@ -117,7 +117,7 @@ void SettingsDialog::resetAuthentication()
 void SettingsDialog::updateUserName()
 {
   if ( Settings::self()->userName().isEmpty() && ! Settings::self()->accessToken().isEmpty() ) {
-    UserInfoJob *job = new UserInfoJob( Settings::self()->accessToken() );
+    UserInfoJob * const job = new UserInfoJob( Settings::self()->accessToken() );
     connect( job, SIGNAL(result(KJob*)), this, SLOT(userInfoJobDone(KJob*)) );
     job->start();
   }
@@ -125,7 +125,7 @@ void SettingsDialog::updateUserName()
 
 void SettingsDialog::userInfoJobDone( KJob* job )
 {
-  UserInfoJob *userInfoJob = dynamic_cast<UserInfoJob*>( job );
+  UserInfoJob * const userInfoJob = dynamic_cast<UserInfoJob*>( job );
   Q_ASSERT( userInfoJob );
   if ( !userInfoJob->error() ) {
     Settings::self()->setUserName( userInfoJob->userInfo()->name() );

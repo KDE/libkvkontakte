@@ -58,7 +58,7 @@ void UserInfoJob::start()
   url.setPath( "/me" );
   url.addQueryItem( "access_token", mAccessToken );
   url.addQueryItem( "fields", "name" );
-  KIO::StoredTransferJob *job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
+  KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
   connect( job, SIGNAL(result(KJob*)), this, SLOT(getJobFinished(KJob*)) );
   job->start();
 }
@@ -80,7 +80,7 @@ void UserInfoJob::getJobFinished( KJob* job )
     kDebug() << "Got data: " << QString::fromAscii( transferJob->data().data() );
     QJson::Parser parser;
     bool ok;
-    QVariant userInfoVariant = parser.parse( transferJob->data(), &ok );
+    const QVariant userInfoVariant = parser.parse( transferJob->data(), &ok );
     if ( ok ) {
       mUserInfo = UserInfoPtr( new UserInfo() );
       QJson::QObjectHelper::qvariant2qobject( userInfoVariant.toMap(), mUserInfo.data() );

@@ -34,10 +34,10 @@ AuthenticationDialog::AuthenticationDialog( QWidget* parent )
   setCaption( i18n( "Authenticate with Facebook" ) );
   setAttribute( Qt::WA_DeleteOnClose, true );
 
-  QWidget *widget = new QWidget( this );
-  QVBoxLayout *layout = new QVBoxLayout( widget );
-  QWidget *progressWidget = new QWidget( this );
-  QHBoxLayout *progressLayout = new QHBoxLayout( progressWidget );
+  QWidget * const widget = new QWidget( this );
+  QVBoxLayout * const layout = new QVBoxLayout( widget );
+  QWidget * const progressWidget = new QWidget( this );
+  QHBoxLayout * const progressLayout = new QHBoxLayout( progressWidget );
   progressLayout->setMargin( 0 );
   layout->setMargin( 0 );
   setMainWidget( widget );
@@ -45,7 +45,7 @@ AuthenticationDialog::AuthenticationDialog( QWidget* parent )
 
   mProgressBar = new QProgressBar( this );
   mProgressBar->setRange( 0, 100 );
-  QLabel *progressLabel = new QLabel( i18n( "Loading Page:" ), this );
+  QLabel * const progressLabel = new QLabel( i18n( "Loading Page:" ), this );
   progressLayout->addWidget( progressLabel );
   progressLayout->addWidget( mProgressBar );
 

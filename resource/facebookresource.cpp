@@ -55,7 +55,7 @@ void FacebookResource::slotAbortRequested()
 
 void FacebookResource::configure( WId windowId )
 {
-  QPointer<SettingsDialog> settingsDialog( new SettingsDialog( this, windowId ) );
+  const QPointer<SettingsDialog> settingsDialog( new SettingsDialog( this, windowId ) );
   if ( settingsDialog->exec() == QDialog::Accepted ) {
     emit configurationDialogAccepted();
   }
