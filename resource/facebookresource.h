@@ -56,6 +56,7 @@ class FacebookResource : public Akonadi::ResourceBase,
     void fetchNextPhoto();
 
     QList<UserInfoPtr> mPendingFriends;
+    int mNumFriends;
 };
 
 #endif

@@ -77,6 +77,8 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
 {
   Q_UNUSED( collection );
   setItemStreamingEnabled( true );
+  emit status( Running, i18n( "Retrieving friends list." ) );
+  emit percent( 0 );
   FriendListJob * const friendListJob = new FriendListJob( Settings::self()->accessToken() );
   connect( friendListJob, SIGNAL(result(KJob*)), this, SLOT(friendListJobFinished(KJob*)) );
   friendListJob->start();
@@ -93,6 +95,8 @@ void FacebookResource::friendListJobFinished( KJob* job )
     foreach( const UserInfoPtr &user, friendListJob->friends() ) {
       friendIds << user->id();
     }
+    emit status( Running, i18n( "Retrieving friends' details." ) );
+    emit percent( 5 );
     FriendJob * const friendJob = new FriendJob( friendIds, Settings::self()->accessToken() );
     connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(detailedFriendListJobFinished(KJob*)) );
     friendJob->start();
@@ -108,6 +112,9 @@ void FacebookResource::detailedFriendListJobFinished( KJob* job )
     cancelTask( i18n( "Unable to retrieve friends' information from server: %1", friendJob->errorText() ) );
   } else {
     mPendingFriends = friendJob->friendInfo();
+    mNumFriends = mPendingFriends.size();
+    emit status( Running, i18n( "Retrieving friends' photos." ) );
+    emit percent( 10 );
     fetchNextPhoto();
   }
 }
@@ -116,6 +123,8 @@ void FacebookResource::fetchNextPhoto()
 {
   if (mPendingFriends.isEmpty()) {
     itemsRetrievalDone();
+    emit percent(100);
+    emit status( Idle, i18n( "Fetched %1 friends from the server.", mNumFriends ) );
   } else {
     PhotoJob * const photoJob = new PhotoJob( mPendingFriends.first()->id(), Settings::self()->accessToken() );
     connect(photoJob, SIGNAL(result(KJob*)), this, SLOT(photoJobFinished(KJob*)));
@@ -140,6 +149,10 @@ void FacebookResource::photoJobFinished(KJob* job)
     newUser.setPayload<KABC::Addressee>( addressee );
     itemsRetrieved( Akonadi::Item::List() << newUser );
     mPendingFriends.removeFirst();
+    if (!mPendingFriends.isEmpty()) {
+      const float percentageDone = (mNumFriends - mPendingFriends.size()) / (float)mPendingFriends.size() * 100.0f;
+      emit percent(10 + percentageDone * 0.9f);
+    }
     fetchNextPhoto();
   }
 }
