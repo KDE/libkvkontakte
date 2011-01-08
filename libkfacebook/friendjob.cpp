@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2010, 2011 Thomas McGuire <mcguire@kde.org>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -18,28 +18,26 @@
 */
 #include "friendjob.h"
 
+#include <KDebug>
 #include <qjson/qobjecthelper.h>
 
 FriendJob::FriendJob( const QString& friendId, const QString& accessToken )
   : FacebookJob( '/' + friendId, accessToken),
     mMultiQuery( false )
 {
-  QStringList fields;
-  fields << "first_name"
-         << "last_name"
-         << "name"
-         << "birthday"
-         << "email"
-         << "website"
-         << "location"
-         << "significant_other";
-  setFields( fields );
+  setFields( friendFields() );
 }
 
 FriendJob::FriendJob( const QStringList& friendIds, const QString& accessToken )
   : FacebookJob( accessToken ),
     mMultiQuery( true )
 {
+  setFields( friendFields() );
+  setIds( friendIds );
+}
+
+QStringList FriendJob::friendFields() const
+{
   QStringList fields;
   fields << "first_name"
          << "last_name"
@@ -48,14 +46,75 @@ FriendJob::FriendJob( const QStringList& friendIds, const QString& accessToken )
          << "email"
          << "website"
          << "location"
-         << "significant_other";
-  setFields( fields );
-  setIds( friendIds );
+         << "work";
+  return fields;
 }
+
 
 QList<UserInfoPtr> FriendJob::friendInfo() const
 {
   return mFriendInfo;
+}
+
+struct WorkInfo
+{
+  QDate start;
+  QDate end;
+  QString position;
+  QString company;
+};
+typedef QSharedPointer<WorkInfo> WorkInfoPtr;
+
+void FriendJob::handleLocation(const UserInfoPtr& userInfo, const QVariant& data)
+{
+  if ( data.isValid() ) {
+    const QVariant nameVariant = data.toMap()["name"];
+    const QString name = nameVariant.toString();
+    if ( !name.isEmpty() ) {
+      if ( name.contains( ',' ) && name.count( ',' ) == 1 ) {
+        QStringList parts = name.split( ',' );
+        userInfo->setCity( parts[0].simplified() );
+        userInfo->setCountry( parts[1].simplified() );
+      } else {
+        userInfo->setCity( name );
+      }
+    }
+  }
+}
+
+void FriendJob::handleWork(const UserInfoPtr& userInfo, const QVariant& data)
+{
+  QList<QVariant> work = data.toList();
+  QList<WorkInfoPtr> workInfos;
+  foreach(const QVariant &workInfo, work) {
+    QVariantMap workMap = workInfo.toMap();
+    QString startDate = workMap["start_date"].toString();
+    QString endDate = workMap["end_date"].toString();
+    QVariant employer = workMap["employer"];
+    QVariant position = workMap["position"];
+
+    startDate.replace("-00", "-01");
+    endDate.replace("-00", "-01");
+    WorkInfoPtr newWorkInfo( new WorkInfo );
+    newWorkInfo->start = QDate::fromString(startDate + "-01", "yyyy-MM-dd");
+    newWorkInfo->end = QDate::fromString(endDate + "-01", "yyyy-MM-dd");
+    newWorkInfo->company = employer.toMap()["name"].toString();
+    newWorkInfo->position = position.toMap()["name"].toString();
+
+    // Invalid enddate means the user works here -> set that as the current work info
+    if (!newWorkInfo->end.isValid()) {
+      userInfo->setCompany(newWorkInfo->company);
+      userInfo->setProfession(newWorkInfo->position);
+      return;
+    }
+    workInfos.append(newWorkInfo);
+  }
+
+  // Ok, non of the jobs is marked as current, simply take the first one
+  if (!workInfos.isEmpty()) {
+    userInfo->setCompany(workInfos.first()->company);
+    userInfo->setProfession(workInfos.first()->position);
+  }
 }
 
 UserInfoPtr FriendJob::handleSingleUser(const QVariant& data)
@@ -63,19 +122,9 @@ UserInfoPtr FriendJob::handleSingleUser(const QVariant& data)
   UserInfoPtr friendInfo( new UserInfo() );
   QJson::QObjectHelper::qvariant2qobject( data.toMap(), friendInfo.data() );
   const QVariant location = data.toMap()["location"];
-  if ( location.isValid() ) {
-    const QVariant nameVariant = location.toMap()["name"];
-    const QString name = nameVariant.toString();
-    if ( !name.isEmpty() ) {
-      if ( name.contains( ',' ) && name.count( ',' ) == 1 ) {
-        QStringList parts = name.split( ',' );
-        friendInfo->setCity( parts[0].simplified() );
-        friendInfo->setCountry( parts[1].simplified() );
-      } else {
-        friendInfo->setCity( name );
-      }
-    }
-  }
+  handleLocation(friendInfo, location);
+  const QVariant work = data.toMap()["work"];
+  handleWork(friendInfo, work);
   return friendInfo;
 }
 

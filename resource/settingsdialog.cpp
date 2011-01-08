@@ -61,7 +61,8 @@ void SettingsDialog::showAuthenticationDialog()
   permissions << "offline_access"
               << "friends_birthday"
               << "friends_website"
-              << "friends_location";
+              << "friends_location"
+              << "friends_work_history";
   AuthenticationDialog * const authDialog = new AuthenticationDialog( this );
   authDialog->setAppId( Settings::self()->appID() );
   authDialog->setPermissions( permissions );

@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2010, 2011 Thomas McGuire <mcguire@kde.org>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -34,7 +34,10 @@ class LIBKFACEBOOK_EXPORT FriendJob : public FacebookJob
     virtual void handleData( const QVariant& data );
 
   private:
+    QStringList friendFields() const;
     UserInfoPtr handleSingleUser( const QVariant& data );
+    void handleLocation(const UserInfoPtr &userInfo, const QVariant &data);
+    void handleWork(const UserInfoPtr &userInfo, const QVariant &data);
 
     QList<UserInfoPtr> mFriendInfo;
     bool mMultiQuery;

@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2010, 2011 Thomas McGuire <mcguire@kde.org>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -50,6 +50,10 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
     QString website() const;
     void setCity( const QString &city );
     void setCountry( const QString &country );
+    void setCompany( const QString &company );
+    QString company() const;
+    void setProfession( const QString &profession );
+    QString profession() const;
 
     KABC::Addressee toAddressee() const;
 
@@ -62,6 +66,8 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
     QString mWebsite;
     QString mCountry;
     QString mCity;
+    QString mCompany;
+    QString mProfession;
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;

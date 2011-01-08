@@ -103,6 +103,26 @@ QString UserInfo::website() const
   return mWebsite;
 }
 
+QString UserInfo::company() const
+{
+  return mCompany;
+}
+
+QString UserInfo::profession() const
+{
+  return mProfession;
+}
+
+void UserInfo::setCompany(const QString& company)
+{
+  mCompany = company;
+}
+
+void UserInfo::setProfession(const QString& profession)
+{
+  mProfession = profession;
+}
+
 KABC::Addressee UserInfo::toAddressee() const
 {
   KABC::Addressee addressee;
@@ -111,6 +131,8 @@ KABC::Addressee UserInfo::toAddressee() const
   addressee.setFormattedName( name() );
   addressee.setUrl( website() );
   addressee.setBirthday( QDateTime( birthday() ) );
+  addressee.setOrganization(mCompany);
+  addressee.insertCustom("KADDRESSBOOK", "X-Profession", mProfession);
   if ( !mCity.isEmpty() || !mCountry.isEmpty() ) {
     KABC::Address address( KABC::Address::Home );
     address.setRegion( mCountry );
