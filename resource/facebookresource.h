@@ -19,6 +19,7 @@
 #ifndef FACEBOOKRESOURCE_H
 #define FACEBOOKRESOURCE_H
 
+#include <libkfacebook/userinfo.h>
 #include <Akonadi/ResourceBase>
 
 class FacebookResource : public Akonadi::ResourceBase,
@@ -48,7 +49,13 @@ class FacebookResource : public Akonadi::ResourceBase,
     void configurationChanged();
     void friendListJobFinished( KJob *job );
     void friendJobFinished( KJob *job );
+    void photoJobFinished( KJob *job );
     void detailedFriendListJobFinished( KJob *job );
+
+  private:
+    void fetchNextPhoto();
+
+    QList<UserInfoPtr> mPendingFriends;
 };
 
 #endif
