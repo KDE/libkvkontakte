@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2010, 2011 Thomas McGuire <mcguire@kde.org>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -63,7 +63,7 @@ void UserInfo::setBirthday(const QString& birthday)
   mBirthday = QDate::fromString( birthday, "MM/dd/yyyy" );
   if ( !mBirthday.isValid() ) {
     // Some users don't tell the year of their birthday.
-    mBirthday = QDate::fromString( birthday, "MM/dd" );
+    mBirthday = QDate::fromString( birthday + "/0001", "MM/dd/yyyy" );
   }
 }
 
@@ -112,8 +112,8 @@ KABC::Addressee UserInfo::toAddressee() const
   addressee.setUrl( website() );
   addressee.setBirthday( QDateTime( birthday() ) );
   if ( !mCity.isEmpty() || !mCountry.isEmpty() ) {
-    KABC::Address address;
-    address.setCountry( mCountry );
+    KABC::Address address( KABC::Address::Home );
+    address.setRegion( mCountry );
     address.setLocality( mCity );
     addressee.insertAddress( address );
   }
