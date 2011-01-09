@@ -21,6 +21,7 @@
 
 #include <libkfacebook/userinfo.h>
 #include <Akonadi/ResourceBase>
+#include <QPointer>
 
 class FacebookResource : public Akonadi::ResourceBase,
                          public Akonadi::AgentBase::Observer
@@ -54,9 +55,14 @@ class FacebookResource : public Akonadi::ResourceBase,
 
   private:
     void fetchNextPhoto();
+    void resetState();
+    void abortWithError(const QString errorMessage);
+    void abort();
 
     QList<UserInfoPtr> mPendingFriends;
+    bool mIdle;
     int mNumFriends;
+    QPointer<KJob> mCurrentJob;
 };
 
 #endif

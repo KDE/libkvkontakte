@@ -33,6 +33,7 @@ FacebookResource::FacebookResource( const QString &id )
     : ResourceBase( id )
 {
   setNeedsNetwork( true );
+  resetState();
   Settings::self()->setResourceId( identifier() );
 
   connect( this, SIGNAL(abortRequested()),
@@ -52,12 +53,37 @@ void FacebookResource::configurationChanged()
 
 void FacebookResource::aboutToQuit()
 {
-  kDebug();
+  slotAbortRequested();
+}
+
+void FacebookResource::abort()
+{
+  resetState();
+  cancelTask();
+}
+
+void FacebookResource::abortWithError(const QString errorMessage)
+{
+  resetState();
+  cancelTask(errorMessage);
+}
+
+void FacebookResource::resetState()
+{
+  mIdle = true;
+  mNumFriends = -1;
+  mCurrentJob = 0;
 }
 
 void FacebookResource::slotAbortRequested()
 {
-  kDebug();
+  if (!mIdle) {
+    if (mCurrentJob) {
+      kDebug() << "Killing current job:" << mCurrentJob;
+      mCurrentJob->kill(KJob::Quietly);
+    }
+    abort();
+  }
 }
 
 void FacebookResource::configure( WId windowId )
@@ -76,20 +102,24 @@ void FacebookResource::configure( WId windowId )
 void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
 {
   Q_UNUSED( collection );
+  Q_ASSERT(mIdle);
+  mIdle = false;
   setItemStreamingEnabled( true );
   emit status( Running, i18n( "Retrieving friends list." ) );
   emit percent( 0 );
   FriendListJob * const friendListJob = new FriendListJob( Settings::self()->accessToken() );
+  mCurrentJob = friendListJob;
   connect( friendListJob, SIGNAL(result(KJob*)), this, SLOT(friendListJobFinished(KJob*)) );
   friendListJob->start();
 }
 
 void FacebookResource::friendListJobFinished( KJob* job )
 {
+  Q_ASSERT(!mIdle);
   FriendListJob * const friendListJob = dynamic_cast<FriendListJob*>( job );
   Q_ASSERT( friendListJob );
   if ( friendListJob->error() ) {
-    cancelTask( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ) );
+    abortWithError( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ) );
   } else {
     QStringList friendIds;
     foreach( const UserInfoPtr &user, friendListJob->friends() ) {
@@ -98,6 +128,7 @@ void FacebookResource::friendListJobFinished( KJob* job )
     emit status( Running, i18n( "Retrieving friends' details." ) );
     emit percent( 5 );
     FriendJob * const friendJob = new FriendJob( friendIds, Settings::self()->accessToken() );
+    mCurrentJob = friendJob;
     connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(detailedFriendListJobFinished(KJob*)) );
     friendJob->start();
   }
@@ -105,11 +136,12 @@ void FacebookResource::friendListJobFinished( KJob* job )
 
 void FacebookResource::detailedFriendListJobFinished( KJob* job )
 {
+  Q_ASSERT(!mIdle);
   FriendJob * const friendJob = dynamic_cast<FriendJob*>( job );
   Q_ASSERT( friendJob );
 
   if ( friendJob->error() ) {
-    cancelTask( i18n( "Unable to retrieve friends' information from server: %1", friendJob->errorText() ) );
+    abortWithError( i18n( "Unable to retrieve friends' information from server: %1", friendJob->errorText() ) );
   } else {
     mPendingFriends = friendJob->friendInfo();
     mNumFriends = mPendingFriends.size();
@@ -125,8 +157,10 @@ void FacebookResource::fetchNextPhoto()
     itemsRetrievalDone();
     emit percent(100);
     emit status( Idle, i18n( "Fetched %1 friends from the server.", mNumFriends ) );
+    resetState();
   } else {
     PhotoJob * const photoJob = new PhotoJob( mPendingFriends.first()->id(), Settings::self()->accessToken() );
+    mCurrentJob = photoJob;
     connect(photoJob, SIGNAL(result(KJob*)), this, SLOT(photoJobFinished(KJob*)));
     photoJob->start();
   }
@@ -134,11 +168,12 @@ void FacebookResource::fetchNextPhoto()
 
 void FacebookResource::photoJobFinished(KJob* job)
 {
+  Q_ASSERT(!mIdle);
   PhotoJob * const photoJob = dynamic_cast<PhotoJob*>( job );
   Q_ASSERT(photoJob);
   Q_ASSERT(!mPendingFriends.isEmpty());
   if (photoJob->error()) {
-    cancelTask( i18n( "Unable to retrieve friends' photo from server: %1", photoJob->errorText() ) );
+    abortWithError( i18n( "Unable to retrieve friends' photo from server: %1", photoJob->errorText() ) );
   } else {
     const UserInfoPtr user = mPendingFriends.first();
     KABC::Addressee addressee = user->toAddressee();
@@ -161,8 +196,10 @@ bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByte
 {
   Q_UNUSED( parts );
   // TODO: Is this ever called??
+  mIdle = false;
   FriendJob * const friendJob = new FriendJob( item.remoteId(),
                                                Settings::self()->accessToken() );
+  mCurrentJob = friendJob;
   friendJob->setProperty( "Item", QVariant::fromValue( item ) );
   connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );
   friendJob->start();
@@ -171,16 +208,18 @@ bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByte
 
 void FacebookResource::friendJobFinished(KJob* job)
 {
+  Q_ASSERT(!mIdle);
   FriendJob * const friendJob = dynamic_cast<FriendJob*>( job );
   Q_ASSERT( friendJob );
   Q_ASSERT( friendJob->friendInfo().size() == 1 );
   if ( friendJob->error() ) {
-    cancelTask( i18n( "Unable to get information about friend from server: %1", friendJob->errorText() ) );
+    abortWithError( i18n( "Unable to get information about friend from server: %1", friendJob->errorText() ) );
   } else {
     Item user = friendJob->property( "Item" ).value<Item>();
     user.setPayload<KABC::Addressee>( friendJob->friendInfo().first()->toAddressee() );
     // TODO: What about picture here?
     itemRetrieved( user );
+    resetState();
   }
 }
 

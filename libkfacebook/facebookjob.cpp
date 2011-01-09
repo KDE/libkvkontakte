@@ -29,11 +29,20 @@ FacebookJob::FacebookJob( const QString& path, const QString& accessToken )
     mPath( path )
 {
   Q_ASSERT( mPath.startsWith( '/' ) );
+  setCapabilities(KJob::Killable);
 }
 
 FacebookJob::FacebookJob( const QString& accessToken )
   : mAccessToken( accessToken )
 {
+}
+
+bool FacebookJob::doKill()
+{
+  if (mJob) {
+    mJob->kill(KJob::Quietly);
+  }
+  return KJob::doKill();
 }
 
 void FacebookJob::setIds( const QStringList& ids )
@@ -64,6 +73,7 @@ void FacebookJob::start()
   }
   kDebug() << "Starting query" << url;
   KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
+  mJob = job;
   connect( job, SIGNAL(result(KJob*)), this, SLOT(getJobFinished(KJob*)) );
   job->start();
 }
@@ -95,6 +105,7 @@ void FacebookJob::getJobFinished( KJob* job )
     }
   }
   emitResult();
+  mJob = 0;
 }
 
 void FacebookJob::handleError( const QVariant& data )

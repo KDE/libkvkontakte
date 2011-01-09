@@ -11,7 +11,6 @@ Todo
     - inbox, outbox
 - Proper lib versioning
 - translations
-- status messages
 - offline support / cache policies / parts
 
 Bugs

@@ -22,6 +22,7 @@
 #include "libkfacebook_export.h"
 #include <KJob>
 #include <QStringList>
+#include <QPointer>
 
 class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
 {
@@ -37,6 +38,7 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
     virtual void start();
 
   protected:
+    virtual bool doKill();
     virtual void handleData( const QVariant &data ) = 0;
 
   private slots:
@@ -49,6 +51,7 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
     QString mPath;
     QStringList mFields;
     QStringList mIds;
+    QPointer<KJob> mJob;
 };
 
 #endif

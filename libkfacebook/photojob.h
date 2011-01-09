@@ -22,6 +22,7 @@
 #include "libkfacebook_export.h"
 #include <KJob>
 #include <QImage>
+#include <QPointer>
 
 class LIBKFACEBOOK_EXPORT PhotoJob : public KJob
 {
@@ -31,6 +32,9 @@ class LIBKFACEBOOK_EXPORT PhotoJob : public KJob
     QImage photo() const;
     virtual void start();
 
+  protected:
+    virtual bool doKill();
+
   private slots:
     void getJobFinished( KJob *job );
 
@@ -38,6 +42,7 @@ class LIBKFACEBOOK_EXPORT PhotoJob : public KJob
     QImage mImage;
     QString mAccessToken;
     QString mUserId;
+    QPointer<KJob> mJob;
 };
 
 #endif

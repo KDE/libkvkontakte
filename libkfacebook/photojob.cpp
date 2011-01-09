@@ -24,11 +24,20 @@
 PhotoJob::PhotoJob(const QString& friendId, const QString& accessToken)
   : mAccessToken(accessToken), mUserId(friendId)
 {
+  setCapabilities(KJob::Killable);
 }
 
 QImage PhotoJob::photo() const
 {
   return mImage;
+}
+
+bool PhotoJob::doKill()
+{
+  if (mJob) {
+    mJob->kill(KJob::Quietly);
+  }
+  return KJob::doKill();
 }
 
 void PhotoJob::start()
@@ -41,6 +50,7 @@ void PhotoJob::start()
   url.addQueryItem( "type", "large" );
   kDebug() << "Starting query" << url;
   KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
+  mJob = job;
   connect( job, SIGNAL(result(KJob*)), this, SLOT(getJobFinished(KJob*)) );
   job->start();
 }
@@ -58,6 +68,7 @@ void PhotoJob::getJobFinished(KJob* job)
     mImage = QImage::fromData(transferJob->data());
   }
   emitResult();
+  mJob = 0;
 }
 
 #include "photojob.moc"
