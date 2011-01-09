@@ -123,6 +123,16 @@ void UserInfo::setProfession(const QString& profession)
   mProfession = profession;
 }
 
+QString UserInfo::partner() const
+{
+  return mPartner;
+}
+
+void UserInfo::setPartner(const QString& partner)
+{
+  mPartner = partner;
+}
+
 KABC::Addressee UserInfo::toAddressee() const
 {
   KABC::Addressee addressee;
@@ -133,6 +143,7 @@ KABC::Addressee UserInfo::toAddressee() const
   addressee.setBirthday( QDateTime( birthday() ) );
   addressee.setOrganization(mCompany);
   addressee.insertCustom("KADDRESSBOOK", "X-Profession", mProfession);
+  addressee.insertCustom("KADDRESSBOOK", "X-SpousesName", mPartner);
   if ( !mCity.isEmpty() || !mCountry.isEmpty() ) {
     KABC::Address address( KABC::Address::Home );
     address.setRegion( mCountry );

@@ -36,6 +36,7 @@ class LIBKFACEBOOK_EXPORT FriendJob : public FacebookJob
   private:
     QStringList friendFields() const;
     UserInfoPtr handleSingleUser( const QVariant& data );
+    void handlePartner(const UserInfoPtr &userInfo, const QVariant &partner);
     void handleLocation(const UserInfoPtr &userInfo, const QVariant &data);
     void handleWork(const UserInfoPtr &userInfo, const QVariant &data);
 

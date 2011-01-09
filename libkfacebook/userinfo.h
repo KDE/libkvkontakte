@@ -54,6 +54,8 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
     QString company() const;
     void setProfession( const QString &profession );
     QString profession() const;
+    void setPartner( const QString &partner );
+    QString partner() const;
 
     KABC::Addressee toAddressee() const;
 
@@ -68,6 +70,7 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
     QString mCity;
     QString mCompany;
     QString mProfession;
+    QString mPartner;
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;

@@ -46,10 +46,10 @@ QStringList FriendJob::friendFields() const
          << "email"
          << "website"
          << "location"
-         << "work";
+         << "work"
+         << "significant_other";
   return fields;
 }
-
 
 QList<UserInfoPtr> FriendJob::friendInfo() const
 {
@@ -117,6 +117,14 @@ void FriendJob::handleWork(const UserInfoPtr& userInfo, const QVariant& data)
   }
 }
 
+void FriendJob::handlePartner(const UserInfoPtr& userInfo, const QVariant& partner)
+{
+  if (partner.isValid()) {
+    const QVariantMap partnerMap = partner.toMap();
+    userInfo->setPartner(partnerMap["name"].toString());
+  }
+}
+
 UserInfoPtr FriendJob::handleSingleUser(const QVariant& data)
 {
   UserInfoPtr friendInfo( new UserInfo() );
@@ -125,6 +133,8 @@ UserInfoPtr FriendJob::handleSingleUser(const QVariant& data)
   handleLocation(friendInfo, location);
   const QVariant work = data.toMap()["work"];
   handleWork(friendInfo, work);
+  const QVariant partner = data.toMap()["significant_other"];
+  handlePartner(friendInfo, partner);
   return friendInfo;
 }
 
