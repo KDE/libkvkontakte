@@ -1,6 +1,7 @@
 Todo
 ----
 
+-add about button
 -data
   - events
     - participants
@@ -11,7 +12,6 @@ Todo
     - show in Kontact summary
       - checkbox "show in kontact summary"
   - notes
-- Proper lib versioning
 - translations
 - automatically sync every x minutes setting
   - not when offline
@@ -38,6 +38,7 @@ Roadmap
 Releasing
 ---------
 - increase soversion of libkfacebook
+- increase version number
 - add changelog
 - add git tag
 - provide tarball(?)
