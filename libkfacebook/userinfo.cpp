@@ -86,8 +86,11 @@ void UserInfo::setLastName(const QString& lastName)
 
 void UserInfo::setWebsite(const QString& website)
 {
-  if ( website.contains ( "\r\n" ) ) {
-    const QStringList websites = website.split( "\r\n" );
+  if ( website.contains( '\r' ) || website.contains( '\n' ) ) {
+    QString normalized = website;
+    normalized.replace( "\r\n", "\n" );
+    normalized.replace( "\r", "\n" );
+    const QStringList websites = normalized.split( '\n' );
     mWebsite = websites[0];
   } else {
     mWebsite = website;
