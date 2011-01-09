@@ -34,7 +34,9 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
   Q_PROPERTY(QString last_name WRITE setLastName READ lastName)
   Q_PROPERTY(QString birthday WRITE setBirthday READ birthdayAsString)
   Q_PROPERTY(QString website WRITE setWebsite READ website)
+  Q_PROPERTY(int timezone WRITE setTimezone READ timezone);
   public:
+    UserInfo();
     void setId( const QString &id );
     QString id() const;
     void setName( const QString &name );
@@ -56,6 +58,8 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
     QString profession() const;
     void setPartner( const QString &partner );
     QString partner() const;
+    void setTimezone(int timezone);
+    int timezone() const;
 
     KABC::Addressee toAddressee() const;
 
@@ -71,6 +75,7 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
     QString mCompany;
     QString mProfession;
     QString mPartner;
+    int mTimezone;
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;

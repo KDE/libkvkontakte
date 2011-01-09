@@ -2,14 +2,19 @@ Todo
 ----
 
 -data
-  - friends
-      - time zone
   - events
     - participants
+    - friend's events??
   - messages
     - inbox, outbox
+  - feeds
+    - show in Kontact summary
+      - checkbox "show in kontact summary"
+  - notes
 - Proper lib versioning
 - translations
+- automatically sync every x minutes setting
+  - not when offline
 - offline support / cache policies / parts
 
 Bugs
@@ -19,3 +24,32 @@ Bugs
 - The progress signal from ResourceBase overrides our own
 - Size of facebook webpage doesn't fit dialog and scrollbars are shown
 - No support for "year not set" in KAddressbook -> birthday appears in year 1900
+- timezone doesn't work
+
+Roadmap
+-------
+
+0.1: read-only events
+0.2: newsfeed (kontact summary plugin)
+0.3: read-only messages
+0.4: write events
+0.5: notes
+
+Releasing
+---------
+- increase soversion of libkfacebook
+- add changelog
+- add git tag
+- provide tarball(?)
+- provide opensuse build service package
+- announce
+  - announce release
+  - kde-announce mailing list
+  - kde-pim mailing list
+  - blog
+    - short intro blurb of what the akonadi resource is
+    - changelog
+    - screenshots
+    - provide link to bugtracker / facebook app page
+  - status update of facebook app
+  - like on facebook

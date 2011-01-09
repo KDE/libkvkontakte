@@ -18,6 +18,13 @@
 */
 #include "userinfo.h"
 
+static const int invalidTimezone = 42;
+
+UserInfo::UserInfo()
+  : mTimezone(invalidTimezone)
+{
+}
+
 QString UserInfo::name() const
 {
   return mName;
@@ -133,6 +140,16 @@ void UserInfo::setPartner(const QString& partner)
   mPartner = partner;
 }
 
+void UserInfo::setTimezone(int timezone)
+{
+  mTimezone = timezone;
+}
+
+int UserInfo::timezone() const
+{
+  return mTimezone;
+}
+
 KABC::Addressee UserInfo::toAddressee() const
 {
   KABC::Addressee addressee;
@@ -142,6 +159,9 @@ KABC::Addressee UserInfo::toAddressee() const
   addressee.setUrl( website() );
   addressee.setBirthday( QDateTime( birthday() ) );
   addressee.setOrganization(mCompany);
+  if (mTimezone != invalidTimezone) {
+    addressee.setTimeZone(KABC::TimeZone(mTimezone));
+  }
   addressee.insertCustom("KADDRESSBOOK", "X-Profession", mProfession);
   addressee.insertCustom("KADDRESSBOOK", "X-SpousesName", mPartner);
   if ( !mCity.isEmpty() || !mCountry.isEmpty() ) {
