@@ -1,5 +1,9 @@
 project(kfacebook)
 
+set(RESOURCE_VERSION "0.1")
+set(LIB_VERSION "1.0")
+set(LIB_SOVERSION "1")
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)

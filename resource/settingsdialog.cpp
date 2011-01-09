@@ -22,7 +22,8 @@
 
 #include <libkfacebook/authenticationdialog.h>
 #include <libkfacebook/userinfojob.h>
-
+#include <KAboutApplicationDialog>
+#include <KAboutData>
 #include <KWindowSystem>
 
 using namespace Akonadi;
@@ -32,7 +33,9 @@ SettingsDialog::SettingsDialog( FacebookResource *parentResource, WId parentWind
     mParentResource( parentResource )
 {
   KWindowSystem::setMainWindow( this, parentWindow );
-  setButtons( Ok|Cancel );
+  setButtons( Ok|Cancel|User1 );
+  setButtonText(User1, i18n("About"));
+  setButtonIcon(User1, KIcon("help-about"));
   setWindowIcon( KIcon( "facebookresource" ) );
   setWindowTitle( i18n("Facebook Settings") );
 
@@ -147,13 +150,30 @@ void SettingsDialog::saveSettings()
 void SettingsDialog::slotButtonClicked( int button )
 {
   switch( button ) {
-  case Ok:
-    saveSettings();
-    accept();
-    break;
-  case Cancel:
-    reject();
-    return;
+    case Ok:
+      saveSettings();
+      accept();
+      break;
+    case Cancel:
+      reject();
+      return;
+    case User1: {
+      KAboutData aboutData( QByteArray( "akonadi_facebook_resource" ),
+                            QByteArray(),
+                            ki18n("Akonadi Facebook Resource"),
+                            QByteArray( RESOURCE_VERSION ),
+                            ki18n( "Makes your friends, events and messages on Facebook available in KDE via Akonadi." ),
+                            KAboutData::License_GPL_V2,
+                            ki18n( "Copyright (C) 2010,2011 Thomas McGuire <mcguire@kde.org>" ) );
+      aboutData.addAuthor( ki18n( "Thomas McGuire" ), ki18n( "Maintainer" ), "mcguire@kde.org" );
+      aboutData.setProgramIconName("facebookresource");
+      aboutData.setTranslator( ki18nc("NAME OF TRANSLATORS", "Your names"),
+                            ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
+      KAboutApplicationDialog *dialog = new KAboutApplicationDialog(&aboutData, this);
+      dialog->setAttribute( Qt::WA_DeleteOnClose, true );
+      dialog->show();
+      break;
+    }
   }
 }
 

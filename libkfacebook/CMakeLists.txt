@@ -23,5 +23,5 @@ target_link_libraries(libkfacebook
   ${KDEPIMLIBS_KABC_LIBS}
 )
 
-set_target_properties(libkfacebook PROPERTIES VERSION 0.1 SOVERSION 0)
+set_target_properties(libkfacebook PROPERTIES VERSION ${LIB_VERSION} SOVERSION ${LIB_SOVERSION})
 install(TARGETS libkfacebook ${INSTALL_TARGETS_DEFAULT_ARGS})

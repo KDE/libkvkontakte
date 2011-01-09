@@ -13,6 +13,8 @@ Todo
       - checkbox "show in kontact summary"
   - notes
 - translations
+  - messages.sh
+  - poke tsgdeos so that scripty can run
 - automatically sync every x minutes setting
   - not when offline
 - offline support / cache policies / parts
@@ -37,10 +39,14 @@ Roadmap
 
 Releasing
 ---------
+- move from scratch repo to playground
+  - translators automatically cc'd
+
 - increase soversion of libkfacebook
 - increase version number
 - add changelog
 - add git tag
+- add git branch
 - provide tarball(?)
 - provide opensuse build service package
 - announce
