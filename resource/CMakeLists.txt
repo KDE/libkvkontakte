@@ -1,5 +1,8 @@
 project(facebookresource)
 
+find_package(Boost 1.34.0)
+macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" TRUE "1.34.0" "Required by Akonadi.")
+
 add_definitions(-DRESOURCE_VERSION=\\"${RESOURCE_VERSION}\\")
 if (XSLTPROC_EXECUTABLE)
   macro( kcfg_generate_dbus_interface _kcfg _name )
@@ -35,10 +38,14 @@ qt4_add_dbus_adaptor(facebookresource_SRCS
 kde4_add_executable(akonadi_facebook_resource RUN_UNINSTALLED ${facebookresource_SRCS})
 
 if (Q_WS_MAC)
-  set_target_properties(akonadi_facebook_resource PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../Info.plist.template)
+  set_target_properties(akonadi_facebook_resource PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
   set_target_properties(akonadi_facebook_resource PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.Akonadi.Facebook")
   set_target_properties(akonadi_facebook_resource PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KDE Akonadi Facebook Resource")
 endif (Q_WS_MAC)
+
+include_directories (
+  ${Boost_INCLUDE_DIR}
+)
 
 target_link_libraries( akonadi_facebook_resource
   ${KDEPIMLIBS_AKONADI_LIBS}

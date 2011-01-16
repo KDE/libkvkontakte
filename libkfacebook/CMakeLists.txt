@@ -12,6 +12,8 @@ set(libkfacebook_SRCS
 
 kde4_add_library(libkfacebook SHARED ${libkfacebook_SRCS})
 
+set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
+
 target_link_libraries(libkfacebook
   ${KDE4_KDECORE_LIBS}
   ${KDE4_KDEUI_LIBS}
