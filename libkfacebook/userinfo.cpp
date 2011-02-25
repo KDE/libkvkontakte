@@ -18,6 +18,8 @@
 */
 #include "userinfo.h"
 
+#include <KDebug>
+
 static const int invalidTimezone = 42;
 
 UserInfo::UserInfo()
@@ -176,3 +178,18 @@ KABC::Addressee UserInfo::toAddressee() const
   return addressee;
 }
 
+void UserInfo::setUpdatedTimeString( const QString& updatedTime )
+{
+  mUpdatedTime = updatedTime;
+}
+
+QString UserInfo::updatedTimeString() const
+{
+  return mUpdatedTime;
+}
+
+KDateTime UserInfo::updatedTime() const
+{
+  // Example: "2011-01-31T17:36:19+0000"
+  return KDateTime::fromString(mUpdatedTime, "%Y-%m-%dT%H:%M:%S%z");
+}

@@ -22,6 +22,7 @@
 #include "libkfacebook_export.h"
 
 #include <KABC/Addressee>
+#include <KDateTime>
 #include <QSharedPointer>
 #include <QDate>
 
@@ -35,6 +36,7 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
   Q_PROPERTY(QString birthday WRITE setBirthday READ birthdayAsString)
   Q_PROPERTY(QString website WRITE setWebsite READ website)
   Q_PROPERTY(int timezone WRITE setTimezone READ timezone);
+  Q_PROPERTY(QString updated_time WRITE setUpdatedTimeString READ updatedTimeString);
   public:
     UserInfo();
     void setId( const QString &id );
@@ -60,6 +62,9 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
     QString partner() const;
     void setTimezone(int timezone);
     int timezone() const;
+    void setUpdatedTimeString(const QString &updatedTime);
+    QString updatedTimeString() const;
+    KDateTime updatedTime() const;
 
     KABC::Addressee toAddressee() const;
 
@@ -75,6 +80,7 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
     QString mCompany;
     QString mProfession;
     QString mPartner;
+    QString mUpdatedTime;
     int mTimezone;
 };
 

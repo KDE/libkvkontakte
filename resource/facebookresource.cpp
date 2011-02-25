@@ -19,6 +19,7 @@
 #include "facebookresource.h"
 #include "settings.h"
 #include "settingsdialog.h"
+#include "timestampattribute.h"
 
 #include <libkfacebook/friendlistjob.h>
 #include <libkfacebook/friendjob.h>
@@ -182,6 +183,9 @@ void FacebookResource::photoJobFinished(KJob* job)
     newUser.setRemoteId( user->id() );
     newUser.setMimeType( "text/directory" );
     newUser.setPayload<KABC::Addressee>( addressee );
+    TimeStampAttribute * const timeStampAttribute = new TimeStampAttribute();
+    timeStampAttribute->setTimeStamp(user->updatedTime());
+    newUser.addAttribute(timeStampAttribute);
     itemsRetrieved( Akonadi::Item::List() << newUser );
     mPendingFriends.removeFirst();
     if (!mPendingFriends.isEmpty()) {

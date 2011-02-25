@@ -24,6 +24,7 @@ set( facebookresource_SRCS
   facebookresource.cpp
   settings.cpp
   settingsdialog.cpp
+  timestampattribute.cpp
 )
 
 install( FILES facebookresource.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents" )
