@@ -135,7 +135,7 @@ void SettingsDialog::userInfoJobDone( KJob* job )
 void SettingsDialog::loadSettings()
 {
   if ( mParentResource->name() == mParentResource->identifier() )
-    mParentResource->setName( i18n( "Faceboook" ) );
+    mParentResource->setName( i18n( "Facebook" ) );
 
   nameEdit->setText( mParentResource->name() );
   nameEdit->setFocus();
