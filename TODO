@@ -9,6 +9,8 @@ Todo
     - participants
     - friend's events??
     - add checkboxes "show declined events" "show maybe events"
+    - add "show event in facebook" link
+    - add attendance label + "change attendence" link
     - rsvp, participants management
       - requires resource-specific incidence editor plugin (talk to openchange guys, they also need that)
   - messages
@@ -38,12 +40,10 @@ Todo
   - not when offline
 - offline support / cache policies / parts
 - faster friend sync
-  - use itemretrievedincremental
-  - use timestamp to detect changed items
-  - compare remoteid with previous list to get added/removed items
   - run photo jobs in parallel
 - button "add kopete account"
 - make libkfacebook static
+- 0.1: Remove "Akonadi" from user-visible terms, especially from FB identifier
 - plasma silk wizard (talk to sebas)
 - set proper resourcec status when not authenticated
 - push notifications
@@ -51,16 +51,31 @@ Todo
 - add option "don't remove deleted data"
 	-> e.g. when the user adjusts privacy settings, don't locally
            delete the birthday
+- 0.1 Better authentication
+    - when authentication fails because access token is rejected, show more user-friendly error message,
+      including instructions on how to fix that.
+    - pop up on first sync if the access token is empty, with "don't ask again" option
+- own kpart for messages, invite replies and so on (check what facebook mobile can do!)
+- 0.1 add config setting for lower date limit
 
 Bugs
 ----
 
 - If only the city is set in the address, KAddressbook shows a superflous comma
+- creates tons of debug areas in kdebugdialog. akonadi_facebook_resource_1 .. 2392
+- 0.1 Webpage embedding stuff does not work when not already logged into Facebook
 - 0.1 The progress signal from ResourceBase overrides our own
 - Size of facebook webpage doesn't fit dialog and scrollbars are shown
 - 0.1 No support for "year not set" in KAddressbook -> birthday appears in year 1900
   - add birthday year patch to repo should maintainer decline it
 - timezone doesn't work
+
+Refactor
+--------
+
+- refactor facebookresource.cpp. It is getting big, and the function names are friends-only
+- common base class for eventjob and friendjob
+
 
 Roadmap
 -------
