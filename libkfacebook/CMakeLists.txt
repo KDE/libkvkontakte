@@ -21,7 +21,7 @@ target_link_libraries(libkfacebook
   ${QT_QTWEBKIT_LIBRARY}
   ${KDE4_KDEWEBKIT_LIBS}
   ${KDE4_KIO_LIBS}
-  ${QJSON_LIBRARY}
+  ${QJSON_LIBRARIES}
   ${KDEPIMLIBS_KABC_LIBS}
 )
 
