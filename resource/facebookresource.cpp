@@ -34,6 +34,7 @@ FacebookResource::FacebookResource( const QString &id )
     : ResourceBase( id )
 {
   setNeedsNetwork( true );
+  setAutomaticProgressReporting( false );
   resetState();
   Settings::self()->setResourceId( identifier() );
 
@@ -189,7 +190,8 @@ void FacebookResource::photoJobFinished(KJob* job)
     itemsRetrieved( Akonadi::Item::List() << newUser );
     mPendingFriends.removeFirst();
     if (!mPendingFriends.isEmpty()) {
-      const float percentageDone = (mNumFriends - mPendingFriends.size()) / (float)mPendingFriends.size() * 100.0f;
+      const int alreadyDownloadedFriends = mNumFriends - mPendingFriends.size();
+      const float percentageDone = alreadyDownloadedFriends / (float)mNumFriends * 100.0f;
       emit percent(10 + percentageDone * 0.9f);
     }
     fetchNextPhoto();
