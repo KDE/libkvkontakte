@@ -79,6 +79,7 @@ void AuthenticationDialog::start()
                                "type=user_agent&"
                                "scope=%2" ).arg( mAppId )
                                            .arg( mPermissions.join( "," ) );
+  kDebug() << "Showing" << url;
   mWebView->setUrl( QUrl::fromUserInput( url ) );
   show();
 }
