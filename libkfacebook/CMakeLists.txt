@@ -14,6 +14,8 @@ kde4_add_library(libkfacebook SHARED ${libkfacebook_SRCS})
 
 set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
+# Yes, QJSON_LIBRARIES and QJSON_LIBRARY are both needed, as otherwise it will break either
+# on Linux or on Mac.
 target_link_libraries(libkfacebook
   ${KDE4_KDECORE_LIBS}
   ${KDE4_KDEUI_LIBS}
@@ -22,6 +24,7 @@ target_link_libraries(libkfacebook
   ${KDE4_KDEWEBKIT_LIBS}
   ${KDE4_KIO_LIBS}
   ${QJSON_LIBRARIES}
+  ${QJSON_LIBRARY}
   ${KDEPIMLIBS_KABC_LIBS}
 )
 
