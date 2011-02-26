@@ -85,3 +85,13 @@ QString EventInfo::startTimeString() const
 {
   return mStartTime;
 }
+
+QString EventInfo::description() const
+{
+  return mDescription;
+}
+
+void EventInfo::setDescription( const QString& description )
+{
+  mDescription = description;
+}
