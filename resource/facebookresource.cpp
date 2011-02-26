@@ -156,6 +156,7 @@ void FacebookResource::friendListJobFinished( KJob* job )
 
     // Figure out which items are new or changed
     foreach( const UserInfoPtr &user, friendListJob->friends() ) {
+#if 0 // Bah, Facebook's timestamp doesn't seem to get updated when a user's profile changes :(
       const KDateTime stampOfExisting = mExistingFriends.value( user->id(), KDateTime() );
       if ( !stampOfExisting.isValid() ) {
         kDebug() << "Friend" << user->id() << user->name() << "is new!";
@@ -166,6 +167,9 @@ void FacebookResource::friendListJobFinished( KJob* job )
       } else {
         //kDebug() << "Friend" << user->id() << user->name() << "is old.";
       }
+#else
+      mNewOrChangedFriends.append( user );
+#endif
     }
 
     // Delete items that are in the Akonadi DB but no on FB
