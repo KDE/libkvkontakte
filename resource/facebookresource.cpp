@@ -269,7 +269,7 @@ void FacebookResource::photoJobFinished(KJob* job)
 
     // Create Item
     KABC::Addressee addressee = user->toAddressee();
-    addressee.setPhoto(KABC::Picture(photoJob->photo()));
+    addressee.setPhoto( KABC::Picture( photoJob->photo() ) );
     Item newUser;
     newUser.setRemoteId( user->id() );
     newUser.setMimeType( "text/directory" );
