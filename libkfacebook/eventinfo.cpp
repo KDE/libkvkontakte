@@ -20,10 +20,34 @@
 
 #include "util.h"
 
-KCalCore::Event EventInfo::asEvent() const
+#include <KDebug>
+
+KCalCore::Event::Ptr EventInfo::asEvent() const
 {
-  return KCalCore::Event();
-  // TODO
+  KCalCore::Event::Ptr event( new KCalCore::Event );
+  event->setSummary( name() );
+  event->setDescription( description() );
+  event->setLocation( location() );
+  event->setHasEndDate( endTime().isValid() );
+  if ( startTime().isValid() ) {
+    event->setDtStart( startTime() );
+  }
+  if ( endTime().isValid() ) {
+    event->setDtEnd( endTime() );
+  } else {
+    // Urgh...
+    kWarning() << "Event without end time: " << event->summary() << event->dtStart();
+    kWarning() << "Using a duration of 2 hours";
+    event->setDuration( KCalCore::Duration( 2 * 60 * 60, KCalCore::Duration::Seconds ) );
+  }
+
+  // TODO: Organizer
+  //       Attendees (accepted, declined)
+  //       Public/Private -> freebusy!
+  //       venue: add to location?
+  //       picture?
+
+  return event;
 }
 
 KDateTime EventInfo::endTime() const

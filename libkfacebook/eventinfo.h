@@ -55,7 +55,7 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     void setDescription( const QString &description );
     QString description() const;
 
-    KCalCore::Event asEvent() const;
+    KCalCore::Event::Ptr asEvent() const;
 
   private:
     QString mName;
