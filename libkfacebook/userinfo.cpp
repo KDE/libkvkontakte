@@ -18,6 +18,8 @@
 */
 #include "userinfo.h"
 
+#include "util.h"
+
 #include <KDebug>
 
 static const int invalidTimezone = 42;
@@ -190,6 +192,5 @@ QString UserInfo::updatedTimeString() const
 
 KDateTime UserInfo::updatedTime() const
 {
-  // Example: "2011-01-31T17:36:19+0000"
-  return KDateTime::fromString(mUpdatedTime, "%Y-%m-%dT%H:%M:%S%z");
+  return facebookTimeToKDateTime( mUpdatedTime );
 }

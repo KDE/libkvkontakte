@@ -24,6 +24,8 @@
 #include <QStringList>
 #include <QPointer>
 
+typedef QPair<QString, QString> QueryItem;
+
 class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
 {
   Q_OBJECT
@@ -34,6 +36,8 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
 
     // If ids are set, the path is ignored.
     void setIds( const QStringList &ids );
+
+    void addQueryItem( const QString &key, const QString &value );
 
     virtual void start();
 
@@ -51,6 +55,7 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
     QString mPath;
     QStringList mFields;
     QStringList mIds;
+    QList<QueryItem> mQueryItems;
     QPointer<KJob> mJob;
 };
 

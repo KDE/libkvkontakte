@@ -37,6 +37,14 @@ FacebookJob::FacebookJob( const QString& accessToken )
 {
 }
 
+void FacebookJob::addQueryItem( const QString& key, const QString& value )
+{
+  QueryItem item;
+  item.first = key;
+  item.second = value;
+  mQueryItems.append( item );
+}
+
 bool FacebookJob::doKill()
 {
   if (mJob) {
@@ -70,6 +78,11 @@ void FacebookJob::start()
   url.addQueryItem( "access_token", mAccessToken );
   if ( !mFields.isEmpty() ) {
     url.addQueryItem( "fields", mFields.join( "," ) );
+  }
+  if ( !mQueryItems.isEmpty() ) {
+    foreach( const QueryItem &item, mQueryItems ) {
+      url.addQueryItem( item.first, item.second );
+    }
   }
   kDebug() << "Starting query" << url;
   KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );

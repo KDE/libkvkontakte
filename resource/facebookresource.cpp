@@ -24,6 +24,7 @@
 #include <libkfacebook/friendlistjob.h>
 #include <libkfacebook/friendjob.h>
 #include <libkfacebook/photojob.h>
+#include <libkfacebook/eventslistjob.h>
 #include <Akonadi/AttributeFactory>
 #include <Akonadi/EntityDisplayAttribute>
 #include <Akonadi/ItemFetchJob>
