@@ -167,6 +167,7 @@ void SettingsDialog::slotButtonClicked( int button )
                             KAboutData::License_GPL_V2,
                             ki18n( "Copyright (C) 2010,2011 Thomas McGuire <mcguire@kde.org>" ) );
       aboutData.addAuthor( ki18n( "Thomas McGuire" ), ki18n( "Maintainer" ), "mcguire@kde.org" );
+      aboutData.addAuthor( ki18n( "Till Adam" ), ki18n( "MacOS Support" ), "adam@kde.org" );
       aboutData.setProgramIconName("facebookresource");
       aboutData.setTranslator( ki18nc("NAME OF TRANSLATORS", "Your names"),
                             ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
