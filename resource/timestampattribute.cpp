@@ -27,7 +27,8 @@ Akonadi::Attribute* TimeStampAttribute::clone() const
 
 void TimeStampAttribute::deserialize(const QByteArray& data)
 {
-  mTimeStamp.fromString(QString::fromUtf8(data.data(), data.size()));
+  const QString timeStamp = QString::fromUtf8( data );
+  mTimeStamp = KDateTime::fromString( timeStamp );
 }
 
 QByteArray TimeStampAttribute::serialized() const
