@@ -24,6 +24,7 @@
 #include <libkfacebook/friendlistjob.h>
 #include <libkfacebook/friendjob.h>
 #include <libkfacebook/photojob.h>
+#include <Akonadi/AttributeFactory>
 #include <Akonadi/EntityDisplayAttribute>
 #include <Akonadi/ItemFetchJob>
 #include <Akonadi/ItemFetchScope>
@@ -35,6 +36,7 @@ static const char * friendsRID = "friends";
 FacebookResource::FacebookResource( const QString &id )
     : ResourceBase( id )
 {
+  AttributeFactory::registerAttribute<TimeStampAttribute>();
   setNeedsNetwork( true );
   setAutomaticProgressReporting( false );
   setObjectName( QLatin1String( "FacebookResource" ) );
