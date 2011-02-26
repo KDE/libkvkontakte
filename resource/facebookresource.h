@@ -52,6 +52,7 @@ class FacebookResource : public Akonadi::ResourceBase,
     void friendJobFinished( KJob *job );
     void photoJobFinished( KJob *job );
     void detailedFriendListJobFinished( KJob *job );
+    void initialItemFetchFinished( KJob *job );
 
   private:
     void fetchNextPhoto();
@@ -60,6 +61,7 @@ class FacebookResource : public Akonadi::ResourceBase,
     void abort();
 
     QList<UserInfoPtr> mPendingFriends;
+    QMap<QString,KDateTime> mExistingFriends;
     bool mIdle;
     int mNumFriends;
     QPointer<KJob> mCurrentJob;

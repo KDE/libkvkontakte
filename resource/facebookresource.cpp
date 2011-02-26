@@ -25,6 +25,8 @@
 #include <libkfacebook/friendjob.h>
 #include <libkfacebook/photojob.h>
 #include <Akonadi/EntityDisplayAttribute>
+#include <Akonadi/ItemFetchJob>
+#include <Akonadi/ItemFetchScope>
 
 using namespace Akonadi;
 
@@ -35,6 +37,7 @@ FacebookResource::FacebookResource( const QString &id )
 {
   setNeedsNetwork( true );
   setAutomaticProgressReporting( false );
+  setObjectName( QLatin1String( "FacebookResource" ) );
   resetState();
   Settings::self()->setResourceId( identifier() );
 
@@ -106,13 +109,32 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
   Q_UNUSED( collection );
   Q_ASSERT(mIdle);
   mIdle = false;
-  setItemStreamingEnabled( true );
-  emit status( Running, i18n( "Retrieving friends list." ) );
+  emit status( Running, i18n( "Preparing sync of friends list." ) );
   emit percent( 0 );
-  FriendListJob * const friendListJob = new FriendListJob( Settings::self()->accessToken() );
-  mCurrentJob = friendListJob;
-  connect( friendListJob, SIGNAL(result(KJob*)), this, SLOT(friendListJobFinished(KJob*)) );
-  friendListJob->start();
+  ItemFetchJob * const fetchJob = new ItemFetchJob( collection );
+  fetchJob->setObjectName( QLatin1String( "InitialFetchJob" ) );
+  fetchJob->fetchScope().fetchAttribute<TimeStampAttribute>();
+  fetchJob->fetchScope().fetchFullPayload( false );
+  mCurrentJob = fetchJob;
+  connect( fetchJob, SIGNAL(result(KJob*)), this, SLOT(initialItemFetchFinished(KJob*)) );
+}
+
+void FacebookResource::initialItemFetchFinished( KJob* job )
+{
+  Q_ASSERT(!mIdle);
+  ItemFetchJob * const itemFetchJob = dynamic_cast<ItemFetchJob*>( job );
+  Q_ASSERT( itemFetchJob );
+  if ( itemFetchJob->error() ) {
+    abortWithError( i18n( "Unable to get list of existing friends from the Akonadi server: %1", itemFetchJob->errorString() ) );
+  } else {
+    setItemStreamingEnabled( true );
+    FriendListJob * const friendListJob = new FriendListJob( Settings::self()->accessToken() );
+    mCurrentJob = friendListJob;
+    connect( friendListJob, SIGNAL(result(KJob*)), this, SLOT(friendListJobFinished(KJob*)) );
+    emit status( Running, i18n( "Retrieving friends list." ) );
+    emit percent( 2 );
+    friendListJob->start();
+  }
 }
 
 void FacebookResource::friendListJobFinished( KJob* job )
