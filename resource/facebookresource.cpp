@@ -80,6 +80,8 @@ void FacebookResource::resetState()
   mIdle = true;
   mNumFriends = -1;
   mCurrentJob = 0;
+  mExistingFriends.clear();
+  mNewOrChangedFriends.clear();
 }
 
 void FacebookResource::slotAbortRequested()
@@ -129,6 +131,10 @@ void FacebookResource::initialItemFetchFinished( KJob* job )
   if ( itemFetchJob->error() ) {
     abortWithError( i18n( "Unable to get list of existing friends from the Akonadi server: %1", itemFetchJob->errorString() ) );
   } else {
+    foreach( const Item &item, itemFetchJob->items() ) {
+      mExistingFriends.insert( item.remoteId(), item.attribute<TimeStampAttribute>()->timeStamp() );
+    }
+
     setItemStreamingEnabled( true );
     FriendListJob * const friendListJob = new FriendListJob( Settings::self()->accessToken() );
     mCurrentJob = friendListJob;
@@ -147,17 +153,60 @@ void FacebookResource::friendListJobFinished( KJob* job )
   if ( friendListJob->error() ) {
     abortWithError( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ) );
   } else {
-    QStringList friendIds;
+
+    // Figure out which items are new or changed
     foreach( const UserInfoPtr &user, friendListJob->friends() ) {
-      friendIds << user->id();
+      const KDateTime stampOfExisting = mExistingFriends.value( user->id(), KDateTime() );
+      if ( !stampOfExisting.isValid() ) {
+        kDebug() << "Friend" << user->id() << user->name() << "is new!";
+        mNewOrChangedFriends.append( user );
+      } else if ( user->updatedTime() > stampOfExisting ) {
+        kDebug() << "Friend" << user->id() << user->name() << "is updated!";
+        mNewOrChangedFriends.append( user );
+      } else {
+        //kDebug() << "Friend" << user->id() << user->name() << "is old.";
+      }
     }
-    emit status( Running, i18n( "Retrieving friends' details." ) );
-    emit percent( 5 );
-    FriendJob * const friendJob = new FriendJob( friendIds, Settings::self()->accessToken() );
-    mCurrentJob = friendJob;
-    connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(detailedFriendListJobFinished(KJob*)) );
-    friendJob->start();
+
+    // Delete items that are in the Akonadi DB but no on FB
+    Item::List removedItems;
+    foreach( const QString &friendId, mExistingFriends.keys() ) {
+      bool found = false;
+      foreach( const UserInfoPtr &user, friendListJob->friends() ) {
+        if ( user->id() == friendId ) {
+          found = true;
+          break;
+        }
+      }
+      if ( !found ) {
+        kDebug() << friendId << "is no longer your friend :(";
+        Item removedItem;
+        removedItem.setRemoteId( friendId );
+        removedItems.append( removedItem );
+      }
+    }
+    itemsRetrievedIncremental( Item::List(), removedItems );
+
+    if ( mNewOrChangedFriends.isEmpty() ) {
+      finish();
+    } else {
+      emit status( Running, i18n( "Retrieving friends' details." ) );
+      emit percent( 5 );
+      fetchNewOrChangedFriends();
+    }
   }
+}
+
+void FacebookResource::fetchNewOrChangedFriends()
+{
+  QStringList mewOrChangedFriendIds;
+  foreach( const UserInfoPtr &user, mNewOrChangedFriends ) {
+    mewOrChangedFriendIds.append( user->id() );
+  }
+  FriendJob * const friendJob = new FriendJob( mewOrChangedFriendIds, Settings::self()->accessToken() );
+  mCurrentJob = friendJob;
+  connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(detailedFriendListJobFinished(KJob*)) );
+  friendJob->start();
 }
 
 void FacebookResource::detailedFriendListJobFinished( KJob* job )
@@ -181,15 +230,27 @@ void FacebookResource::fetchNextPhoto()
 {
   if (mPendingFriends.isEmpty()) {
     itemsRetrievalDone();
-    emit percent(100);
-    emit status( Idle, i18n( "Fetched %1 friends from the server.", mNumFriends ) );
-    resetState();
+    finish();
   } else {
     PhotoJob * const photoJob = new PhotoJob( mPendingFriends.first()->id(), Settings::self()->accessToken() );
     mCurrentJob = photoJob;
     connect(photoJob, SIGNAL(result(KJob*)), this, SLOT(photoJobFinished(KJob*)));
     photoJob->start();
   }
+}
+
+void FacebookResource::finish()
+{
+  Q_ASSERT( mPendingFriends.isEmpty() );
+
+  emit percent(100);
+  if ( mNumFriends > 0 ) {
+    emit status( Idle, i18np( "Updated one friend from the server.",
+                              "Updated %1 friends from the server.", mNumFriends ) );
+  } else {
+    emit status( Idle, i18n( "Finished, no friends needed to be updated." ) );
+  }
+  resetState();
 }
 
 void FacebookResource::photoJobFinished(KJob* job)
@@ -201,7 +262,12 @@ void FacebookResource::photoJobFinished(KJob* job)
   if (photoJob->error()) {
     abortWithError( i18n( "Unable to retrieve friends' photo from server: %1", photoJob->errorText() ) );
   } else {
+
+    // Update lists
     const UserInfoPtr user = mPendingFriends.first();
+    mPendingFriends.removeFirst();
+
+    // Create Item
     KABC::Addressee addressee = user->toAddressee();
     addressee.setPhoto(KABC::Picture(photoJob->photo()));
     Item newUser;
@@ -209,10 +275,11 @@ void FacebookResource::photoJobFinished(KJob* job)
     newUser.setMimeType( "text/directory" );
     newUser.setPayload<KABC::Addressee>( addressee );
     TimeStampAttribute * const timeStampAttribute = new TimeStampAttribute();
-    timeStampAttribute->setTimeStamp(user->updatedTime());
-    newUser.addAttribute(timeStampAttribute);
-    itemsRetrieved( Akonadi::Item::List() << newUser );
-    mPendingFriends.removeFirst();
+    timeStampAttribute->setTimeStamp( user->updatedTime() );
+    newUser.addAttribute( timeStampAttribute );
+
+    // Done!
+    itemsRetrievedIncremental( Item::List() << newUser, Item::List() );
     if (!mPendingFriends.isEmpty()) {
       const int alreadyDownloadedFriends = mNumFriends - mPendingFriends.size();
       const float percentageDone = alreadyDownloadedFriends / (float)mNumFriends * 100.0f;

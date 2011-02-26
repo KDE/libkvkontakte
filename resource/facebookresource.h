@@ -60,10 +60,21 @@ class FacebookResource : public Akonadi::ResourceBase,
     void abortWithError(const QString errorMessage);
     void abort();
 
-    QList<UserInfoPtr> mPendingFriends;
+    void fetchNewOrChangedFriends();
+    void finish();
+
+    // Friends that are already stored on the Akonadi server
     QMap<QString,KDateTime> mExistingFriends;
-    bool mIdle;
+
+    // Pending new/changed friends we still need to download
+    QList<UserInfoPtr> mPendingFriends;
+
+    QList<UserInfoPtr> mNewOrChangedFriends;
+
+    // Total number of new & changed friends
     int mNumFriends;
+
+    bool mIdle;
     QPointer<KJob> mCurrentJob;
 };
 
