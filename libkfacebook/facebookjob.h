@@ -41,6 +41,8 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
 
     virtual void start();
 
+    enum JobErrorType { AuthenticationProblem = KJob::UserDefinedError + 42 };
+
   protected:
     virtual bool doKill();
     virtual void handleData( const QVariant &data ) = 0;
