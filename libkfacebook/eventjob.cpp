@@ -59,7 +59,12 @@ QList<EventInfoPtr> EventJob::eventInfo() const
 EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
 {
   EventInfoPtr eventInfo( new EventInfo() );
-  QJson::QObjectHelper::qvariant2qobject( data.toMap(), eventInfo.data() );
+  const QVariantMap dataMap = data.toMap();
+  QJson::QObjectHelper::qvariant2qobject( dataMap, eventInfo.data() );
+  const QVariant owner = dataMap.value( "owner" );
+  if ( !owner.isNull() && owner.isValid() ) {
+    eventInfo->setOrganizer( owner.toMap().value( "name" ).toString() );
+  }
   return eventInfo;
 }
 

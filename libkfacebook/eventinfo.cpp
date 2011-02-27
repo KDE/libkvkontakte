@@ -39,6 +39,8 @@ KCalCore::Event::Ptr EventInfo::asEvent() const
   event->setDescription( desc, true );
   event->setLocation( location() );
   event->setHasEndDate( endTime().isValid() );
+  event->setOrganizer( organizer() );
+  event->setUid( id() );
   if ( startTime().isValid() ) {
     event->setDtStart( startTime() );
   } else {
@@ -135,3 +137,14 @@ void EventInfo::setDescription( const QString& description )
 {
   mDescription = description;
 }
+
+QString EventInfo::organizer() const
+{
+  return mOrganizer;
+}
+
+void EventInfo::setOrganizer(const QString& organizer)
+{
+  mOrganizer = organizer;
+}
+

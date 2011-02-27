@@ -55,6 +55,9 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     void setDescription( const QString &description );
     QString description() const;
 
+    void setOrganizer( const QString &organizer );
+    QString organizer() const;
+
     KCalCore::Event::Ptr asEvent() const;
 
   private:
@@ -64,6 +67,7 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     QString mLocation;
     QString mId;
     QString mDescription;
+    QString mOrganizer;
 };
 
 typedef QSharedPointer<EventInfo> EventInfoPtr;
