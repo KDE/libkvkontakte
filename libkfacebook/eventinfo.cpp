@@ -55,6 +55,7 @@ KCalCore::Event::Ptr EventInfo::asEvent() const
     endDate.setTime( QTime::fromString( "23:59:00" ) );
     kWarning() << "Event without end time: " << event->summary() << event->dtStart();
     kWarning() << "Making it an event until the end of the day.";
+    event->setDtEnd( endDate );
     //kWarning() << "Using a duration of 2 hours";
     //event->setDuration( KCalCore::Duration( 2 * 60 * 60, KCalCore::Duration::Seconds ) );
   }
