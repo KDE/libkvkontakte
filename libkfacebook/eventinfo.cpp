@@ -31,14 +31,20 @@ KCalCore::Event::Ptr EventInfo::asEvent() const
   event->setHasEndDate( endTime().isValid() );
   if ( startTime().isValid() ) {
     event->setDtStart( startTime() );
+  } else {
+    kWarning() << "WTF, event has no start date??";
   }
   if ( endTime().isValid() ) {
     event->setDtEnd( endTime() );
-  } else {
+  } else if ( startTime().isValid() && !endTime().isValid() ) {
     // Urgh...
+    KDateTime endDate;
+    endDate.setDate( startTime().date() );
+    endDate.setTime( QTime::fromString( "23:59:00" ) );
     kWarning() << "Event without end time: " << event->summary() << event->dtStart();
-    kWarning() << "Using a duration of 2 hours";
-    event->setDuration( KCalCore::Duration( 2 * 60 * 60, KCalCore::Duration::Seconds ) );
+    kWarning() << "Making it an event until the end of the day.";
+    //kWarning() << "Using a duration of 2 hours";
+    //event->setDuration( KCalCore::Duration( 2 * 60 * 60, KCalCore::Duration::Seconds ) );
   }
 
   // TODO: Organizer

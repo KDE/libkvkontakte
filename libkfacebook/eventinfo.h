@@ -29,8 +29,8 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(QString name WRITE setName READ name)
-  Q_PROPERTY(QString startTime WRITE setStartTimeString READ startTimeString)
-  Q_PROPERTY(QString endTime WRITE setEndTimeString READ endTimeString)
+  Q_PROPERTY(QString start_time WRITE setStartTimeString READ startTimeString)
+  Q_PROPERTY(QString end_time WRITE setEndTimeString READ endTimeString)
   Q_PROPERTY(QString location WRITE setLocation READ location)
   Q_PROPERTY(QString id WRITE setId READ id)
   Q_PROPERTY(QString description WRITE setDescription READ description)
