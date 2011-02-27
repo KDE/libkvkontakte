@@ -24,7 +24,9 @@
 #include <libkfacebook/friendlistjob.h>
 #include <libkfacebook/friendjob.h>
 #include <libkfacebook/photojob.h>
-#include <libkfacebook/eventslistjob.h>
+#include <libkfacebook/alleventslistjob.h>
+#include <libkfacebook/eventjob.h>
+
 #include <Akonadi/AttributeFactory>
 #include <Akonadi/EntityDisplayAttribute>
 #include <Akonadi/ItemFetchJob>
@@ -33,6 +35,7 @@
 using namespace Akonadi;
 
 static const char * friendsRID = "friends";
+static const char * eventsRID = "events";
 
 FacebookResource::FacebookResource( const QString &id )
     : ResourceBase( id )
@@ -111,17 +114,48 @@ void FacebookResource::configure( WId windowId )
 
 void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
 {
-  Q_UNUSED( collection );
   Q_ASSERT(mIdle);
-  mIdle = false;
-  emit status( Running, i18n( "Preparing sync of friends list." ) );
-  emit percent( 0 );
-  ItemFetchJob * const fetchJob = new ItemFetchJob( collection );
-  fetchJob->setObjectName( QLatin1String( "InitialFetchJob" ) );
-  fetchJob->fetchScope().fetchAttribute<TimeStampAttribute>();
-  fetchJob->fetchScope().fetchFullPayload( false );
-  mCurrentJob = fetchJob;
-  connect( fetchJob, SIGNAL(result(KJob*)), this, SLOT(initialItemFetchFinished(KJob*)) );
+
+  if ( collection.remoteId() == friendsRID ) {
+    mIdle = false;
+    emit status( Running, i18n( "Preparing sync of friends list." ) );
+    emit percent( 0 );
+    ItemFetchJob * const fetchJob = new ItemFetchJob( collection );
+    fetchJob->fetchScope().fetchAttribute<TimeStampAttribute>();
+    fetchJob->fetchScope().fetchFullPayload( false );
+    mCurrentJob = fetchJob;
+    connect( fetchJob, SIGNAL(result(KJob*)), this, SLOT(initialItemFetchFinished(KJob*)) );
+  } else if ( collection.remoteId() == eventsRID ) {
+    mIdle = false;
+    emit status( Running, i18n( "Preparing sync of events list." ) );
+    emit percent( 0 );
+    AllEventsListJob * const listJob = new AllEventsListJob( Settings::self()->accessToken() );
+    listJob->setLowerLimit(KDateTime::fromString( Settings::self()->lowerLimit(), "%Y-%m-%d" ));
+    mCurrentJob = listJob;
+    connect( listJob, SIGNAL(result(KJob*)), this, SLOT(eventListFetched(KJob*)) );
+    listJob->start();
+  } else {
+    cancelTask( i18n( "Unable to syncronize this collection." ) );
+  }
+}
+
+void FacebookResource::eventListFetched( KJob* job )
+{
+  Q_ASSERT( !mIdle );
+  AllEventsListJob * const listJob = dynamic_cast<AllEventsListJob*>( job );
+  Q_ASSERT( listJob );
+  if ( listJob->error() ) {
+    abortWithError( i18n( "Unable to get events from server: %1", listJob->errorString() ) );
+  } else {
+    QStringList eventIds;
+    foreach( const EventInfoPtr &event, listJob->allEvents() ) {
+      eventIds.append( event->id() );
+    }
+    EventJob * const eventJob = new EventJob( eventIds, Settings::self()->accessToken() );
+    mCurrentJob = eventJob;
+    connect( eventJob, SIGNAL(result(KJob*)), this, SLOT(detailedEventListJobFinished(KJob*)) );
+    eventJob->start();
+  }
 }
 
 void FacebookResource::initialItemFetchFinished( KJob* job )
@@ -193,7 +227,7 @@ void FacebookResource::friendListJobFinished( KJob* job )
     itemsRetrievedIncremental( Item::List(), removedItems );
 
     if ( mNewOrChangedFriends.isEmpty() ) {
-      finish();
+      finishFriendFetching();
     } else {
       emit status( Running, i18n( "Retrieving friends' details." ) );
       emit percent( 5 );
@@ -212,6 +246,30 @@ void FacebookResource::fetchNewOrChangedFriends()
   mCurrentJob = friendJob;
   connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(detailedFriendListJobFinished(KJob*)) );
   friendJob->start();
+}
+
+void FacebookResource::detailedEventListJobFinished( KJob* job )
+{
+  Q_ASSERT( !mIdle );
+  Q_ASSERT( job == mCurrentJob );
+  EventJob * const eventJob = dynamic_cast<EventJob*>( job );
+  Q_ASSERT( eventJob );
+  if ( job->error() ) {
+  } else {
+    setItemStreamingEnabled( true );
+
+    Item::List eventItems;
+    foreach ( const EventInfoPtr &eventInfo, eventJob->eventInfo() ) {
+      Item event;
+      event.setRemoteId( eventInfo->id() );
+      event.setPayload<KCalCore::Incidence::Ptr>( eventInfo->asEvent() );
+      event.setMimeType( eventInfo->asEvent()->mimeType() );
+      eventItems.append( event );
+    }
+    itemsRetrieved( eventItems );
+    itemsRetrievalDone();
+    finishEventsFetching();
+  }
 }
 
 void FacebookResource::detailedFriendListJobFinished( KJob* job )
@@ -235,7 +293,7 @@ void FacebookResource::fetchNextPhoto()
 {
   if (mPendingFriends.isEmpty()) {
     itemsRetrievalDone();
-    finish();
+    finishFriendFetching();
   } else {
     PhotoJob * const photoJob = new PhotoJob( mPendingFriends.first()->id(), Settings::self()->accessToken() );
     mCurrentJob = photoJob;
@@ -244,7 +302,15 @@ void FacebookResource::fetchNextPhoto()
   }
 }
 
-void FacebookResource::finish()
+void FacebookResource::finishEventsFetching()
+{
+  emit percent(100);
+  // TODO: Use an actual number here
+  emit status( Idle, i18n( "All events fetched from server." ) );
+  resetState();
+}
+
+void FacebookResource::finishFriendFetching()
 {
   Q_ASSERT( mPendingFriends.isEmpty() );
 
@@ -333,10 +399,21 @@ void FacebookResource::retrieveCollections()
   friends.setParentCollection( Akonadi::Collection::root() );
   friends.setContentMimeTypes( QStringList() << "text/directory" );
   friends.setRights( Collection::ReadOnly );
-  EntityDisplayAttribute *displayAttribute = new EntityDisplayAttribute();
-  displayAttribute->setIconName( "facebookresource" );
-  friends.addAttribute( displayAttribute );
-  collectionsRetrieved( Collection::List() << friends );
+  EntityDisplayAttribute * const friendsDisplayAttribute = new EntityDisplayAttribute();
+  friendsDisplayAttribute->setIconName( "facebookresource" );
+  friends.addAttribute( friendsDisplayAttribute );
+
+  Collection events;
+  events.setRemoteId( eventsRID );
+  events.setName( i18n( "Events" ) );
+  events.setParentCollection( Akonadi::Collection::root() );
+  events.setContentMimeTypes( QStringList() << "text/calendar" << KCalCore::Event::eventMimeType() );
+  events.setRights( Collection::ReadOnly );
+  EntityDisplayAttribute * const evendDisplayAttribute = new EntityDisplayAttribute();
+  evendDisplayAttribute->setIconName( "facebookresource" );
+  events.addAttribute( evendDisplayAttribute );
+
+  collectionsRetrieved( Collection::List() << friends << events );
 }
 
 AKONADI_RESOURCE_MAIN( FacebookResource )
