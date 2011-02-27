@@ -73,10 +73,15 @@ void FacebookResource::abort()
   cancelTask();
 }
 
-void FacebookResource::abortWithError(const QString errorMessage)
+void FacebookResource::abortWithError( const QString errorMessage, bool authFailure )
 {
   resetState();
-  cancelTask(errorMessage);
+  cancelTask( errorMessage );
+
+  // This doesn't work, why?
+  if ( authFailure ) {
+    emit status( Broken, i18n( "Unable to login to Facebook, authentication failure." ) );
+  }
 }
 
 void FacebookResource::resetState()
@@ -145,7 +150,8 @@ void FacebookResource::eventListFetched( KJob* job )
   AllEventsListJob * const listJob = dynamic_cast<AllEventsListJob*>( job );
   Q_ASSERT( listJob );
   if ( listJob->error() ) {
-    abortWithError( i18n( "Unable to get events from server: %1", listJob->errorString() ) );
+    abortWithError( i18n( "Unable to get events from server: %1", listJob->errorString() ),
+                    listJob->error() == FacebookJob::AuthenticationProblem );
   } else {
     QStringList eventIds;
     foreach( const EventInfoPtr &event, listJob->allEvents() ) {
@@ -186,7 +192,8 @@ void FacebookResource::friendListJobFinished( KJob* job )
   FriendListJob * const friendListJob = dynamic_cast<FriendListJob*>( job );
   Q_ASSERT( friendListJob );
   if ( friendListJob->error() ) {
-    abortWithError( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ) );
+    abortWithError( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ),
+                    friendListJob->error() == FacebookJob::AuthenticationProblem );
   } else {
 
     // Figure out which items are new or changed
