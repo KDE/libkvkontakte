@@ -32,6 +32,7 @@ target_link_libraries(libkfacebook
   ${QJSON_LIBRARY}
   ${KDEPIMLIBS_KABC_LIBS}
   ${KDEPIMLIBS_KCALCORE_LIBS}
+  ${KDEPIMLIBS_KPIMUTILS_LIBS}
 )
 
 set_target_properties(libkfacebook PROPERTIES VERSION ${LIB_VERSION} SOVERSION ${LIB_SOVERSION})

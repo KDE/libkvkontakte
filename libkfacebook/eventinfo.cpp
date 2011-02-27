@@ -22,12 +22,13 @@
 
 #include <KDebug>
 #include <KLocalizedString>
+#include <KPIMUtils/LinkLocator>
 
 KCalCore::Event::Ptr EventInfo::asEvent() const
 {
   KCalCore::Event::Ptr event( new KCalCore::Event );
   QString desc = description();
-  desc.replace( "\n", "<br>" );
+  desc = KPIMUtils::LinkLocator::convertToHtml( desc, KPIMUtils::LinkLocator::ReplaceSmileys );
   if ( !desc.isEmpty() ) {
     desc += "<br><br>";
   }
