@@ -42,7 +42,6 @@ Todo
   - run photo jobs in parallel
 - button "add kopete account"
 - make libkfacebook static
-- 0.1: Remove "Akonadi" from user-visible terms, especially from FB identifier
 - plasma silk wizard (talk to sebas)
 - set proper resourcec status when not authenticated
 - push notifications
@@ -54,7 +53,6 @@ Todo
     - when authentication fails because access token is rejected, show more user-friendly error message,
       including instructions on how to fix that.
     - pop up on first sync if the access token is empty, with "don't ask again" option
-    - automatically sync after closing the configure dialog and being online and having an access token
 - own kpart for messages, invite replies and so on (check what facebook mobile can do!)
 - 0.1 switch to "broken" status after an authentication error
 
@@ -64,6 +62,7 @@ Bugs
 - If only the city is set in the address, KAddressbook shows a superflous comma
 - creates tons of debug areas in kdebugdialog. akonadi_facebook_resource_1 .. 2392
 - 0.1 Webpage embedding stuff does not work when not already logged into Facebook
+    - Sergio can't reproduce
 - 0.1 The progress signal from ResourceBase overrides our own
 - Size of facebook webpage doesn't fit dialog and scrollbars are shown
 - 0.1 No support for "year not set" in KAddressbook -> birthday appears in year 1900
