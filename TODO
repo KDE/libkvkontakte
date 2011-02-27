@@ -9,7 +9,6 @@ Todo
     - participants
     - friend's events??
     - add checkboxes "show declined events" "show maybe events"
-    - add "show event in facebook" link
     - add attendance label + "change attendence" link
     - rsvp, participants management
       - requires resource-specific incidence editor plugin (talk to openchange guys, they also need that)
@@ -55,8 +54,9 @@ Todo
     - when authentication fails because access token is rejected, show more user-friendly error message,
       including instructions on how to fix that.
     - pop up on first sync if the access token is empty, with "don't ask again" option
+    - automatically sync after closing the configure dialog and being online and having an access token
 - own kpart for messages, invite replies and so on (check what facebook mobile can do!)
-- 0.1 add config setting for lower date limit
+- 0.1 switch to "broken" status after an authentication error
 
 Bugs
 ----
