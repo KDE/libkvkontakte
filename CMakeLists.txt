@@ -15,6 +15,8 @@ macro_log_feature(XSLTPROC_EXECUTABLE "xsltproc" "The command line XSLT processo
 find_package(QJSON)
 macro_log_feature(QJSON_FOUND "QJSON" "Qt library for handling JSON data" "http://qjson.sourceforge.net/" TRUE)
 
+configure_file(config.h.cmake "${CMAKE_CURRENT_BINARY_DIR}/config.h")
+
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 include_directories(

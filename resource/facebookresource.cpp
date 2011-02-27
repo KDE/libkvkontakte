@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "facebookresource.h"
+#include <config.h>
 #include "settings.h"
 #include "settingsdialog.h"
 #include "timestampattribute.h"
@@ -42,7 +43,9 @@ FacebookResource::FacebookResource( const QString &id )
 {
   AttributeFactory::registerAttribute<TimeStampAttribute>();
   setNeedsNetwork( true );
+#if KDEPIMLIBS_IS_VERSION( 4, 6, 41 )
   setAutomaticProgressReporting( false );
+#endif
   setObjectName( QLatin1String( "FacebookResource" ) );
   resetState();
   Settings::self()->setResourceId( identifier() );
