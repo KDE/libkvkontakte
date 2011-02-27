@@ -64,7 +64,7 @@ void AllEventsListJob::eventListJobFinished( KJob* job )
   if ( job->error() ) {
     kWarning() << "Job error:" << job->errorString();
     setError( listJob->error() );
-    setErrorText( listJob->errorText() );
+    setErrorText( listJob->errorString() );
     emitResult();
   } else {
     kDebug() << "Got" << listJob->events().size() << "events from our subjob.";

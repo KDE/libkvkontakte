@@ -97,8 +97,8 @@ void FacebookJob::getJobFinished( KJob* job )
   Q_ASSERT( transferJob );
   if ( transferJob->error() ) {
     setError( transferJob->error() );
-    setErrorText( transferJob->errorText() );
-    kWarning() << "Job error: " << transferJob->errorText();
+    setErrorText( KIO::buildErrorString( error(), transferJob->errorText() ) );
+    kWarning() << "Job error: " << transferJob->errorString();
   } else {
     kDebug() << "Got data: " << QString::fromAscii( transferJob->data().data() );
     QJson::Parser parser;

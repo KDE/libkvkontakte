@@ -61,7 +61,7 @@ void PhotoJob::getJobFinished(KJob* job)
   Q_ASSERT( transferJob );
   if ( transferJob->error() ) {
     setError( transferJob->error() );
-    setErrorText( transferJob->errorText() );
+    setErrorText( KIO::buildErrorString( error(), transferJob->errorText() ) );
     kWarning() << "Job error: " << transferJob->errorText();
   } else {
     kDebug() << "Got picture of" << transferJob->data().length() << "bytes.";
