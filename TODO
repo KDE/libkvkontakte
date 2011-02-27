@@ -35,7 +35,7 @@ Todo
 - translations
   - messages.sh
   - poke tsgdeos so that scripty can run
-- automatically sync every x minutes setting
+- 0.1 automatically sync every x minutes setting
   - not when offline
 - offline support / cache policies / parts
 - faster friend sync
@@ -54,11 +54,11 @@ Todo
       including instructions on how to fix that.
     - pop up on first sync if the access token is empty, with "don't ask again" option
 - own kpart for messages, invite replies and so on (check what facebook mobile can do!)
-- 0.1 switch to "broken" status after an authentication error
 
 Bugs
 ----
 
+- switching to "broken" status after an authentication error does not work, something overwrites the status
 - If only the city is set in the address, KAddressbook shows a superflous comma
 - creates tons of debug areas in kdebugdialog. akonadi_facebook_resource_1 .. 2392
 - 0.1 Webpage embedding stuff does not work when not already logged into Facebook
