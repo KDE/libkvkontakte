@@ -30,7 +30,8 @@ using namespace Akonadi;
 
 SettingsDialog::SettingsDialog( FacebookResource *parentResource, WId parentWindow )
   : KDialog(),
-    mParentResource( parentResource )
+    mParentResource( parentResource ),
+    mTriggerSync( false )
 {
   KWindowSystem::setMainWindow( this, parentWindow );
   setButtons( Ok|Cancel|User1 );
@@ -45,6 +46,9 @@ SettingsDialog::SettingsDialog( FacebookResource *parentResource, WId parentWind
 
 SettingsDialog::~SettingsDialog()
 {
+  if ( mTriggerSync ) {
+    mParentResource->synchronize();
+  }
 }
 
 void SettingsDialog::setupWidgets()
@@ -86,6 +90,9 @@ void SettingsDialog::authenticationCanceled()
 
 void SettingsDialog::authenticationDone(const QString& accessToken)
 {
+  if ( Settings::self()->accessToken() != accessToken && !accessToken.isEmpty() ) {
+    mTriggerSync = true;
+  }
   Settings::self()->setAccessToken( accessToken );
   updateAuthenticationWidgets();
   updateUserName();

@@ -32,6 +32,8 @@ class FacebookResource : public Akonadi::ResourceBase,
     FacebookResource( const QString &id );
     ~FacebookResource();
 
+    using ResourceBase::synchronize;
+
   public Q_SLOTS:
     virtual void configure( WId windowId );
 

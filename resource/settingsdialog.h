@@ -48,6 +48,7 @@ class SettingsDialog : public KDialog, private Ui::SettingsDialog
     void updateUserName();
 
     FacebookResource *mParentResource;
+    bool mTriggerSync;
 };
 
 #endif
