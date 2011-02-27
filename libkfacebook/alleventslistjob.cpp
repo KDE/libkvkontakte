@@ -62,7 +62,6 @@ void AllEventsListJob::eventListJobFinished( KJob* job )
   EventsListJob * const listJob = dynamic_cast<EventsListJob*>( job );
   Q_ASSERT( listJob );
   if ( job->error() ) {
-    kWarning() << "Job error:" << job->errorString();
     setError( listJob->error() );
     setErrorText( listJob->errorString() );
     emitResult();
