@@ -21,12 +21,21 @@
 #include "util.h"
 
 #include <KDebug>
+#include <KLocalizedString>
 
 KCalCore::Event::Ptr EventInfo::asEvent() const
 {
   KCalCore::Event::Ptr event( new KCalCore::Event );
+  QString desc = description();
+  desc.replace( "\n", "<br>" );
+  if ( !desc.isEmpty() ) {
+    desc += "<br><br>";
+  }
+  desc += "<a href=\"" + QString( "http://www.facebook.com/event.php?eid=%1" ).arg( id() ) +
+          "\">" + i18n( "View Event on Facebook" ) + "</a>";
+
   event->setSummary( name() );
-  event->setDescription( description() );
+  event->setDescription( desc, true );
   event->setLocation( location() );
   event->setHasEndDate( endTime().isValid() );
   if ( startTime().isValid() ) {
