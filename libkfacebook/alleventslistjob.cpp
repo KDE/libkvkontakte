@@ -62,9 +62,10 @@ void AllEventsListJob::eventListJobFinished( KJob* job )
   EventsListJob * const listJob = dynamic_cast<EventsListJob*>( job );
   Q_ASSERT( listJob );
   if ( job->error() ) {
+    kWarning() << "Job error:" << job->errorString();
     setError( listJob->error() );
     setErrorText( listJob->errorText() );
-    kWarning() << "Job error:" << job->errorString();
+    emitResult();
   } else {
     kDebug() << "Got" << listJob->events().size() << "events from our subjob.";
     //kDebug() << "Next: " << listJob->nextEvents();
