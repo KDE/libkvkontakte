@@ -35,8 +35,8 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
   Q_PROPERTY(QString last_name WRITE setLastName READ lastName)
   Q_PROPERTY(QString birthday WRITE setBirthday READ birthdayAsString)
   Q_PROPERTY(QString website WRITE setWebsite READ website)
-  Q_PROPERTY(int timezone WRITE setTimezone READ timezone);
-  Q_PROPERTY(QString updated_time WRITE setUpdatedTimeString READ updatedTimeString);
+  Q_PROPERTY(int timezone WRITE setTimezone READ timezone)
+  Q_PROPERTY(QString updated_time WRITE setUpdatedTimeString READ updatedTimeString)
   public:
     UserInfo();
     void setId( const QString &id );
