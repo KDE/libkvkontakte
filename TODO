@@ -5,10 +5,10 @@ Todo
 -data
   - friend lists
     - as contact groups or as collections?
-  - 0.1 events
+  - events
     - participants
     - friend's events??
-    - add checkboxes "show declined events" "show maybe events"
+    - 0.1 add checkboxes "show declined events" "show maybe events"
     - add attendance label + "change attendence" link
     - rsvp, participants management
       - requires resource-specific incidence editor plugin (talk to openchange guys, they also need that)
@@ -32,7 +32,7 @@ Todo
       - what about settings, simply open resource settings?
       - ability to filter wall posts
   - notes
-- translations
+- 0.1 translations
   - messages.sh
   - poke tsgdeos so that scripty can run
 - 0.1 automatically sync every x minutes setting
@@ -58,12 +58,10 @@ Todo
 Bugs
 ----
 
+- 0.1: retrieveItem() for events not implemented
 - switching to "broken" status after an authentication error does not work, something overwrites the status
 - If only the city is set in the address, KAddressbook shows a superflous comma
 - creates tons of debug areas in kdebugdialog. akonadi_facebook_resource_1 .. 2392
-- 0.1 Webpage embedding stuff does not work when not already logged into Facebook
-    - Sergio can't reproduce
-- 0.1 The progress signal from ResourceBase overrides our own
 - Size of facebook webpage doesn't fit dialog and scrollbars are shown
 - 0.1 No support for "year not set" in KAddressbook -> birthday appears in year 1900
   - add birthday year patch to repo should maintainer decline it
@@ -124,6 +122,7 @@ Releasing
       - add "like" button
     - status update of facebook app
     - post to my own facebook wall (KDE+KDAB groups)
+    - post to the KDEPIM facebook group
     - forum.kde.org - brainstorm section, news section
       - http://forum.kde.org/viewtopic.php?f=20&t=37275
       - http://forum.kde.org/brainstorm.php#idea89545_page1
