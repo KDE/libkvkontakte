@@ -77,11 +77,9 @@ Refactor
 Roadmap
 -------
 
-0.1: read-only events
+0.1: read-only events + notes
 0.2: newsfeed (kontact summary plugin)
 0.3: read-only messages
-0.4: write events
-0.5: notes
 
 Releasing
 ---------
