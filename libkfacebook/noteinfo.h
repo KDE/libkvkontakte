@@ -21,8 +21,8 @@
 
 #include "libkfacebook_export.h"
 
+#include <KMime/Message>
 #include <KDateTime>
-#include <KCalCore/Event>
 #include <QObject>
 
 class LIBKFACEBOOK_EXPORT NoteInfo : public QObject
@@ -54,6 +54,8 @@ class LIBKFACEBOOK_EXPORT NoteInfo : public QObject
     void setUpdatedTimeString( const QString &updatedTime );
     QString updatedTimeString() const;
     KDateTime updatedTime() const;
+
+    KMime::Message::Ptr asNote() const;
 
   private:
     QString mId;

@@ -155,7 +155,7 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
     AllNotesListJob * const notesJob = new AllNotesListJob( Settings::self()->accessToken() );
     notesJob->setLowerLimit(KDateTime::fromString( Settings::self()->lowerLimit(), "%Y-%m-%d" ));
     mCurrentJob = notesJob;
-    connect( notesJob, SIGNAL(result(KJob*)), this, SLOT(notesListFetched(KJob*)) );
+    connect( notesJob, SIGNAL(result(KJob*)), this, SLOT(noteListFetched(KJob*)) );
     notesJob->start();
   } else {
     cancelTask( i18n( "Unable to syncronize this collection." ) );
@@ -164,6 +164,7 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
 
 void FacebookResource::noteListFetched( KJob* job )
 {
+  kDebug() << "WE ARE HER!";
   Q_ASSERT( !mIdle );
   AllNotesListJob * const listJob = dynamic_cast<AllNotesListJob*>( job );
   Q_ASSERT( listJob );
@@ -177,12 +178,14 @@ void FacebookResource::noteListFetched( KJob* job )
     foreach( const NoteInfoPtr &noteInfo, listJob->allNotes() ) {
       Item note;
       note.setRemoteId( noteInfo->id() );
-
+      note.setPayload<KMime::Message::Ptr>( noteInfo->asNote() );
+      note.setMimeType( noteInfo->asNote()->mimeType() );
       noteItems.append(note);
     }
 
     itemsRetrieved( noteItems );
     itemsRetrievalDone();
+    finishNotesFetching();
     
   }
 }

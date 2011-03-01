@@ -29,6 +29,15 @@ void NoteInfo::setId( const QString &id)
   mId = id;
 }
 
+KMime::Message::Ptr NoteInfo::asNote() const
+{
+  KMime::Message::Ptr note( new KMime::Message );
+
+ // note->setBody( message().toAscii() );
+
+  return note;
+}
+
 QString NoteInfo::id() const
 {
   return mId;

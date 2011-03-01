@@ -70,26 +70,26 @@ void AllNotesListJob::noteListJobFinished( KJob* job )
     //kDebug() << "Next: " << listJob->nextNotes();
     //kDebug() << "Prev: " << listJob->previousNotes();
 
-    const KUrl next = KUrl::fromUserInput( listJob->nextNotes() );
-    const QString limit = next.queryItem( "limit" );
-    const QString until = next.queryItem( "until" );
-    const QString since = next.queryItem( "since" );
+    const KUrl prev = KUrl::fromUserInput( listJob->previousNotes() );
+    const QString limit = prev.queryItem( "limit" );
+    const QString until = prev.queryItem( "until" );
+    const QString since = prev.queryItem( "since" );
     if ( until.isEmpty() ) {
       kDebug() << "Aborting notes fetching, no date range found in URL!";
     }
-    KDateTime untilTime;
-    untilTime.setTime_t( until.toLongLong() );
-    if ( !untilTime.isValid() ) {
+    KDateTime sinceTime;
+    sinceTime.setTime_t( since.toLongLong() );
+    if ( !sinceTime.isValid() ) {
       kDebug() << "Aborting notes fetching, invalid date range found in URL!";
     }
     //kDebug() << "Starting new subjob for limit" << limit << ", until" << until << ", since" << since;
     //kDebug() << "Lower limit:" << mLowerLimit.toString();
     //kDebug() << "limit of URL:" << untilTime.toString();
 
-    // Stop when we got all events after a certain dates, or no event at all
-    if ( listJob->notes().isEmpty() || until.isEmpty() || !untilTime.isValid() ||
-         untilTime < mLowerLimit ) {
-      kDebug() << "All notes fetched.";
+    // Stop when we got all notes after a certain dates, or no notes at all
+    if ( listJob->notes().isEmpty() || since.isEmpty() || !sinceTime.isValid() ||
+         sinceTime < mLowerLimit ) {
+      kDebug() << "All notes fetched: " << mNotes.size();
       mCurrentJob = 0;
       emitResult();
     } else {
@@ -106,7 +106,7 @@ void AllNotesListJob::noteListJobFinished( KJob* job )
         mCurrentJob->addQueryItem( "since", since );
       }
       connect( mCurrentJob, SIGNAL(result(KJob*)),
-               this, SLOT(eventListJobFinished(KJob*)) );
+               this, SLOT(noteListJobFinished(KJob*)) );
       mCurrentJob->start();
     }
   }

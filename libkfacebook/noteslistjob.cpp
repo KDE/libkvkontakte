@@ -48,7 +48,6 @@ void NotesListJob::handleData( const QVariant& root )
   foreach( const QVariant &user, data.toList() ) {
     NoteInfoPtr noteInfo( new NoteInfo() );
     QJson::QObjectHelper::qvariant2qobject( user.toMap(), noteInfo.data() );
-    kDebug() << user;
     mNotes.append( noteInfo );
   }
   const QVariant paging = root.toMap()["paging"];
