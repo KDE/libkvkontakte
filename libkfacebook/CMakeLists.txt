@@ -21,6 +21,7 @@ set(libkfacebook_SRCS
 kde4_add_library(kfacebook SHARED ${libkfacebook_SRCS})
 
 set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 # Yes, QJSON_LIBRARIES and QJSON_LIBRARY are both needed, as otherwise it will break either
 # on Linux or on Mac.
@@ -35,6 +36,7 @@ target_link_libraries(kfacebook
   ${QJSON_LIBRARY}
   ${KDEPIMLIBS_KABC_LIBS}
   ${KDEPIMLIBS_KPIMUTILS_LIBS}
+  ${KDEPIMLIBS_KMIME_LIBS}
 )
 
 if(KDEPIM_44_COMPAT)
