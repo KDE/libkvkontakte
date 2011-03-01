@@ -27,6 +27,7 @@
 #include <libkfacebook/photojob.h>
 #include <libkfacebook/alleventslistjob.h>
 #include <libkfacebook/eventjob.h>
+#include <libkfacebook/allnoteslistjob.h>
 
 #include <Akonadi/AttributeFactory>
 #include <Akonadi/EntityDisplayAttribute>
@@ -126,6 +127,8 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
 {
   Q_ASSERT(mIdle);
 
+  kDebug() << collection.remoteId();
+
   if ( collection.remoteId() == friendsRID ) {
     mIdle = false;
     emit status( Running, i18n( "Preparing sync of friends list." ) );
@@ -144,10 +147,46 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
     mCurrentJob = listJob;
     connect( listJob, SIGNAL(result(KJob*)), this, SLOT(eventListFetched(KJob*)) );
     listJob->start();
+  } else if ( collection.remoteId() == notesRID ) {
+    kDebug() << "FOOBAR!";
+    mIdle = false;
+    emit status( Running, i18n( "Preparing sync of notes list." ) );
+    emit percent( 0 );
+    AllNotesListJob * const notesJob = new AllNotesListJob( Settings::self()->accessToken() );
+    notesJob->setLowerLimit(KDateTime::fromString( Settings::self()->lowerLimit(), "%Y-%m-%d" ));
+    mCurrentJob = notesJob;
+    connect( notesJob, SIGNAL(result(KJob*)), this, SLOT(notesListFetched(KJob*)) );
+    notesJob->start();
   } else {
     cancelTask( i18n( "Unable to syncronize this collection." ) );
   }
 }
+
+void FacebookResource::noteListFetched( KJob* job )
+{
+  Q_ASSERT( !mIdle );
+  AllNotesListJob * const listJob = dynamic_cast<AllNotesListJob*>( job );
+  Q_ASSERT( listJob );
+  if ( listJob->error() ) {
+    abortWithError( i18n( "Unable to get events from server: %1", listJob->errorString() ),
+                    listJob->error() == FacebookJob::AuthenticationProblem );
+  } else {
+    setItemStreamingEnabled( true );
+    
+    Item::List noteItems;
+    foreach( const NoteInfoPtr &noteInfo, listJob->allNotes() ) {
+      Item note;
+      note.setRemoteId( noteInfo->id() );
+
+      noteItems.append(note);
+    }
+
+    itemsRetrieved( noteItems );
+    itemsRetrievalDone();
+    
+  }
+}
+
 
 void FacebookResource::eventListFetched( KJob* job )
 {
@@ -320,6 +359,13 @@ void FacebookResource::fetchNextPhoto()
     connect(photoJob, SIGNAL(result(KJob*)), this, SLOT(photoJobFinished(KJob*)));
     photoJob->start();
   }
+}
+
+void FacebookResource::finishNotesFetching()
+{
+  emit percent(100);
+  emit status( Idle, i18n( "All notes fetched from server." ) );
+  resetState();
 }
 
 void FacebookResource::finishEventsFetching()

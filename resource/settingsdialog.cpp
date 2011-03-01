@@ -71,7 +71,8 @@ void SettingsDialog::showAuthenticationDialog()
               << "friends_location"
               << "friends_work_history"
               << "friends_relationships"
-              << "user_events";
+              << "user_events"
+              << "user_notes";
   AuthenticationDialog * const authDialog = new AuthenticationDialog( this );
   authDialog->setAppId( Settings::self()->appID() );
   authDialog->setPermissions( permissions );
@@ -170,11 +171,12 @@ void SettingsDialog::slotButtonClicked( int button )
                             QByteArray(),
                             ki18n("Akonadi Facebook Resource"),
                             QByteArray( RESOURCE_VERSION ),
-                            ki18n( "Makes your friends, events and messages on Facebook available in KDE via Akonadi." ),
+                            ki18n( "Makes your friends, events, notes and messages on Facebook available in KDE via Akonadi." ),
                             KAboutData::License_GPL_V2,
                             ki18n( "Copyright (C) 2010,2011 Thomas McGuire <mcguire@kde.org>" ) );
       aboutData.addAuthor( ki18n( "Thomas McGuire" ), ki18n( "Maintainer" ), "mcguire@kde.org" );
       aboutData.addAuthor( ki18n( "Till Adam" ), ki18n( "MacOS Support" ), "adam@kde.org" );
+      aboutData.addAuthor( ki18n( "Roeland Jago Douma" ), ki18n( "Notes Implementation" ), "unix@rullzer.com" );
       aboutData.setProgramIconName("facebookresource");
       aboutData.setTranslator( ki18nc("NAME OF TRANSLATORS", "Your names"),
                             ki18nc("EMAIL OF TRANSLATORS", "Your emails"));

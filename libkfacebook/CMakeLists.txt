@@ -13,6 +13,9 @@ set(libkfacebook_SRCS
   util.cpp
   alleventslistjob.cpp
   eventjob.cpp
+  noteinfo.cpp
+  noteslistjob.cpp
+  allnoteslistjob.cpp
 )
 
 kde4_add_library(kfacebook SHARED ${libkfacebook_SRCS})
