@@ -38,6 +38,7 @@ using namespace Akonadi;
 static const char * friendsRID = "friends";
 static const char * eventsRID = "events";
 static const char * eventMimeType = "application/x-vnd.akonadi.calendar.event";
+static const char * notesRID = "notes";
 
 FacebookResource::FacebookResource( const QString &id )
     : ResourceBase( id )
@@ -432,7 +433,17 @@ void FacebookResource::retrieveCollections()
   evendDisplayAttribute->setIconName( "facebookresource" );
   events.addAttribute( evendDisplayAttribute );
 
-  collectionsRetrieved( Collection::List() << friends << events );
+  Collection notes;
+  notes.setRemoteId( notesRID );
+  notes.setName( i18n( "Notes" ) );
+  notes.setParentCollection( Akonadi::Collection::root() );
+  notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note" << "inode/directory" );
+  notes.setRights( Collection::ReadOnly );
+  EntityDisplayAttribute * const notesDisplayAttribute = new EntityDisplayAttribute();
+  notesDisplayAttribute->setIconName( "facebookresource" );
+  notes.addAttribute( notesDisplayAttribute );
+
+  collectionsRetrieved( Collection::List() << friends << events << notes );
 }
 
 AKONADI_RESOURCE_MAIN( FacebookResource )
