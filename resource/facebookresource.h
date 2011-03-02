@@ -58,6 +58,8 @@ class FacebookResource : public Akonadi::ResourceBase,
     void eventListFetched( KJob *job );
     void detailedEventListJobFinished( KJob *job );
     void noteListFetched( KJob *job );
+    void noteJobFinished( KJob *job );
+
 
   private:
     void fetchNextPhoto();

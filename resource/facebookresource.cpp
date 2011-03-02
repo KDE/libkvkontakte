@@ -28,6 +28,7 @@
 #include <libkfacebook/alleventslistjob.h>
 #include <libkfacebook/eventjob.h>
 #include <libkfacebook/allnoteslistjob.h>
+#include <libkfacebook/notejob.h>
 
 #include <Akonadi/AttributeFactory>
 #include <Akonadi/EntityDisplayAttribute>
@@ -148,7 +149,6 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
     connect( listJob, SIGNAL(result(KJob*)), this, SLOT(eventListFetched(KJob*)) );
     listJob->start();
   } else if ( collection.remoteId() == notesRID ) {
-    kDebug() << "FOOBAR!";
     mIdle = false;
     emit status( Running, i18n( "Preparing sync of notes list." ) );
     emit percent( 0 );
@@ -164,7 +164,6 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
 
 void FacebookResource::noteListFetched( KJob* job )
 {
-  kDebug() << "WE ARE HER!";
   Q_ASSERT( !mIdle );
   AllNotesListJob * const listJob = dynamic_cast<AllNotesListJob*>( job );
   Q_ASSERT( listJob );
@@ -178,8 +177,9 @@ void FacebookResource::noteListFetched( KJob* job )
     foreach( const NoteInfoPtr &noteInfo, listJob->allNotes() ) {
       Item note;
       note.setRemoteId( noteInfo->id() );
-      note.setPayload<KMime::Message::Ptr>( noteInfo->asNote() );
-      note.setMimeType( noteInfo->asNote()->mimeType() );
+      note.setPayload( noteInfo->asNote() );
+      note.setSize( noteInfo->asNote()->size() );
+      note.setMimeType( "text/x-vnd.akonadi.note" );
       noteItems.append(note);
     }
 
@@ -432,15 +432,43 @@ void FacebookResource::photoJobFinished(KJob* job)
 bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByteArray> &parts )
 {
   Q_UNUSED( parts );
-  // TODO: Is this ever called??
-  mIdle = false;
-  FriendJob * const friendJob = new FriendJob( item.remoteId(),
+
+  kDebug() << item.mimeType();
+
+  if (item.mimeType() == "text/directory") {
+    // TODO: Is this ever called??
+    mIdle = false;
+    FriendJob * const friendJob = new FriendJob( item.remoteId(),
                                                Settings::self()->accessToken() );
-  mCurrentJob = friendJob;
-  friendJob->setProperty( "Item", QVariant::fromValue( item ) );
-  connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );
-  friendJob->start();
+    mCurrentJob = friendJob;
+    friendJob->setProperty( "Item", QVariant::fromValue( item ) );
+    connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );
+    friendJob->start();
+  } else if (item.mimeType() == "text/x-vnd.akonadi.note") {
+    mIdle = false;
+    NoteJob * const noteJob = new NoteJob( item.remoteId(), Settings::self()->accessToken());
+    mCurrentJob = noteJob;
+    noteJob->setProperty( "Item", QVariant::fromValue( item ) );
+    connect( noteJob, SIGNAL(result(KJob*)), this, SLOT(noteJobFinished(KJob*)) );
+    noteJob->start();
+  }
   return true;
+}
+
+void FacebookResource::noteJobFinished(KJob* job)
+{
+  Q_ASSERT(!mIdle);
+  NoteJob * const noteJob = dynamic_cast<NoteJob*>( job );
+  Q_ASSERT( noteJob );
+  Q_ASSERT( noteJob->noteInfo().size() == 1 );
+  if ( noteJob->error() ) {
+    abortWithError( i18n( "Unable to get information about note from server: %1", noteJob->errorText() ) );
+  } else {
+    Item note = noteJob->property( "Item" ).value<Item>();
+    note.setPayload( noteJob->noteInfo().first()->asNote() );
+    itemRetrieved( note );
+    resetState();
+  }
 }
 
 void FacebookResource::friendJobFinished(KJob* job)
@@ -486,13 +514,16 @@ void FacebookResource::retrieveCollections()
   notes.setRemoteId( notesRID );
   notes.setName( i18n( "Notes" ) );
   notes.setParentCollection( Akonadi::Collection::root() );
-  notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note" << "inode/directory" );
+  notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note" );
   notes.setRights( Collection::ReadOnly );
   EntityDisplayAttribute * const notesDisplayAttribute = new EntityDisplayAttribute();
   notesDisplayAttribute->setIconName( "facebookresource" );
   notes.addAttribute( notesDisplayAttribute );
 
-  collectionsRetrieved( Collection::List() << friends << events << notes );
+//  collectionsRetrieved( Collection::List() << friends << events << notes );
+  collectionsRetrieved( Collection::List() << notes );
+
+
 }
 
 AKONADI_RESOURCE_MAIN( FacebookResource )

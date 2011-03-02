@@ -33,7 +33,12 @@ KMime::Message::Ptr NoteInfo::asNote() const
 {
   KMime::Message::Ptr note( new KMime::Message );
 
- // note->setBody( message().toAscii() );
+  note->setBody( message().toAscii() );
+  note->date()->fromUnicodeString( updatedTime().toString(KDateTime::RFCDateDay), "utf-8" );
+  note->from(true);
+  note->subject()->fromUnicodeString( subject(), "utf-8" );
+
+  note->parse();
 
   return note;
 }
