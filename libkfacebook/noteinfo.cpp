@@ -20,6 +20,7 @@
 
 #include "util.h"
 
+#include <dom/html_document.h>
 #include <KDebug>
 #include <KLocalizedString>
 #include <KPIMUtils/LinkLocator>
@@ -31,16 +32,22 @@ void NoteInfo::setId( const QString &id)
 
 KMime::Message::Ptr NoteInfo::asNote() const
 {
-  KMime::Message::Ptr note( new KMime::Message );
+  KMime::Message *note = new KMime::Message();
 
-  note->setBody( message().toAscii() );
+  QString m = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd\">\n";
+  m += "<html><head></head><body>\n";
+  m += message();
+  m += "</body>";
+
+  note->setBody( m.toAscii() );
   note->date()->fromUnicodeString( updatedTime().toString(KDateTime::RFCDateDay), "utf-8" );
-  note->from(true);
+  note->contentType()->fromUnicodeString( "text/html", "utf-8" );
   note->subject()->fromUnicodeString( subject(), "utf-8" );
+  note->from()->fromUnicodeString( "you@facebook", "utf-8" );
 
-  note->parse();
+  note->assemble();
 
-  return note;
+  return KMime::Message::Ptr(note);
 }
 
 QString NoteInfo::id() const
