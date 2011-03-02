@@ -72,7 +72,8 @@ void SettingsDialog::showAuthenticationDialog()
               << "friends_work_history"
               << "friends_relationships"
               << "user_events"
-              << "user_notes";
+              << "user_notes"
+              << "create_note";
   AuthenticationDialog * const authDialog = new AuthenticationDialog( this );
   authDialog->setAppId( Settings::self()->appID() );
   authDialog->setPermissions( permissions );

@@ -30,6 +30,8 @@
 #include <libkfacebook/allnoteslistjob.h>
 #include <libkfacebook/notejob.h>
 
+#include <libkfacebook/facebookdeletejob.h>
+
 #include <Akonadi/AttributeFactory>
 #include <Akonadi/EntityDisplayAttribute>
 #include <Akonadi/ItemFetchJob>
@@ -515,7 +517,7 @@ void FacebookResource::retrieveCollections()
   notes.setName( i18n( "Notes" ) );
   notes.setParentCollection( Akonadi::Collection::root() );
   notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note" );
-  notes.setRights( Collection::ReadOnly );
+  notes.setRights( Collection::ReadOnly | Collection::CanDeleteItem );
   EntityDisplayAttribute * const notesDisplayAttribute = new EntityDisplayAttribute();
   notesDisplayAttribute->setIconName( "facebookresource" );
   notes.addAttribute( notesDisplayAttribute );
@@ -524,6 +526,23 @@ void FacebookResource::retrieveCollections()
   collectionsRetrieved( Collection::List() << notes );
 
 
+}
+
+void FacebookResource::itemRemoved( const Akonadi::Item &item)
+{
+  /*
+   * Delete a note
+   * TODO: handle signal! and signal akonadi etc! whoohoo
+   */
+  if (item.mimeType() == "text/x-vnd.akonadi.note") {
+    mIdle = false;
+    FacebookDeleteJob * const deleteJob = new FacebookDeleteJob( item.remoteId(),
+                                               Settings::self()->accessToken() );
+    mCurrentJob = deleteJob;
+    deleteJob->setProperty( "Item", QVariant::fromValue( item ) );
+    connect( deleteJob, SIGNAL(result(KJob*)), this, SLOT(deleteJobFinished(KJob*)) );
+    deleteJob->start();
+  }
 }
 
 AKONADI_RESOURCE_MAIN( FacebookResource )
