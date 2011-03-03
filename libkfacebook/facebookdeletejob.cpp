@@ -24,9 +24,6 @@
 #include <KDebug>
 #include <KLocale>
 
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
-
 FacebookDeleteJob::FacebookDeleteJob( const QString& id, const QString& accessToken )
   : mAccessToken( accessToken ),
     mId( id )
@@ -53,7 +50,7 @@ void FacebookDeleteJob::start()
   url.addQueryItem("method", "delete");
 
   kDebug() << "Starting delete: " << url;
-  KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
+  KIO::StoredTransferJob * const job = KIO::storedHttpPost( QByteArray(), url, KIO::HideProgressInfo );
   mJob = job;
   connect( job, SIGNAL(result(KJob*)), this, SLOT(deleteJobFinished(KJob*)) );
   job->start();
@@ -61,14 +58,14 @@ void FacebookDeleteJob::start()
 
 void FacebookDeleteJob::deleteJobFinished( KJob *job )
 {
-  KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
-  Q_ASSERT( transferJob );
-  if ( transferJob->error() ) { 
-    setError( transferJob->error() );
-    setErrorText( KIO::buildErrorString( error(), transferJob->errorText() ) );
-    kWarning() << "Job error: " << transferJob->errorString();
+  KIO::StoredTransferJob *deleteJob = dynamic_cast<KIO::StoredTransferJob *>( job );
+  Q_ASSERT( deleteJob );
+  if ( deleteJob->error() ) { 
+    setError( deleteJob->error() );
+    setErrorText( KIO::buildErrorString( error(), deleteJob->errorText() ) );
+    kWarning() << "Job error: " << deleteJob->errorString();
   } else {
-    kDebug() << "Got data: " << QString::fromAscii( transferJob->data().data() );
+    kDebug() << "Got data: " << QString::fromAscii( deleteJob->data().data() );
   }
 
   emitResult();
