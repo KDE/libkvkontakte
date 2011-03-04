@@ -54,22 +54,27 @@ Todo
       including instructions on how to fix that.
     - pop up on first sync if the access token is empty, with "don't ask again" option
 - own kpart for messages, invite replies and so on (check what facebook mobile can do!)
+- 0.1 add i18c for strings that need context
+- 0.1 userbase documentation that shows how to set up resources, both in kdepim 4.4 and 4.6
 
 Bugs
 ----
 
+- 0.1 QJSon not installed -> weird CMake error
 - 0.1: retrieveItem() for events not implemented
 - switching to "broken" status after an authentication error does not work, something overwrites the status
 - If only the city is set in the address, KAddressbook shows a superflous comma
-- creates tons of debug areas in kdebugdialog. akonadi_facebook_resource_1 .. 2392
+- creates tons of debug areas in kdebugdialog. akonadi_facebook_resource_1 .. 2392 (general Akonadi problem, report)
 - Size of facebook webpage doesn't fit dialog and scrollbars are shown
 - 0.1 No support for "year not set" in KAddressbook -> birthday appears in year 1900
   - add birthday year patch to repo should maintainer decline it
-- timezone doesn't work
+- timezone doesn't work (report bug)
 
 Refactor
 --------
 
+- add documentation to job classes + general overview documentation
+	- how facebook requests work (HTTP+QJSON), job-based approach
 - refactor facebookresource.cpp. It is getting big, and the function names are friends-only
 - common base class for eventjob and friendjob
 
@@ -80,10 +85,12 @@ Roadmap
 0.1: read-only events + notes
 0.2: newsfeed (kontact summary plugin)
 0.3: read-only messages
+1.0: 0.3 after some testing
 
 Releasing
 ---------
 
+- Split this out into RELEASE-HOWTO
 - Once
   - move from scratch repo to playground
     - translators automatically cc'd
@@ -102,6 +109,8 @@ Releasing
   - provide opensuse build service package
   - announce
     - kde-announce mailing list
+    - kde-packagers
+    - kde-apps
     - kde-pim mailing list
     - projects.kde.org news
     - blog
@@ -121,6 +130,7 @@ Releasing
     - status update of facebook app
     - post to my own facebook wall (KDE+KDAB groups)
     - post to the KDEPIM facebook group
+	- mention new developers in @ tag
     - forum.kde.org - brainstorm section, news section
       - http://forum.kde.org/viewtopic.php?f=20&t=37275
       - http://forum.kde.org/brainstorm.php#idea89545_page1
