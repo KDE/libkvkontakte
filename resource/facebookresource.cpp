@@ -29,6 +29,7 @@
 #include <libkfacebook/eventjob.h>
 #include <libkfacebook/allnoteslistjob.h>
 #include <libkfacebook/notejob.h>
+#include <libkfacebook/noteaddjob.h>
 
 #include <libkfacebook/facebookdeletejob.h>
 
@@ -36,6 +37,7 @@
 #include <Akonadi/EntityDisplayAttribute>
 #include <Akonadi/ItemFetchJob>
 #include <Akonadi/ItemFetchScope>
+#include <akonadi/changerecorder.h>
 
 using namespace Akonadi;
 
@@ -59,6 +61,9 @@ FacebookResource::FacebookResource( const QString &id )
   connect( this, SIGNAL(abortRequested()),
            this, SLOT(slotAbortRequested()) );
   connect( this, SIGNAL(reloadConfiguration()), SLOT(configurationChanged()) );
+
+  changeRecorder()->fetchCollection( true );
+  changeRecorder()->itemFetchScope().fetchFullPayload( true );
 }
 
 FacebookResource::~FacebookResource()
@@ -179,7 +184,7 @@ void FacebookResource::noteListFetched( KJob* job )
     foreach( const NoteInfoPtr &noteInfo, listJob->allNotes() ) {
       Item note;
       note.setRemoteId( noteInfo->id() );
-      note.setPayload( noteInfo->asNote() );
+      note.setPayload<KMime::Message::Ptr>( noteInfo->asNote() );
       note.setSize( noteInfo->asNote()->size() );
       note.setMimeType( "text/x-vnd.akonadi.note" );
       noteItems.append(note);
@@ -516,8 +521,9 @@ void FacebookResource::retrieveCollections()
   notes.setRemoteId( notesRID );
   notes.setName( i18n( "Notes" ) );
   notes.setParentCollection( Akonadi::Collection::root() );
-  notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note" );
-  notes.setRights( Collection::ReadOnly | Collection::CanDeleteItem );
+  notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note" << "inode/directory" );
+  notes.setRights( Collection::ReadOnly      | Collection::CanChangeItem | 
+                   Collection::CanDeleteItem | Collection::CanCreateItem );
   EntityDisplayAttribute * const notesDisplayAttribute = new EntityDisplayAttribute();
   notesDisplayAttribute->setIconName( "facebookresource" );
   notes.addAttribute( notesDisplayAttribute );
@@ -549,6 +555,38 @@ void FacebookResource::deleteJobFinished(KJob *job)
 {
   Item item = job->property( "Item" ).value<Item>(); 
   changeCommitted( item );
+}
+
+void FacebookResource::itemAdded( const Akonadi::Item &item, const Akonadi::Collection &collection )
+{
+  /*
+   * A note is added!
+   */
+  if (collection.remoteId() == notesRID) {
+    if (item.hasPayload<KMime::Message::Ptr>() == true) {
+      KMime::Message::Ptr note = item.payload<KMime::Message::Ptr>();
+      QString subject = note->subject()->asUnicodeString();
+      QString message = note->body();
+
+      mIdle = false;
+      NoteAddJob * const addJob = new NoteAddJob( subject, message, Settings::self()->accessToken() );
+      mCurrentJob = addJob;
+      addJob->setProperty( "Item", QVariant::fromValue( item ) );
+      connect( addJob, SIGNAL(result(KJob *)), this, SLOT(noteAddJobFinished(KJob *)) );
+      addJob->start();
+    }
+  }
+
+  changeCommitted( item );
+}
+
+void FacebookResource::noteAddJobFinished(KJob *job)
+{
+  NoteAddJob * const addJob = dynamic_cast<NoteAddJob*>( job );
+  Item note = addJob->property( "Item" ).value<Item>();
+  note.setRemoteId(addJob->property( "id" ).value<QString>());
+
+  changeCommitted( note );
 }
 
 AKONADI_RESOURCE_MAIN( FacebookResource )

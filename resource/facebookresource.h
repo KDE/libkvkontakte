@@ -43,6 +43,7 @@ class FacebookResource : public Akonadi::ResourceBase,
     bool retrieveItem( const Akonadi::Item &item, const QSet<QByteArray> &parts );
 
     void itemRemoved( const Akonadi::Item &item);
+    void itemAdded( const Akonadi::Item &item, const Akonadi::Collection &collection );
 
   protected:
 
@@ -61,6 +62,7 @@ class FacebookResource : public Akonadi::ResourceBase,
     void detailedEventListJobFinished( KJob *job );
     void noteListFetched( KJob *job );
     void noteJobFinished( KJob *job );
+    void noteAddJobFinished( KJob *job );
 
     void deleteJobFinished( KJob *job );
 
