@@ -57,19 +57,6 @@ Todo
 - 0.1 add i18c for strings that need context
 - 0.1 userbase documentation that shows how to set up resources, both in kdepim 4.4 and 4.6
 
-Bugs
-----
-
-- 0.1 QJSon not installed -> weird CMake error
-- 0.1: retrieveItem() for events not implemented
-- switching to "broken" status after an authentication error does not work, something overwrites the status
-- If only the city is set in the address, KAddressbook shows a superflous comma
-- creates tons of debug areas in kdebugdialog. akonadi_facebook_resource_1 .. 2392 (general Akonadi problem, report)
-- Size of facebook webpage doesn't fit dialog and scrollbars are shown
-- 0.1 No support for "year not set" in KAddressbook -> birthday appears in year 1900
-  - add birthday year patch to repo should maintainer decline it
-- timezone doesn't work (report bug)
-
 Refactor
 --------
 
@@ -86,54 +73,3 @@ Roadmap
 0.2: newsfeed (kontact summary plugin)
 0.3: read-only messages
 1.0: 0.3 after some testing
-
-Releasing
----------
-
-- Split this out into RELEASE-HOWTO
-- Once
-  - move from scratch repo to playground
-    - translators automatically cc'd
-  - add to projects.kde.org
-
-- 2 weeks before
-  - add git branch
-  - announce string freeze + branch to translators
-
-- Release day
-  - increase soversion of libkfacebook
-  - increase version number
-  - add changelog
-  - add git tag
-  - provide tarball(?)
-  - provide opensuse build service package
-  - announce
-    - kde-announce mailing list
-    - kde-packagers
-    - kde-apps
-    - kde-pim mailing list
-    - projects.kde.org news
-    - blog
-      - short intro blurb of what the akonadi resource is
-      - changelog
-      - screenshots
-        - kaddressbook showing a KDE contact who has some details (needs approval!)
-        - korganizer showing at least two of my events + personal calender
-        - kontact summary: upcoming birthdays + events + news feed
-      - provide link to bugtracker / facebook app page
-      - provide link to setup instructions blog entry
-        - for KDEPIM 4.4 and 4.6
-        - detailed instructions how to set up resource and how to use it
-        - screenshots for every step
-        - instructions on where to download and how to install
-      - add "like" button
-    - status update of facebook app
-    - post to my own facebook wall (KDE+KDAB groups)
-    - post to the KDEPIM facebook group
-	- mention new developers in @ tag
-    - forum.kde.org - brainstorm section, news section
-      - http://forum.kde.org/viewtopic.php?f=20&t=37275
-      - http://forum.kde.org/brainstorm.php#idea89545_page1
-      - http://forum.kde.org/brainstorm.php#idea87665_page1
-    - projects.kde.org news
-    - twitter / identica

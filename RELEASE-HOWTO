@@ -1,0 +1,41 @@
+- 2 weeks before
+  - add git branch
+  - announce string freeze + branch to translators
+
+- Release day
+  - increase soversion of libkfacebook
+  - increase version number
+  - add changelog
+  - add git tag
+  - provide tarball(?)
+  - provide opensuse build service package
+  - announce
+    - kde-announce mailing list
+    - kde-packagers
+    - kde-apps
+    - kde-pim mailing list
+    - projects.kde.org news
+    - blog
+      - short intro blurb of what the akonadi resource is
+      - changelog
+      - screenshots
+        - kaddressbook showing a KDE contact who has some details (needs approval!)
+        - korganizer showing at least two of my events + personal calender
+        - kontact summary: upcoming birthdays + events + news feed
+      - provide link to bugtracker / facebook app page
+      - provide link to setup instructions blog entry
+        - for KDEPIM 4.4 and 4.6
+        - detailed instructions how to set up resource and how to use it
+        - screenshots for every step
+        - instructions on where to download and how to install
+      - add "like" button
+    - status update of facebook app
+    - post to my own facebook wall (KDE+KDAB groups)
+    - post to the KDEPIM facebook group
+  - mention new developers in @ tag
+    - forum.kde.org - brainstorm section, news section
+      - http://forum.kde.org/viewtopic.php?f=20&t=37275
+      - http://forum.kde.org/brainstorm.php#idea89545_page1
+      - http://forum.kde.org/brainstorm.php#idea87665_page1
+    - projects.kde.org news
+    - twitter / identica
