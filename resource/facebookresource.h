@@ -61,7 +61,7 @@ class FacebookResource : public Akonadi::ResourceBase,
   private:
     void fetchNextPhoto();
     void resetState();
-    void abortWithError( const QString errorMessage, bool authFailure = false );
+    void abortWithError( const QString& errorMessage, bool authFailure = false );
     void abort();
 
     void fetchNewOrChangedFriends();

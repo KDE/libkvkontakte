@@ -77,7 +77,7 @@ void FacebookResource::abort()
   cancelTask();
 }
 
-void FacebookResource::abortWithError( const QString errorMessage, bool authFailure )
+void FacebookResource::abortWithError( const QString& errorMessage, bool authFailure )
 {
   resetState();
   cancelTask( errorMessage );
