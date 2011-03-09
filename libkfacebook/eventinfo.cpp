@@ -149,3 +149,17 @@ void EventInfo::setOrganizer(const QString& organizer)
   mOrganizer = organizer;
 }
 
+void EventInfo::setUpdatedTimeString(const QString& updatedTime)
+{
+  mUpdatedTime = updatedTime;
+}
+
+KDateTime EventInfo::updatedTime() const
+{
+  return facebookTimeToKDateTime(mUpdatedTime);
+}
+
+QString EventInfo::updatedTimeString() const
+{
+  return mUpdatedTime;
+}

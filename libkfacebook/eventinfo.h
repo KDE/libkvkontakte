@@ -47,6 +47,7 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
   Q_PROPERTY(QString location WRITE setLocation READ location)
   Q_PROPERTY(QString id WRITE setId READ id)
   Q_PROPERTY(QString description WRITE setDescription READ description)
+  Q_PROPERTY(QString updated_time WRITE setUpdatedTimeString READ updatedTimeString)
   public:
     void setName( const QString &name );
     QString name() const;
@@ -71,6 +72,10 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     void setOrganizer( const QString &organizer );
     QString organizer() const;
 
+    void setUpdatedTimeString( const QString & updatedTime );
+    QString updatedTimeString() const;
+    KDateTime updatedTime() const;
+
     EventPtr asEvent() const;
 
   private:
@@ -81,6 +86,7 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     QString mId;
     QString mDescription;
     QString mOrganizer;
+    QString mUpdatedTime;
 };
 
 typedef QSharedPointer<EventInfo> EventInfoPtr;
