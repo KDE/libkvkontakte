@@ -36,6 +36,8 @@ EventPtr EventInfo::asEvent() const
           "\">" + i18n( "View Event on Facebook" ) + "</a>";
 
   event->setSummary( name() );
+  event->setLastModified( updatedTime() );
+  event->setCreated( updatedTime() ); // That's a lie, but Facebook doesn't give us the created time
   event->setDescription( desc, true );
   event->setLocation( location() );
   event->setHasEndDate( endTime().isValid() );
