@@ -161,6 +161,7 @@ KABC::Addressee UserInfo::toAddressee() const
 {
   KABC::Addressee addressee;
   addressee.setGivenName( firstName() );
+  addressee.setUid( id() );
   addressee.setFamilyName( lastName() );
   addressee.setFormattedName( name() );
   addressee.setUrl( website() );
