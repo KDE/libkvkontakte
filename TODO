@@ -1,7 +1,6 @@
 Todo
 ----
 
--0.1 check if it compiles with kdepimlibs 4.5/kdepim-runtim 4.4
 -data
   - friend lists
     - as contact groups or as collections?
@@ -32,9 +31,6 @@ Todo
       - what about settings, simply open resource settings?
       - ability to filter wall posts
   - notes
-- 0.1 translations
-  - messages.sh
-  - poke tsgdeos so that scripty can run
 - 0.1 automatically sync every x minutes setting
   - not when offline
 - offline support / cache policies / parts
@@ -56,6 +52,8 @@ Todo
 - own kpart for messages, invite replies and so on (check what facebook mobile can do!)
 - 0.1 add i18c for strings that need context
 - 0.1 userbase documentation that shows how to set up resources, both in kdepim 4.4 and 4.6
+    - also add Help button in settings dialog that opens the webpage
+- 0.1 Flesh out the projects.kde.org page a bit, with screenshots and a long description
 
 Refactor
 --------

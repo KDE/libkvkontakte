@@ -1,5 +1,5 @@
 - 2 weeks before
-  - add git branch
+  - add stable git branch and mark it as stable on projects.kde.org
   - announce string freeze + branch to translators
 
 - Release day
@@ -9,9 +9,11 @@
   - add git tag
   - provide tarball(?)
   - provide opensuse build service package
+  - mail to kde-packagers
+
+- Release day (+5 days after actual release, so that packagers created the packages)
   - announce
     - kde-announce mailing list
-    - kde-packagers
     - kde-apps
     - kde-pim mailing list
     - projects.kde.org news
@@ -32,6 +34,7 @@
     - status update of facebook app
     - post to my own facebook wall (KDE+KDAB groups)
     - post to the KDEPIM facebook group
+  - make sure to link to packages
   - mention new developers in @ tag
     - forum.kde.org - brainstorm section, news section
       - http://forum.kde.org/viewtopic.php?f=20&t=37275

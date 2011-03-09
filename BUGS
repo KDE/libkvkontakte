@@ -1,5 +1,15 @@
+- 0.1 Syncing the Facebook resource freezes up Kontact in 4.4.x
+    - Bug in the Facebook resource: The item revision is incremented every sync,
+      probably because the payload changes (for example DTSTAMP for events)
+      This might be a limitation in the ResourceBase sync code.
+    - After a sync, the Kontact summary updates itself for each changed item, leading to many
+      costly updates that freeze the GUI
+    - To fix this problem, the updated_time could be compared with the timestamp
+      attribute, however a bug in Facebook prevents this.
+    - Possible workaround in Kontact: Limit updates of the summary to only update each 15 seconds or
+      so
 - 0.1 QJSon not installed -> weird CMake error
-- 0.1: retrieveItem() for events not implemented
+- 0.1 retrieveItem() for events not implemented
 - switching to "broken" status after an authentication error does not work, something overwrites the status
 - If only the city is set in the address, KAddressbook shows a superflous comma
 - creates tons of debug areas in kdebugdialog. akonadi_facebook_resource_1 .. 2392 (general Akonadi problem, report)
