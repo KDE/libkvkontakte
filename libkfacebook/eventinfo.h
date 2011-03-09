@@ -19,11 +19,24 @@
 #ifndef EVENTINFO_H
 #define EVENTINFO_H
 
+#include <config.h>
 #include "libkfacebook_export.h"
 
 #include <KDateTime>
-#include <KCalCore/Event>
 #include <QObject>
+
+#ifndef KDEPIM_44_COMPAT
+#include <KCalCore/Event>
+typedef KCalCore::Event Event;
+typedef KCalCore::Event::Ptr EventPtr;
+typedef KCalCore::Incidence::Ptr IncidencePtr;
+#else
+#include <boost/shared_ptr.hpp>
+#include <KCal/Event>
+typedef KCal::Event Event;
+typedef boost::shared_ptr<KCal::Event> EventPtr;
+typedef boost::shared_ptr<KCal::Incidence> IncidencePtr;
+#endif
 
 class LIBKFACEBOOK_EXPORT EventInfo : public QObject
 {
@@ -58,7 +71,7 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     void setOrganizer( const QString &organizer );
     QString organizer() const;
 
-    KCalCore::Event::Ptr asEvent() const;
+    EventPtr asEvent() const;
 
   private:
     QString mName;

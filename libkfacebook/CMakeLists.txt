@@ -31,9 +31,14 @@ target_link_libraries(libkfacebook
   ${QJSON_LIBRARIES}
   ${QJSON_LIBRARY}
   ${KDEPIMLIBS_KABC_LIBS}
-  ${KDEPIMLIBS_KCALCORE_LIBS}
   ${KDEPIMLIBS_KPIMUTILS_LIBS}
 )
+
+if(KDEPIM_44_COMPAT)
+  target_link_libraries(libkfacebook ${KDEPIMLIBS_KCAL_LIBS})
+else(KDEPIM_44_COMPAT)
+  target_link_libraries(libkfacebook ${KDEPIMLIBS_KCALCORE_LIBS})
+endif(KDEPIM_44_COMPAT)
 
 set_target_properties(libkfacebook PROPERTIES VERSION ${LIB_VERSION} SOVERSION ${LIB_SOVERSION})
 install(TARGETS libkfacebook ${INSTALL_TARGETS_DEFAULT_ARGS})

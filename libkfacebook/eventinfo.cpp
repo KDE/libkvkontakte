@@ -24,9 +24,9 @@
 #include <KLocalizedString>
 #include <KPIMUtils/LinkLocator>
 
-KCalCore::Event::Ptr EventInfo::asEvent() const
+EventPtr EventInfo::asEvent() const
 {
-  KCalCore::Event::Ptr event( new KCalCore::Event );
+  EventPtr event( new Event );
   QString desc = description();
   desc = KPIMUtils::LinkLocator::convertToHtml( desc, KPIMUtils::LinkLocator::ReplaceSmileys );
   if ( !desc.isEmpty() ) {

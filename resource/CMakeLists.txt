@@ -51,13 +51,18 @@ include_directories (
 target_link_libraries( akonadi_facebook_resource
   ${KDEPIMLIBS_AKONADI_LIBS}
   ${KDEPIMLIBS_KABC_LIBS}
-  ${KDEPIMLIBS_KCALCORE_LIBS}
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
   ${QT_QTDBUS_LIBRARY}
   ${KDE4_KDECORE_LIBS}
   libkfacebook
 )
+
+if(KDEPIM_44_COMPAT)
+  target_link_libraries(akonadi_facebook_resource ${KDEPIMLIBS_KCAL_LIBS})
+else(KDEPIM_44_COMPAT)
+  target_link_libraries(akonadi_facebook_resource ${KDEPIMLIBS_KCALCORE_LIBS})
+endif(KDEPIM_44_COMPAT)
 
 add_subdirectory(icons)
 
