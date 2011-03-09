@@ -38,6 +38,20 @@ typedef boost::shared_ptr<KCal::Event> EventPtr;
 typedef boost::shared_ptr<KCal::Incidence> IncidencePtr;
 #endif
 
+class Attendee {
+  public:
+    Attendee(const QString &name, const QString &id, const QString &status);
+
+    QString getName() const;
+    QString getId() const;
+    QString getStatus() const;
+
+  private:
+    QString mName;
+    QString mId;
+    QString mStatus;
+};
+
 class LIBKFACEBOOK_EXPORT EventInfo : public QObject
 {
   Q_OBJECT
@@ -76,6 +90,10 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     QString updatedTimeString() const;
     KDateTime updatedTime() const;
 
+    /* TODO: Add more const stuff */
+    void addAttendee(Attendee const *a);
+    QList<Attendee const *> attendees() const;
+
     EventPtr asEvent() const;
 
   private:
@@ -87,6 +105,8 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     QString mDescription;
     QString mOrganizer;
     QString mUpdatedTime;
+
+    QList<const Attendee *> mAttendees;
 };
 
 typedef QSharedPointer<EventInfo> EventInfoPtr;

@@ -47,7 +47,8 @@ QStringList EventJob::eventFields() const
          << "location"
          << "venue"
          << "privacy"
-         << "updated_time";
+         << "updated_time"
+         << "invited";
   return fields;
 }
 
@@ -64,6 +65,17 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariant owner = dataMap.value( "owner" );
   if ( !owner.isNull() && owner.isValid() ) {
     eventInfo->setOrganizer( owner.toMap().value( "name" ).toString() );
+  }
+
+  const QVariantList attendees = dataMap.value("invited").toMap().value("data").toList();
+
+  QVariant attendee;
+  foreach(attendee, attendees) {
+    const QVariantMap attendeeMap = attendee.toMap();
+    Attendee *a = new Attendee(attendeeMap["name"].toString(), 
+                               attendeeMap["id"].toString(),
+                               attendeeMap["rsvp_status"].toString());
+    eventInfo->addAttendee(a);
   }
   return eventInfo;
 }

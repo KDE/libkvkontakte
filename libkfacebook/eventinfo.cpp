@@ -23,6 +23,29 @@
 #include <KDebug>
 #include <KLocalizedString>
 #include <KPIMUtils/LinkLocator>
+#include <KCal/Attendee>
+
+Attendee::Attendee(const QString &name, const QString &id, const QString &status)
+  : mName(name), mId(id), mStatus(status)
+{
+
+}
+
+QString Attendee::getName() const
+{
+  return mName;
+}
+
+QString Attendee::getId() const
+{
+  return mId;
+}
+
+QString Attendee::getStatus() const
+{
+  return mStatus;
+}
+
 
 EventPtr EventInfo::asEvent() const
 {
@@ -63,10 +86,33 @@ EventPtr EventInfo::asEvent() const
   }
 
   // TODO: Organizer
-  //       Attendees (accepted, declined)
   //       Public/Private -> freebusy!
   //       venue: add to location?
   //       picture?
+  
+  const QList<Attendee const *> eventAttendees = attendees();
+
+  QList<Attendee const *>::const_iterator i;
+  for (i = eventAttendees.begin(); i != eventAttendees.end(); i++) {
+    const Attendee *a = *i;
+
+    KCal::Attendee::PartStat status = KCal::Attendee::NeedsAction;
+    if (a->getStatus() == "attending") {
+      status = KCal::Attendee::Accepted;
+    } else if (a->getStatus() == "declined") {
+      status = KCal::Attendee::Declined;
+    } else if (a->getStatus() == "unsure") {
+      status = KCal::Attendee::Tentative;
+    }
+
+    KCal::Attendee *b = new KCal::Attendee(a->getName(), 
+                                           "facebook@unkown.invalid", 
+                                           false, 
+                                           status,
+                                           KCal::Attendee::OptParticipant,
+                                           a->getId() );
+    event->addAttendee(b);
+  }
 
   return event;
 }
@@ -164,4 +210,14 @@ KDateTime EventInfo::updatedTime() const
 QString EventInfo::updatedTimeString() const
 {
   return mUpdatedTime;
+}
+
+void EventInfo::addAttendee(Attendee const *a )
+{
+  mAttendees << a;
+}
+
+QList<Attendee const *> EventInfo::attendees() const
+{
+  return mAttendees;
 }

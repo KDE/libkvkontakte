@@ -529,7 +529,7 @@ void FacebookResource::retrieveCollections()
   notes.addAttribute( notesDisplayAttribute );
 
 //  collectionsRetrieved( Collection::List() << friends << events << notes );
-  collectionsRetrieved( Collection::List() << notes );
+  collectionsRetrieved( Collection::List() << events << notes );
 
 
 }
