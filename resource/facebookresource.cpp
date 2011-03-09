@@ -266,6 +266,7 @@ void FacebookResource::detailedEventListJobFinished( KJob* job )
   EventJob * const eventJob = dynamic_cast<EventJob*>( job );
   Q_ASSERT( eventJob );
   if ( job->error() ) {
+    abortWithError( i18n( "Unable to get list of events from server: %1", eventJob->errorText() ) );
   } else {
     setItemStreamingEnabled( true );
 
