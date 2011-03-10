@@ -22,6 +22,7 @@
 #include <libkfacebook/userinfo.h>
 #include <Akonadi/ResourceBase>
 #include <QPointer>
+#include <QMutex>
 
 class FacebookResource : public Akonadi::ResourceBase,
                          public Akonadi::AgentBase::Observer
@@ -68,7 +69,7 @@ class FacebookResource : public Akonadi::ResourceBase,
 
 
   private:
-    void fetchNextPhoto();
+    void fetchPhotos();
     void resetState();
     void abortWithError( const QString& errorMessage, bool authFailure = false );
     void abort();
@@ -91,6 +92,7 @@ class FacebookResource : public Akonadi::ResourceBase,
 
     bool mIdle;
     QPointer<KJob> mCurrentJob;
+    QMutex mPhotoMutex;
 };
 
 #endif

@@ -85,5 +85,6 @@ class LIBKFACEBOOK_EXPORT UserInfo : public QObject
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;
+Q_DECLARE_METATYPE(UserInfoPtr)
 
 #endif

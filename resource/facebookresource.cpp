@@ -354,18 +354,16 @@ void FacebookResource::detailedFriendListJobFinished( KJob* job )
     mNumFriends = mPendingFriends.size();
     emit status( Running, i18n( "Retrieving friends' photos." ) );
     emit percent( 10 );
-    fetchNextPhoto();
+    fetchPhotos();
   }
 }
 
-void FacebookResource::fetchNextPhoto()
+void FacebookResource::fetchPhotos()
 {
-  if (mPendingFriends.isEmpty()) {
-    itemsRetrievalDone();
-    finishFriendFetching();
-  } else {
-    PhotoJob * const photoJob = new PhotoJob( mPendingFriends.first()->id(), Settings::self()->accessToken() );
-    mCurrentJob = photoJob;
+  UserInfoPtr f;
+  foreach(f, mPendingFriends) {
+    PhotoJob * const photoJob = new PhotoJob(f->id(), Settings::self()->accessToken() );
+    photoJob->setProperty("friend", QVariant::fromValue( f ));
     connect(photoJob, SIGNAL(result(KJob*)), this, SLOT(photoJobFinished(KJob*)));
     photoJob->start();
   }
@@ -402,18 +400,13 @@ void FacebookResource::finishFriendFetching()
 
 void FacebookResource::photoJobFinished(KJob* job)
 {
-  Q_ASSERT(!mIdle);
   PhotoJob * const photoJob = dynamic_cast<PhotoJob*>( job );
   Q_ASSERT(photoJob);
-  Q_ASSERT(!mPendingFriends.isEmpty());
+  UserInfoPtr user = job->property("friend").value<UserInfoPtr>();
+
   if (photoJob->error()) {
     abortWithError( i18n( "Unable to retrieve friends' photo from server: %1", photoJob->errorText() ) );
   } else {
-
-    // Update lists
-    const UserInfoPtr user = mPendingFriends.first();
-    mPendingFriends.removeFirst();
-
     // Create Item
     KABC::Addressee addressee = user->toAddressee();
     addressee.setPhoto( KABC::Picture( photoJob->photo() ) );
@@ -425,14 +418,24 @@ void FacebookResource::photoJobFinished(KJob* job)
     timeStampAttribute->setTimeStamp( user->updatedTime() );
     newUser.addAttribute( timeStampAttribute );
 
-    // Done!
+    /*
+     * "Critial section" where we need to serialize
+     * 
+     * TODO: find out if itemsRetrievedIncremental is thread safe (then it can
+     * be moved outside).
+     */
+    mPhotoMutex.lock();
     itemsRetrievedIncremental( Item::List() << newUser, Item::List() );
+    mPendingFriends.removeFirst();
     if (!mPendingFriends.isEmpty()) {
       const int alreadyDownloadedFriends = mNumFriends - mPendingFriends.size();
       const float percentageDone = alreadyDownloadedFriends / (float)mNumFriends * 100.0f;
       emit percent(10 + percentageDone * 0.9f);
+    } else {
+      itemsRetrievalDone();
+      finishFriendFetching();
     }
-    fetchNextPhoto();
+    mPhotoMutex.unlock();
   }
 }
 

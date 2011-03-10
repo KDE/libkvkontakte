@@ -34,7 +34,6 @@ Todo
   - not when offline
 - offline support / cache policies / parts
 - faster friend sync
-  - run photo jobs in parallel
 - button "add kopete account"
 - make libkfacebook static
 - plasma silk wizard (talk to sebas)
