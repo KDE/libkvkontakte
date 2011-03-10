@@ -40,16 +40,16 @@ typedef boost::shared_ptr<KCal::Incidence> IncidencePtr;
 
 class Attendee {
   public:
-    Attendee(const QString &name, const QString &id, const QString &status);
+    Attendee(const QString &name, const QString &id, const KCal::Attendee::PartStat &status);
 
     QString getName() const;
     QString getId() const;
-    QString getStatus() const;
+    KCal::Attendee::PartStat getStatus() const;
 
   private:
     QString mName;
     QString mId;
-    QString mStatus;
+    KCal::Attendee::PartStat mStatus;
 };
 
 class LIBKFACEBOOK_EXPORT EventInfo : public QObject

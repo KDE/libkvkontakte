@@ -25,7 +25,7 @@
 #include <KPIMUtils/LinkLocator>
 #include <KCal/Attendee>
 
-Attendee::Attendee(const QString &name, const QString &id, const QString &status)
+Attendee::Attendee(const QString &name, const QString &id, const KCal::Attendee::PartStat &status)
   : mName(name), mId(id), mStatus(status)
 {
 
@@ -41,7 +41,7 @@ QString Attendee::getId() const
   return mId;
 }
 
-QString Attendee::getStatus() const
+KCal::Attendee::PartStat Attendee::getStatus() const
 {
   return mStatus;
 }
@@ -96,19 +96,10 @@ EventPtr EventInfo::asEvent() const
   for (i = eventAttendees.begin(); i != eventAttendees.end(); i++) {
     const Attendee *a = *i;
 
-    KCal::Attendee::PartStat status = KCal::Attendee::NeedsAction;
-    if (a->getStatus() == "attending") {
-      status = KCal::Attendee::Accepted;
-    } else if (a->getStatus() == "declined") {
-      status = KCal::Attendee::Declined;
-    } else if (a->getStatus() == "unsure") {
-      status = KCal::Attendee::Tentative;
-    }
-
     KCal::Attendee *b = new KCal::Attendee(a->getName(), 
                                            "facebook@unkown.invalid", 
                                            false, 
-                                           status,
+                                           a->getStatus(),
                                            KCal::Attendee::OptParticipant,
                                            a->getId() );
     event->addAttendee(b);
