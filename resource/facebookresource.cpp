@@ -563,10 +563,10 @@ void FacebookResource::itemAdded( const Akonadi::Item &item, const Akonadi::Coll
    * A note is added!
    */
   if (collection.remoteId() == notesRID) {
-    if (item.hasPayload<KMime::Message::Ptr>() == true) {
-      KMime::Message::Ptr note = item.payload<KMime::Message::Ptr>();
-      QString subject = note->subject()->asUnicodeString();
-      QString message = note->body();
+    if (item.hasPayload<KMime::Message::Ptr>()) {
+      const KMime::Message::Ptr note = item.payload<KMime::Message::Ptr>();
+      const QString subject = note->subject()->asUnicodeString();
+      const QString message = note->body();
 
       mIdle = false;
       NoteAddJob * const addJob = new NoteAddJob( subject, message, Settings::self()->accessToken() );
@@ -575,9 +575,7 @@ void FacebookResource::itemAdded( const Akonadi::Item &item, const Akonadi::Coll
       connect( addJob, SIGNAL(result(KJob *)), this, SLOT(noteAddJobFinished(KJob *)) );
       addJob->start();
     }
-  }
-
-  changeCommitted( item );
+  } 
 }
 
 void FacebookResource::noteAddJobFinished(KJob *job)
@@ -585,6 +583,9 @@ void FacebookResource::noteAddJobFinished(KJob *job)
   NoteAddJob * const addJob = dynamic_cast<NoteAddJob*>( job );
   Item note = addJob->property( "Item" ).value<Item>();
   note.setRemoteId(addJob->property( "id" ).value<QString>());
+
+  mIdle = true;
+  mCurrentJob = NULL;
 
   changeCommitted( note );
 }
