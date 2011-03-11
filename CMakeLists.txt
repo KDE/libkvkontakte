@@ -33,6 +33,7 @@ include_directories(
   ${KDEPIMLIBS_INCLUDE_DIRS}
   ${KDE4_INCLUDES}
   ${QJSON_INCLUDE_DIR}
+  ${Boost_INCLUDE_DIR}
 )
 
 add_subdirectory(libkfacebook)
