@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Facebook
+Name[nl]=Facebook
 Name[pt]=Facebook
 Name[uk]=Facebook
 Name[x-test]=xxFacebookxx
 Comment=Makes your Facebook data available in KDE
+Comment[nl]=Maak je Facebook data beschikbaar in KDE
 Comment[pt]=Torna os seus dados do Facebook disponíveis no KDE
 Comment[uk]=Робить доступними дані Facebook у KDE
 Comment[x-test]=xxMakes your Facebook data available in KDExx
