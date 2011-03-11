@@ -19,10 +19,10 @@
 #ifndef EVENTJOB_H
 #define EVENTJOB_H
 
-#include "facebookjob.h"
+#include "facebookjobs.h"
 #include "eventinfo.h"
 
-class LIBKFACEBOOK_EXPORT EventJob : public FacebookJob
+class LIBKFACEBOOK_EXPORT EventJob : public FacebookGetJob
 {
   Q_OBJECT
   public:

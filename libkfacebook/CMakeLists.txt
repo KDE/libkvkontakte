@@ -5,7 +5,6 @@ set(libkfacebook_SRCS
   userinfojob.cpp
   userinfo.cpp
   friendlistjob.cpp
-  facebookjob.cpp
   friendjob.cpp
   photojob.cpp
   eventslistjob.cpp
@@ -17,9 +16,8 @@ set(libkfacebook_SRCS
   noteslistjob.cpp
   allnoteslistjob.cpp
   notejob.cpp
-  facebookdeletejob.cpp
   noteaddjob.cpp
-  facebookaddjob.cpp
+  facebookjobs.cpp
 )
 
 kde4_add_library(kfacebook SHARED ${libkfacebook_SRCS})

@@ -22,13 +22,13 @@
 #include <qjson/qobjecthelper.h>
 
 NoteJob::NoteJob( const QString& noteId, const QString& accessToken )
-  : FacebookJob( '/' + noteId, accessToken),
+  : FacebookGetJob( '/' + noteId, accessToken),
     mMultiQuery( false )
 {
 }
 
 NoteJob::NoteJob( const QStringList& noteIds, const QString& accessToken )
-  : FacebookJob( accessToken ),
+  : FacebookGetJob( accessToken ),
     mMultiQuery( true )
 {
   setIds( noteIds );

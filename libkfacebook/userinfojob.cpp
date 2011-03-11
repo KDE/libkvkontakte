@@ -21,7 +21,7 @@
 #include <qjson/qobjecthelper.h>
 
 UserInfoJob::UserInfoJob( const QString& accessToken )
-  : FacebookJob( "/me", accessToken )
+  : FacebookGetJob( "/me", accessToken )
 {
   setFields( QStringList() << "name" );
 }

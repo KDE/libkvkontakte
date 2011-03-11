@@ -22,14 +22,14 @@
 #include <qjson/qobjecthelper.h>
 
 FriendJob::FriendJob( const QString& friendId, const QString& accessToken )
-  : FacebookJob( '/' + friendId, accessToken),
+  : FacebookGetJob( '/' + friendId, accessToken),
     mMultiQuery( false )
 {
   setFields( friendFields() );
 }
 
 FriendJob::FriendJob( const QStringList& friendIds, const QString& accessToken )
-  : FacebookJob( accessToken ),
+  : FacebookGetJob( accessToken ),
     mMultiQuery( true )
 {
   setFields( friendFields() );

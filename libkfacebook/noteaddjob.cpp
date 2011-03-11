@@ -21,8 +21,8 @@
 NoteAddJob::NoteAddJob( const QString &subject,const QString &message, const QString &accessToken )
   : FacebookAddJob( "/me/notes", accessToken)
 {
-  addField("subject", subject);
-  addField("message", message);
+  addQueryItem("subject", subject);
+  addQueryItem("message", message);
 }
 
 #include "noteaddjob.moc"

@@ -20,10 +20,10 @@
 #define FRIENDLISTJOB_H
 
 #include "userinfo.h"
-#include "facebookjob.h"
+#include "facebookjobs.h"
 
 /// Get a list of friends of the user
-class LIBKFACEBOOK_EXPORT FriendListJob : public FacebookJob
+class LIBKFACEBOOK_EXPORT FriendListJob : public FacebookGetJob
 {
   Q_OBJECT
   public:

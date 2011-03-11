@@ -22,7 +22,7 @@
 #include <qjson/qobjecthelper.h>
 
 NotesListJob::NotesListJob( const QString& accessToken )
-  : FacebookJob( "/me/notes", accessToken )
+  : FacebookGetJob( "/me/notes", accessToken )
 {
 }
 

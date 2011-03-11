@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2011 Roeland Jago Douma <unix@rullzer.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "facebookjob.h"
+#include "facebookjobs.h"
 
 #include <qjson/parser.h>
 
@@ -53,45 +53,149 @@ bool FacebookJob::doKill()
   return KJob::doKill();
 }
 
-void FacebookJob::setIds( const QStringList& ids )
+/*
+ * Facebook Add Job
+ */
+FacebookAddJob::FacebookAddJob( const QString &path, const QString &accessToken)
+  : FacebookJob(path, accessToken)
+{
+}
+
+void FacebookAddJob::start()
+{
+  KUrl url;
+  url.setProtocol("https");
+  url.setHost("graph.facebook.com");
+  url.setPath(mPath);
+
+  url.addQueryItem("access_token", mAccessToken);
+
+  foreach(const QueryItem item, mQueryItems) {
+    url.addQueryItem(item.first, item.second);
+  }
+
+  kDebug() << "Starting add: " << url;
+  KIO::StoredTransferJob * const job = KIO::storedHttpPost( QByteArray(), url, KIO::HideProgressInfo );
+  mJob = job;
+  connect( job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)) );
+  job->start();
+}
+
+void FacebookAddJob::jobFinished(KJob *job)
+{
+  KIO::StoredTransferJob *addJob = dynamic_cast<KIO::StoredTransferJob *>( job );
+  Q_ASSERT( addJob );
+  if ( addJob->error() ) { 
+    setError( addJob->error() );
+    setErrorText( KIO::buildErrorString( error(), addJob->errorText() ) );
+    kWarning() << "Job error: " << addJob->errorString();
+  } else {
+    QJson::Parser parser;
+    QVariant result = parser.parse(addJob->data().data());
+    const QVariantMap dataMap = result.toMap();
+    if ( dataMap.contains("id") ) { 
+      setProperty("id", dataMap["id"]);
+    }   
+  }
+
+  emitResult();
+  mJob = 0;
+}
+
+/*
+ * Facebook Delete job
+ */
+FacebookDeleteJob::FacebookDeleteJob( const QString &id, const QString &accessToken)
+  : FacebookJob("/" + id, accessToken)
+{
+}
+
+void FacebookDeleteJob::start()
+{
+  KUrl url;
+  url.setProtocol("https");
+  url.setHost("graph.facebook.com");
+  url.setPath(mPath);
+
+  url.addQueryItem("access_token", mAccessToken);
+  url.addQueryItem("method", "delete");
+
+  kDebug() << "Starting delete: " << url;
+  KIO::StoredTransferJob * const job = KIO::storedHttpPost( QByteArray(), url, KIO::HideProgressInfo ); 
+  mJob = job;
+  connect( job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)) );
+  job->start();
+}
+
+void FacebookDeleteJob::jobFinished( KJob *job )
+{
+  KIO::StoredTransferJob *deleteJob = dynamic_cast<KIO::StoredTransferJob *>( job );
+  Q_ASSERT( deleteJob );
+  if ( deleteJob->error() ) {
+    setError( deleteJob->error() );
+    setErrorText( KIO::buildErrorString( error(), deleteJob->errorText() ) );
+    kWarning() << "Job error: " << deleteJob->errorString();
+  } else {
+    kDebug() << "Got data: " << QString::fromAscii( deleteJob->data().data() );
+  }
+
+  emitResult();
+  mJob = 0;
+}
+
+/*
+ * Facebook get job
+ */
+
+FacebookGetJob::FacebookGetJob( const QString &path, const QString &accessToken )
+  : FacebookJob(path, accessToken)
+{
+}
+
+FacebookGetJob::FacebookGetJob( const QString &accessToken)
+  : FacebookJob(accessToken)
+{
+}
+
+void FacebookGetJob::setIds( const QStringList& ids )
 {
   mIds = ids;
 }
 
-void FacebookJob::setFields( const QStringList& fields )
+void FacebookGetJob::setFields( const QStringList& fields )
 {
   mFields = fields;
 }
 
-void FacebookJob::start()
+void FacebookGetJob::start()
 {
   Q_ASSERT( mIds.isEmpty() ^ mPath.isEmpty() );
   KUrl url;
   url.setProtocol( "https" );
   url.setHost( "graph.facebook.com" );
-  if ( !mPath.isEmpty() ) {
+  if ( !mPath.isEmpty() ) { 
     url.setPath( mPath );
   } else {
     url.setPath( "/" );
     url.addQueryItem( "ids", mIds.join( "," ) );
   }
   url.addQueryItem( "access_token", mAccessToken );
-  if ( !mFields.isEmpty() ) {
+  if ( !mFields.isEmpty() ) { 
     url.addQueryItem( "fields", mFields.join( "," ) );
   }
-  if ( !mQueryItems.isEmpty() ) {
-    foreach( const QueryItem &item, mQueryItems ) {
-      url.addQueryItem( item.first, item.second );
-    }
+  
+  foreach( const QueryItem &item, mQueryItems ) {
+    url.addQueryItem( item.first, item.second );
   }
+
   kDebug() << "Starting query" << url;
   KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
   mJob = job;
-  connect( job, SIGNAL(result(KJob*)), this, SLOT(getJobFinished(KJob*)) );
+  connect( job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)) );
   job->start();
 }
 
-void FacebookJob::getJobFinished( KJob* job )
+void FacebookGetJob::jobFinished(KJob *job)
 {
   KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
   Q_ASSERT( transferJob );
@@ -121,7 +225,7 @@ void FacebookJob::getJobFinished( KJob* job )
   mJob = 0;
 }
 
-void FacebookJob::handleError( const QVariant& data )
+void FacebookGetJob::handleError( const QVariant& data )
 {
   const QVariantMap errorMap = data.toMap();
   const QString type = errorMap["type"].toString();
@@ -137,4 +241,5 @@ void FacebookJob::handleError( const QVariant& data )
 }
 
 
-#include "facebookjob.moc"
+
+#include "facebookjobs.moc"

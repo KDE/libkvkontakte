@@ -21,7 +21,7 @@
 #include <qjson/qobjecthelper.h>
 
 FriendListJob::FriendListJob( const QString& accessToken )
-  : FacebookJob( "/me/friends", accessToken )
+  : FacebookGetJob( "/me/friends", accessToken )
 {
 }
 

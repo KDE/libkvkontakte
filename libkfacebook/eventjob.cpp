@@ -22,14 +22,14 @@
 #include <qjson/qobjecthelper.h>
 
 EventJob::EventJob( const QString& eventId, const QString& accessToken )
-  : FacebookJob( '/' + eventId, accessToken),
+  : FacebookGetJob( '/' + eventId, accessToken),
     mMultiQuery( false )
 {
   setFields( eventFields() );
 }
 
 EventJob::EventJob( const QStringList& eventIds, const QString& accessToken )
-  : FacebookJob( accessToken ),
+  : FacebookGetJob( accessToken ),
     mMultiQuery( true )
 {
   setFields( eventFields() );

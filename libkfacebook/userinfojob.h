@@ -20,10 +20,10 @@
 #define USERINFOJOB_H
 
 #include "userinfo.h"
-#include "facebookjob.h"
+#include "facebookjobs.h"
 
 /// Gets information about the user that is authenticated
-class LIBKFACEBOOK_EXPORT UserInfoJob : public FacebookJob
+class LIBKFACEBOOK_EXPORT UserInfoJob : public FacebookGetJob
 {
   Q_OBJECT
   public:

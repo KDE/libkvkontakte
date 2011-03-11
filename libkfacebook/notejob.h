@@ -19,10 +19,10 @@
 #ifndef NOTEJOB_H
 #define NOTEJOB_H
 
-#include "facebookjob.h"
+#include "facebookjobs.h"
 #include "noteinfo.h"
 
-class LIBKFACEBOOK_EXPORT NoteJob : public FacebookJob
+class LIBKFACEBOOK_EXPORT NoteJob : public FacebookGetJob
 {
   Q_OBJECT
   public:

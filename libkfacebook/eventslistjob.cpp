@@ -22,7 +22,7 @@
 #include <qjson/qobjecthelper.h>
 
 EventsListJob::EventsListJob( const QString& accessToken )
-  : FacebookJob( "/me/events", accessToken )
+  : FacebookGetJob( "/me/events", accessToken )
 {
 }
 

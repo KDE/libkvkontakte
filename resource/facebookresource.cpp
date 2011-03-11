@@ -31,7 +31,7 @@
 #include <libkfacebook/notejob.h>
 #include <libkfacebook/noteaddjob.h>
 
-#include <libkfacebook/facebookdeletejob.h>
+#include <libkfacebook/facebookjobs.h>
 
 #include <Akonadi/AttributeFactory>
 #include <Akonadi/EntityDisplayAttribute>

@@ -19,10 +19,10 @@
 #ifndef FRIENDJOB_H
 #define FRIENDJOB_H
 
-#include "facebookjob.h"
+#include "facebookjobs.h"
 #include "userinfo.h"
 
-class LIBKFACEBOOK_EXPORT FriendJob : public FacebookJob
+class LIBKFACEBOOK_EXPORT FriendJob : public FacebookGetJob
 {
   Q_OBJECT
   public:

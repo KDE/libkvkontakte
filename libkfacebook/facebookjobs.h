@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2011 Roeland Jago Douma <unix@rullzer.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef FACEBOOKJOB_H
-#define FACEBOOKJOB_H
+#ifndef FACEBOOKJOBS_H
+#define FACEBOOKJOBS_H
 
 #include "libkfacebook_export.h"
 #include <KJob>
@@ -32,33 +32,78 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
   public:
     FacebookJob( const QString &path, const QString &accessToken );
     explicit FacebookJob( const QString &accessToken );
-    void setFields( const QStringList &fields );
-
-    // If ids are set, the path is ignored.
-    void setIds( const QStringList &ids );
 
     void addQueryItem( const QString &key, const QString &value );
 
-    virtual void start();
+    virtual void start() = 0;
 
     enum JobErrorType { AuthenticationProblem = KJob::UserDefinedError + 42 };
 
   protected:
     virtual bool doKill();
-    virtual void handleData( const QVariant &data ) = 0;
 
   private slots:
-    void getJobFinished( KJob *job );
+    virtual void jobFinished( KJob *job ) = 0;
 
-  private:
-    void handleError( const QVariant &data );
-
+  protected:
     QString mAccessToken;
     QString mPath;
-    QStringList mFields;
-    QStringList mIds;
     QList<QueryItem> mQueryItems;
     QPointer<KJob> mJob;
+};
+
+class LIBKFACEBOOK_EXPORT FacebookAddJob : public FacebookJob
+{
+  Q_OBJECT
+
+  public:
+    FacebookAddJob( const QString &path, const QString &accessToken );
+
+    virtual void start();
+
+  private slots:
+    void jobFinished(KJob *job);
+};
+
+class LIBKFACEBOOK_EXPORT FacebookDeleteJob : public FacebookJob
+{
+  Q_OBJECT
+
+  public:
+    FacebookDeleteJob( const QString &id, const QString &accessToken);
+
+    virtual void start();
+
+  private slots:
+    void jobFinished(KJob *job);
+};
+
+class LIBKFACEBOOK_EXPORT FacebookGetJob : public FacebookJob
+{
+  Q_OBJECT
+
+  public:
+    FacebookGetJob( const QString &path, const QString &accessToken ); 
+    explicit FacebookGetJob( const QString &accessToken ); 
+
+    void setFields( const QStringList &fields ); 
+
+    // If ids are set, the path is ignored.
+    void setIds( const QStringList &ids ); 
+
+    virtual void start();
+
+  protected:
+    virtual void handleData( const QVariant &data ) = 0; 
+
+  private slots:
+    void jobFinished( KJob *job ); 
+
+  private:
+    void handleError( const QVariant &data ); 
+
+    QStringList mFields;
+    QStringList mIds;
 };
 
 #endif

@@ -60,14 +60,6 @@ Refactor
 	- how facebook requests work (HTTP+QJSON), job-based approach
 - refactor facebookresource.cpp. It is getting big, and the function names are friends-only
 - common base class for eventjob and friendjob and notejob
-- group jobs:
-  i.e. facebookjob + facebookDelJob + facebookAddJob should have 1 common base
-  class facebookJob and then 3 classes 
-    * facebookGetJob, 
-    * facebookDelJob,
-    * facebookAddJob
-  Maybe even add them to one file (since they don't do that much)
-  "facebookjobs"
 
 Roadmap
 -------

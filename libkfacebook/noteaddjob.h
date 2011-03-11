@@ -19,7 +19,7 @@
 #ifndef NOTEADDJOB_H
 #define NOTEADDJOB_H
 
-#include "facebookaddjob.h"
+#include "facebookjobs.h"
 #include "noteinfo.h"
 
 class LIBKFACEBOOK_EXPORT NoteAddJob : public FacebookAddJob
