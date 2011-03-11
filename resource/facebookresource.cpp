@@ -102,7 +102,7 @@ void FacebookResource::resetState()
 {
   mIdle = true;
   mNumFriends = -1;
-  mCurrentJob = 0;
+  mCurrentJobs.clear();
   mExistingFriends.clear();
   mNewOrChangedFriends.clear();
 }
@@ -110,9 +110,9 @@ void FacebookResource::resetState()
 void FacebookResource::slotAbortRequested()
 {
   if (!mIdle) {
-    if (mCurrentJob) {
-      kDebug() << "Killing current job:" << mCurrentJob;
-      mCurrentJob->kill(KJob::Quietly);
+    foreach(const QPointer<KJob> j, mCurrentJobs) {
+      kDebug() << "Killing current job:" << j;
+      j->kill(KJob::Quietly);
     }
     abort();
   }
@@ -142,7 +142,7 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
     ItemFetchJob * const fetchJob = new ItemFetchJob( collection );
     fetchJob->fetchScope().fetchAttribute<TimeStampAttribute>();
     fetchJob->fetchScope().fetchFullPayload( false );
-    mCurrentJob = fetchJob;
+    mCurrentJobs << fetchJob;
     connect( fetchJob, SIGNAL(result(KJob*)), this, SLOT(initialItemFetchFinished(KJob*)) );
   } else if ( collection.remoteId() == eventsRID ) {
     mIdle = false;
@@ -150,7 +150,7 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
     emit percent( 0 );
     AllEventsListJob * const listJob = new AllEventsListJob( Settings::self()->accessToken() );
     listJob->setLowerLimit(KDateTime::fromString( Settings::self()->lowerLimit(), "%Y-%m-%d" ));
-    mCurrentJob = listJob;
+    mCurrentJobs << listJob;
     connect( listJob, SIGNAL(result(KJob*)), this, SLOT(eventListFetched(KJob*)) );
     listJob->start();
   } else if ( collection.remoteId() == notesRID ) {
@@ -159,7 +159,7 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
     emit percent( 0 );
     AllNotesListJob * const notesJob = new AllNotesListJob( Settings::self()->accessToken() );
     notesJob->setLowerLimit(KDateTime::fromString( Settings::self()->lowerLimit(), "%Y-%m-%d" ));
-    mCurrentJob = notesJob;
+    mCurrentJobs << notesJob;
     connect( notesJob, SIGNAL(result(KJob*)), this, SLOT(noteListFetched(KJob*)) );
     notesJob->start();
   } else {
@@ -172,6 +172,8 @@ void FacebookResource::noteListFetched( KJob* job )
   Q_ASSERT( !mIdle );
   AllNotesListJob * const listJob = dynamic_cast<AllNotesListJob*>( job );
   Q_ASSERT( listJob );
+  mCurrentJobs.removeAll(job);
+
   if ( listJob->error() ) {
     abortWithError( i18n( "Unable to get notes from server: %1", listJob->errorString() ),
                     listJob->error() == FacebookJob::AuthenticationProblem );
@@ -199,8 +201,11 @@ void FacebookResource::noteListFetched( KJob* job )
 void FacebookResource::eventListFetched( KJob* job )
 {
   Q_ASSERT( !mIdle );
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   AllEventsListJob * const listJob = dynamic_cast<AllEventsListJob*>( job );
   Q_ASSERT( listJob );
+  mCurrentJobs.removeAll(job);
+
   if ( listJob->error() ) {
     abortWithError( i18n( "Unable to get events from server: %1", listJob->errorString() ),
                     listJob->error() == FacebookJob::AuthenticationProblem );
@@ -215,7 +220,7 @@ void FacebookResource::eventListFetched( KJob* job )
       return;
     }
     EventJob * const eventJob = new EventJob( eventIds, Settings::self()->accessToken() );
-    mCurrentJob = eventJob;
+    mCurrentJobs << eventJob;
     connect( eventJob, SIGNAL(result(KJob*)), this, SLOT(detailedEventListJobFinished(KJob*)) );
     eventJob->start();
   }
@@ -224,8 +229,11 @@ void FacebookResource::eventListFetched( KJob* job )
 void FacebookResource::initialItemFetchFinished( KJob* job )
 {
   Q_ASSERT(!mIdle);
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   ItemFetchJob * const itemFetchJob = dynamic_cast<ItemFetchJob*>( job );
   Q_ASSERT( itemFetchJob );
+  mCurrentJobs.removeAll(job);
+
   if ( itemFetchJob->error() ) {
     abortWithError( i18n( "Unable to get list of existing friends from the Akonadi server: %1", itemFetchJob->errorString() ) );
   } else {
@@ -236,7 +244,7 @@ void FacebookResource::initialItemFetchFinished( KJob* job )
 
     setItemStreamingEnabled( true );
     FriendListJob * const friendListJob = new FriendListJob( Settings::self()->accessToken() );
-    mCurrentJob = friendListJob;
+    mCurrentJobs << friendListJob;
     connect( friendListJob, SIGNAL(result(KJob*)), this, SLOT(friendListJobFinished(KJob*)) );
     emit status( Running, i18n( "Retrieving friends list." ) );
     emit percent( 2 );
@@ -247,8 +255,11 @@ void FacebookResource::initialItemFetchFinished( KJob* job )
 void FacebookResource::friendListJobFinished( KJob* job )
 {
   Q_ASSERT(!mIdle);
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   FriendListJob * const friendListJob = dynamic_cast<FriendListJob*>( job );
   Q_ASSERT( friendListJob );
+  mCurrentJobs.removeAll(job);
+
   if ( friendListJob->error() ) {
     abortWithError( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ),
                     friendListJob->error() == FacebookJob::AuthenticationProblem );
@@ -309,7 +320,7 @@ void FacebookResource::fetchNewOrChangedFriends()
     mewOrChangedFriendIds.append( user->id() );
   }
   FriendJob * const friendJob = new FriendJob( mewOrChangedFriendIds, Settings::self()->accessToken() );
-  mCurrentJob = friendJob;
+  mCurrentJobs << friendJob;
   connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(detailedFriendListJobFinished(KJob*)) );
   friendJob->start();
 }
@@ -317,9 +328,11 @@ void FacebookResource::fetchNewOrChangedFriends()
 void FacebookResource::detailedEventListJobFinished( KJob* job )
 {
   Q_ASSERT( !mIdle );
-  Q_ASSERT( job == mCurrentJob );
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   EventJob * const eventJob = dynamic_cast<EventJob*>( job );
   Q_ASSERT( eventJob );
+  mCurrentJobs.removeAll(job);
+
   if ( job->error() ) {
     abortWithError( i18n( "Unable to get list of events from server: %1", eventJob->errorText() ) );
   } else {
@@ -342,8 +355,10 @@ void FacebookResource::detailedEventListJobFinished( KJob* job )
 void FacebookResource::detailedFriendListJobFinished( KJob* job )
 {
   Q_ASSERT(!mIdle);
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   FriendJob * const friendJob = dynamic_cast<FriendJob*>( job );
   Q_ASSERT( friendJob );
+  mCurrentJobs.removeAll(job);
 
   if ( friendJob->error() ) {
     abortWithError( i18n( "Unable to retrieve friends' information from server: %1", friendJob->errorText() ) );
@@ -358,9 +373,11 @@ void FacebookResource::detailedFriendListJobFinished( KJob* job )
 
 void FacebookResource::fetchPhotos()
 {
+  mIdle = false;
   mNumPhotosFetched = 0;
   foreach(const UserInfoPtr f, mPendingFriends) {
     PhotoJob * const photoJob = new PhotoJob(f->id(), Settings::self()->accessToken() );
+    mCurrentJobs << photoJob;
     photoJob->setProperty("friend", QVariant::fromValue( f ));
     connect(photoJob, SIGNAL(result(KJob*)), this, SLOT(photoJobFinished(KJob*)));
     photoJob->start();
@@ -384,6 +401,8 @@ void FacebookResource::finishEventsFetching()
 
 void FacebookResource::finishFriendFetching()
 {
+  Q_ASSERT(mCurrentJobs.size() == 0);
+
   mPendingFriends.clear();
   emit percent(100);
   if ( mNumFriends > 0 ) {
@@ -397,9 +416,12 @@ void FacebookResource::finishFriendFetching()
 
 void FacebookResource::photoJobFinished(KJob* job)
 {
+  Q_ASSERT(!mIdle);
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   PhotoJob * const photoJob = dynamic_cast<PhotoJob*>( job );
   Q_ASSERT(photoJob);
   UserInfoPtr user = job->property("friend").value<UserInfoPtr>();
+  mCurrentJobs.removeOne(job);
 
   if (photoJob->error()) {
     abortWithError( i18n( "Unable to retrieve friends' photo from server: %1", photoJob->errorText() ) );
@@ -417,7 +439,7 @@ void FacebookResource::photoJobFinished(KJob* job)
 
     itemsRetrievedIncremental( Item::List() << newUser, Item::List() );
     mNumPhotosFetched++;
-    
+
     if (mNumPhotosFetched != mNumFriends) {
       const int alreadyDownloadedFriends = mNumFriends - mPendingFriends.size();
       const float percentageDone = alreadyDownloadedFriends / (float)mNumFriends * 100.0f;
@@ -440,14 +462,14 @@ bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByte
     mIdle = false;
     FriendJob * const friendJob = new FriendJob( item.remoteId(),
                                                Settings::self()->accessToken() );
-    mCurrentJob = friendJob;
+    mCurrentJobs << friendJob;
     friendJob->setProperty( "Item", QVariant::fromValue( item ) );
     connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );
     friendJob->start();
   } else if (item.mimeType() == "text/x-vnd.akonadi.note") {
     mIdle = false;
     NoteJob * const noteJob = new NoteJob( item.remoteId(), Settings::self()->accessToken());
-    mCurrentJob = noteJob;
+    mCurrentJobs << noteJob;
     noteJob->setProperty( "Item", QVariant::fromValue( item ) );
     connect( noteJob, SIGNAL(result(KJob*)), this, SLOT(noteJobFinished(KJob*)) );
     noteJob->start();
@@ -458,9 +480,12 @@ bool FacebookResource::retrieveItem( const Akonadi::Item &item, const QSet<QByte
 void FacebookResource::noteJobFinished(KJob* job)
 {
   Q_ASSERT(!mIdle);
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   NoteJob * const noteJob = dynamic_cast<NoteJob*>( job );
   Q_ASSERT( noteJob );
   Q_ASSERT( noteJob->noteInfo().size() == 1 );
+  mCurrentJobs.removeAll(job);
+
   if ( noteJob->error() ) {
     abortWithError( i18n( "Unable to get information about note from server: %1", noteJob->errorText() ) );
   } else {
@@ -474,9 +499,12 @@ void FacebookResource::noteJobFinished(KJob* job)
 void FacebookResource::friendJobFinished(KJob* job)
 {
   Q_ASSERT(!mIdle);
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   FriendJob * const friendJob = dynamic_cast<FriendJob*>( job );
   Q_ASSERT( friendJob );
   Q_ASSERT( friendJob->friendInfo().size() == 1 );
+  mCurrentJobs.removeAll(job);
+
   if ( friendJob->error() ) {
     abortWithError( i18n( "Unable to get information about friend from server: %1", friendJob->errorText() ) );
   } else {
@@ -534,7 +562,7 @@ void FacebookResource::itemRemoved( const Akonadi::Item &item)
     mIdle = false;
     FacebookDeleteJob * const deleteJob = new FacebookDeleteJob( item.remoteId(),
                                                Settings::self()->accessToken() );
-    mCurrentJob = deleteJob;
+    mCurrentJobs << deleteJob;
     deleteJob->setProperty( "Item", QVariant::fromValue( item ) );
     connect( deleteJob, SIGNAL(result(KJob*)), this, SLOT(deleteJobFinished(KJob*)) );
     deleteJob->start();
@@ -543,6 +571,9 @@ void FacebookResource::itemRemoved( const Akonadi::Item &item)
 
 void FacebookResource::deleteJobFinished(KJob *job)
 {
+  Q_ASSERT(!mIdle);
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
+  mCurrentJobs.removeAll(job);
   Item item = job->property( "Item" ).value<Item>(); 
   changeCommitted( item );
 }
@@ -560,7 +591,7 @@ void FacebookResource::itemAdded( const Akonadi::Item &item, const Akonadi::Coll
 
       mIdle = false;
       NoteAddJob * const addJob = new NoteAddJob( subject, message, Settings::self()->accessToken() );
-      mCurrentJob = addJob;
+      mCurrentJobs << addJob;
       addJob->setProperty( "Item", QVariant::fromValue( item ) );
       connect( addJob, SIGNAL(result(KJob *)), this, SLOT(noteAddJobFinished(KJob *)) );
       addJob->start();
@@ -570,12 +601,17 @@ void FacebookResource::itemAdded( const Akonadi::Item &item, const Akonadi::Coll
 
 void FacebookResource::noteAddJobFinished(KJob *job)
 {
+  Q_ASSERT( !mIdle );
+  Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   NoteAddJob * const addJob = dynamic_cast<NoteAddJob*>( job );
+  Q_ASSERT( addJob );
+  mCurrentJobs.removeAll(job);
+
   Item note = addJob->property( "Item" ).value<Item>();
   note.setRemoteId(addJob->property( "id" ).value<QString>());
 
   mIdle = true;
-  mCurrentJob = NULL;
+  mCurrentJobs.clear();
 
   changeCommitted( note );
 }

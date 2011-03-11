@@ -92,7 +92,7 @@ class FacebookResource : public Akonadi::ResourceBase,
     int mNumPhotosFetched;
 
     bool mIdle;
-    QPointer<KJob> mCurrentJob;
+    QList< QPointer<KJob> > mCurrentJobs;
 };
 
 #endif
