@@ -72,20 +72,4 @@ void FacebookDeleteJob::deleteJobFinished( KJob *job )
   mJob = 0;
 }
 
-void FacebookDeleteJob::handleError( const QVariant& data )
-{
-  const QVariantMap errorMap = data.toMap();
-  const QString type = errorMap["type"].toString();
-  const QString message = errorMap["message"].toString();
-  kWarning() << "An error of type" << type << "occurred:" << message;
-  if ( type.toLower() != "oauthexception" ) {
-    setError( KJob::UserDefinedError );
-    setErrorText( i18n( "The Facebook server returned an error of type <i>%1</i>: <i>%2</i>" , type, message ) );
-  } else {
-    setError( AuthenticationProblem );
-    setErrorText( i18n( "Unable to login to the Facebook server, authentication failure.\nThe server said: <i>%1</i>", message ) );
-  }
-}
-
-
 #include "facebookdeletejob.moc"

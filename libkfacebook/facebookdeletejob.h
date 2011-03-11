@@ -41,8 +41,6 @@ class LIBKFACEBOOK_EXPORT FacebookDeleteJob : public KJob
     void deleteJobFinished( KJob *job );
 
   private:
-    void handleError( const QVariant &data );
-
     QString mAccessToken;
     QString mId;
     QPointer<KJob> mJob;
