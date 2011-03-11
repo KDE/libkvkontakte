@@ -21,10 +21,9 @@
 
 #include "libkfacebook_export.h"
 
+#include <KMime/Message>
 #include <KDateTime>
 #include <QObject>
-
-#include <kmime/kmime_message.h>
 
 class LIBKFACEBOOK_EXPORT NoteInfo : public QObject
 {

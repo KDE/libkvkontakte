@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #ifndef ALLNOTESLISTJOB_H
-#define ALLNOTESSLISTJOB_H
+#define ALLNOTESLISTJOB_H
 
 #include "noteinfo.h"
 #include "libkfacebook_export.h"
