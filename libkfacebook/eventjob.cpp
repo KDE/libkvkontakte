@@ -78,7 +78,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariantList noreply = dataMap.value("noreply").toMap().value("data").toList();
   foreach(attendee, noreply) {
     const QVariantMap map= attendee.toMap();
-    Attendee *a = new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::NeedsAction);
+    AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::NeedsAction) );
     eventInfo->addAttendee(a);
   }
 
@@ -88,7 +88,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariantList maybe = dataMap.value("maybe").toMap().value("data").toList();
   foreach(attendee, maybe) {
     const QVariantMap map= attendee.toMap();
-    Attendee *a = new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Tentative);
+    AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Tentative) );
     eventInfo->addAttendee(a);
   }
 
@@ -98,7 +98,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariantList attending = dataMap.value("attending").toMap().value("data").toList();
   foreach(attendee, attending) {
     const QVariantMap map= attendee.toMap();
-    Attendee *a = new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Accepted);
+    AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Accepted) );
     eventInfo->addAttendee(a);
   }
 
@@ -108,7 +108,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariantList declined = dataMap.value("declined").toMap().value("data").toList();
   foreach(attendee, declined) {
     const QVariantMap map= attendee.toMap();
-    Attendee *a = new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Declined);
+    AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Declined) );
     eventInfo->addAttendee(a);
   }
 

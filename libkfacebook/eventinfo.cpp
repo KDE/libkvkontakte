@@ -31,17 +31,17 @@ Attendee::Attendee(const QString &name, const QString &id, const KCal::Attendee:
 
 }
 
-QString Attendee::getName() const
+QString Attendee::name() const
 {
   return mName;
 }
 
-QString Attendee::getId() const
+QString Attendee::id() const
 {
   return mId;
 }
 
-KCal::Attendee::PartStat Attendee::getStatus() const
+KCal::Attendee::PartStat Attendee::status() const
 {
   return mStatus;
 }
@@ -90,18 +90,13 @@ EventPtr EventInfo::asEvent() const
   //       venue: add to location?
   //       picture?
   
-  const QList<Attendee const *> eventAttendees = attendees();
-
-  QList<Attendee const *>::const_iterator i;
-  for (i = eventAttendees.begin(); i != eventAttendees.end(); i++) {
-    const Attendee *a = *i;
-
-    KCal::Attendee *b = new KCal::Attendee(a->getName(), 
+  foreach(const AttendeePtr a, attendees()) {
+    KCal::Attendee *b = new KCal::Attendee(a->name(), 
                                            "facebook@unkown.invalid", 
                                            false, 
-                                           a->getStatus(),
+                                           a->status(),
                                            KCal::Attendee::OptParticipant,
-                                           a->getId() );
+                                           a->id() );
     event->addAttendee(b);
   }
 
@@ -203,12 +198,12 @@ QString EventInfo::updatedTimeString() const
   return mUpdatedTime;
 }
 
-void EventInfo::addAttendee(Attendee const *a )
+void EventInfo::addAttendee(AttendeePtr a )
 {
   mAttendees << a;
 }
 
-QList<Attendee const *> EventInfo::attendees() const
+QList<AttendeePtr> EventInfo::attendees() const
 {
   return mAttendees;
 }

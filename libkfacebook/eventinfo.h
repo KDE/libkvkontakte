@@ -42,15 +42,18 @@ class Attendee {
   public:
     Attendee(const QString &name, const QString &id, const KCal::Attendee::PartStat &status);
 
-    QString getName() const;
-    QString getId() const;
-    KCal::Attendee::PartStat getStatus() const;
+    QString name() const;
+    QString id() const;
+    KCal::Attendee::PartStat status() const;
 
   private:
     QString mName;
     QString mId;
     KCal::Attendee::PartStat mStatus;
 };
+
+typedef QSharedPointer<Attendee> AttendeePtr;
+
 
 class LIBKFACEBOOK_EXPORT EventInfo : public QObject
 {
@@ -91,8 +94,8 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     KDateTime updatedTime() const;
 
     /* TODO: Add more const stuff */
-    void addAttendee(Attendee const *a);
-    QList<Attendee const *> attendees() const;
+    void addAttendee(AttendeePtr a);
+    QList<AttendeePtr> attendees() const;
 
     EventPtr asEvent() const;
 
@@ -106,7 +109,7 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     QString mOrganizer;
     QString mUpdatedTime;
 
-    QList<const Attendee *> mAttendees;
+    QList<AttendeePtr> mAttendees;
 };
 
 typedef QSharedPointer<EventInfo> EventInfoPtr;
