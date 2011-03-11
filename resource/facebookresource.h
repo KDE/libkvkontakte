@@ -89,10 +89,10 @@ class FacebookResource : public Akonadi::ResourceBase,
 
     // Total number of new & changed friends
     int mNumFriends;
+    int mNumPhotosFetched;
 
     bool mIdle;
     QPointer<KJob> mCurrentJob;
-    QMutex mPhotoMutex;
 };
 
 #endif

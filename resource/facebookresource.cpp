@@ -358,8 +358,8 @@ void FacebookResource::detailedFriendListJobFinished( KJob* job )
 
 void FacebookResource::fetchPhotos()
 {
-  UserInfoPtr f;
-  foreach(f, mPendingFriends) {
+  mNumPhotosFetched = 0;
+  foreach(const UserInfoPtr f, mPendingFriends) {
     PhotoJob * const photoJob = new PhotoJob(f->id(), Settings::self()->accessToken() );
     photoJob->setProperty("friend", QVariant::fromValue( f ));
     connect(photoJob, SIGNAL(result(KJob*)), this, SLOT(photoJobFinished(KJob*)));
@@ -384,8 +384,7 @@ void FacebookResource::finishEventsFetching()
 
 void FacebookResource::finishFriendFetching()
 {
-  Q_ASSERT( mPendingFriends.isEmpty() );
-
+  mPendingFriends.clear();
   emit percent(100);
   if ( mNumFriends > 0 ) {
     emit status( Idle, i18np( "Updated one friend from the server.",
@@ -416,16 +415,10 @@ void FacebookResource::photoJobFinished(KJob* job)
     timeStampAttribute->setTimeStamp( user->updatedTime() );
     newUser.addAttribute( timeStampAttribute );
 
-    /*
-     * "Critial section" where we need to serialize
-     * 
-     * TODO: find out if itemsRetrievedIncremental is thread safe (then it can
-     * be moved outside).
-     */
-    mPhotoMutex.lock();
     itemsRetrievedIncremental( Item::List() << newUser, Item::List() );
-    mPendingFriends.removeFirst();
-    if (!mPendingFriends.isEmpty()) {
+    mNumPhotosFetched++;
+    
+    if (mNumPhotosFetched != mNumFriends) {
       const int alreadyDownloadedFriends = mNumFriends - mPendingFriends.size();
       const float percentageDone = alreadyDownloadedFriends / (float)mNumFriends * 100.0f;
       emit percent(10 + percentageDone * 0.9f);
@@ -433,7 +426,6 @@ void FacebookResource::photoJobFinished(KJob* job)
       itemsRetrievalDone();
       finishFriendFetching();
     }
-    mPhotoMutex.unlock();
   }
 }
 
