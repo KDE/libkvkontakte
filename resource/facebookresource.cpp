@@ -135,8 +135,6 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
 {
   Q_ASSERT(mIdle);
 
-  kDebug() << collection.remoteId();
-
   if ( collection.remoteId() == friendsRID ) {
     mIdle = false;
     emit status( Running, i18n( "Preparing sync of friends list." ) );
@@ -175,7 +173,7 @@ void FacebookResource::noteListFetched( KJob* job )
   AllNotesListJob * const listJob = dynamic_cast<AllNotesListJob*>( job );
   Q_ASSERT( listJob );
   if ( listJob->error() ) {
-    abortWithError( i18n( "Unable to get events from server: %1", listJob->errorString() ),
+    abortWithError( i18n( "Unable to get notes from server: %1", listJob->errorString() ),
                     listJob->error() == FacebookJob::AuthenticationProblem );
   } else {
     setItemStreamingEnabled( true );
@@ -524,7 +522,7 @@ void FacebookResource::retrieveCollections()
   notes.setRemoteId( notesRID );
   notes.setName( i18n( "Notes" ) );
   notes.setParentCollection( Akonadi::Collection::root() );
-  notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note" << "inode/directory" );
+  notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note"  );
   notes.setRights( Collection::ReadOnly      | Collection::CanChangeItem | 
                    Collection::CanDeleteItem | Collection::CanCreateItem );
   EntityDisplayAttribute * const notesDisplayAttribute = new EntityDisplayAttribute();
