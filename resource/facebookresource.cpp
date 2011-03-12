@@ -543,8 +543,7 @@ void FacebookResource::retrieveCollections()
   notes.setName( i18n( "Notes" ) );
   notes.setParentCollection( Akonadi::Collection::root() );
   notes.setContentMimeTypes( QStringList() << "text/x-vnd.akonadi.note"  );
-  notes.setRights( Collection::ReadOnly      | Collection::CanChangeItem | 
-                   Collection::CanDeleteItem | Collection::CanCreateItem );
+  notes.setRights( Collection::ReadOnly);
   EntityDisplayAttribute * const notesDisplayAttribute = new EntityDisplayAttribute();
   notesDisplayAttribute->setIconName( "facebookresource" );
   notes.addAttribute( notesDisplayAttribute );
