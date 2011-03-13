@@ -15,13 +15,13 @@ set(libkfacebook_SRCS
   eventjob.cpp
 )
 
-kde4_add_library(libkfacebook SHARED ${libkfacebook_SRCS})
+kde4_add_library(kfacebook SHARED ${libkfacebook_SRCS})
 
 set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
 # Yes, QJSON_LIBRARIES and QJSON_LIBRARY are both needed, as otherwise it will break either
 # on Linux or on Mac.
-target_link_libraries(libkfacebook
+target_link_libraries(kfacebook
   ${KDE4_KDECORE_LIBS}
   ${KDE4_KDEUI_LIBS}
   ${QT_QTGUI_LIBRARY}
@@ -35,10 +35,10 @@ target_link_libraries(libkfacebook
 )
 
 if(KDEPIM_44_COMPAT)
-  target_link_libraries(libkfacebook ${KDEPIMLIBS_KCAL_LIBS})
+  target_link_libraries(kfacebook ${KDEPIMLIBS_KCAL_LIBS})
 else(KDEPIM_44_COMPAT)
-  target_link_libraries(libkfacebook ${KDEPIMLIBS_KCALCORE_LIBS})
+  target_link_libraries(kfacebook ${KDEPIMLIBS_KCALCORE_LIBS})
 endif(KDEPIM_44_COMPAT)
 
-set_target_properties(libkfacebook PROPERTIES VERSION ${LIB_VERSION} SOVERSION ${LIB_SOVERSION})
-install(TARGETS libkfacebook ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(kfacebook PROPERTIES VERSION ${LIB_VERSION} SOVERSION ${LIB_SOVERSION})
+install(TARGETS kfacebook ${INSTALL_TARGETS_DEFAULT_ARGS})

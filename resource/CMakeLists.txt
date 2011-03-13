@@ -55,7 +55,7 @@ target_link_libraries( akonadi_facebook_resource
   ${QT_QTGUI_LIBRARY}
   ${QT_QTDBUS_LIBRARY}
   ${KDE4_KDECORE_LIBS}
-  libkfacebook
+  kfacebook
 )
 
 if(KDEPIM_44_COMPAT)
