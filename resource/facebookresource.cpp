@@ -182,7 +182,8 @@ void FacebookResource::initialItemFetchFinished( KJob* job )
     abortWithError( i18n( "Unable to get list of existing friends from the Akonadi server: %1", itemFetchJob->errorString() ) );
   } else {
     foreach( const Item &item, itemFetchJob->items() ) {
-      mExistingFriends.insert( item.remoteId(), item.attribute<TimeStampAttribute>()->timeStamp() );
+      if ( item.hasAttribute<TimeStampAttribute>() )
+        mExistingFriends.insert( item.remoteId(), item.attribute<TimeStampAttribute>()->timeStamp() );
     }
 
     setItemStreamingEnabled( true );
