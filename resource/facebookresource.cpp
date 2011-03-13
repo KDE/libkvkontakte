@@ -161,6 +161,11 @@ void FacebookResource::eventListFetched( KJob* job )
     foreach( const EventInfoPtr &event, listJob->allEvents() ) {
       eventIds.append( event->id() );
     }
+    if ( eventIds.isEmpty() ) {
+      itemsRetrievalDone();
+      finishEventsFetching();
+      return;
+    }
     EventJob * const eventJob = new EventJob( eventIds, Settings::self()->accessToken() );
     mCurrentJob = eventJob;
     connect( eventJob, SIGNAL(result(KJob*)), this, SLOT(detailedEventListJobFinished(KJob*)) );
