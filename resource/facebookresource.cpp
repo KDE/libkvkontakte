@@ -106,6 +106,7 @@ void FacebookResource::resetState()
   mCurrentJobs.clear();
   mExistingFriends.clear();
   mNewOrChangedFriends.clear();
+  mPendingFriends.clear();
 }
 
 void FacebookResource::slotAbortRequested()
