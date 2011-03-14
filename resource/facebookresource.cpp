@@ -578,6 +578,7 @@ void FacebookResource::deleteJobFinished(KJob *job)
   } else {
     const Item item = job->property( "Item" ).value<Item>(); 
     changeCommitted( item );
+    resetState();
   }
 }
 
@@ -619,8 +620,8 @@ void FacebookResource::noteAddJobFinished(KJob *job)
     Item note = addJob->property( "Item" ).value<Item>();
     note.setRemoteId(addJob->property( "id" ).value<QString>());
     changeCommitted( note );
+    resetState();
   }
-  resetState();
 }
 
 AKONADI_RESOURCE_MAIN( FacebookResource )
