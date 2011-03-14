@@ -46,6 +46,8 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
     virtual void jobFinished( KJob *job ) = 0;
 
   protected:
+    void handleError( const QVariant &data );
+
     QString mAccessToken;
     QString mPath;
     QList<QueryItem> mQueryItems;
@@ -100,8 +102,6 @@ class LIBKFACEBOOK_EXPORT FacebookGetJob : public FacebookJob
     void jobFinished( KJob *job ); 
 
   private:
-    void handleError( const QVariant &data ); 
-
     QStringList mFields;
     QStringList mIds;
 };

@@ -53,6 +53,21 @@ bool FacebookJob::doKill()
   return KJob::doKill();
 }
 
+void FacebookJob::handleError( const QVariant& data )
+{
+  const QVariantMap errorMap = data.toMap();
+  const QString type = errorMap["type"].toString();
+  const QString message = errorMap["message"].toString();
+  kWarning() << "An error of type" << type << "occurred:" << message;
+  if ( type.toLower() != "oauthexception" ) {
+    setError( KJob::UserDefinedError );
+    setErrorText( i18n( "The Facebook server returned an error of type <i>%1</i>: <i>%2</i>" , type, message ) );
+  } else {
+    setError( AuthenticationProblem );
+    setErrorText( i18n( "Unable to login to the Facebook server, authentication failure.\nThe server said: <i>%1</i>", message ) );
+  }
+}
+
 /*
  * Facebook Add Job
  */
@@ -91,11 +106,23 @@ void FacebookAddJob::jobFinished(KJob *job)
     kWarning() << "Job error: " << addJob->errorString();
   } else {
     QJson::Parser parser;
-    QVariant result = parser.parse(addJob->data().data());
-    const QVariantMap dataMap = result.toMap();
-    if ( dataMap.contains("id") ) { 
-      setProperty("id", dataMap["id"]);
-    }   
+    bool ok;
+    const QVariant result = parser.parse(addJob->data(), &ok);
+    if (!ok) {
+      kWarning() << "Unable to parse JSON data: " << QString::fromAscii( addJob->data().data() );
+      setError( KJob::UserDefinedError );
+      setErrorText( i18n( "Unable to parse data returned by the Facebook server: %1", parser.errorString() ) );
+    } else {
+      const QVariant error = result.toMap()["error"];
+      if ( error.isValid() ) {
+        handleError( error );
+      } else {
+        const QVariantMap dataMap = result.toMap();
+        if ( dataMap.contains("id") ) {
+          setProperty("id", dataMap["id"]);
+        }
+      }
+    }
   }
 
   emitResult();
@@ -136,6 +163,7 @@ void FacebookDeleteJob::jobFinished( KJob *job )
     setErrorText( KIO::buildErrorString( error(), deleteJob->errorText() ) );
     kWarning() << "Job error: " << deleteJob->errorString();
   } else {
+    // TODO: error handling. Does the server return the error as a JSON string?
     kDebug() << "Got data: " << QString::fromAscii( deleteJob->data().data() );
   }
 
@@ -224,22 +252,5 @@ void FacebookGetJob::jobFinished(KJob *job)
   emitResult();
   mJob = 0;
 }
-
-void FacebookGetJob::handleError( const QVariant& data )
-{
-  const QVariantMap errorMap = data.toMap();
-  const QString type = errorMap["type"].toString();
-  const QString message = errorMap["message"].toString();
-  kWarning() << "An error of type" << type << "occurred:" << message;
-  if ( type.toLower() != "oauthexception" ) {
-    setError( KJob::UserDefinedError );
-    setErrorText( i18n( "The Facebook server returned an error of type <i>%1</i>: <i>%2</i>" , type, message ) );
-  } else {
-    setError( AuthenticationProblem );
-    setErrorText( i18n( "Unable to login to the Facebook server, authentication failure.\nThe server said: <i>%1</i>", message ) );
-  }
-}
-
-
 
 #include "facebookjobs.moc"
