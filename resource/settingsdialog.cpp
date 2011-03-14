@@ -173,10 +173,10 @@ void SettingsDialog::slotButtonClicked( int button )
                             QByteArray( RESOURCE_VERSION ),
                             ki18n( "Makes your friends, events, notes and messages on Facebook available in KDE via Akonadi." ),
                             KAboutData::License_GPL_V2,
-                            ki18n( "Copyright (C) 2010,2011 Thomas McGuire <mcguire@kde.org>" ) );
+                            ki18n( "Copyright (C) 2010,2011 Akonadi Facebook Resource Developers" ) );
       aboutData.addAuthor( ki18n( "Thomas McGuire" ), ki18n( "Maintainer" ), "mcguire@kde.org" );
-      aboutData.addAuthor( ki18n( "Till Adam" ), ki18n( "MacOS Support" ), "adam@kde.org" );
-      aboutData.addAuthor( ki18n( "Roeland Jago Douma" ), ki18n( "Notes Implementation" ), "unix@rullzer.com" );
+      aboutData.addAuthor( ki18n( "Roeland Jago Douma" ), ki18n( "Developer" ), "unix@rullzer.com" );
+      aboutData.addCredit( ki18n( "Till Adam" ), ki18n( "MacOS Support" ), "adam@kde.org" );
       aboutData.setProgramIconName("facebookresource");
       aboutData.setTranslator( ki18nc("NAME OF TRANSLATORS", "Your names"),
                             ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
