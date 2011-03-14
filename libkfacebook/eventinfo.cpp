@@ -25,7 +25,7 @@
 #include <KPIMUtils/LinkLocator>
 #include <KCal/Attendee>
 
-Attendee::Attendee(const QString &name, const QString &id, const KCal::Attendee::PartStat &status)
+Attendee::Attendee(const QString &name, const QString &id, const KAttendee::PartStat &status)
   : mName(name), mId(id), mStatus(status)
 {
 
@@ -41,7 +41,7 @@ QString Attendee::id() const
   return mId;
 }
 
-KCal::Attendee::PartStat Attendee::status() const
+KAttendee::PartStat Attendee::status() const
 {
   return mStatus;
 }
@@ -88,14 +88,13 @@ EventPtr EventInfo::asEvent() const
   //       Public/Private -> freebusy!
   //       venue: add to location?
   //       picture?
-
-  foreach(const AttendeePtr &attendee, attendees()) {
-    KCal::Attendee * const b = new KCal::Attendee(attendee->name(),
-                                                  "facebook@unkown.invalid", 
-                                                  false, 
-                                                  attendee->status(),
-                                                  KCal::Attendee::OptParticipant,
-                                                  attendee->id() );
+  foreach(const AttendeePtr &a, attendees()) {
+    KAttendee *b = new KAttendee(a->name(), 
+                                 "facebook@unkown.invalid", 
+                                 false, 
+                                 a->status(),
+                                 KAttendee::OptParticipant,
+                                 a->id() );
     event->addAttendee(b);
   }
 

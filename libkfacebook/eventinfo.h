@@ -30,27 +30,29 @@
 typedef KCalCore::Event Event;
 typedef KCalCore::Event::Ptr EventPtr;
 typedef KCalCore::Incidence::Ptr IncidencePtr;
+typedef KCalCore::Attendee KAttendee;
 #else
 #include <boost/shared_ptr.hpp>
 #include <KCal/Event>
 typedef KCal::Event Event;
 typedef boost::shared_ptr<KCal::Event> EventPtr;
 typedef boost::shared_ptr<KCal::Incidence> IncidencePtr;
+typedef KCal::Attendee KAttendee;
 #endif
 
 class Attendee
 {
   public:
-    Attendee(const QString &name, const QString &id, const KCal::Attendee::PartStat &status);
+    Attendee(const QString &name, const QString &id, const KAttendee::PartStat &status);
 
     QString name() const;
     QString id() const;
-    KCal::Attendee::PartStat status() const;
+    KAttendee::PartStat status() const;
 
   private:
     QString mName;
     QString mId;
-    KCal::Attendee::PartStat mStatus;
+    KAttendee::PartStat mStatus;
 };
 
 typedef QSharedPointer<Attendee> AttendeePtr;
