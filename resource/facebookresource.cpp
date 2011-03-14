@@ -162,7 +162,9 @@ void FacebookResource::retrieveItems( const Akonadi::Collection &collection )
     connect( notesJob, SIGNAL(result(KJob*)), this, SLOT(noteListFetched(KJob*)) );
     notesJob->start();
   } else {
-    cancelTask( i18n( "Unable to syncronize this collection." ) );
+    // This can not happen
+    Q_ASSERT(!"Unknown Collection");
+    cancelTask();
   }
 }
 
