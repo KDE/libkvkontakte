@@ -100,7 +100,7 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     QString updatedTimeString() const;
     KDateTime updatedTime() const;
 
-    void addAttendee(const AttendeeInfoPtr &a);
+    void addAttendees(const QList<AttendeeInfoPtr> &attendees);
     QList<AttendeeInfoPtr> attendees() const;
 
     EventPtr asEvent() const;

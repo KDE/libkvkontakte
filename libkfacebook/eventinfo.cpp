@@ -195,9 +195,9 @@ QString EventInfo::updatedTimeString() const
   return mUpdatedTime;
 }
 
-void EventInfo::addAttendee(const AttendeeInfoPtr &a)
+void EventInfo::addAttendees(const QList<AttendeeInfoPtr> &attendees)
 {
-  mAttendees << a;
+  mAttendees << attendees;
 }
 
 QList<AttendeeInfoPtr> EventInfo::attendees() const

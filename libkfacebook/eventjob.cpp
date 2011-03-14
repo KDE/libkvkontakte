@@ -60,6 +60,20 @@ QList<EventInfoPtr> EventJob::eventInfo() const
   return mEventInfo;
 }
 
+QList<AttendeeInfoPtr> attendees(const QVariantMap &dataMap, const QString &facebookKey,
+                                 Attendee::PartStat status)
+{
+  QList<AttendeeInfoPtr> retVal;
+  const QVariantList list = dataMap.value(facebookKey).toMap().value("data").toList();
+  foreach(const QVariant &attendee, list) {
+    const QVariantMap map = attendee.toMap();
+    AttendeeInfoPtr attendeeInfo( new AttendeeInfo(map["name"].toString(),
+                                                   map["id"].toString(), status) );
+    retVal << attendeeInfo;
+  }
+  return retVal;
+}
+
 EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
 {
   EventInfoPtr eventInfo( new EventInfo() );
@@ -70,45 +84,10 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
     eventInfo->setOrganizer( owner.toMap().value( "name" ).toString() );
   }
 
-  /*
-   * People that have not yet responded
-   */
-  const QVariantList noreply = dataMap.value("noreply").toMap().value("data").toList();
-  foreach(const QVariant &attendee, noreply) {
-    const QVariantMap map= attendee.toMap();
-    AttendeeInfoPtr a( new AttendeeInfo(map["name"].toString(), map["id"].toString(), Attendee::NeedsAction) );
-    eventInfo->addAttendee(a);
-  }
-
-  /*
-   * People that maybe will attend
-   */
-  const QVariantList maybe = dataMap.value("maybe").toMap().value("data").toList();
-  foreach(const QVariant &attendee, maybe) {
-    const QVariantMap map = attendee.toMap();
-    AttendeeInfoPtr a( new AttendeeInfo(map["name"].toString(), map["id"].toString(), Attendee::Tentative) );
-    eventInfo->addAttendee(a);
-  }
-
-  /*
-   * People that will attend
-   */
-  const QVariantList attending = dataMap.value("attending").toMap().value("data").toList();
-  foreach(const QVariant &attendee, attending) {
-    const QVariantMap map = attendee.toMap();
-    AttendeeInfoPtr a( new AttendeeInfo(map["name"].toString(), map["id"].toString(), Attendee::Accepted) );
-    eventInfo->addAttendee(a);
-  }
-
-  /*
-   * People that have declined
-   */
-  const QVariantList declined = dataMap.value("declined").toMap().value("data").toList();
-  foreach(const QVariant &attendee, declined) {
-    const QVariantMap map = attendee.toMap();
-    AttendeeInfoPtr a( new AttendeeInfo(map["name"].toString(), map["id"].toString(), Attendee::Declined) );
-    eventInfo->addAttendee(a);
-  }
+  eventInfo->addAttendees(attendees(dataMap, "noreply", Attendee::NeedsAction));
+  eventInfo->addAttendees(attendees(dataMap, "maybe", Attendee::Tentative));
+  eventInfo->addAttendees(attendees(dataMap, "attending", Attendee::Accepted));
+  eventInfo->addAttendees(attendees(dataMap, "declined", Attendee::Declined));
 
   return eventInfo;
 }
