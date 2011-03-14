@@ -85,7 +85,7 @@ void FacebookAddJob::start()
 
   url.addQueryItem("access_token", mAccessToken);
 
-  foreach(const QueryItem item, mQueryItems) {
+  foreach(const QueryItem &item, mQueryItems) {
     url.addQueryItem(item.first, item.second);
   }
 
@@ -174,7 +174,6 @@ void FacebookDeleteJob::jobFinished( KJob *job )
 /*
  * Facebook get job
  */
-
 FacebookGetJob::FacebookGetJob( const QString &path, const QString &accessToken )
   : FacebookJob(path, accessToken)
 {
@@ -211,7 +210,7 @@ void FacebookGetJob::start()
   if ( !mFields.isEmpty() ) { 
     url.addQueryItem( "fields", mFields.join( "," ) );
   }
-  
+
   foreach( const QueryItem &item, mQueryItems ) {
     url.addQueryItem( item.first, item.second );
   }
