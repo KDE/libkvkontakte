@@ -5,7 +5,6 @@ set(LIB_VERSION "1.0")
 set(LIB_SOVERSION "1")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
