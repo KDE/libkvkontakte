@@ -24,7 +24,7 @@
 #include <KUrl>
 
 AllNotesListJob::AllNotesListJob( const QString& accessToken )
-  : mAccessToken( accessToken )
+  : PagedListJob( accessToken )
 {
 }
 
@@ -33,82 +33,47 @@ QList< NoteInfoPtr > AllNotesListJob::allNotes() const
   return mNotes;
 }
 
-bool AllNotesListJob::doKill()
+void AllNotesListJob::appendItems(const ListJobBase* job)
 {
-  if (mCurrentJob) {
-    mCurrentJob->kill( KJob::Quietly );
+  const NotesListJob * const listJob = dynamic_cast<const NotesListJob*>(job);
+  Q_ASSERT(listJob);
+  mNotes.append(listJob->notes());
+}
+
+bool AllNotesListJob::shouldStartNewJob(const KUrl& prev, const KUrl& next)
+{
+  Q_UNUSED(next);
+  const QString since = prev.queryItem( "since" );
+  if ( since.isEmpty() ) {
+    kDebug() << "Aborting notes fetching, no date range found in URL!";
+    return false;
   }
-  return KJob::doKill();
+  KDateTime sinceTime;
+  sinceTime.setTime_t( since.toLongLong() );
+  if ( !sinceTime.isValid() ) {
+    kDebug() << "Aborting notes fetching, invalid date range found in URL!";
+    return false;
+  }
+  return (sinceTime >= mLowerLimit);
 }
 
-void AllNotesListJob::setLowerLimit( const KDateTime& lowerLimit )
+ListJobBase* AllNotesListJob::createJob(const KUrl &prev, const KUrl &next)
 {
-  mLowerLimit = lowerLimit;
-}
-
-void AllNotesListJob::start()
-{
-  Q_ASSERT( mLowerLimit.isValid() );
-  Q_ASSERT( !mCurrentJob );
-  mCurrentJob = new NotesListJob( mAccessToken );
-  connect( mCurrentJob, SIGNAL(result(KJob*)),
-           this, SLOT(noteListJobFinished(KJob*)) );
-  mCurrentJob->start();
-}
-
-void AllNotesListJob::noteListJobFinished( KJob* job )
-{
-  Q_ASSERT( job == mCurrentJob );
-  NotesListJob * const listJob = dynamic_cast<NotesListJob*>( job );
-  Q_ASSERT( listJob );
-  if ( job->error() ) {
-    mCurrentJob = 0;
-    setError( listJob->error() );
-    setErrorText( listJob->errorString() );
-    emitResult();
-  } else {
-    kDebug() << "Got" << listJob->notes().size() << "notes from our subjob.";
-    //kDebug() << "Next: " << listJob->nextNotes();
-    //kDebug() << "Prev: " << listJob->previousNotes();
-
-    const KUrl prev = KUrl::fromUserInput( listJob->previousNotes() );
+  Q_UNUSED(next);
+  NotesListJob * const job = new NotesListJob(mAccessToken);
+  if (!prev.isEmpty()) {
     const QString limit = prev.queryItem( "limit" );
     const QString until = prev.queryItem( "until" );
     const QString since = prev.queryItem( "since" );
-    if ( until.isEmpty() ) {
-      kDebug() << "Aborting notes fetching, no date range found in URL!";
+    if ( !limit.isEmpty() ) {
+      job->addQueryItem( "limit", limit );
     }
-    KDateTime sinceTime;
-    sinceTime.setTime_t( since.toLongLong() );
-    if ( !sinceTime.isValid() ) {
-      kDebug() << "Aborting notes fetching, invalid date range found in URL!";
+    if ( !until.isEmpty() ) {
+      job->addQueryItem( "until", until );
     }
-    //kDebug() << "Starting new subjob for limit" << limit << ", until" << until << ", since" << since;
-    //kDebug() << "Lower limit:" << mLowerLimit.toString();
-    //kDebug() << "limit of URL:" << untilTime.toString();
-
-    // Stop when we got all notes after a certain dates, or no notes at all
-    if ( listJob->notes().isEmpty() || since.isEmpty() || !sinceTime.isValid() ||
-         sinceTime < mLowerLimit ) {
-      kDebug() << "All notes fetched: " << mNotes.size();
-      mCurrentJob = 0;
-      emitResult();
-    } else {
-      mNotes.append( listJob->notes() );
-
-      mCurrentJob = new NotesListJob( mAccessToken );
-      if ( !limit.isEmpty() ) {
-        mCurrentJob->addQueryItem( "limit", limit );
-      }
-      if ( !until.isEmpty() ) {
-        mCurrentJob->addQueryItem( "until", until );
-      }
-      if ( !since.isEmpty() ) {
-        mCurrentJob->addQueryItem( "since", since );
-      }
-      connect( mCurrentJob, SIGNAL(result(KJob*)),
-               this, SLOT(noteListJobFinished(KJob*)) );
-      mCurrentJob->start();
+    if ( !since.isEmpty() ) {
+      job->addQueryItem( "since", since );
     }
   }
+  return job;
 }

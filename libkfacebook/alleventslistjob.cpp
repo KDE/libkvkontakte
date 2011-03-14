@@ -21,10 +21,9 @@
 #include "eventslistjob.h"
 
 #include <KDebug>
-#include <KUrl>
 
 AllEventsListJob::AllEventsListJob( const QString& accessToken )
-  : mAccessToken( accessToken )
+  : PagedListJob( accessToken )
 {
 }
 
@@ -33,82 +32,47 @@ QList< EventInfoPtr > AllEventsListJob::allEvents() const
   return mEvents;
 }
 
-bool AllEventsListJob::doKill()
+void AllEventsListJob::appendItems(const ListJobBase* job)
 {
-  if (mCurrentJob) {
-    mCurrentJob->kill( KJob::Quietly );
+  const EventsListJob * const listJob = dynamic_cast<const EventsListJob*>(job);
+  Q_ASSERT(listJob);
+  mEvents.append(listJob->events());
+}
+
+bool AllEventsListJob::shouldStartNewJob(const KUrl& prev, const KUrl& next)
+{
+  Q_UNUSED(prev);
+  const QString until = next.queryItem( "until" );
+  if ( until.isEmpty() ) {
+    kDebug() << "Aborting events fetching, no date range found in URL!";
+    return false;
   }
-  return KJob::doKill();
+  KDateTime untilTime;
+  untilTime.setTime_t( until.toLongLong() );
+  if ( !untilTime.isValid() ) {
+    kDebug() << "Aborting events fetching, invalid date range found in URL!";
+    return false;
+  }
+  return (untilTime >= mLowerLimit);
 }
 
-void AllEventsListJob::setLowerLimit( const KDateTime& lowerLimit )
+ListJobBase* AllEventsListJob::createJob(const KUrl &prev, const KUrl &next)
 {
-  mLowerLimit = lowerLimit;
-}
-
-void AllEventsListJob::start()
-{
-  Q_ASSERT( mLowerLimit.isValid() );
-  Q_ASSERT( !mCurrentJob );
-  mCurrentJob = new EventsListJob( mAccessToken );
-  connect( mCurrentJob, SIGNAL(result(KJob*)),
-           this, SLOT(eventListJobFinished(KJob*)) );
-  mCurrentJob->start();
-}
-
-void AllEventsListJob::eventListJobFinished( KJob* job )
-{
-  Q_ASSERT( job == mCurrentJob );
-  EventsListJob * const listJob = dynamic_cast<EventsListJob*>( job );
-  Q_ASSERT( listJob );
-  if ( job->error() ) {
-    mCurrentJob = 0;
-    setError( listJob->error() );
-    setErrorText( listJob->errorString() );
-    emitResult();
-  } else {
-    kDebug() << "Got" << listJob->events().size() << "events from our subjob.";
-    //kDebug() << "Next: " << listJob->nextEvents();
-    //kDebug() << "Prev: " << listJob->previousEvents();
-
-    const KUrl next = KUrl::fromUserInput( listJob->nextEvents() );
+  Q_UNUSED(prev);
+  EventsListJob * const job = new EventsListJob(mAccessToken);
+  if (!next.isEmpty()) {
     const QString limit = next.queryItem( "limit" );
     const QString until = next.queryItem( "until" );
     const QString since = next.queryItem( "since" );
-    if ( until.isEmpty() ) {
-      kDebug() << "Aborting events fetching, no date range found in URL!";
+    if ( !limit.isEmpty() ) {
+      job->addQueryItem( "limit", limit );
     }
-    KDateTime untilTime;
-    untilTime.setTime_t( until.toLongLong() );
-    if ( !untilTime.isValid() ) {
-      kDebug() << "Aborting events fetching, invalid date range found in URL!";
+    if ( !until.isEmpty() ) {
+      job->addQueryItem( "until", until );
     }
-    //kDebug() << "Starting new subjob for limit" << limit << ", until" << until << ", since" << since;
-    //kDebug() << "Lower limit:" << mLowerLimit.toString();
-    //kDebug() << "limit of URL:" << untilTime.toString();
-
-    // Stop when we got all events after a certain dates, or no event at all
-    if ( listJob->events().isEmpty() || until.isEmpty() || !untilTime.isValid() ||
-         untilTime < mLowerLimit ) {
-      kDebug() << "All events fetched.";
-      mCurrentJob = 0;
-      emitResult();
-    } else {
-      mEvents.append( listJob->events() );
-
-      mCurrentJob = new EventsListJob( mAccessToken );
-      if ( !limit.isEmpty() ) {
-        mCurrentJob->addQueryItem( "limit", limit );
-      }
-      if ( !until.isEmpty() ) {
-        mCurrentJob->addQueryItem( "until", until );
-      }
-      if ( !since.isEmpty() ) {
-        mCurrentJob->addQueryItem( "since", since );
-      }
-      connect( mCurrentJob, SIGNAL(result(KJob*)),
-               this, SLOT(eventListJobFinished(KJob*)) );
-      mCurrentJob->start();
+    if ( !since.isEmpty() ) {
+      job->addQueryItem( "since", since );
     }
   }
+  return job;
 }

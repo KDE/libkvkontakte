@@ -22,7 +22,7 @@
 #include <qjson/qobjecthelper.h>
 
 EventsListJob::EventsListJob( const QString& accessToken )
-  : FacebookGetJob( "/me/events", accessToken )
+  : ListJobBase( "/me/events", accessToken )
 {
 }
 
@@ -31,29 +31,14 @@ QList< EventInfoPtr > EventsListJob::events() const
   return mEvents;
 }
 
-void EventsListJob::handleData( const QVariant& root )
+void EventsListJob::handleItem(const QVariant& item)
 {
-  const QVariant data = root.toMap()["data"];
-  foreach( const QVariant &user, data.toList() ) {
-    EventInfoPtr eventInfo( new EventInfo() );
-    QJson::QObjectHelper::qvariant2qobject( user.toMap(), eventInfo.data() );
-    mEvents.append( eventInfo );
-  }
-  const QVariant paging = root.toMap()["paging"];
-  mNextPage = paging.toMap().value("next").toString();
-  mPrevPage = paging.toMap().value("previous").toString();
+  EventInfoPtr eventInfo( new EventInfo() );
+  QJson::QObjectHelper::qvariant2qobject( item.toMap(), eventInfo.data() );
+  mEvents.append( eventInfo );
 }
 
-QString EventsListJob::nextEvents() const
+int EventsListJob::numEntries() const
 {
-  return mNextPage;
+  return mEvents.size();
 }
-
-QString EventsListJob::previousEvents() const
-{
-  return mPrevPage;
-}
-
-
-
-

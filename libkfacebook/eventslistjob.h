@@ -19,26 +19,22 @@
 #ifndef EVENTSLISTJOB_H
 #define EVENTSLISTJOB_H
 
-#include "facebookjobs.h"
+#include "listjobbase.h"
 #include "eventinfo.h"
 
-class LIBKFACEBOOK_EXPORT EventsListJob : public FacebookGetJob
+class LIBKFACEBOOK_EXPORT EventsListJob : public ListJobBase
 {
   Q_OBJECT
   public:
     EventsListJob( const QString &accessToken );
     QList<EventInfoPtr> events() const;
-
-    QString previousEvents() const;
-    QString nextEvents() const;
+    int numEntries() const;
 
   protected:
-    virtual void handleData( const QVariant& data );
+    void handleItem( const QVariant& item );
 
   private:
     QList<EventInfoPtr> mEvents;
-    QString mNextPage;
-    QString mPrevPage;
 };
 
 #endif

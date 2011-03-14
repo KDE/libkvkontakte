@@ -1,4 +1,4 @@
-/* Copyright 2011 Roeland Jago Douma <unix@rullzer.com>
+/* Copyright 2011 Thomas McGuire <mcguire@kde.org>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -16,27 +16,32 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef ALLNOTESLISTJOB_H
-#define ALLNOTESLISTJOB_H
+#include "listjobbase.h"
 
-#include "pagedlistjob.h"
-#include "noteinfo.h"
-#include "libkfacebook_export.h"
+#include <QVariant>
 
-class LIBKFACEBOOK_EXPORT AllNotesListJob : public PagedListJob
+ListJobBase::ListJobBase( const QString &path, const QString& accessToken )
+  : FacebookGetJob( path, accessToken )
 {
-  Q_OBJECT
-  public:
-    explicit AllNotesListJob( const QString &accessToken );
-    QList<NoteInfoPtr> allNotes() const;
+}
 
-  protected:
-    virtual void appendItems(const ListJobBase* job);
-    virtual ListJobBase* createJob(const KUrl &prev, const KUrl &next);
-    virtual bool shouldStartNewJob(const KUrl& prev, const KUrl& next);
+void ListJobBase::handleData( const QVariant& root )
+{
+  const QVariant data = root.toMap()["data"];
+  foreach( const QVariant &user, data.toList() ) {
+    handleItem( user );
+  }
+  const QVariant paging = root.toMap()["paging"];
+  mNextPage = paging.toMap().value("next").toString();
+  mPrevPage = paging.toMap().value("previous").toString();
+}
 
-  private:
-    QList<NoteInfoPtr> mNotes;
-};
+QString ListJobBase::nextItems() const
+{
+  return mNextPage;
+}
 
-#endif
+QString ListJobBase::previousItems() const
+{
+  return mPrevPage;
+}

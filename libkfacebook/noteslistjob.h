@@ -19,26 +19,22 @@
 #ifndef NOTESLISTJOB_H
 #define NOTESLISTJOB_H
 
-#include "facebookjobs.h"
+#include "listjobbase.h"
 #include "noteinfo.h"
 
-class LIBKFACEBOOK_EXPORT NotesListJob : public FacebookGetJob
+class LIBKFACEBOOK_EXPORT NotesListJob : public ListJobBase
 {
   Q_OBJECT
   public:
     NotesListJob( const QString &accessToken );
     QList<NoteInfoPtr> notes() const;
-
-    QString previousNotes() const;
-    QString nextNotes() const;
+    int numEntries() const;
 
   protected:
-    virtual void handleData( const QVariant& data );
+    void handleItem( const QVariant& item );
 
   private:
     QList<NoteInfoPtr> mNotes;
-    QString mNextPage;
-    QString mPrevPage;
 };
 
 #endif

@@ -19,33 +19,23 @@
 #ifndef ALLEVENTSLISTJOB_H
 #define ALLEVENTSLISTJOB_H
 
+#include "pagedlistjob.h"
 #include "eventinfo.h"
 #include "libkfacebook_export.h"
 
-#include <KJob>
-#include <QPointer>
-
-class EventsListJob;
-
-class LIBKFACEBOOK_EXPORT AllEventsListJob : public KJob
+class LIBKFACEBOOK_EXPORT AllEventsListJob : public PagedListJob
 {
   Q_OBJECT
   public:
     explicit AllEventsListJob( const QString &accessToken );
-    void setLowerLimit( const KDateTime &lowerLimit );
-    QList<EventInfoPtr> allEvents() const;
-    virtual void start();
-
-  protected slots:
-    void eventListJobFinished( KJob * job );
+    QList< EventInfoPtr > allEvents() const;
 
   protected:
-    virtual bool doKill();
+    virtual void appendItems(const ListJobBase* job);
+    virtual ListJobBase* createJob(const KUrl &prev, const KUrl &next);
+    virtual bool shouldStartNewJob(const KUrl& prev, const KUrl& next);
 
   private:
-    KDateTime mLowerLimit;
-    QPointer<EventsListJob> mCurrentJob;
-    QString mAccessToken;
     QList<EventInfoPtr> mEvents;
 };
 

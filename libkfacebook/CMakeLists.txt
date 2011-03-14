@@ -18,6 +18,8 @@ set(libkfacebook_SRCS
   notejob.cpp
   noteaddjob.cpp
   facebookjobs.cpp
+  pagedlistjob.cpp
+  listjobbase.cpp
 )
 
 kde4_add_library(kfacebook SHARED ${libkfacebook_SRCS})

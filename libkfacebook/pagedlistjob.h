@@ -1,4 +1,4 @@
-/* Copyright 2011 Roeland Jago Douma <unix@rullzer.com>
+/* Copyright 2011 Thomas McGuire <mcguire@kde.org>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -16,27 +16,40 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef ALLNOTESLISTJOB_H
-#define ALLNOTESLISTJOB_H
+#ifndef PAGEDLISTJOB_H
+#define PAGEDLISTJOB_H
 
-#include "pagedlistjob.h"
-#include "noteinfo.h"
 #include "libkfacebook_export.h"
 
-class LIBKFACEBOOK_EXPORT AllNotesListJob : public PagedListJob
+#include <KJob>
+#include <KUrl>
+#include <KDateTime>
+#include <QPointer>
+
+class ListJobBase;
+
+class LIBKFACEBOOK_EXPORT PagedListJob : public KJob
 {
   Q_OBJECT
   public:
-    explicit AllNotesListJob( const QString &accessToken );
-    QList<NoteInfoPtr> allNotes() const;
+    explicit PagedListJob( const QString &accessToken );
+    void setLowerLimit( const KDateTime &lowerLimit );
+    virtual void start();
+
+  protected slots:
+    void listJobFinished( KJob * job );
 
   protected:
-    virtual void appendItems(const ListJobBase* job);
-    virtual ListJobBase* createJob(const KUrl &prev, const KUrl &next);
-    virtual bool shouldStartNewJob(const KUrl& prev, const KUrl& next);
+    virtual bool doKill();
+    virtual ListJobBase * createJob(const KUrl &prev, const KUrl &next) = 0;
+    virtual void appendItems( const ListJobBase * job ) = 0;
+    virtual bool shouldStartNewJob(const KUrl &prev, const KUrl &next) = 0;
+
+    QString mAccessToken;
+    KDateTime mLowerLimit;
 
   private:
-    QList<NoteInfoPtr> mNotes;
+    QPointer<ListJobBase> mCurrentJob;
 };
 
 #endif

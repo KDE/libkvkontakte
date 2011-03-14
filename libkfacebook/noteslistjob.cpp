@@ -22,7 +22,7 @@
 #include <qjson/qobjecthelper.h>
 
 NotesListJob::NotesListJob( const QString& accessToken )
-  : FacebookGetJob( "/me/notes", accessToken )
+  : ListJobBase( "/me/notes", accessToken )
 {
 }
 
@@ -31,25 +31,14 @@ QList< NoteInfoPtr > NotesListJob::notes() const
   return mNotes;
 }
 
-QString NotesListJob::previousNotes() const
+void NotesListJob::handleItem(const QVariant& item)
 {
-  return mPrevPage;
+  NoteInfoPtr noteInfo( new NoteInfo() );
+  QJson::QObjectHelper::qvariant2qobject( item.toMap(), noteInfo.data() );
+  mNotes.append( noteInfo );
 }
 
-QString NotesListJob::nextNotes() const
+int NotesListJob::numEntries() const
 {
-  return mNextPage;
-}
-
-void NotesListJob::handleData( const QVariant& root )
-{
-  const QVariant data = root.toMap()["data"];
-  foreach( const QVariant &user, data.toList() ) {
-    NoteInfoPtr noteInfo( new NoteInfo() );
-    QJson::QObjectHelper::qvariant2qobject( user.toMap(), noteInfo.data() );
-    mNotes.append( noteInfo );
-  }
-  const QVariant paging = root.toMap()["paging"];
-  mNextPage = paging.toMap().value("next").toString();
-  mPrevPage = paging.toMap().value("previous").toString();
+  return mNotes.size();
 }

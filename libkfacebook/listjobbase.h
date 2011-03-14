@@ -1,4 +1,4 @@
-/* Copyright 2011 Roeland Jago Douma <unix@rullzer.com>
+/* Copyright 2011 Thomas McGuire <mcguire@kde.org>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -16,27 +16,30 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef ALLNOTESLISTJOB_H
-#define ALLNOTESLISTJOB_H
+#ifndef LISTJOBBASE_H
+#define LISTJOBBASE_H
 
-#include "pagedlistjob.h"
-#include "noteinfo.h"
 #include "libkfacebook_export.h"
 
-class LIBKFACEBOOK_EXPORT AllNotesListJob : public PagedListJob
+#include "facebookjobs.h"
+
+class LIBKFACEBOOK_EXPORT ListJobBase : public FacebookGetJob
 {
   Q_OBJECT
   public:
-    explicit AllNotesListJob( const QString &accessToken );
-    QList<NoteInfoPtr> allNotes() const;
+    ListJobBase( const QString &path, const QString &accessToken );
+    virtual int numEntries() const = 0;
+
+    QString previousItems() const;
+    QString nextItems() const;
 
   protected:
-    virtual void appendItems(const ListJobBase* job);
-    virtual ListJobBase* createJob(const KUrl &prev, const KUrl &next);
-    virtual bool shouldStartNewJob(const KUrl& prev, const KUrl& next);
+    virtual void handleData( const QVariant& data );
+    virtual void handleItem( const QVariant& item ) = 0;
 
   private:
-    QList<NoteInfoPtr> mNotes;
+    QString mNextPage;
+    QString mPrevPage;
 };
 
 #endif
