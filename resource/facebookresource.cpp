@@ -553,10 +553,6 @@ void FacebookResource::retrieveCollections()
 
 void FacebookResource::itemRemoved(const Akonadi::Item &item)
 {
-  /*
-   * Delete a note
-   * TODO: handle signal! and signal akonadi etc! whoohoo
-   */
   if (item.mimeType() == "text/x-vnd.akonadi.note") {
     mIdle = false;
     FacebookDeleteJob * const deleteJob = new FacebookDeleteJob( item.remoteId(),
@@ -587,9 +583,6 @@ void FacebookResource::deleteJobFinished(KJob *job)
 
 void FacebookResource::itemAdded( const Akonadi::Item &item, const Akonadi::Collection &collection )
 {
-  /*
-   * A note is added!
-   */
   if (collection.remoteId() == notesRID) {
     if (item.hasPayload<KMime::Message::Ptr>()) {
       const KMime::Message::Ptr note = item.payload<KMime::Message::Ptr>();
