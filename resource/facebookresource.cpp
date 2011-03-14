@@ -181,7 +181,7 @@ void FacebookResource::noteListFetched( KJob* job )
                     listJob->error() == FacebookJob::AuthenticationProblem );
   } else {
     setItemStreamingEnabled( true );
-    
+
     Item::List noteItems;
     foreach( const NoteInfoPtr &noteInfo, listJob->allNotes() ) {
       Item note;
