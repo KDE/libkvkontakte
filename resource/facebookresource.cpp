@@ -420,7 +420,7 @@ void FacebookResource::photoJobFinished(KJob* job)
   Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   PhotoJob * const photoJob = dynamic_cast<PhotoJob*>( job );
   Q_ASSERT(photoJob);
-  UserInfoPtr user = job->property("friend").value<UserInfoPtr>();
+  const UserInfoPtr user = job->property("friend").value<UserInfoPtr>();
   mCurrentJobs.removeOne(job);
 
   if (photoJob->error()) {
