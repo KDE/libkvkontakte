@@ -62,6 +62,7 @@ void AllNotesListJob::noteListJobFinished( KJob* job )
   NotesListJob * const listJob = dynamic_cast<NotesListJob*>( job );
   Q_ASSERT( listJob );
   if ( job->error() ) {
+    mCurrentJob = 0;
     setError( listJob->error() );
     setErrorText( listJob->errorString() );
     emitResult();
