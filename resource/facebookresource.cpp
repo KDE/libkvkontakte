@@ -30,7 +30,6 @@
 #include <libkfacebook/allnoteslistjob.h>
 #include <libkfacebook/notejob.h>
 #include <libkfacebook/noteaddjob.h>
-
 #include <libkfacebook/facebookjobs.h>
 
 #include <Akonadi/AttributeFactory>
@@ -110,9 +109,9 @@ void FacebookResource::resetState()
 void FacebookResource::slotAbortRequested()
 {
   if (!mIdle) {
-    foreach(const QPointer<KJob> j, mCurrentJobs) {
-      kDebug() << "Killing current job:" << j;
-      j->kill(KJob::Quietly);
+    foreach(const QPointer<KJob> &job, mCurrentJobs) {
+      kDebug() << "Killing current job:" << job;
+      job->kill(KJob::Quietly);
     }
     abort();
   }
