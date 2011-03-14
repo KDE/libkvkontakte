@@ -565,6 +565,10 @@ void FacebookResource::itemRemoved(const Akonadi::Item &item)
     deleteJob->setProperty( "Item", QVariant::fromValue( item ) );
     connect( deleteJob, SIGNAL(result(KJob*)), this, SLOT(deleteJobFinished(KJob*)) );
     deleteJob->start();
+  } else {
+    // Shouldn't happen, all other items are read-only
+    Q_ASSERT(!"Unable to delete item, not ours.");
+    cancelTask();
   }
 }
 
@@ -573,8 +577,12 @@ void FacebookResource::deleteJobFinished(KJob *job)
   Q_ASSERT(!mIdle);
   Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   mCurrentJobs.removeAll(job);
-  Item item = job->property( "Item" ).value<Item>(); 
-  changeCommitted( item );
+  if ( job->error() ) {
+    abortWithError( i18n( "Unable to get delete note from server: %1", job->errorText() ) );
+  } else {
+    const Item item = job->property( "Item" ).value<Item>(); 
+    changeCommitted( item );
+  }
 }
 
 void FacebookResource::itemAdded( const Akonadi::Item &item, const Akonadi::Collection &collection )
@@ -594,8 +602,14 @@ void FacebookResource::itemAdded( const Akonadi::Item &item, const Akonadi::Coll
       addJob->setProperty( "Item", QVariant::fromValue( item ) );
       connect( addJob, SIGNAL(result(KJob *)), this, SLOT(noteAddJobFinished(KJob *)) );
       addJob->start();
+    } else {
+      Q_ASSERT(!"Note has wrong mimetype.");
+      cancelTask();
     }
-  } 
+  } else {
+    Q_ASSERT(!"Can not add this type of item!");
+    cancelTask();
+  }
 }
 
 void FacebookResource::noteAddJobFinished(KJob *job)
@@ -606,13 +620,14 @@ void FacebookResource::noteAddJobFinished(KJob *job)
   Q_ASSERT( addJob );
   mCurrentJobs.removeAll(job);
 
-  Item note = addJob->property( "Item" ).value<Item>();
-  note.setRemoteId(addJob->property( "id" ).value<QString>());
-
-  mIdle = true;
-  mCurrentJobs.clear();
-
-  changeCommitted( note );
+  if (job->error()) {
+    abortWithError( i18n( "Unable to get upload note to server: %1", job->errorText() ) );
+  } else {
+    Item note = addJob->property( "Item" ).value<Item>();
+    note.setRemoteId(addJob->property( "id" ).value<QString>());
+    changeCommitted( note );
+  }
+  resetState();
 }
 
 AKONADI_RESOURCE_MAIN( FacebookResource )
