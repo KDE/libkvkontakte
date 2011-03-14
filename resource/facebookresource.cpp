@@ -576,7 +576,7 @@ void FacebookResource::deleteJobFinished(KJob *job)
   Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
   mCurrentJobs.removeAll(job);
   if ( job->error() ) {
-    abortWithError( i18n( "Unable to get delete note from server: %1", job->errorText() ) );
+    abortWithError( i18n( "Unable to delete note from server: %1", job->errorText() ) );
   } else {
     const Item item = job->property( "Item" ).value<Item>(); 
     changeCommitted( item );
