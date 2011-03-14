@@ -195,10 +195,8 @@ void FacebookResource::noteListFetched( KJob* job )
     itemsRetrieved( noteItems );
     itemsRetrievalDone();
     finishNotesFetching();
-    
   }
 }
-
 
 void FacebookResource::eventListFetched( KJob* job )
 {
@@ -377,7 +375,7 @@ void FacebookResource::fetchPhotos()
 {
   mIdle = false;
   mNumPhotosFetched = 0;
-  foreach(const UserInfoPtr f, mPendingFriends) {
+  foreach(const UserInfoPtr &f, mPendingFriends) {
     PhotoJob * const photoJob = new PhotoJob(f->id(), Settings::self()->accessToken() );
     mCurrentJobs << photoJob;
     photoJob->setProperty("friend", QVariant::fromValue( f ));
@@ -553,7 +551,7 @@ void FacebookResource::retrieveCollections()
   collectionsRetrieved( Collection::List() << friends << events << notes );
 }
 
-void FacebookResource::itemRemoved( const Akonadi::Item &item)
+void FacebookResource::itemRemoved(const Akonadi::Item &item)
 {
   /*
    * Delete a note
