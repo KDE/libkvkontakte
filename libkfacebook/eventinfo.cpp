@@ -46,7 +46,6 @@ KCal::Attendee::PartStat Attendee::status() const
   return mStatus;
 }
 
-
 EventPtr EventInfo::asEvent() const
 {
   EventPtr event( new Event );
@@ -89,14 +88,14 @@ EventPtr EventInfo::asEvent() const
   //       Public/Private -> freebusy!
   //       venue: add to location?
   //       picture?
-  
-  foreach(const AttendeePtr a, attendees()) {
-    KCal::Attendee *b = new KCal::Attendee(a->name(), 
-                                           "facebook@unkown.invalid", 
-                                           false, 
-                                           a->status(),
-                                           KCal::Attendee::OptParticipant,
-                                           a->id() );
+
+  foreach(const AttendeePtr &attendee, attendees()) {
+    KCal::Attendee * const b = new KCal::Attendee(attendee->name(),
+                                                  "facebook@unkown.invalid", 
+                                                  false, 
+                                                  attendee->status(),
+                                                  KCal::Attendee::OptParticipant,
+                                                  attendee->id() );
     event->addAttendee(b);
   }
 
@@ -198,7 +197,7 @@ QString EventInfo::updatedTimeString() const
   return mUpdatedTime;
 }
 
-void EventInfo::addAttendee(AttendeePtr a )
+void EventInfo::addAttendee(const AttendeePtr &a)
 {
   mAttendees << a;
 }

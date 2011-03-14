@@ -70,14 +70,12 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
     eventInfo->setOrganizer( owner.toMap().value( "name" ).toString() );
   }
 
-  QVariant attendee;
-
   /*
    * People that have not yet responded
    */
   const QVariantList noreply = dataMap.value("noreply").toMap().value("data").toList();
-  foreach(attendee, noreply) {
-    const QVariantMap map= attendee.toMap();
+  foreach(const QVariant &attendee, noreply) {
+    const QVariantMap map = attendee.toMap();
     AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::NeedsAction) );
     eventInfo->addAttendee(a);
   }
@@ -86,8 +84,8 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
    * People that maybe will attend
    */
   const QVariantList maybe = dataMap.value("maybe").toMap().value("data").toList();
-  foreach(attendee, maybe) {
-    const QVariantMap map= attendee.toMap();
+  foreach(const QVariant &attendee, maybe) {
+    const QVariantMap map = attendee.toMap();
     AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Tentative) );
     eventInfo->addAttendee(a);
   }
@@ -96,8 +94,8 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
    * People that will attend
    */
   const QVariantList attending = dataMap.value("attending").toMap().value("data").toList();
-  foreach(attendee, attending) {
-    const QVariantMap map= attendee.toMap();
+  foreach(const QVariant &attendee, attending) {
+    const QVariantMap map = attendee.toMap();
     AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Accepted) );
     eventInfo->addAttendee(a);
   }
@@ -106,13 +104,11 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
    * People that have declined
    */
   const QVariantList declined = dataMap.value("declined").toMap().value("data").toList();
-  foreach(attendee, declined) {
-    const QVariantMap map= attendee.toMap();
+  foreach(const QVariant &attendee, declined) {
+    const QVariantMap map = attendee.toMap();
     AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KCal::Attendee::Declined) );
     eventInfo->addAttendee(a);
   }
-
-
 
   return eventInfo;
 }

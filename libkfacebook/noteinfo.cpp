@@ -20,7 +20,6 @@
 
 #include "util.h"
 
-#include <dom/html_document.h>
 #include <KDebug>
 #include <KLocalizedString>
 #include <KPIMUtils/LinkLocator>
@@ -32,7 +31,7 @@ void NoteInfo::setId( const QString &id)
 
 KMime::Message::Ptr NoteInfo::asNote() const
 {
-  KMime::Message *note = new KMime::Message();
+  KMime::Message * const note = new KMime::Message();
 
   QString m = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd\">\n";
   m += "<html><head></head><body>\n";
@@ -114,5 +113,3 @@ KDateTime NoteInfo::updatedTime() const
 {
   return facebookTimeToKDateTime(mUpdatedTime);
 }
-
-

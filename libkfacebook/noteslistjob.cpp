@@ -41,7 +41,6 @@ QString NotesListJob::nextNotes() const
   return mNextPage;
 }
 
-
 void NotesListJob::handleData( const QVariant& root )
 {
   const QVariant data = root.toMap()["data"];
@@ -54,5 +53,3 @@ void NotesListJob::handleData( const QVariant& root )
   mNextPage = paging.toMap().value("next").toString();
   mPrevPage = paging.toMap().value("previous").toString();
 }
-
-
