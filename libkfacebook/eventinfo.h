@@ -27,35 +27,39 @@
 
 #ifndef KDEPIM_44_COMPAT
 #include <KCalCore/Event>
+#include <KCalCore/Attendee>
 typedef KCalCore::Event Event;
+typedef KCalCore::Attendee Attendee;
 typedef KCalCore::Event::Ptr EventPtr;
 typedef KCalCore::Incidence::Ptr IncidencePtr;
-typedef KCalCore::Attendee KAttendee;
+typedef KCalCore::Attendee::Ptr AttendeePtr;
 #else
 #include <boost/shared_ptr.hpp>
 #include <KCal/Event>
+#include <KCal/Attendee>
 typedef KCal::Event Event;
+typedef KCal::Attendee Attendee;
 typedef boost::shared_ptr<KCal::Event> EventPtr;
 typedef boost::shared_ptr<KCal::Incidence> IncidencePtr;
-typedef KCal::Attendee KAttendee;
+typedef KCal::Attendee* AttendeePtr;
 #endif
 
-class Attendee
+class AttendeeInfo
 {
   public:
-    Attendee(const QString &name, const QString &id, const KAttendee::PartStat &status);
+    AttendeeInfo(const QString &name, const QString &id, const Attendee::PartStat &status);
 
     QString name() const;
     QString id() const;
-    KAttendee::PartStat status() const;
+    Attendee::PartStat status() const;
 
   private:
     QString mName;
     QString mId;
-    KAttendee::PartStat mStatus;
+    Attendee::PartStat mStatus;
 };
 
-typedef QSharedPointer<Attendee> AttendeePtr;
+typedef QSharedPointer<AttendeeInfo> AttendeeInfoPtr;
 
 
 class LIBKFACEBOOK_EXPORT EventInfo : public QObject
@@ -96,8 +100,8 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     QString updatedTimeString() const;
     KDateTime updatedTime() const;
 
-    void addAttendee(const AttendeePtr &a);
-    QList<AttendeePtr> attendees() const;
+    void addAttendee(const AttendeeInfoPtr &a);
+    QList<AttendeeInfoPtr> attendees() const;
 
     EventPtr asEvent() const;
 
@@ -111,7 +115,7 @@ class LIBKFACEBOOK_EXPORT EventInfo : public QObject
     QString mOrganizer;
     QString mUpdatedTime;
 
-    QList<AttendeePtr> mAttendees;
+    QList<AttendeeInfoPtr> mAttendees;
 };
 
 typedef QSharedPointer<EventInfo> EventInfoPtr;

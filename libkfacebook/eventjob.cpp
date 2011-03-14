@@ -76,7 +76,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariantList noreply = dataMap.value("noreply").toMap().value("data").toList();
   foreach(const QVariant &attendee, noreply) {
     const QVariantMap map= attendee.toMap();
-    AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KAttendee::NeedsAction) );
+    AttendeeInfoPtr a( new AttendeeInfo(map["name"].toString(), map["id"].toString(), Attendee::NeedsAction) );
     eventInfo->addAttendee(a);
   }
 
@@ -86,7 +86,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariantList maybe = dataMap.value("maybe").toMap().value("data").toList();
   foreach(const QVariant &attendee, maybe) {
     const QVariantMap map = attendee.toMap();
-    AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KAttendee::Tentative) );
+    AttendeeInfoPtr a( new AttendeeInfo(map["name"].toString(), map["id"].toString(), Attendee::Tentative) );
     eventInfo->addAttendee(a);
   }
 
@@ -96,7 +96,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariantList attending = dataMap.value("attending").toMap().value("data").toList();
   foreach(const QVariant &attendee, attending) {
     const QVariantMap map = attendee.toMap();
-    AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KAttendee::Accepted) );
+    AttendeeInfoPtr a( new AttendeeInfo(map["name"].toString(), map["id"].toString(), Attendee::Accepted) );
     eventInfo->addAttendee(a);
   }
 
@@ -106,7 +106,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   const QVariantList declined = dataMap.value("declined").toMap().value("data").toList();
   foreach(const QVariant &attendee, declined) {
     const QVariantMap map = attendee.toMap();
-    AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KAttendee::Declined) );
+    AttendeeInfoPtr a( new AttendeeInfo(map["name"].toString(), map["id"].toString(), Attendee::Declined) );
     eventInfo->addAttendee(a);
   }
 

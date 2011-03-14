@@ -23,25 +23,24 @@
 #include <KDebug>
 #include <KLocalizedString>
 #include <KPIMUtils/LinkLocator>
-#include <KCal/Attendee>
 
-Attendee::Attendee(const QString &name, const QString &id, const KAttendee::PartStat &status)
+AttendeeInfo::AttendeeInfo(const QString &name, const QString &id, const Attendee::PartStat &status)
   : mName(name), mId(id), mStatus(status)
 {
 
 }
 
-QString Attendee::name() const
+QString AttendeeInfo::name() const
 {
   return mName;
 }
 
-QString Attendee::id() const
+QString AttendeeInfo::id() const
 {
   return mId;
 }
 
-KAttendee::PartStat Attendee::status() const
+Attendee::PartStat AttendeeInfo::status() const
 {
   return mStatus;
 }
@@ -88,14 +87,14 @@ EventPtr EventInfo::asEvent() const
   //       Public/Private -> freebusy!
   //       venue: add to location?
   //       picture?
-  foreach(const AttendeePtr &a, attendees()) {
-    KAttendee *b = new KAttendee(a->name(), 
+  foreach(const AttendeeInfoPtr &attendeeInfo, attendees()) {
+    AttendeePtr attendee( new Attendee(attendeeInfo->name(),
                                  "facebook@unkown.invalid", 
                                  false, 
-                                 a->status(),
-                                 KAttendee::OptParticipant,
-                                 a->id() );
-    event->addAttendee(b);
+                                 attendeeInfo->status(),
+                                 Attendee::OptParticipant,
+                                 attendeeInfo->id() ) );
+    event->addAttendee(attendee);
   }
 
   return event;
@@ -196,12 +195,12 @@ QString EventInfo::updatedTimeString() const
   return mUpdatedTime;
 }
 
-void EventInfo::addAttendee(const AttendeePtr &a)
+void EventInfo::addAttendee(const AttendeeInfoPtr &a)
 {
   mAttendees << a;
 }
 
-QList<AttendeePtr> EventInfo::attendees() const
+QList<AttendeeInfoPtr> EventInfo::attendees() const
 {
   return mAttendees;
 }
