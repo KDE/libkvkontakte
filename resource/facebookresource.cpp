@@ -443,7 +443,7 @@ void FacebookResource::photoJobFinished(KJob* job)
     mNumPhotosFetched++;
 
     if (mNumPhotosFetched != mNumFriends) {
-      const int alreadyDownloadedFriends = mNumFriends - mPendingFriends.size();
+      const int alreadyDownloadedFriends = mNumPhotosFetched;
       const float percentageDone = alreadyDownloadedFriends / (float)mNumFriends * 100.0f;
       emit percent(10 + percentageDone * 0.9f);
     } else {
