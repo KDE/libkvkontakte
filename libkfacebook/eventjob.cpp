@@ -85,7 +85,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
    */
   const QVariantList maybe = dataMap.value("maybe").toMap().value("data").toList();
   foreach(const QVariant &attendee, maybe) {
-    const QVariantMap map= attendee.toMap();
+    const QVariantMap map = attendee.toMap();
     AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KAttendee::Tentative) );
     eventInfo->addAttendee(a);
   }
@@ -94,8 +94,8 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
    * People that will attend
    */
   const QVariantList attending = dataMap.value("attending").toMap().value("data").toList();
-  foreach(attendee, attending) {
-    const QVariantMap map= attendee.toMap();
+  foreach(const QVariant &attendee, attending) {
+    const QVariantMap map = attendee.toMap();
     AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KAttendee::Accepted) );
     eventInfo->addAttendee(a);
   }
@@ -105,7 +105,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
    */
   const QVariantList declined = dataMap.value("declined").toMap().value("data").toList();
   foreach(const QVariant &attendee, declined) {
-    const QVariantMap map= attendee.toMap();
+    const QVariantMap map = attendee.toMap();
     AttendeePtr a( new Attendee(map["name"].toString(), map["id"].toString(), KAttendee::Declined) );
     eventInfo->addAttendee(a);
   }
