@@ -28,7 +28,7 @@
 typedef QPair<QString, QString> QueryItem;
 
 /**
- * Facebook Job base class
+ * FacebookJob base class
  */
 class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
 {
@@ -68,7 +68,7 @@ class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
 };
 
 /**
- * FacebookJob that add data to facebook
+ * FacebookJob that adds data to facebook
  */
 class LIBKFACEBOOK_EXPORT FacebookAddJob : public FacebookJob
 {
@@ -84,7 +84,7 @@ class LIBKFACEBOOK_EXPORT FacebookAddJob : public FacebookJob
 };
 
 /**
- * Facebook job that deletes data from facebook
+ * FacebookJob that deletes data from facebook
  */
 class LIBKFACEBOOK_EXPORT FacebookDeleteJob : public FacebookJob
 {
@@ -100,7 +100,7 @@ class LIBKFACEBOOK_EXPORT FacebookDeleteJob : public FacebookJob
 };
 
 /**
- * Facebook job that gets data from facebook
+ * FacebookJob that gets data from facebook
  */
 class LIBKFACEBOOK_EXPORT FacebookGetJob : public FacebookJob
 {
