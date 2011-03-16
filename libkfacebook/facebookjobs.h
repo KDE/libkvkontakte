@@ -27,34 +27,49 @@
 
 typedef QPair<QString, QString> QueryItem;
 
+/**
+ * Facebook Job base class
+ */
 class LIBKFACEBOOK_EXPORT FacebookJob : public KJob
 {
   Q_OBJECT
   public:
+    /** 
+     * Constructor that sets the path and the accesstoken 
+     *
+     * @param path The path after https://graphs.facebook.com
+     * @param accessToken The accessToken to access our data on facebook
+     * */
     FacebookJob( const QString &path, const QString &accessToken );
     explicit FacebookJob( const QString &accessToken );
 
+    /** Add a query item to the list */
     void addQueryItem( const QString &key, const QString &value );
 
     virtual void start() = 0;
 
     enum JobErrorType { AuthenticationProblem = KJob::UserDefinedError + 42 };
-
+  
   protected:
+    /** Kill the currentjobs and its subjobs */
     virtual bool doKill();
+
+    /** Check for a return error and set the appropiate error messags */
+    void handleError( const QVariant &data );
+
+    QString mAccessToken;         /** Facebook Access token */
+    QString mPath;                /** path after https://graph.facebook.com/ */
+    QList<QueryItem> mQueryItems; /** The query items */
+    QPointer<KJob> mJob;          /** Pointer to the running job */
 
   private slots:
     virtual void jobFinished( KJob *job ) = 0;
 
-  protected:
-    void handleError( const QVariant &data );
-
-    QString mAccessToken;
-    QString mPath;
-    QList<QueryItem> mQueryItems;
-    QPointer<KJob> mJob;
 };
 
+/**
+ * FacebookJob that add data to facebook
+ */
 class LIBKFACEBOOK_EXPORT FacebookAddJob : public FacebookJob
 {
   Q_OBJECT
@@ -68,6 +83,9 @@ class LIBKFACEBOOK_EXPORT FacebookAddJob : public FacebookJob
     void jobFinished(KJob *job);
 };
 
+/**
+ * Facebook job that deletes data from facebook
+ */
 class LIBKFACEBOOK_EXPORT FacebookDeleteJob : public FacebookJob
 {
   Q_OBJECT
@@ -81,6 +99,9 @@ class LIBKFACEBOOK_EXPORT FacebookDeleteJob : public FacebookJob
     void jobFinished(KJob *job);
 };
 
+/**
+ * Facebook job that gets data from facebook
+ */
 class LIBKFACEBOOK_EXPORT FacebookGetJob : public FacebookJob
 {
   Q_OBJECT
@@ -89,9 +110,11 @@ class LIBKFACEBOOK_EXPORT FacebookGetJob : public FacebookJob
     FacebookGetJob( const QString &path, const QString &accessToken ); 
     explicit FacebookGetJob( const QString &accessToken ); 
 
+    /** Set the fields the job should retrieve from facebook */
     void setFields( const QStringList &fields ); 
 
-    // If ids are set, the path is ignored.
+    /** Set the Id's the job should retrieve from facebook.
+     * If this is set then the path is ignored */
     void setIds( const QStringList &ids ); 
 
     virtual void start();
@@ -103,8 +126,8 @@ class LIBKFACEBOOK_EXPORT FacebookGetJob : public FacebookJob
     void jobFinished( KJob *job ); 
 
   private:
-    QStringList mFields;
-    QStringList mIds;
+    QStringList mFields; /** The field to retrieve from facebook */
+    QStringList mIds;    /** The id's to retrieve from facebook */
 };
 
 #endif

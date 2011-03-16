@@ -25,6 +25,9 @@
 #include <KDebug>
 #include <KLocale>
 
+/*
+ * FacebookJobs base class
+ */
 FacebookJob::FacebookJob( const QString& path, const QString& accessToken )
   : mAccessToken( accessToken ),
     mPath( path )

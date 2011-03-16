@@ -25,6 +25,9 @@
 #include <KDateTime>
 #include <QObject>
 
+/**
+ * Class to represent a facebook note
+ */
 class LIBKFACEBOOK_EXPORT NoteInfo : public QObject
 {
   Q_OBJECT
@@ -35,35 +38,88 @@ class LIBKFACEBOOK_EXPORT NoteInfo : public QObject
   Q_PROPERTY(QString created_time WRITE setCreatedTimeString READ createdTimeString)
   Q_PROPERTY(QString updated_time WRITE setUpdatedTimeString READ updatedTimeString)
   public:
+    /**
+     * Set the facebook id of this note
+     * @param id the facebook id
+     */
     void setId( const QString &id);
+    /**
+     * Returns the facebook id
+     */
     QString id() const;
 
+    /**
+     * Set who wrote the note
+     * @param from the creator of the note
+     */
     void setFrom( const QString &from);
+    /**
+     * Returns the creator of the note
+     */
     QString from() const;
 
+    /**
+     * Set the subject of the note
+     * @param subject the subject
+     */
     void setSubject( const QString &subject);
+    /**
+     * Returns the subject of the note.
+     */
     QString subject() const;
 
+    /**
+     * Set the actual content of the note
+     * @param message The actual content of the note
+     */
     void setMessage( const QString &message);
+    /**
+     * Returns the content of the note.
+     */
     QString message() const;
 
+    /**
+     * Set the creation time of the note
+     * @param createdTime Time in "facebook format"
+     */
     void setCreatedTimeString( const QString &createdTime );
+    /**
+     * Returns the creation time as a string in "facebook format"
+     */
     QString createdTimeString() const;
+    /**
+     * Returns the creation time in KDateTime
+     */
     KDateTime createdTime() const;
 
+    /**
+     * Set the time of the last update of the note
+     * @param updatedTime The time, in "facebook format", of the last update of
+     *                    the note.
+     */
     void setUpdatedTimeString( const QString &updatedTime );
+    /**
+     * Returns the time of the last update of the note in "facebook format"
+     */
     QString updatedTimeString() const;
+    /**
+     * Returns the time of the last update of the note as a KDateTime
+     */
     KDateTime updatedTime() const;
 
+    /**
+     * Generates a KMime::Message from this note and return a
+     * KMime::Message::Ptr to it.
+     */
     KMime::Message::Ptr asNote() const;
 
   private:
-    QString mId;
-    QString mFrom;
-    QString mSubject;
-    QString mMessage;
-    QString mCreatedTime;
-    QString mUpdatedTime;
+    QString mId;          /* Facebook id of the note. */
+    QString mFrom;        /* Creator of the note. */
+    QString mSubject;     /* Subject of the note. */
+    QString mMessage;     /* Actual content of the note. */
+    QString mCreatedTime; /* Creation time of the note. */
+    QString mUpdatedTime; /* Last update time of the note. */
 };
 
 typedef QSharedPointer<NoteInfo> NoteInfoPtr;
