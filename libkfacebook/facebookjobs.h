@@ -122,7 +122,7 @@ class LIBKFACEBOOK_EXPORT FacebookGetJob : public FacebookJob
   protected:
     virtual void handleData( const QVariant &data ) = 0; 
 
-  private slots:
+  protected slots:
     void jobFinished( KJob *job ); 
 
   private:
