@@ -52,6 +52,7 @@ Todo
 - 0.1 userbase documentation that shows how to set up resources, both in kdepim 4.4 and 4.6
     - also add Help button in settings dialog that opens the webpage
 - 0.1 Flesh out the projects.kde.org page a bit, with screenshots and a long description
+- 0.1 Convert photojob to use FacebookGetJob
 
 Refactor
 --------
