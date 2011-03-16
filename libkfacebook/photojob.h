@@ -20,29 +20,24 @@
 #define PHOTOJOB_H
 
 #include "libkfacebook_export.h"
+#include "facebookjobs.h"
 #include <KJob>
 #include <QImage>
 #include <QPointer>
 
-class LIBKFACEBOOK_EXPORT PhotoJob : public KJob
+class LIBKFACEBOOK_EXPORT PhotoJob : public FacebookGetJob
 {
   Q_OBJECT
   public:
     PhotoJob( const QString &friendId, const QString &accessToken );
     QImage photo() const;
-    virtual void start();
-
-  protected:
-    virtual bool doKill();
 
   private slots:
-    void getJobFinished( KJob *job );
+    void jobFinished( KJob *job );
 
   private:
+    void handleData( const QVariant& data );
     QImage mImage;
-    QString mAccessToken;
-    QString mUserId;
-    QPointer<KJob> mJob;
 };
 
 #endif

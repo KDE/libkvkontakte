@@ -22,9 +22,9 @@
 #include <KIO/Job>
 
 PhotoJob::PhotoJob(const QString& friendId, const QString& accessToken)
-  : mAccessToken(accessToken), mUserId(friendId)
+  : FacebookGetJob("/" + friendId + "/picture", accessToken)
 {
-  setCapabilities(KJob::Killable);
+  addQueryItem("type", "large");
 }
 
 QImage PhotoJob::photo() const
@@ -32,30 +32,7 @@ QImage PhotoJob::photo() const
   return mImage;
 }
 
-bool PhotoJob::doKill()
-{
-  if (mJob) {
-    mJob->kill(KJob::Quietly);
-  }
-  return KJob::doKill();
-}
-
-void PhotoJob::start()
-{
-  KUrl url;
-  url.setProtocol( "https" );
-  url.setHost( "graph.facebook.com" );
-  url.setPath( "/" + mUserId + "/picture" );
-  url.addQueryItem( "access_token", mAccessToken );
-  url.addQueryItem( "type", "large" );
-  kDebug() << "Starting query" << url;
-  KIO::StoredTransferJob * const job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
-  mJob = job;
-  connect( job, SIGNAL(result(KJob*)), this, SLOT(getJobFinished(KJob*)) );
-  job->start();
-}
-
-void PhotoJob::getJobFinished(KJob* job)
+void PhotoJob::jobFinished(KJob* job)
 {
   KIO::StoredTransferJob * const transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
   Q_ASSERT( transferJob );
@@ -69,6 +46,10 @@ void PhotoJob::getJobFinished(KJob* job)
   }
   emitResult();
   mJob = 0;
+}
+
+void PhotoJob::handleData( const QVariant& data )
+{
 }
 
 #include "photojob.moc"
