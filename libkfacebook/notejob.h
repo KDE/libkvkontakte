@@ -22,21 +22,63 @@
 #include "facebookjobs.h"
 #include "noteinfo.h"
 
+/**
+* A job to retrieve one or multiple notes from facebook and convert them into
+* noteInfo objects.
+*/
 class LIBKFACEBOOK_EXPORT NoteJob : public FacebookGetJob
 {
   Q_OBJECT
   public:
+    /**
+    * @brief Construct a notejob to retrieve multiple notes.
+    *
+    * @param noteIds A list of ids of notes to retrieve.
+    * @param accessToken The token to access data on facebook.
+    */
     NoteJob( const QStringList &noteIds, const QString &accessToken );
+    
+    /**
+    * @brief Contrust a notejob to retrieve a single note from facebook.
+    *
+    * @param noteId The id of the note to retrieve.
+    * @param accessToken The token to accesss data on facebook.
+    */
     NoteJob( const QString &noteId, const QString &accessToken );
+
+    /**
+    * @brief Return a list of all the notes that his job has retrieved
+    *
+    * @return List of pointers to noteinfo objects
+    */
     QList<NoteInfoPtr> noteInfo() const;
 
   protected:
+    /**
+    * @brief Handle the data that is returned by the FacebookGetJob
+    *
+    * @param data A JSON string describing one or multiple notes
+    */
     virtual void handleData( const QVariant& data );
 
   private:
+    /**
+    * @brief Convert a JSON string to a noteInfo object.
+    *
+    * @param data JSON string that describes a facebook note.
+    *
+    * @return Pointer to a noteInfo object
+    */
     NoteInfoPtr handleSingleNote( const QVariant& data );
 
+    /**
+    * @brief List of pointers to noteInfo objects.
+    */
     QList<NoteInfoPtr> mNoteInfo;
+    /**
+    * @brief Boolean value to indicate if we are retrieving one or multple 
+    * notes
+    */
     bool mMultiQuery;
 };
 

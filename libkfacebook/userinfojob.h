@@ -22,15 +22,28 @@
 #include "userinfo.h"
 #include "facebookjobs.h"
 
-/// Gets information about the user that is authenticated
+/**
+ * Get information about the currently authenticated user
+ */
 class LIBKFACEBOOK_EXPORT UserInfoJob : public FacebookGetJob
 {
   Q_OBJECT
   public:
+    /**
+    * @brief Construct a job to retrieve the data of the currently authenticaed user.
+    * @param accessToken The access token to access data on facebook.
+    */
     UserInfoJob( const QString &accessToken );
+    /**
+    * @return A pointer to a userInfo object about the currently authenticated user.
+    */
     UserInfoPtr userInfo() const;
 
   protected:
+    /**
+    * @brief Handles the data returned by the FacebookGetJob
+    * @param data A JSON string containing the data of the currently authenticated user.
+    */
     virtual void handleData( const QVariant& data );
 
   private:

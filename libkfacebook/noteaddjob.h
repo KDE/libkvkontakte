@@ -22,10 +22,23 @@
 #include "facebookjobs.h"
 #include "noteinfo.h"
 
+
+/**
+* Add a note to facebook
+*
+* @todo get the new id and set it accordingly!
+*/
 class LIBKFACEBOOK_EXPORT NoteAddJob : public FacebookAddJob
 {
   Q_OBJECT
   public:
+    /**
+    * @brief Add a note to facebook.
+    *
+    * @param subject The subject of the new note.
+    * @param message The actual content of the note.
+    * @param accessToken The accessToken to add content to facebook
+    */
     NoteAddJob( const QString &subject,const QString &message, const QString &accessToken );
 };
 
