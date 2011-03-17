@@ -50,6 +50,7 @@ void PhotoJob::jobFinished(KJob* job)
 
 void PhotoJob::handleData( const QVariant& data )
 {
+  Q_UNUSED(data);
 }
 
 #include "photojob.moc"
