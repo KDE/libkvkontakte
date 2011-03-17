@@ -22,12 +22,37 @@
 #include "facebookjobs.h"
 #include "eventinfo.h"
 
+/**
+ * A job to retrieve one or multiple notes from facebook
+ */
 class LIBKFACEBOOK_EXPORT EventJob : public FacebookGetJob
 {
   Q_OBJECT
   public:
+    /**
+    * @brief Constructor to create a job that retrieves multiple notes
+    *        from facebook.
+    *
+    * @param eventIds The list of ids of the notes to retrieve.
+    * @param accessToken The access token to access the notes on facebook.
+    */
     EventJob( const QStringList &eventIds, const QString &accessToken );
+
+    /**
+    * @brief Constructor to create a job that retrieves a single note from 
+    *        facebook.
+    *
+    * @param eventId The id of the note to retrieve.
+    * @param accessToken The access token to access the note on facebook.
+    */
     EventJob( const QString &eventId, const QString &accessToken );
+
+    /**
+    * @brief Return a list of pointers to EventInfo objects that have been
+    *        retrieved by this job.
+    *
+    * @return 
+    */
     QList<EventInfoPtr> eventInfo() const;
 
   protected:
