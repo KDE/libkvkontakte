@@ -256,4 +256,31 @@ void FacebookGetJob::jobFinished(KJob *job)
   mJob = 0;
 }
 
+/*
+ * FacebookGetIdJob
+ */
+FacebookGetIdJob::FacebookGetIdJob(const QStringList &ids, const QString &accessToken)
+  : FacebookGetJob(accessToken),
+    mMultiQuery(true)
+{
+  setIds(ids);
+}
+
+FacebookGetIdJob::FacebookGetIdJob(const QString &id, const QString &accessToken)
+  : FacebookGetJob("/" + id, accessToken),
+    mMultiQuery(false)
+{
+}
+
+void FacebookGetIdJob::handleData(const QVariant &data)
+{
+  if (!mMultiQuery) {
+    handleSingleData(data);
+  } else {
+    foreach(const QVariant &item, data.toMap()) {
+      handleSingleData(item);
+    }
+  }
+}
+
 #include "facebookjobs.moc"

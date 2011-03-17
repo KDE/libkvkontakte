@@ -130,4 +130,40 @@ class LIBKFACEBOOK_EXPORT FacebookGetJob : public FacebookJob
     QStringList mIds;    /** The id's to retrieve from facebook */
 };
 
+/**
+ * A FacebookGetJob to retrieve a single or multiple elements from facebook
+ * based on their facebook id.
+ */
+class LIBKFACEBOOK_EXPORT FacebookGetIdJob : public FacebookGetJob
+{
+  Q_OBJECT
+  public:
+    /**
+     * @brief Constructor to retrieve a list of ids from facebook.
+     *
+     * @param ids A list of ids to retrieve from facebook.
+     * @param accessToken The access token to retrieve data from facebook.
+     */
+    FacebookGetIdJob(const QStringList &ids, const QString &accessToken);
+
+    /**
+     * @brief Constructor to retrieve a single item from facebook.
+     *
+     * @param id The id of the item to retrieve from facebook.
+     * @param accessToken The access token to retrieve the data from facebook.
+     */
+    FacebookGetIdJob(const QString &id, const QString &accessToken);
+
+  protected:
+    /**
+     * @brief Parse a single item that is returned by the FacebookGetJob and
+     *        add it to the interl list of elements.
+     */
+    virtual void handleSingleData(const QVariant &data) = 0;
+
+  private:
+    virtual void handleData(const QVariant &data);
+    bool mMultiQuery;
+};  
+
 #endif
