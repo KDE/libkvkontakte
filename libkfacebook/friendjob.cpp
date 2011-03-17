@@ -22,15 +22,13 @@
 #include <qjson/qobjecthelper.h>
 
 FriendJob::FriendJob( const QString& friendId, const QString& accessToken )
-  : FacebookGetJob( '/' + friendId, accessToken),
-    mMultiQuery( false )
+  : FacebookGetIdJob(friendId, accessToken)
 {
   setFields( friendFields() );
 }
 
 FriendJob::FriendJob( const QStringList& friendIds, const QString& accessToken )
-  : FacebookGetJob( accessToken ),
-    mMultiQuery( true )
+  : FacebookGetIdJob( friendIds, accessToken )
 {
   setFields( friendFields() );
   setIds( friendIds );
@@ -127,7 +125,7 @@ void FriendJob::handlePartner(const UserInfoPtr& userInfo, const QVariant& partn
   }
 }
 
-UserInfoPtr FriendJob::handleSingleUser(const QVariant& data)
+void FriendJob::handleSingleData(const QVariant& data)
 {
   UserInfoPtr friendInfo( new UserInfo() );
   QJson::QObjectHelper::qvariant2qobject( data.toMap(), friendInfo.data() );
@@ -137,18 +135,7 @@ UserInfoPtr FriendJob::handleSingleUser(const QVariant& data)
   handleWork(friendInfo, work);
   const QVariant partner = data.toMap()["significant_other"];
   handlePartner(friendInfo, partner);
-  return friendInfo;
-}
-
-void FriendJob::handleData( const QVariant& data )
-{
-  if ( !mMultiQuery ) {
-    mFriendInfo.append( handleSingleUser( data ) );
-  } else {
-    foreach( const QVariant &user, data.toMap() ) {
-      mFriendInfo.append( handleSingleUser( user ) );
-    }
-  }
+  mFriendInfo.append(friendInfo);
 }
 
 #include "friendjob.moc"

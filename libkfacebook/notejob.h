@@ -26,7 +26,7 @@
 * A job to retrieve one or multiple notes from facebook and convert them into
 * noteInfo objects.
 */
-class LIBKFACEBOOK_EXPORT NoteJob : public FacebookGetJob
+class LIBKFACEBOOK_EXPORT NoteJob : public FacebookGetIdJob
 {
   Q_OBJECT
   public:
@@ -53,33 +53,10 @@ class LIBKFACEBOOK_EXPORT NoteJob : public FacebookGetJob
     */
     QList<NoteInfoPtr> noteInfo() const;
 
-  protected:
-    /**
-    * @brief Handle the data that is returned by the FacebookGetJob
-    *
-    * @param data A JSON string describing one or multiple notes
-    */
-    virtual void handleData( const QVariant& data );
-
   private:
-    /**
-    * @brief Convert a JSON string to a noteInfo object.
-    *
-    * @param data JSON string that describes a facebook note.
-    *
-    * @return Pointer to a noteInfo object
-    */
-    NoteInfoPtr handleSingleNote( const QVariant& data );
-
-    /**
-    * @brief List of pointers to noteInfo objects.
-    */
+    void handleSingleData( const QVariant& data );
+    
     QList<NoteInfoPtr> mNoteInfo;
-    /**
-    * @brief Boolean value to indicate if we are retrieving one or multple 
-    * notes
-    */
-    bool mMultiQuery;
 };
 
 #endif

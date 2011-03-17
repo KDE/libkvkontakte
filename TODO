@@ -59,7 +59,6 @@ Refactor
 - add documentation to job classes + general overview documentation
 	- how facebook requests work (HTTP+QJSON), job-based approach
 - refactor facebookresource.cpp. It is getting big, and the function names are friends-only
-- common base class for eventjob and friendjob and notejob
 
 Roadmap
 -------

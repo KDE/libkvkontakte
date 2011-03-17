@@ -25,7 +25,7 @@
 /**
  * A job to retrieve the data about one or multiple friends from facebook.
  */
-class LIBKFACEBOOK_EXPORT FriendJob : public FacebookGetJob
+class LIBKFACEBOOK_EXPORT FriendJob : public FacebookGetIdJob
 {
   Q_OBJECT
   public:
@@ -51,18 +51,14 @@ class LIBKFACEBOOK_EXPORT FriendJob : public FacebookGetJob
     */
     QList<UserInfoPtr> friendInfo() const;
 
-  protected:
-    virtual void handleData( const QVariant& data );
-
   private:
     QStringList friendFields() const;
-    UserInfoPtr handleSingleUser( const QVariant& data );
+    void handleSingleData( const QVariant& data );
     void handlePartner(const UserInfoPtr &userInfo, const QVariant &partner);
     void handleLocation(const UserInfoPtr &userInfo, const QVariant &data);
     void handleWork(const UserInfoPtr &userInfo, const QVariant &data);
 
     QList<UserInfoPtr> mFriendInfo;
-    bool mMultiQuery;
 };
 
 #endif

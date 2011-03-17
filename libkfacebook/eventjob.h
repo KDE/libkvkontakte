@@ -25,7 +25,7 @@
 /**
  * A job to retrieve one or multiple notes from facebook
  */
-class LIBKFACEBOOK_EXPORT EventJob : public FacebookGetJob
+class LIBKFACEBOOK_EXPORT EventJob : public FacebookGetIdJob
 {
   Q_OBJECT
   public:
@@ -55,15 +55,11 @@ class LIBKFACEBOOK_EXPORT EventJob : public FacebookGetJob
     */
     QList<EventInfoPtr> eventInfo() const;
 
-  protected:
-    virtual void handleData( const QVariant& data );
-
   private:
     QStringList eventFields() const;
-    EventInfoPtr handleSingleEvent( const QVariant& data );
+    void handleSingleData( const QVariant& data );
 
     QList<EventInfoPtr> mEventInfo;
-    bool mMultiQuery;
 };
 
 #endif

@@ -22,18 +22,15 @@
 #include <qjson/qobjecthelper.h>
 
 EventJob::EventJob( const QString& eventId, const QString& accessToken )
-  : FacebookGetJob( '/' + eventId, accessToken),
-    mMultiQuery( false )
+  : FacebookGetIdJob(eventId, accessToken)
 {
   setFields( eventFields() );
 }
 
 EventJob::EventJob( const QStringList& eventIds, const QString& accessToken )
-  : FacebookGetJob( accessToken ),
-    mMultiQuery( true )
+  : FacebookGetIdJob(eventIds, accessToken )
 {
   setFields( eventFields() );
-  setIds( eventIds );
 }
 
 QStringList EventJob::eventFields() const
@@ -74,7 +71,7 @@ QList<AttendeeInfoPtr> attendees(const QVariantMap &dataMap, const QString &face
   return retVal;
 }
 
-EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
+void EventJob::handleSingleData( const QVariant& data )
 {
   EventInfoPtr eventInfo( new EventInfo() );
   const QVariantMap dataMap = data.toMap();
@@ -89,18 +86,7 @@ EventInfoPtr EventJob::handleSingleEvent( const QVariant& data )
   eventInfo->addAttendees(attendees(dataMap, "attending", Attendee::Accepted));
   eventInfo->addAttendees(attendees(dataMap, "declined", Attendee::Declined));
 
-  return eventInfo;
-}
-
-void EventJob::handleData( const QVariant& data )
-{
-  if ( !mMultiQuery ) {
-    mEventInfo.append( handleSingleEvent( data ) );
-  } else {
-    foreach( const QVariant &event, data.toMap() ) {
-      mEventInfo.append( handleSingleEvent( event ) );
-    }
-  }
+  mEventInfo.append(eventInfo);
 }
 
 #include "eventjob.moc"
