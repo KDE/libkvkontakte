@@ -7,6 +7,7 @@ Todo
   - events
     - friend's events??
     - 0.1 add checkboxes "show declined events" "show maybe events"
+    - 0.1 add organizer
     - add attendance label + "change attendence" link
     - rsvp, participants management
       - requires resource-specific incidence editor plugin (talk to openchange guys, they also need that)
@@ -29,20 +30,15 @@ Todo
       - also provide plasma app
       - what about settings, simply open resource settings?
       - ability to filter wall posts
-  - notes
 - 0.1 automatically sync every x minutes setting
   - not when offline
 - offline support / cache policies / parts
-- faster friend sync
-- button "add kopete account"
-- make libkfacebook static
+- 0.1 make libkfacebook static
 - plasma silk wizard (talk to sebas)
+  - also for kopete
 - set proper resourcec status when not authenticated
 - push notifications
   - especially for news feed -> nice animation when item appears
-- add option "don't remove deleted data"
-	-> e.g. when the user adjusts privacy settings, don't locally
-           delete the birthday
 - 0.1 Better authentication
     - when authentication fails because access token is rejected, show more user-friendly error message,
       including instructions on how to fix that.
@@ -52,6 +48,11 @@ Todo
 - 0.1 userbase documentation that shows how to set up resources, both in kdepim 4.4 and 4.6
     - also add Help button in settings dialog that opens the webpage
 - 0.1 Flesh out the projects.kde.org page a bit, with screenshots and a long description
+- data received with final events job is getting to big, make it more granular
+    - fetch participants with separate jobs
+    - only retrive participants on demand
+    - streaming
+    - add better progress info
 
 Refactor
 --------
@@ -59,6 +60,7 @@ Refactor
 - add documentation to job classes + general overview documentation
 	- how facebook requests work (HTTP+QJSON), job-based approach
 - refactor facebookresource.cpp. It is getting big, and the function names are friends-only
+- move all jobs into jobs/ subdirectory
 
 Roadmap
 -------
