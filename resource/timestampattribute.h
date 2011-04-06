@@ -25,6 +25,7 @@
 class TimeStampAttribute : public Akonadi::Attribute
 {
   public:
+    TimeStampAttribute();
     virtual Attribute* clone() const;
     virtual void deserialize(const QByteArray& data);
     virtual QByteArray serialized() const;

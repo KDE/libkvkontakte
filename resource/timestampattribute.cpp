@@ -18,6 +18,10 @@
 */
 #include "timestampattribute.h"
 
+TimeStampAttribute::TimeStampAttribute()
+{
+}
+
 Akonadi::Attribute* TimeStampAttribute::clone() const
 {
   TimeStampAttribute * const attribute = new TimeStampAttribute();
