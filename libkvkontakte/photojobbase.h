@@ -1,5 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
-   Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
+/* Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -17,30 +16,32 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef PHOTOJOBBASE_H
+#define PHOTOJOBBASE_H
 
-#include "settingsbase.h"
+#include <QImage>
+#include <KJob>
+#include <KUrl>
+#include "vkontaktejobs.h"
+#include "userinfo.h"
 
-#include <qwindowdefs.h>
 
-class Settings : public SettingsBase
+// KJobWithSubjob::doKill will be inherited
+class LIBKVKONTAKTE_EXPORT PhotoJobBase : public KJobWithSubjob
 {
     Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
 public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
+    PhotoJobBase(const KUrl &urlString);
 
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
+    virtual void start();
+    QImage photo() const;
+
+private slots:
+    void jobFinished( KJob *job );
 
 private:
-    WId m_winId;
-    QString m_resourceId;
+    KUrl m_url;
+    QImage m_photo;
 };
 
-#endif
+#endif // PHOTOJOBBASE_H

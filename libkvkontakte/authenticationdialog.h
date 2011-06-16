@@ -17,30 +17,41 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef AUTHENTICATIONWIDGET_H
+#define AUTHENTICATIONWIDGET_H
 
-#include "settingsbase.h"
+#include "libkvkontakte_export.h"
 
-#include <qwindowdefs.h>
+#include <KDialog>
 
-class Settings : public SettingsBase
+class KWebView;
+class QProgressBar;
+
+class LIBKVKONTAKTE_EXPORT AuthenticationDialog : public KDialog
 {
-    Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
-public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
+  Q_OBJECT
+  public:
+    AuthenticationDialog( QWidget *parent );
+    void setAppId( const QString &appId );
+    void setPermissions( const QStringList &permissions );
+    void start();
 
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
+  signals:
+    void authenticated( const QString &accessToken );
+    void canceled();
 
-private:
-    WId m_winId;
-    QString m_resourceId;
+  private slots:
+
+    void urlChanged( const QUrl &url );
+    void showErrorDialog();
+
+  private:
+    QString mAppId;
+    QStringList mPermissions;
+    KWebView *mWebView;
+    QProgressBar *mProgressBar;
+    QString mError;
+    QString mErrorDescription;
 };
 
 #endif

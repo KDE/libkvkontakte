@@ -1,4 +1,4 @@
-project(facebookresource)
+project(vkontakteresource)
 
 find_package(Boost 1.34.0)
 macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" TRUE "1.34.0" "Required by Akonadi.")
@@ -20,38 +20,37 @@ endif (XSLTPROC_EXECUTABLE)
 
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}" )
 
-set( facebookresource_SRCS
-  facebookresource.cpp
-  facebookresource_events.cpp
-  facebookresource_friends.cpp
-  facebookresource_notes.cpp
+set( vkontakteresource_SRCS
+  vkontakteresource.cpp
+  vkontakteresource_events.cpp
+  vkontakteresource_friends.cpp
+  vkontakteresource_notes.cpp
   settings.cpp
   settingsdialog.cpp
-  timestampattribute.cpp
 )
 
-install( FILES facebookresource.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents" )
+install( FILES vkontakteresource.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents" )
 
-kde4_add_ui_files( facebookresource_SRCS settingsdialog.ui)
-kde4_add_kcfg_files(facebookresource_SRCS settingsbase.kcfgc)
-kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/settingsbase.kcfg org.kde.Akonadi.Facebook.Settings)
-qt4_add_dbus_adaptor(facebookresource_SRCS
-  ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.Facebook.Settings.xml settings.h Settings
+kde4_add_ui_files( vkontakteresource_SRCS settingsdialog.ui)
+kde4_add_kcfg_files(vkontakteresource_SRCS settingsbase.kcfgc)
+kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/settingsbase.kcfg org.kde.Akonadi.Vkontakte.Settings)
+qt4_add_dbus_adaptor(vkontakteresource_SRCS
+  ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.Vkontakte.Settings.xml settings.h Settings
 )
 
-kde4_add_executable(akonadi_facebook_resource RUN_UNINSTALLED ${facebookresource_SRCS})
+kde4_add_executable(akonadi_vkontakte_resource RUN_UNINSTALLED ${vkontakteresource_SRCS})
 
 if (Q_WS_MAC)
-  set_target_properties(akonadi_facebook_resource PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-  set_target_properties(akonadi_facebook_resource PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.Akonadi.Facebook")
-  set_target_properties(akonadi_facebook_resource PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KDE Akonadi Facebook Resource")
+  set_target_properties(akonadi_vkontakte_resource PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+  set_target_properties(akonadi_vkontakte_resource PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.Akonadi.Vkontakte")
+  set_target_properties(akonadi_vkontakte_resource PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KDE Akonadi VKontakte Resource")
 endif (Q_WS_MAC)
 
 include_directories (
   ${Boost_INCLUDE_DIR}
 )
 
-target_link_libraries( akonadi_facebook_resource
+target_link_libraries( akonadi_vkontakte_resource
   ${KDEPIMLIBS_AKONADI_LIBS}
   ${KDEPIMLIBS_KABC_LIBS}
   ${QT_QTCORE_LIBRARY}
@@ -59,15 +58,15 @@ target_link_libraries( akonadi_facebook_resource
   ${QT_QTDBUS_LIBRARY}
   ${KDE4_KDECORE_LIBS}
   ${KDEPIMLIBS_KMIME_LIBS}
-  kfacebook
+  kvkontakte
 )
 
 if(KDEPIM_44_COMPAT)
-  target_link_libraries(akonadi_facebook_resource ${KDEPIMLIBS_KCAL_LIBS})
+  target_link_libraries(akonadi_vkontakte_resource ${KDEPIMLIBS_KCAL_LIBS})
 else(KDEPIM_44_COMPAT)
-  target_link_libraries(akonadi_facebook_resource ${KDEPIMLIBS_KCALCORE_LIBS})
+  target_link_libraries(akonadi_vkontakte_resource ${KDEPIMLIBS_KCALCORE_LIBS})
 endif(KDEPIM_44_COMPAT)
 
 add_subdirectory(icons)
 
-install(TARGETS akonadi_facebook_resource ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS akonadi_vkontakte_resource ${INSTALL_TARGETS_DEFAULT_ARGS})

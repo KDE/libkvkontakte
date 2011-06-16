@@ -1,4 +1,5 @@
 /* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+   Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -17,175 +18,180 @@
    Boston, MA 02110-1301, USA.
 */
 #include "settingsdialog.h"
-#include "facebookresource.h"
+#include "vkontakteresource.h"
 #include "settings.h"
 
-#include <libkfacebook/authenticationdialog.h>
-#include <libkfacebook/userinfojob.h>
+#include <libkvkontakte/authenticationdialog.h>
+#include <libkvkontakte/userinfojob.h>
 #include <KAboutApplicationDialog>
 #include <KAboutData>
 #include <KWindowSystem>
+#include <libkvkontakte/getvariablejob.h>
 
 using namespace Akonadi;
 
-SettingsDialog::SettingsDialog( FacebookResource *parentResource, WId parentWindow )
-  : KDialog(),
-    mParentResource( parentResource ),
-    mTriggerSync( false )
+SettingsDialog::SettingsDialog( VkontakteResource *parentResource, WId parentWindow )
+    : KDialog(),
+      mParentResource( parentResource ),
+      mTriggerSync( false )
 {
-  KWindowSystem::setMainWindow( this, parentWindow );
-  setButtons( Ok|Cancel|User1 );
-  setButtonText(User1, i18n("About"));
-  setButtonIcon(User1, KIcon("help-about"));
-  setWindowIcon( KIcon( "facebookresource" ) );
-  setWindowTitle( i18n("Facebook Settings") );
+    KWindowSystem::setMainWindow( this, parentWindow );
+    setButtons( Ok|Cancel|User1 );
+    setButtonText(User1, i18n("About"));
+    setButtonIcon(User1, KIcon("help-about"));
+    setWindowIcon( KIcon( "vkontakteresource" ) );
+    setWindowTitle( i18n("VKontakte Settings") );
 
-  setupWidgets();
-  loadSettings();
+    setupWidgets();
+    loadSettings();
 }
 
 SettingsDialog::~SettingsDialog()
 {
-  if ( mTriggerSync ) {
-    mParentResource->synchronize();
-  }
+    if ( mTriggerSync ) {
+        mParentResource->synchronize();
+    }
 }
 
 void SettingsDialog::setupWidgets()
 {
-  QWidget * const page = new QWidget( this );
-  setupUi( page );
-  setMainWidget( page );
-  updateAuthenticationWidgets();
-  updateUserName();
-  connect( resetButton, SIGNAL(clicked(bool)), this, SLOT(resetAuthentication()) );
-  connect( authenticateButton, SIGNAL(clicked(bool)), this, SLOT(showAuthenticationDialog()) );
+    QWidget * const page = new QWidget( this );
+    setupUi( page );
+    setMainWidget( page );
+    updateAuthenticationWidgets();
+    updateUserName();
+    connect( resetButton, SIGNAL(clicked(bool)), this, SLOT(resetAuthentication()) );
+    connect( authenticateButton, SIGNAL(clicked(bool)), this, SLOT(showAuthenticationDialog()) );
 }
 
 void SettingsDialog::showAuthenticationDialog()
 {
-  QStringList permissions;
-  permissions << "offline_access"
-              << "friends_birthday"
-              << "friends_website"
-              << "friends_location"
-              << "friends_work_history"
-              << "friends_relationships"
-              << "user_events"
-              << "user_notes";
-  AuthenticationDialog * const authDialog = new AuthenticationDialog( this );
-  authDialog->setAppId( Settings::self()->appID() );
-  authDialog->setPermissions( permissions );
-  connect( authDialog, SIGNAL(authenticated(QString)),
-           this, SLOT(authenticationDone(QString)) );
-  connect( authDialog, SIGNAL(canceled()),
-           this, SLOT(authenticationCanceled()) );
-  authenticateButton->setEnabled( false );
-  authDialog->start();
+    QStringList permissions;
+    permissions << "notify"
+                << "friends"
+                << "photos"
+                << "audio"
+                << "video"
+                << "docs"
+                << "notes"
+                << "pages"
+                << "offers"
+                << "questions"
+                << "wall"
+                << "messages"
+                << "offline";
+    AuthenticationDialog * const authDialog = new AuthenticationDialog( this );
+    authDialog->setAppId( Settings::self()->appID() );
+    authDialog->setPermissions( permissions );
+    connect( authDialog, SIGNAL(authenticated(QString)),
+             this, SLOT(authenticationDone(QString)) );
+    connect( authDialog, SIGNAL(canceled()),
+             this, SLOT(authenticationCanceled()) );
+    authenticateButton->setEnabled( false );
+    authDialog->start();
 }
 
 void SettingsDialog::authenticationCanceled()
 {
-  authenticateButton->setEnabled( true );
+    authenticateButton->setEnabled( true );
 }
 
 void SettingsDialog::authenticationDone(const QString& accessToken)
 {
-  if ( Settings::self()->accessToken() != accessToken && !accessToken.isEmpty() ) {
-    mTriggerSync = true;
-  }
-  Settings::self()->setAccessToken( accessToken );
-  updateAuthenticationWidgets();
-  updateUserName();
+    if ( Settings::self()->accessToken() != accessToken && !accessToken.isEmpty() ) {
+        mTriggerSync = true;
+    }
+    Settings::self()->setAccessToken( accessToken );
+    updateAuthenticationWidgets();
+    updateUserName();
 }
 
 void SettingsDialog::updateAuthenticationWidgets()
 {
-  if ( Settings::self()->accessToken().isEmpty() ) {
-    authenticationStack->setCurrentIndex( 0 );
-  } else {
-    authenticationStack->setCurrentIndex( 1 );
-    if ( Settings::self()->userName().isEmpty() ) {
-      authenticationLabel->setText( i18n( "Authenticated." ) );
+    if ( Settings::self()->accessToken().isEmpty() ) {
+        authenticationStack->setCurrentIndex( 0 );
     } else {
-      authenticationLabel->setText( i18n( "Authenticated as <b>%1</b>.", Settings::self()->userName() ) );
+        authenticationStack->setCurrentIndex( 1 );
+        if ( Settings::self()->userName().isEmpty() ) {
+            authenticationLabel->setText( i18n( "Authenticated." ) );
+        } else {
+            authenticationLabel->setText( i18n( "Authenticated as <b>%1</b>.", Settings::self()->userName() ) );
+        }
     }
-  }
 }
 
 void SettingsDialog::resetAuthentication()
 {
-  Settings::self()->setAccessToken( QString() );
-  Settings::self()->setUserName( QString() );
-  updateAuthenticationWidgets();
+    Settings::self()->setAccessToken( QString() );
+    Settings::self()->setUserName( QString() );
+    updateAuthenticationWidgets();
 }
 
 void SettingsDialog::updateUserName()
 {
-  if ( Settings::self()->userName().isEmpty() && ! Settings::self()->accessToken().isEmpty() ) {
-    UserInfoJob * const job = new UserInfoJob( Settings::self()->accessToken() );
-    connect( job, SIGNAL(result(KJob*)), this, SLOT(userInfoJobDone(KJob*)) );
-    job->start();
-  }
+    if ( Settings::self()->userName().isEmpty() && ! Settings::self()->accessToken().isEmpty() ) {
+        GetVariableJob * const job = new GetVariableJob( Settings::self()->accessToken(), 1281 ); // get display name
+        connect( job, SIGNAL(result(KJob*)), this, SLOT(userInfoJobDone(KJob*)) );
+        job->start();
+    }
 }
 
 void SettingsDialog::userInfoJobDone( KJob* job )
 {
-  UserInfoJob * const userInfoJob = dynamic_cast<UserInfoJob*>( job );
-  Q_ASSERT( userInfoJob );
-  if ( !userInfoJob->error() ) {
-    Settings::self()->setUserName( userInfoJob->userInfo()->name() );
-    updateAuthenticationWidgets();
-  } else {
-    kWarning() << "Can't get user info: " << userInfoJob->errorText();
-  }
+    GetVariableJob * const userInfoJob = dynamic_cast<GetVariableJob*>( job );
+    Q_ASSERT( userInfoJob );
+    if ( !userInfoJob->error() ) {
+        Settings::self()->setUserName( userInfoJob->variable().toString() );
+        updateAuthenticationWidgets();
+    } else {
+        kWarning() << "Can't get user info: " << userInfoJob->errorText();
+    }
 }
 
 void SettingsDialog::loadSettings()
 {
-  if ( mParentResource->name() == mParentResource->identifier() )
-    mParentResource->setName( i18n( "Facebook" ) );
+    if ( mParentResource->name() == mParentResource->identifier() )
+        mParentResource->setName( i18n( "Vkontakte" ) );
 
-  nameEdit->setText( mParentResource->name() );
-  nameEdit->setFocus();
+    nameEdit->setText( mParentResource->name() );
+    nameEdit->setFocus();
 }
 
 void SettingsDialog::saveSettings()
 {
-  mParentResource->setName( nameEdit->text() );
-  Settings::self()->writeConfig();
+    mParentResource->setName( nameEdit->text() );
+    Settings::self()->writeConfig();
 }
 
 void SettingsDialog::slotButtonClicked( int button )
 {
-  switch( button ) {
+    switch( button ) {
     case Ok:
-      saveSettings();
-      accept();
-      break;
+        saveSettings();
+        accept();
+        break;
     case Cancel:
-      reject();
-      return;
+        reject();
+        return;
     case User1: {
-      KAboutData aboutData( QByteArray( "akonadi_facebook_resource" ),
-                            QByteArray(),
-                            ki18n("Akonadi Facebook Resource"),
-                            QByteArray( RESOURCE_VERSION ),
-                            ki18n( "Makes your friends, events, notes and messages on Facebook available in KDE via Akonadi." ),
-                            KAboutData::License_GPL_V2,
-                            ki18n( "Copyright (C) 2010,2011 Akonadi Facebook Resource Developers" ) );
-      aboutData.addAuthor( ki18n( "Thomas McGuire" ), ki18n( "Maintainer" ), "mcguire@kde.org" );
-      aboutData.addAuthor( ki18n( "Roeland Jago Douma" ), ki18n( "Developer" ), "unix@rullzer.com" );
-      aboutData.addCredit( ki18n( "Till Adam" ), ki18n( "MacOS Support" ), "adam@kde.org" );
-      aboutData.setProgramIconName("facebookresource");
-      aboutData.setTranslator( ki18nc("NAME OF TRANSLATORS", "Your names"),
-                            ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
-      KAboutApplicationDialog *dialog = new KAboutApplicationDialog(&aboutData, this);
-      dialog->setAttribute( Qt::WA_DeleteOnClose, true );
-      dialog->show();
-      break;
+        KAboutData aboutData( QByteArray( "akonadi_vkontakte_resource" ),
+                              QByteArray(),
+                              ki18n("Akonadi Vkontakte Resource"),
+                              QByteArray( RESOURCE_VERSION ),
+                              ki18n( "Makes your friends, events, notes and messages on Vkontakte available in KDE via Akonadi." ),
+                              KAboutData::License_GPL_V2,
+                              ki18n( "(С) 2011 Alexander Potashev" ) );
+        aboutData.addAuthor( ki18n( "Alexander Potashev" ), ki18n( "Maintainer" ), "aspotashev@gmail.com" );
+        aboutData.addCredit( ki18n( "Thomas McGuire" ), ki18n( "Creator of akonadi-facebook" ), "mcguire@kde.org" );
+        aboutData.setProgramIconName("vkontakteresource");
+        aboutData.setTranslator( ki18nc("NAME OF TRANSLATORS", "Your names"),
+                                 ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
+        KAboutApplicationDialog *dialog = new KAboutApplicationDialog(&aboutData, this);
+        dialog->setAttribute( Qt::WA_DeleteOnClose, true );
+        dialog->show();
+        break;
     }
-  }
+    }
 }
 
 #include "settingsdialog.moc"

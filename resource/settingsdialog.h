@@ -21,7 +21,7 @@
 
 #include "ui_settingsdialog.h"
 
-class FacebookResource;
+class VkontakteResource;
 class KJob;
 
 class SettingsDialog : public KDialog, private Ui::SettingsDialog
@@ -29,7 +29,7 @@ class SettingsDialog : public KDialog, private Ui::SettingsDialog
   Q_OBJECT
 
   public:
-    SettingsDialog( FacebookResource *parentResource, WId parentWindow );
+    SettingsDialog( VkontakteResource *parentResource, WId parentWindow );
     ~SettingsDialog();
 
   private slots:
@@ -47,7 +47,7 @@ class SettingsDialog : public KDialog, private Ui::SettingsDialog
     void updateAuthenticationWidgets();
     void updateUserName();
 
-    FacebookResource *mParentResource;
+    VkontakteResource *mParentResource;
     bool mTriggerSync;
 };
 

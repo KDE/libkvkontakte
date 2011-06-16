@@ -17,30 +17,29 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#include "friendlistjob.h"
 
-#include "settingsbase.h"
+#include <qjson/qobjecthelper.h>
 
-#include <qwindowdefs.h>
-
-class Settings : public SettingsBase
+FriendListJob::FriendListJob( const QString& accessToken, const QString &uid )
+    : VkontakteJob( "friends.get", accessToken )
 {
-    Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
-public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
+    addQueryItem("uid", uid);
+    addQueryItem("fields", UserInfo::allQueryFields().join( "," ));
+}
 
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
+QList< UserInfoPtr > FriendListJob::friends() const
+{
+    return m_friends;
+}
 
-private:
-    WId m_winId;
-    QString m_resourceId;
-};
+void FriendListJob::handleData( const QVariant& data )
+{
+    foreach( const QVariant &user, data.toList() ) {
+        UserInfoPtr userInfo( new UserInfo() );
+        QJson::QObjectHelper::qvariant2qobject( user.toMap(), userInfo.data() );
+        m_friends.append( userInfo );
+    }
+}
 
-#endif
+#include "friendlistjob.moc"

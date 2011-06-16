@@ -1,5 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
-   Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
+/* Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -17,30 +16,27 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef GETVARIABLEJOB_H
+#define GETVARIABLEJOB_H
 
-#include "settingsbase.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <QVariant>
 
-#include <qwindowdefs.h>
-
-class Settings : public SettingsBase
+// For the info about specific variables see:
+// http://vkontakte.ru/developers.php?o=-1&p=%D5%F0%E0%ED%E5%ED%E8%E5%20%E4%E0%ED%ED%FB%F5%20%ED%E0%20%F1%E5%F0%E2%E5%F0%E0%F5%20%C2%CA%EE%ED%F2%E0%EA%F2%E5
+class LIBKVKONTAKTE_EXPORT GetVariableJob : public VkontakteJob
 {
-    Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
+
 public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
+    GetVariableJob(const QString &accessToken, int index);
 
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
+    QVariant variable() const;
 
+protected:
+    virtual void handleData(const QVariant& data);
+    
 private:
-    WId m_winId;
-    QString m_resourceId;
+    QVariant m_variable;
 };
 
-#endif
+#endif // GETVARIABLEJOB_H

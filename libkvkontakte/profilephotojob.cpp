@@ -1,5 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
-   Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
+/* Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -17,30 +16,10 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#include "profilephotojob.h"
+#include "userinfo.h"
 
-#include "settingsbase.h"
-
-#include <qwindowdefs.h>
-
-class Settings : public SettingsBase
+ProfilePhotoJob::ProfilePhotoJob(const UserInfoPtr &userInfo)
+    : PhotoJobBase( KUrl(userInfo->photo()) )
 {
-    Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
-public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
-
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
-
-private:
-    WId m_winId;
-    QString m_resourceId;
-};
-
-#endif
+}

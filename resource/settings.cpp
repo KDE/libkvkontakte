@@ -1,4 +1,5 @@
 /* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+   Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -56,26 +57,26 @@ Settings::Settings()
 
 void Settings::setWindowId( WId id )
 {
-  mWinId = id;
+  m_winId = id;
 }
 
 void Settings::setResourceId( const QString &resourceIdentifier )
 {
-  mResourceId = resourceIdentifier;
+  m_resourceId = resourceIdentifier;
 }
 
-QString Settings::apiKey() const
-{
-  return "9c41511dae89d7dfb4cde6be07365475";
-}
+// QString Settings::apiKey() const
+// {
+//   return "9c41511dae89d7dfb4cde6be07365475";
+// }
 
 QString Settings::appID() const
 {
-  return "175243235841602";
+  return "2383230";
 }
 
-QString Settings::appSecret() const
-{
-  return "57b6eadd130bb9ecff7dcb701558833d";
-}
+// QString Settings::appSecret() const
+// {
+//   return "57b6eadd130bb9ecff7dcb701558833d";
+// }
 

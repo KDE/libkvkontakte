@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2011 Thomas McGuire <mcguire@kde.org>
    Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
@@ -17,30 +17,11 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#include "util.h"
 
-#include "settingsbase.h"
-
-#include <qwindowdefs.h>
-
-class Settings : public SettingsBase
+KDateTime vkontakteTimeToKDateTime(const QString& vkontakteTime)
 {
-    Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
-public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
-
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
-
-private:
-    WId m_winId;
-    QString m_resourceId;
-};
-
-#endif
+    KDateTime res;
+    res.setTime_t(vkontakteTime.toLongLong());
+    return res;
+}

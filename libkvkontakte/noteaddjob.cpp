@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2011 Roeland Jago Douma <unix@rullzer.com>
    Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
@@ -17,30 +17,26 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#include "noteaddjob.h"
 
-#include "settingsbase.h"
+#include <QVariant>
 
-#include <qwindowdefs.h>
-
-class Settings : public SettingsBase
+NoteAddJob::NoteAddJob( const QString &accessToken, const QString &title, const QString &text )
+  : VkontakteJob( "notes.add", accessToken )
 {
-    Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
-public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
+    addQueryItem( "title", title );
+    addQueryItem( "text", text );
+    addQueryItem( "privacy", "3" );
+}
 
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
+void NoteAddJob::handleData(const QVariant& data)
+{
+    m_nid = data.toMap()["nid"].toString();
+}
 
-private:
-    WId m_winId;
-    QString m_resourceId;
-};
+QString NoteAddJob::nid() const
+{
+    return m_nid;
+}
 
-#endif
+#include "noteaddjob.moc"

@@ -17,30 +17,25 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef FRIENDLISTJOB_H
+#define FRIENDLISTJOB_H
 
-#include "settingsbase.h"
+#include "userinfo.h"
+#include "vkontaktejobs.h"
 
-#include <qwindowdefs.h>
-
-class Settings : public SettingsBase
+/// Get a list of friends of the user
+class LIBKVKONTAKTE_EXPORT FriendListJob : public VkontakteJob
 {
     Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
 public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
+    FriendListJob( const QString &accessToken, const QString &uid );
+    QList<UserInfoPtr> friends() const;
 
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
+protected:
+    virtual void handleData( const QVariant& data );
 
 private:
-    WId m_winId;
-    QString m_resourceId;
+    QList<UserInfoPtr> m_friends;
 };
 
 #endif

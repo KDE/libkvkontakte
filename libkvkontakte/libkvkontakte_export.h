@@ -17,30 +17,20 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef LIBKVKONTAKTE_EXPORT_H
+#define LIBKVKONTAKTE_EXPORT_H
 
-#include "settingsbase.h"
+/* needed for KDE_EXPORT and KDE_IMPORT macros */
+#include <kdemacros.h>
 
-#include <qwindowdefs.h>
-
-class Settings : public SettingsBase
-{
-    Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
-public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
-
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
-
-private:
-    WId m_winId;
-    QString m_resourceId;
-};
+#ifndef LIBKVKONTAKTE_EXPORT
+# if defined(MAKE_LIBKVKONTAKTE_LIB)
+   /* We are building this library */
+#  define LIBKVKONTAKTE_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define LIBKVKONTAKTE_EXPORT KDE_IMPORT
+# endif
+#endif
 
 #endif

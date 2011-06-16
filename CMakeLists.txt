@@ -1,4 +1,4 @@
-project(kfacebook)
+project(kvkontakte)
 
 set(RESOURCE_VERSION "0.1")
 set(LIB_VERSION "1.0")
@@ -36,7 +36,8 @@ include_directories(
   ${Boost_INCLUDE_DIR}
 )
 
-add_subdirectory(libkfacebook)
+add_subdirectory(libkvkontakte)
 add_subdirectory(resource)
 
 macro_display_feature_log()
+

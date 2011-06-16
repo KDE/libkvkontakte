@@ -1,4 +1,4 @@
-/* Copyright 2010 Thomas McGuire <mcguire@kde.org>
+/* Copyright 2011 Roeland Jago Douma <unix@rullzer.com>
    Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
@@ -17,30 +17,36 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef NOTEADDJOB_H
+#define NOTEADDJOB_H
 
-#include "settingsbase.h"
+#include "vkontaktejobs.h"
+#include "noteinfo.h"
 
-#include <qwindowdefs.h>
 
-class Settings : public SettingsBase
+/**
+* Add a note to vkontakte
+*/
+class LIBKVKONTAKTE_EXPORT NoteAddJob : public VkontakteJob
 {
     Q_OBJECT
-    Q_CLASSINFO( "D-Bus Interface", "org.kde.Akonadi.Vkontakte.ExtendedSettings" )
 public:
-    Settings();
-    void setWindowId( WId id );
-    void setResourceId( const QString &resourceIdentifier );
-    static Settings *self();
+    /**
+    * @brief Add a note to vkontakte.
+    *
+    * @param subject The subject of the new note.
+    * @param message The actual content of the note.
+    * @param accessToken The accessToken to add content to facebook
+    */
+    NoteAddJob( const QString &subject, const QString &message, const QString &accessToken );
+    
+    QString nid() const;
 
-    QString appID() const;
-//     QString apiKey() const;
-//     QString appSecret() const;
-
+protected:
+    virtual void handleData( const QVariant& data );
+    
 private:
-    WId m_winId;
-    QString m_resourceId;
+    QString m_nid;
 };
 
 #endif
