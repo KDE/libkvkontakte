@@ -38,7 +38,7 @@ KMime::Message::Ptr NoteInfo::asNote() const
     note->date()->fromUnicodeString( date().toString(KDateTime::RFCDateDay), "utf-8" );
     note->contentType()->fromUnicodeString( "text/html", "utf-8" );
     note->subject()->fromUnicodeString( title(), "utf-8" );
-    note->from()->fromUnicodeString( "you@facebook", "utf-8" );
+    note->from()->fromUnicodeString( "you@vkontakte", "utf-8" );
 
     note->assemble();
 
