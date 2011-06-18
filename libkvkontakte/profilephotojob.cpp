@@ -20,6 +20,6 @@
 #include "userinfo.h"
 
 ProfilePhotoJob::ProfilePhotoJob(const UserInfoPtr &userInfo)
-    : PhotoJobBase( KUrl(userInfo->photo()) )
+    : PhotoJobBase( KUrl(userInfo->photoMedium()) )
 {
 }

@@ -169,7 +169,18 @@ QString UserInfo::photo() const
 {
     return m_photo;
 }
+
 void UserInfo::setPhoto(const QString& photo)
 {
     m_photo = photo;
+}
+
+QString UserInfo::photoMedium() const
+{
+    return m_photoMedium;
+}
+
+void UserInfo::setPhotoMedium(const QString& photoMedium)
+{
+    m_photoMedium = photoMedium;
 }

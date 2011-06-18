@@ -48,7 +48,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     //Q_PROPERTY(QString country WRITE setCountry READ country)
     Q_PROPERTY(int timezone WRITE setTimezone READ timezone)
     Q_PROPERTY(QString photo WRITE setPhoto READ photo)
-//     Q_PROPERTY(QString photo_medium WRITE setPhotoMedium READ photoMedium)
+    Q_PROPERTY(QString photo_medium WRITE setPhotoMedium READ photoMedium)
 //     Q_PROPERTY(QString photo_big WRITE setPhotoBig READ photoBig)
 //     Q_PROPERTY(QString photo_rec WRITE setPhotoRec READ photoRec)
 //     Q_PROPERTY(int online WRITE setOnline READ online)
@@ -159,6 +159,18 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     QString photo() const;
 
     /**
+     * @brief Set the URL of the medium-sized profile photo
+     *
+     * @param photoMedium URL of the medium-sized profile photo
+     **/
+    void setPhotoMedium(const QString &photoMedium);
+
+    /**
+     * @return The URL of this user's medium-sized photo
+     **/
+    QString photoMedium() const;
+
+    /**
     * @brief Created a KABC::Addressee for all the information we have about
     *        this person.
     *
@@ -180,6 +192,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     int m_timezone;
 
     QString m_photo;
+    QString m_photoMedium;
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;
