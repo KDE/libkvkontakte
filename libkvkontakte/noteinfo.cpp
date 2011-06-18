@@ -107,7 +107,7 @@ QString NoteInfo::dateString() const
 
 KDateTime NoteInfo::date() const
 {
-    return vkontakteTimeToKDateTime(m_date);
+    return unixTimeToKDateTime(m_date);
 }
 
 int NoteInfo::ncom() const

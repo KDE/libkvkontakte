@@ -19,9 +19,9 @@
 */
 #include "util.h"
 
-KDateTime vkontakteTimeToKDateTime(const QString& vkontakteTime)
+KDateTime unixTimeToKDateTime(const QString& unixTime)
 {
     KDateTime res;
-    res.setTime_t(vkontakteTime.toLongLong());
+    res.setTime_t(unixTime.toLongLong());
     return res;
 }
