@@ -53,7 +53,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Not yet authenticated with Facebook.</string>
+            <string>Not yet authenticated with VKontakte.</string>
            </property>
           </widget>
          </item>
@@ -74,7 +74,7 @@
           </font>
          </property>
          <property name="text">
-          <string>In order to access your Facebook data in KDE, you need to authenticate this application with Facebook. To do so, click the above button and follow the instructions on the screen.</string>
+          <string>In order to access your VKontakte data in KDE, you need to authenticate this application with VKontakte. To do so, click the above button and follow the instructions on the screen.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
