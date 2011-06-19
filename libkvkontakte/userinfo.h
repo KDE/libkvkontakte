@@ -39,6 +39,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     // uid, first_name, last_name, nickname, sex, bdate (birthdate), city, country,
     // timezone, photo, photo_medium, photo_big, photo_rec.
     Q_PROPERTY(QString uid WRITE setUid READ uid)
+    Q_PROPERTY(QString domain WRITE setDomain READ domain)
     Q_PROPERTY(QString first_name WRITE setFirstName READ firstName)
     Q_PROPERTY(QString last_name WRITE setLastName READ lastName)
     Q_PROPERTY(QString nickname WRITE setNickName READ nickName)
@@ -79,6 +80,9 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     * @return The vkontakte id of this person
     */
     QString uid() const;
+
+    void setDomain( QString domain );
+    QString domain() const;
 
     /**
     * @brief Set the first name of this person.
@@ -170,6 +174,8 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
      **/
     QString photoMedium() const;
 
+    QString profileUrl() const;
+
     /**
     * @brief Created a KABC::Addressee for all the information we have about
     *        this person.
@@ -182,6 +188,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 
   private:
     QString m_uid; // this could be an integer, but what if something will change?..
+    QString m_domain; // plain string
     QString m_firstName; // plain string
     QString m_lastName; // plain string
     QString m_nickName; // plain string

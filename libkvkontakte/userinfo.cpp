@@ -40,6 +40,16 @@ void UserInfo::setUid(QString uid)
     m_uid = uid;
 }
 
+QString UserInfo::domain() const
+{
+    return m_domain;
+}
+
+void UserInfo::setDomain(QString domain)
+{
+    m_domain = domain;
+}
+
 // "[day].[month].[year]" or "[day].[month]"
 void UserInfo::setBirthday(const QString& birthday)
 {
@@ -110,6 +120,14 @@ int UserInfo::timezone() const
     return m_timezone;
 }
 
+QString UserInfo::profileUrl() const
+{
+    if (domain().isEmpty())
+        return "http://vkontakte.ru/id" + uid();
+    else
+        return "http://vkontakte.ru/" + domain();
+}
+
 KABC::Addressee UserInfo::toAddressee() const
 {
     KABC::Addressee addressee;
@@ -117,7 +135,7 @@ KABC::Addressee UserInfo::toAddressee() const
     addressee.setUid( QString("%1").arg(uid()) );
     addressee.setFamilyName( lastName() );
     //addressee.setFormattedName( name() );
-    //addressee.setUrl( website() );
+    addressee.setUrl( profileUrl() );
     addressee.setBirthday( QDateTime( birthday() ) );
     //addressee.setOrganization(mCompany);
     if (m_timezone != invalidTimezone) {
