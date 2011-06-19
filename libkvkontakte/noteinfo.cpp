@@ -34,7 +34,7 @@ KMime::Message::Ptr NoteInfo::asNote() const
     m += text();
     m += "</body>";
 
-    note->setBody( m.toAscii() );
+    note->mainBodyPart()->fromUnicodeString(m);
     note->date()->fromUnicodeString( date().toString(KDateTime::RFCDateDay), "utf-8" );
     note->contentType()->fromUnicodeString( "text/html", "utf-8" );
     note->subject()->fromUnicodeString( title(), "utf-8" );
