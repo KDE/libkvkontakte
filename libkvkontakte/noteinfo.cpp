@@ -82,7 +82,7 @@ void NoteInfo::setText(const QString &text)
 
 QString NoteInfo::text() const
 {
-    return m_text;
+    return QString(m_text).remove(QChar::ByteOrderMark);
 }
 
 void NoteInfo::setTextWiki(const QString &textWiki)
