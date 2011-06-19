@@ -59,16 +59,16 @@ void VkontakteJob::addQueryItem( const QString& key, const QString& value )
 void VkontakteJob::handleError( const QVariant& data )
 {
     const QVariantMap errorMap = data.toMap();
-    const QString type = errorMap["type"].toString();
-    const QString message = errorMap["message"].toString();
-    kWarning() << "An error of type" << type << "occurred:" << message;
-    if ( type.toLower() != "oauthexception" ) {
+    int error_code = errorMap["error_code"].toInt();
+    const QString error_msg = errorMap["error_msg"].toString();
+    kWarning() << "An error of type" << error_code << "occurred:" << error_msg;
+//     if ( type.toLower() != "oauthexception" ) {
         setError( KJob::UserDefinedError );
-        setErrorText( i18n( "The VKontakte server returned an error of type <i>%1</i>: <i>%2</i>" , type, message ) );
-    } else {
-        setError( AuthenticationProblem );
-        setErrorText( i18n( "Unable to login to the VKontakte server, authentication failure.\nThe server said: <i>%1</i>", message ) );
-    }
+        setErrorText( i18n( "The VKontakte server returned (in reply to method %3) an error of type <i>%1</i>: <i>%2</i>" , error_code, error_msg, m_method ) );
+//     } else {
+//         setError( AuthenticationProblem );
+//         setErrorText( i18n( "Unable to login to the VKontakte server, authentication failure.\nThe server said: <i>%1</i>", message ) );
+//     }
 }
 
 void VkontakteJob::start()

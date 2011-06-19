@@ -38,7 +38,7 @@
 #include <Akonadi/ItemFetchJob>
 #include <Akonadi/ItemFetchScope>
 #include <akonadi/changerecorder.h>
-#include <libkvkontakte/userinfojob.h>
+#include <libkvkontakte/userinfofulljob.h>
 
 using namespace Akonadi;
 
@@ -188,7 +188,7 @@ bool VkontakteResource::retrieveItem( const Akonadi::Item &item, const QSet<QByt
     if (item.mimeType() == "text/directory") {
         // TODO: Is this ever called??
         m_idle = false;
-        UserInfoJob * const friendJob = new UserInfoJob( Settings::self()->accessToken(), item.remoteId() );
+        UserInfoFullJob * const friendJob = new UserInfoFullJob( Settings::self()->accessToken(), item.remoteId() );
         m_currentJobs << friendJob;
         friendJob->setProperty( "Item", QVariant::fromValue( item ) );
         connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );

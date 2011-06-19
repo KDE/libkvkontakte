@@ -13,6 +13,8 @@ set(libkvkontakte_SRCS
     getvariablejob.cpp
     currentuserjob.cpp
     profilephotojob.cpp
+    userinfofulljob.cpp
+    cidsnamesjob.cpp
     
     util.cpp
     noteinfo.cpp

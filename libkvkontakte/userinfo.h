@@ -45,8 +45,8 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     Q_PROPERTY(QString nickname WRITE setNickName READ nickName)
 //    Q_PROPERTY(QString sex WRITE setSex READ sex)
     Q_PROPERTY(QString bdate WRITE setBirthday READ birthdayAsString)
-    //Q_PROPERTY(QString city WRITE setCity READ city)
-    //Q_PROPERTY(QString country WRITE setCountry READ country)
+    Q_PROPERTY(QString city WRITE setCity READ city)
+    Q_PROPERTY(QString country WRITE setCountry READ country)
     Q_PROPERTY(int timezone WRITE setTimezone READ timezone)
     Q_PROPERTY(QString photo WRITE setPhoto READ photo)
     Q_PROPERTY(QString photo_medium WRITE setPhotoMedium READ photoMedium)
@@ -134,11 +134,21 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     */
     void setCity( const QString &city );
 
+    QString city() const;
+
     /**
     * @brief Set the current country of this person.
     * @param country The current country of this person.
     */
     void setCountry( const QString &country );
+
+    QString country() const;
+
+    void setCountryString(const QString &countryString);
+    QString countryString() const;
+
+    void setCityString(const QString &cityString);
+    QString cityString() const;
 
     /**
     * @brief Set the timezone of this person.
@@ -177,8 +187,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     QString profileUrl() const;
 
     /**
-    * @brief Created a KABC::Addressee for all the information we have about
-    *        this person.
+    * @brief Created a KABC::Addressee for all the information we have about this person.
     *
     * @return A KABC::Addressee of this person. 
     */
@@ -195,7 +204,9 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 
     QDate m_birthday;
     QString m_country;
+    QString m_countryString;
     QString m_city;
+    QString m_cityString;
     int m_timezone;
 
     QString m_photo;

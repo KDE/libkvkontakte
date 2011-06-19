@@ -30,7 +30,7 @@
 #include <akonadi/changerecorder.h>
 #include <libkvkontakte/friendlistjob.h>
 #include <libkvkontakte/friendjob.h>
-#include <libkvkontakte/userinfojob.h>
+#include <libkvkontakte/userinfofulljob.h>
 #include <libkvkontakte/profilephotojob.h>
 
 using namespace Akonadi;
@@ -117,7 +117,8 @@ void VkontakteResource::fetchNewOrChangedFriends()
     foreach( const UserInfoPtr &user, m_newOrChangedFriends ) {
         newOrChangedFriendIds.append( user->uid() );
     }
-    UserInfoJob * const friendJob = new UserInfoJob( Settings::self()->accessToken(), newOrChangedFriendIds );
+    UserInfoFullJob * const friendJob = new UserInfoFullJob(
+        Settings::self()->accessToken(), newOrChangedFriendIds);
     m_currentJobs << friendJob;
     connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(detailedFriendListJobFinished(KJob*)) );
     friendJob->start();
@@ -128,7 +129,7 @@ void VkontakteResource::detailedFriendListJobFinished( KJob* job )
 {
     Q_ASSERT(!m_idle);
     Q_ASSERT( m_currentJobs.indexOf(job) != -1 );
-    UserInfoJob * const friendJob = dynamic_cast<UserInfoJob*>( job );
+    UserInfoFullJob * const friendJob = dynamic_cast<UserInfoFullJob*>( job );
     Q_ASSERT( friendJob );
     m_currentJobs.removeAll(job);
 
@@ -212,7 +213,7 @@ void VkontakteResource::friendJobFinished(KJob* job)
 {
     Q_ASSERT(!m_idle);
     Q_ASSERT( m_currentJobs.indexOf(job) != -1 );
-    UserInfoJob * const friendJob = dynamic_cast<UserInfoJob*>( job );
+    UserInfoFullJob * const friendJob = dynamic_cast<UserInfoFullJob*>( job );
     Q_ASSERT( friendJob );
     Q_ASSERT( friendJob->friendInfo().size() == 1 );
     m_currentJobs.removeAll(job);

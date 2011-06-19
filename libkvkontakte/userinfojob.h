@@ -75,6 +75,8 @@ private:
     QList<UserInfoPtr> m_userInfo;
     QStringList m_uids;
     QStringList m_fields;
+    bool m_needCityNames;
+    bool m_needCountryNames;
 };
 
 #endif

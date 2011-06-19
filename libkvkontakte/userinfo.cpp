@@ -100,16 +100,6 @@ void UserInfo::setNickName(const QString& nickName)
     m_nickName = nickName;
 }
 
-/*void UserInfo::setCity(const QString& city)
-{
-  mCity = city;
-}
-
-void UserInfo::setCountry(const QString& country)
-{
-  mCountry = country;
-}
-*/
 void UserInfo::setTimezone(int timezone)
 {
     m_timezone = timezone;
@@ -143,19 +133,18 @@ KABC::Addressee UserInfo::toAddressee() const
     }
     //addressee.insertCustom("KADDRESSBOOK", "X-Profession", mProfession);
     //addressee.insertCustom("KADDRESSBOOK", "X-SpousesName", mPartner);
-//     if ( !mCity.isEmpty() || !mCountry.isEmpty() ) {
-//         KABC::Address address( KABC::Address::Home );
-//         address.setRegion( mCountry );
-//         address.setLocality( mCity );
-//         addressee.insertAddress( address );
-//     }
+    if ( !countryString().isEmpty() || !cityString().isEmpty() ) {
+        KABC::Address address(KABC::Address::Home);
+        address.setRegion(countryString());
+        address.setLocality(cityString());
+        addressee.insertAddress(address);
+    }
     return addressee;
 }
 
 /**
  * @brief Returns the stringlist of all possible field groups
- * that may be requested in VKontakte API methods like "getProfiles",
- * "friends.get", etc.
+ * that may be requested in VKontakte API methods "getProfiles" and "friends.get"
  *
  * @return The list of strings to pass as "fields" argument to a method.
  **/
@@ -201,4 +190,44 @@ QString UserInfo::photoMedium() const
 void UserInfo::setPhotoMedium(const QString& photoMedium)
 {
     m_photoMedium = photoMedium;
+}
+
+QString UserInfo::city() const
+{
+    return m_city;
+}
+
+QString UserInfo::country() const
+{
+    return m_country;
+}
+
+void UserInfo::setCity(const QString &city)
+{
+    m_city = city;
+}
+
+void UserInfo::setCountry(const QString &country)
+{
+    m_country = country;
+}
+
+QString UserInfo::cityString() const
+{
+    return m_cityString;
+}
+
+QString UserInfo::countryString() const
+{
+    return m_countryString;
+}
+
+void UserInfo::setCityString(const QString& cityString)
+{
+    m_cityString = cityString;
+}
+
+void UserInfo::setCountryString(const QString& countryString)
+{
+    m_countryString = countryString;
 }
