@@ -14,10 +14,22 @@ if (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
 else (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
 
   if (NOT WIN32)
+    set (_pc_qjson_string "QJson")
+    if (QJSON_FIND_VERSION_EXACT)
+      set (_pc_qjson_string "${_pc_qjson_string}=")
+    else (QJSON_FIND_VERSION_EXACT)
+      set (_pc_qjson_string "${_pc_qjson_string}>=")
+    endif (QJSON_FIND_VERSION_EXACT)
+    if (QJSON_FIND_VERSION_COUNT GREATER 0)
+      set (_pc_qjson_string "${_pc_qjson_string}${QJSON_FIND_VERSION}")
+    else (QJSON_FIND_VERSION_COUNT GREATER 0)
+      set (_pc_qjson_string "${_pc_qjson_string}0.5")
+    endif (QJSON_FIND_VERSION_COUNT GREATER 0)
     # use pkg-config to get the values of QJSON_INCLUDE_DIRS
     # and QJSON_LIBRARY_DIRS to add as hints to the find commands.
     include (FindPkgConfig)
-    pkg_check_modules (PC_QJSON QJson>=0.5)
+    pkg_check_modules (PC_QJSON ${_pc_qjson_string})
+    set (QJSON_VERSION "${PC_QJSON_VERSION}")
   endif (NOT WIN32)
 
   find_library (QJSON_LIBRARIES
@@ -39,6 +51,9 @@ else (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
   )
 
   include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(QJSON DEFAULT_MSG QJSON_LIBRARIES QJSON_INCLUDE_DIR)
+  find_package_handle_standard_args(QJSON
+                                    REQUIRED_VARS QJSON_LIBRARIES QJSON_INCLUDE_DIR
+                                    VERSION_VAR QJSON_VERSION
+  )
 
 endif (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
