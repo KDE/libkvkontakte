@@ -98,32 +98,32 @@ void VkontakteJob::start()
 
 void VkontakteJob::jobFinished(KJob *job)
 {
-  KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
-  Q_ASSERT( transferJob );
-  if ( transferJob->error() ) {
-    setError( transferJob->error() );
-    setErrorText( KIO::buildErrorString( error(), transferJob->errorText() ) );
-    kWarning() << "Job error: " << transferJob->errorString();
-  } else {
-    kDebug() << "Got data: " << QString::fromAscii( transferJob->data().data() );
-    QJson::Parser parser;
-    bool ok;
-    const QVariant data = parser.parse( transferJob->data(), &ok );
-    if ( ok ) {
-      const QVariant error = data.toMap()["error"];
-      if ( error.isValid() ) {
-        handleError( error );
-      } else {
-        handleData( data.toMap()["response"] );
-      }
+    KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
+    Q_ASSERT( transferJob );
+    if ( transferJob->error() ) {
+        setError( transferJob->error() );
+        setErrorText( KIO::buildErrorString( error(), transferJob->errorText() ) );
+        kWarning() << "Job error: " << transferJob->errorString();
     } else {
-      kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
-      setError( KJob::UserDefinedError );
-      setErrorText( i18n( "Unable to parse data returned by the Facebook server: %1", parser.errorString() ) );
+        kDebug() << "Got data: " << QString::fromAscii( transferJob->data().data() );
+        QJson::Parser parser;
+        bool ok;
+        const QVariant data = parser.parse( transferJob->data(), &ok );
+        if ( ok ) {
+            const QVariant error = data.toMap()["error"];
+            if ( error.isValid() ) {
+                handleError( error );
+            } else {
+                handleData( data.toMap()["response"] );
+            }
+        } else {
+            kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
+            setError( KJob::UserDefinedError );
+            setErrorText( i18n( "Unable to parse data returned by the Facebook server: %1", parser.errorString() ) );
+        }
     }
-  }
-  emitResult();
-  m_job = 0;
+    emitResult();
+    m_job = 0;
 }
 
 /*
