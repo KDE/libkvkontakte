@@ -21,7 +21,7 @@
 GetVariableJob::GetVariableJob(const QString& accessToken, int index)
     : VkontakteJob("getVariable", accessToken)
 {
-    addQueryItem("key", QString("%1").arg(index));
+    addQueryItem("key", QString::number(index));
 }
 
 void GetVariableJob::handleData(const QVariant& data)

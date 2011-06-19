@@ -25,5 +25,5 @@ CurrentUserJob::CurrentUserJob(const QString& accessToken)
 
 QString CurrentUserJob::uid() const
 {
-    return QString("%1").arg(variable().toInt());
+    return QString::number(variable().toInt());
 }

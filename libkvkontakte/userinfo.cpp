@@ -132,7 +132,7 @@ KABC::Addressee UserInfo::toAddressee() const
 {
     KABC::Addressee addressee;
     addressee.setGivenName( firstName() );
-    addressee.setUid( QString("%1").arg(uid()) );
+    addressee.setUid( uid() );
     addressee.setFamilyName( lastName() );
     //addressee.setFormattedName( name() );
     addressee.setUrl( profileUrl() );
