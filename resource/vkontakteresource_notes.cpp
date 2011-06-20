@@ -73,11 +73,10 @@ void VkontakteResource::finishNotesFetching()
 
 void VkontakteResource::noteJobFinished(KJob* job)
 {
-    Q_ASSERT(!mIdle);
-    Q_ASSERT( mCurrentJobs.indexOf(job) != -1 );
+    Q_ASSERT(!m_idle);
+    Q_ASSERT( m_currentJobs.indexOf(job) != -1 );
     NoteJob * const noteJob = dynamic_cast<NoteJob*>( job );
     Q_ASSERT( noteJob );
-    Q_ASSERT( noteJob->noteInfo().size() == 1 );
     m_currentJobs.removeAll(job);
 
     if ( noteJob->error() ) {
