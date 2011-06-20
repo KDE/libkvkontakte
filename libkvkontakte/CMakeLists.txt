@@ -17,7 +17,7 @@ set(libkvkontakte_SRCS
     cidsnamesjob.cpp
     longpollserverjob.cpp
     longpollserverinfo.cpp
-    discussioninfo.cpp
+    messageinfo.cpp
     discussionslistjob.cpp
     
     util.cpp

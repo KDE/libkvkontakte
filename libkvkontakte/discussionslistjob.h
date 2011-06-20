@@ -2,7 +2,7 @@
 #define DISCUSSIONSLISTJOB_H
 
 #include <libkvkontakte/vkontaktejobs.h>
-#include <libkvkontakte/discussioninfo.h>
+#include <libkvkontakte/messageinfo.h>
 
 
 class LIBKVKONTAKTE_EXPORT DiscussionsListJob : public VkontakteJob
@@ -19,7 +19,7 @@ public:
     DiscussionsListJob(const QString &accessToken,
                        int offset = 0, int count = 100, int previewLength = 0);
 
-    QList<DiscussionInfoPtr> discussions() const;
+    QList<MessageInfoPtr> discussions() const;
     int totalCount() const;
 
 protected:
@@ -29,7 +29,7 @@ protected:
 
 private:
     int m_totalCount; // number of all discussions, not only discussions retrieved in this request
-    QList<DiscussionInfoPtr> m_discussions;
+    QList<MessageInfoPtr> m_discussions;
 };
 
 #endif // DISCUSSIONSLISTJOB_H

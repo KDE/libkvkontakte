@@ -16,106 +16,106 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "discussioninfo.h"
+#include "messageinfo.h"
 
 #include "util.h"
 
-DiscussionInfo::DiscussionInfo()
+MessageInfo::MessageInfo()
     : m_readState(0), m_out(0)
 {
 }
 
-void DiscussionInfo::setDateString(const QString &createdDate)
+void MessageInfo::setDateString(const QString &createdDate)
 {
     m_date = createdDate;
 }
 
-QString DiscussionInfo::dateString() const
+QString MessageInfo::dateString() const
 {
     return m_date;
 }
 
-KDateTime DiscussionInfo::date() const
+KDateTime MessageInfo::date() const
 {
     return unixTimeToKDateTime(m_date);
 }
 
-void DiscussionInfo::setUid(const QString &uid)
+void MessageInfo::setUid(const QString &uid)
 {
     m_uid = uid;
 }
 
-QString DiscussionInfo::uid() const
+QString MessageInfo::uid() const
 {
     return m_uid;
 }
 
-void DiscussionInfo::setMid(const QString &mid)
+void MessageInfo::setMid(const QString &mid)
 {
     m_mid = mid;
 }
 
-QString DiscussionInfo::mid() const
+QString MessageInfo::mid() const
 {
     return m_mid;
 }
 
-void DiscussionInfo::setTitle(const QString &title)
+void MessageInfo::setTitle(const QString &title)
 {
     m_title = title;
 }
 
-QString DiscussionInfo::title() const
+QString MessageInfo::title() const
 {
     return m_title;
 }
 
-void DiscussionInfo::setBody(const QString &body)
+void MessageInfo::setBody(const QString &body)
 {
     m_body = body;
 }
 
-QString DiscussionInfo::body() const
+QString MessageInfo::body() const
 {
     return m_body;
 }
 
-void DiscussionInfo::setReadState(int readState)
+void MessageInfo::setReadState(int readState)
 {
     m_readState = readState;
 }
 
-int DiscussionInfo::readState() const
+int MessageInfo::readState() const
 {
     return m_readState;
 }
 
-void DiscussionInfo::setOut(int out)
+void MessageInfo::setOut(int out)
 {
     m_out = out;
 }
 
-int DiscussionInfo::out() const
+int MessageInfo::out() const
 {
     return m_out;
 }
 
-void DiscussionInfo::setChatId(const QString &chatId)
+void MessageInfo::setChatId(const QString &chatId)
 {
     m_chatId = chatId;
 }
 
-QString DiscussionInfo::chatId() const
+QString MessageInfo::chatId() const
 {
     return m_chatId;
 }
 
-void DiscussionInfo::setChatActive(const QString &chatActive)
+void MessageInfo::setChatActive(const QString &chatActive)
 {
     m_chatActive = chatActive;
 }
 
-QString DiscussionInfo::chatActive() const
+QString MessageInfo::chatActive() const
 {
     return m_chatActive;
 }

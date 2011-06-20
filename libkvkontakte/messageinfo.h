@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef DISCUSSIONINFO_H
-#define DISCUSSIONINFO_H
+#ifndef MESSAGEINFO_H
+#define MESSAGEINFO_H
 
 #include "libkvkontakte_export.h"
 
@@ -27,9 +27,9 @@
 #include <QDate>
 
 /**
-* Class that describes a discussion on vkontakte.ru
+* Class that describes a private message on vkontakte.ru
 */
-class LIBKVKONTAKTE_EXPORT DiscussionInfo : public QObject
+class LIBKVKONTAKTE_EXPORT MessageInfo : public QObject
 {
     Q_OBJECT
 
@@ -40,14 +40,14 @@ class LIBKVKONTAKTE_EXPORT DiscussionInfo : public QObject
     Q_PROPERTY(QString title WRITE setTitle READ title)
     Q_PROPERTY(QString body WRITE setBody READ body)
     Q_PROPERTY(int read_state WRITE setReadState READ readState)
-    Q_PROPERTY(int out WRITE setOut READ out)
+    Q_PROPERTY(int out WRITE setOut READ out) // do non-discussion messages have this?
 
     // For chats: chat_id, chat_active
     Q_PROPERTY(QString chat_id WRITE setChatId READ chatId)
     Q_PROPERTY(QString chat_active WRITE setChatActive READ chatActive)
 
 public:
-    DiscussionInfo();
+    MessageInfo();
 
     /**
      * Set the creation time of the note
@@ -107,6 +107,6 @@ private:
     QString m_chatActive;
 };
 
-typedef QSharedPointer<DiscussionInfo> DiscussionInfoPtr;
+typedef QSharedPointer<MessageInfo> MessageInfoPtr;
 
-#endif // DISCUSSIONINFO_H
+#endif // MESSAGEINFO_H
