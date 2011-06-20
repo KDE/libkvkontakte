@@ -215,7 +215,7 @@ void VkontakteResource::friendJobFinished(KJob* job)
     Q_ASSERT( m_currentJobs.indexOf(job) != -1 );
     UserInfoFullJob * const friendJob = dynamic_cast<UserInfoFullJob*>( job );
     Q_ASSERT( friendJob );
-    Q_ASSERT( friendJob->friendInfo().size() == 1 );
+    Q_ASSERT( friendJob->userInfo().size() == 1 );
     m_currentJobs.removeAll(job);
 
     if ( friendJob->error() ) {
