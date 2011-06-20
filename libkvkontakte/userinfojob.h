@@ -38,31 +38,31 @@ public:
     * @brief Construct a job to retrieve the data of the currently authenticaed user.
     * @param accessToken The access token to access data on vkontakte.
     */
-    UserInfoJob ( const QString &accessToken );
+    UserInfoJob(const QString &accessToken);
 
     /**
     * @brief Construct a job to retrieve the data of user with the given uid.
     * @param accessToken The access token to access data on vkontakte.
     * @param uid The user ID
     */
-    UserInfoJob ( const QString &accessToken, const QString &uid );
+    UserInfoJob(const QString &accessToken, const QString &uid);
 
-    UserInfoJob ( const QString &accessToken, const QStringList &uids );
+    UserInfoJob(const QString &accessToken, const QStringList &uids);
 
     /**
     * @return A pointer to a userInfo object about the currently authenticated user.
     */
     QList<UserInfoPtr> userInfo() const;
 
-    //void addUid ( QString uid );
-    void setFields ( const QStringList &fields );
+    //void addUid(QString uid);
+    void setFields(const QStringList &fields);
 
 protected:
     /**
     * @brief Handles the data returned by the VkontakteGetJob
     * @param data A JSON string containing the data.
     */
-    virtual void handleData ( const QVariant& data );
+    virtual void handleData(const QVariant& data);
 
     UserInfoPtr handleSingleData(const QVariant& data);
 
