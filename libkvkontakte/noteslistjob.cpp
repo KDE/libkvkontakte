@@ -34,17 +34,17 @@ NotesListJob::NotesListJob(const QString& accessToken,
 
 void NotesListJob::handleItem(const QVariant& data)
 {
-    NoteInfoPtr noteInfo(new NoteInfo());
-    QJson::QObjectHelper::qvariant2qobject(data.toMap(), noteInfo.data());
-    m_notes.append(noteInfo);
+    NoteInfoPtr item(new NoteInfo());
+    QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
+    m_notes.append(item);
 }
 
 void NotesListJob::handleData(const QVariant& data)
 {
-    QVariantList notes = data.toList();
-    m_totalCount = notes[0].toInt();
-    notes.pop_front();
-    foreach (const QVariant &item, notes) {
+    QVariantList list = data.toList();
+    m_totalCount = list[0].toInt();
+    list.pop_front();
+    foreach (const QVariant &item, list) {
         handleItem(item);
     }
 }

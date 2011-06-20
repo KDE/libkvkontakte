@@ -68,27 +68,27 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 //     Q_PROPERTY(QString faculty_name WRITE setFacultyName READ facultyName)
 //     Q_PROPERTY(QString graduation WRITE setGraduation READ graduation)
 
-  public:
+public:
     UserInfo();
 
     /**
     * @brief Sets the facebook id of a person
     * @param id The Vkontakte id
     */
-    void setUid( QString uid );
+    void setUid(const QString &uid);
     /**
     * @return The vkontakte id of this person
     */
     QString uid() const;
 
-    void setDomain( QString domain );
+    void setDomain(const QString &domain);
     QString domain() const;
 
     /**
     * @brief Set the first name of this person.
     * @param firstName The first name of this person.
     */
-    void setFirstName( const QString &firstName );
+    void setFirstName(const QString &firstName);
     /**
     * @return The first name of this person.
     */
@@ -98,7 +98,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     * @brief Set the last name of this person.
     * @param lastName The last name of this person.
     */
-    void setLastName( const QString &lastName );
+    void setLastName(const QString &lastName);
     /**
     * @return The last name of this person.
     */
@@ -195,7 +195,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 
     static QStringList allQueryFields();
 
-  private:
+private:
     QString m_uid; // this could be an integer, but what if something will change?..
     QString m_domain; // plain string
     QString m_firstName; // plain string
@@ -216,4 +216,4 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 typedef QSharedPointer<UserInfo> UserInfoPtr;
 Q_DECLARE_METATYPE(UserInfoPtr)
 
-#endif
+#endif // USERINFO_H

@@ -14,7 +14,7 @@ public:
 
 protected:
     virtual void handleData(const QVariant& data);
-    
+
 private:
     LongPollServerInfoPtr m_serverInfo;
 };

@@ -35,7 +35,7 @@ QString UserInfo::uid() const
     return m_uid;
 }
 
-void UserInfo::setUid(QString uid)
+void UserInfo::setUid(const QString &uid)
 {
     m_uid = uid;
 }
@@ -45,7 +45,7 @@ QString UserInfo::domain() const
     return m_domain;
 }
 
-void UserInfo::setDomain(QString domain)
+void UserInfo::setDomain(const QString &domain)
 {
     m_domain = domain;
 }
