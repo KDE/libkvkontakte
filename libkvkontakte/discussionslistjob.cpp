@@ -1,0 +1,37 @@
+#include "discussionslistjob.h"
+#include <qjson/qobjecthelper.h>
+
+DiscussionsListJob::DiscussionsListJob(const QString& accessToken, int offset, int count, int previewLength)
+    : VkontakteJob("messages.getDialogs", accessToken)
+{
+    addQueryItem("offset", QString::number(offset));
+    addQueryItem("count", QString::number(count));
+    addQueryItem("preview_length", QString::number(previewLength));
+}
+
+void DiscussionsListJob::handleItem(const QVariant& data)
+{
+    DiscussionInfoPtr item(new DiscussionInfo());
+    QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
+    m_discussions.append(item);
+}
+
+void DiscussionsListJob::handleData(const QVariant& data)
+{
+    QVariantList list = data.toList();
+    m_totalCount = list[0].toInt();
+    list.pop_front();
+    foreach (const QVariant &item, list) {
+        handleItem(item);
+    }
+}
+
+QList<DiscussionInfoPtr> DiscussionsListJob::discussions() const
+{
+    return m_discussions;
+}
+
+int DiscussionsListJob::totalCount() const
+{
+    return m_totalCount;
+}
