@@ -88,14 +88,14 @@ void VkontakteResource::abort()
     cancelTask();
 }
 
-void VkontakteResource::abortWithError( const QString& errorMessage, bool authFailure )
+void VkontakteResource::abortWithError(const QString& errorMessage, bool authFailure)
 {
     resetState();
-    cancelTask( errorMessage );
+    cancelTask(errorMessage);
 
     // This doesn't work, why?
-    if ( authFailure ) {
-        emit status( Broken, i18n( "Unable to login to Vkontakte, authentication failure." ) );
+    if (authFailure) {
+        emit status(Broken, i18n("Unable to login to Vkontakte, authentication failure."));
     }
 }
 
