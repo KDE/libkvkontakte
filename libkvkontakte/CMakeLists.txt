@@ -19,6 +19,7 @@ set(libkvkontakte_SRCS
     longpollserverinfo.cpp
     messageinfo.cpp
     discussionslistjob.cpp
+    messageslistjob.cpp
     
     util.cpp
     noteinfo.cpp

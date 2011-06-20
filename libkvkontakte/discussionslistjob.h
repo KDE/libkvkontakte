@@ -19,7 +19,7 @@ public:
     DiscussionsListJob(const QString &accessToken,
                        int offset = 0, int count = 100, int previewLength = 0);
 
-    QList<MessageInfoPtr> discussions() const;
+    QList<MessageInfoPtr> list() const;
     int totalCount() const;
 
 protected:
@@ -29,7 +29,7 @@ protected:
 
 private:
     int m_totalCount; // number of all discussions, not only discussions retrieved in this request
-    QList<MessageInfoPtr> m_discussions;
+    QList<MessageInfoPtr> m_list;
 };
 
 #endif // DISCUSSIONSLISTJOB_H

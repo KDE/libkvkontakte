@@ -13,7 +13,7 @@ void DiscussionsListJob::handleItem(const QVariant& data)
 {
     MessageInfoPtr item(new MessageInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    m_discussions.append(item);
+    m_list.append(item);
 }
 
 void DiscussionsListJob::handleData(const QVariant& data)
@@ -26,9 +26,9 @@ void DiscussionsListJob::handleData(const QVariant& data)
     }
 }
 
-QList<MessageInfoPtr> DiscussionsListJob::discussions() const
+QList<MessageInfoPtr> DiscussionsListJob::list() const
 {
-    return m_discussions;
+    return m_list;
 }
 
 int DiscussionsListJob::totalCount() const
