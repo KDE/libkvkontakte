@@ -20,10 +20,11 @@ set(libkvkontakte_SRCS
     messageinfo.cpp
     discussionslistjob.cpp
     messageslistjob.cpp
-    
-    util.cpp
     noteinfo.cpp
     noteaddjob.cpp
+
+    qintlist.cpp
+    util.cpp
     vkontaktejobs.cpp  
 )
 

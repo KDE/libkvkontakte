@@ -86,7 +86,7 @@ private:
     void finishNotesFetching();
 
     // Friends that are already stored on the Akonadi server
-    QMap<QString,KDateTime> m_existingFriends;
+    QMap<int, KDateTime> m_existingFriends;
 
     // Pending new/changed friends we still need to download
     QList<UserInfoPtr> m_pendingFriends;

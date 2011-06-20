@@ -188,7 +188,7 @@ bool VkontakteResource::retrieveItem( const Akonadi::Item &item, const QSet<QByt
     if (item.mimeType() == "text/directory") {
         // TODO: Is this ever called??
         m_idle = false;
-        UserInfoFullJob * const friendJob = new UserInfoFullJob( Settings::self()->accessToken(), item.remoteId() );
+        UserInfoFullJob * const friendJob = new UserInfoFullJob( Settings::self()->accessToken(), item.remoteId().toInt() );
         m_currentJobs << friendJob;
         friendJob->setProperty( "Item", QVariant::fromValue( item ) );
         connect( friendJob, SIGNAL(result(KJob*)), this, SLOT(friendJobFinished(KJob*)) );

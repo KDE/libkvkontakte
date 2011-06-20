@@ -51,7 +51,7 @@ void VkontakteResource::noteListFetched( KJob* job )
         Item::List noteItems;
         foreach( const NoteInfoPtr &noteInfo, listJob->notes() ) {
             Item note;
-            note.setRemoteId( noteInfo->nid() ); // FIXME: are all nids unique, or may be different users may have notes with the same nids?
+            note.setRemoteId( QString::number(noteInfo->nid()) ); // FIXME: are all nids unique, or may be different users may have notes with the same nids?
             note.setPayload<KMime::Message::Ptr>( noteInfo->asNote() );
             note.setSize( noteInfo->asNote()->size() );
             note.setMimeType( "text/x-vnd.akonadi.note" );

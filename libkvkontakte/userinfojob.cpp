@@ -27,22 +27,22 @@
 
 // http://vkontakte.ru/developers.php?o=-1&p=getProfiles
 UserInfoJob::UserInfoJob ( const QString& accessToken )
-    : VkontakteJob ( "getProfiles", accessToken )
+    : VkontakteJob ("getProfiles", accessToken)
 {
     // The complete list of fields
-    setFields ( UserInfo::allQueryFields() );
+    setFields(UserInfo::allQueryFields());
 
     // TODO: support "counters" request (probably in another KJob)
 }
 
-UserInfoJob::UserInfoJob ( const QString &accessToken, const QString &uid )
-    : VkontakteJob ( "getProfiles", accessToken )
+UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
+    : VkontakteJob("getProfiles", accessToken)
 {
-    setFields ( UserInfo::allQueryFields() );
+    setFields(UserInfo::allQueryFields());
     m_uids << uid;
 }
 
-UserInfoJob::UserInfoJob(const QString& accessToken, const QStringList& uids)
+UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
     : VkontakteJob("getProfiles", accessToken)
 {
     setFields ( UserInfo::allQueryFields() );
@@ -57,17 +57,17 @@ QList<UserInfoPtr> UserInfoJob::userInfo() const
     return m_userInfo;
 }
 
-void UserInfoJob::setFields ( const QStringList &fields )
+void UserInfoJob::setFields(const QStringList &fields)
 {
     m_fields = fields;
 }
 
 void UserInfoJob::prepareQueryItems()
 {
-    addQueryItem ( "uids", m_uids.join ( "," ) );
+    addQueryItem("uids", m_uids.join());
 
-    if ( !m_fields.isEmpty() )
-        addQueryItem ( "fields", m_fields.join ( "," ) );
+    if (!m_fields.isEmpty())
+        addQueryItem ("fields", m_fields.join(","));
 }
 
 UserInfoPtr UserInfoJob::handleSingleData(const QVariant& data)

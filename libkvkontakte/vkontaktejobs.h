@@ -23,7 +23,6 @@
 
 #include "libkvkontakte_export.h"
 #include <KJob>
-#include <QStringList>
 #include <QPointer>
 
 typedef QPair<QString, QString> QueryItem;
@@ -52,7 +51,7 @@ public:
      * @param accessToken The accessToken to access our data on vkontakte
      * @param httpPost Whether to make a POST http request instead of GET ("false" by default)
      * */
-    VkontakteJob( const QString &method, const QString &accessToken, bool httpPost = false );
+    VkontakteJob(const QString &method, const QString &accessToken, bool httpPost = false);
 
     virtual void start();
 
@@ -60,12 +59,12 @@ public:
 
 protected:
     /** Add a query item to the list */
-    void addQueryItem( const QString &key, const QString &value );
+    void addQueryItem(const QString &key, const QString &value);
 
     /** Check for a return error and set the appropiate error messags */
-    void handleError( const QVariant &data );
+    void handleError(const QVariant &data);
 
-    virtual void handleData( const QVariant& data ) = 0;
+    virtual void handleData(const QVariant& data) = 0;
 
     /** Called right before sending request to server */
     virtual void prepareQueryItems() {}
@@ -76,7 +75,7 @@ protected:
     QList<QueryItem> m_queryItems; /** The query items */
 
 private slots:
-    void jobFinished( KJob *job );
+    void jobFinished(KJob *job);
 };
 
 #endif

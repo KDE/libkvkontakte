@@ -22,6 +22,7 @@
 
 #include "userinfo.h"
 #include "vkontaktejobs.h"
+#include "qintlist.h"
 
 /**
  * Get information about multiple users
@@ -45,9 +46,9 @@ public:
     * @param accessToken The access token to access data on vkontakte.
     * @param uid The user ID
     */
-    UserInfoJob(const QString &accessToken, const QString &uid);
+    UserInfoJob(const QString &accessToken, int uid);
 
-    UserInfoJob(const QString &accessToken, const QStringList &uids);
+    UserInfoJob(const QString &accessToken, const QIntList &uids);
 
     /**
     * @return A pointer to a userInfo object about the currently authenticated user.
@@ -73,7 +74,7 @@ protected:
 
 private:
     QList<UserInfoPtr> m_userInfo;
-    QStringList m_uids;
+    QIntList m_uids;
     QStringList m_fields;
     bool m_needCityNames;
     bool m_needCountryNames;

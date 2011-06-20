@@ -35,8 +35,8 @@ class LIBKVKONTAKTE_EXPORT MessageInfo : public QObject
 
     // date, uid, mid, title, body, read_state, out
     Q_PROPERTY(QString date WRITE setDateString READ dateString)
-    Q_PROPERTY(QString uid WRITE setUid READ uid)
-    Q_PROPERTY(QString mid WRITE setMid READ mid)
+    Q_PROPERTY(int uid WRITE setUid READ uid)
+    Q_PROPERTY(int mid WRITE setMid READ mid)
     Q_PROPERTY(QString title WRITE setTitle READ title)
     Q_PROPERTY(QString body WRITE setBody READ body)
     Q_PROPERTY(int read_state WRITE setReadState READ readState)
@@ -67,14 +67,14 @@ public:
     * @brief Sets the facebook id of a person
     * @param id The Vkontakte id
     */
-    void setUid(const QString &uid);
+    void setUid(int uid);
     /**
     * @return The vkontakte id of this person
     */
-    QString uid() const;
+    int uid() const;
 
-    void setMid(const QString &mid);
-    QString mid() const;
+    void setMid(int mid);
+    int mid() const;
 
     void setTitle(const QString &title);
     QString title() const;
@@ -96,8 +96,8 @@ public:
 
 private:
     QString m_date;
-    QString m_uid;
-    QString m_mid;
+    int m_uid;
+    int m_mid;
     QString m_title;
     QString m_body;
     int m_readState;

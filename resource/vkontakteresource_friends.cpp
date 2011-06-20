@@ -84,7 +84,7 @@ void VkontakteResource::friendListJobFinished( KJob* job )
 
         // Delete items that are in the Akonadi DB but no on FB
         Item::List removedItems;
-        foreach( const QString &friendId, m_existingFriends.keys() ) {
+        foreach (const int friendId, m_existingFriends.keys()) {
             bool found = false;
             foreach( const UserInfoPtr &user, friendListJob->friends() ) {
                 if ( user->uid() == friendId ) {
@@ -95,7 +95,7 @@ void VkontakteResource::friendListJobFinished( KJob* job )
             if ( !found ) {
                 kDebug() << friendId << "is no longer your friend :(";
                 Item removedItem;
-                removedItem.setRemoteId( friendId );
+                removedItem.setRemoteId( QString::number(friendId) );
                 removedItems.append( removedItem );
             }
         }
@@ -113,9 +113,9 @@ void VkontakteResource::friendListJobFinished( KJob* job )
 
 void VkontakteResource::fetchNewOrChangedFriends()
 {
-    QStringList newOrChangedFriendIds;
-    foreach( const UserInfoPtr &user, m_newOrChangedFriends ) {
-        newOrChangedFriendIds.append( user->uid() );
+    QIntList newOrChangedFriendIds;
+    foreach (const UserInfoPtr &user, m_newOrChangedFriends) {
+        newOrChangedFriendIds.append(user->uid());
     }
     UserInfoFullJob * const friendJob = new UserInfoFullJob(
         Settings::self()->accessToken(), newOrChangedFriendIds);
@@ -188,7 +188,7 @@ void VkontakteResource::photoJobFinished(KJob* job)
         KABC::Addressee addressee = user->toAddressee();
         addressee.setPhoto( KABC::Picture( photoJob->photo() ) );
         Item newUser;
-        newUser.setRemoteId( user->uid() );
+        newUser.setRemoteId( QString::number(user->uid()) );
         newUser.setMimeType( "text/directory" );
         newUser.setPayload<KABC::Addressee>( addressee );
 //        TimeStampAttribute * const timeStampAttribute = new TimeStampAttribute();

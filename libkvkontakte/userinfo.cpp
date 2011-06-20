@@ -30,12 +30,12 @@ UserInfo::UserInfo()
 {
 }
 
-QString UserInfo::uid() const
+int UserInfo::uid() const
 {
     return m_uid;
 }
 
-void UserInfo::setUid(const QString &uid)
+void UserInfo::setUid(int uid)
 {
     m_uid = uid;
 }
@@ -122,7 +122,7 @@ KABC::Addressee UserInfo::toAddressee() const
 {
     KABC::Addressee addressee;
     addressee.setGivenName( firstName() );
-    addressee.setUid( uid() );
+    addressee.setUid( QString::number(uid()) );
     addressee.setFamilyName( lastName() );
     //addressee.setFormattedName( name() );
     addressee.setUrl( profileUrl() );
@@ -192,22 +192,22 @@ void UserInfo::setPhotoMedium(const QString& photoMedium)
     m_photoMedium = photoMedium;
 }
 
-QString UserInfo::city() const
+int UserInfo::city() const
 {
     return m_city;
 }
 
-QString UserInfo::country() const
+int UserInfo::country() const
 {
     return m_country;
 }
 
-void UserInfo::setCity(const QString &city)
+void UserInfo::setCity(int city)
 {
     m_city = city;
 }
 
-void UserInfo::setCountry(const QString &country)
+void UserInfo::setCountry(int country)
 {
     m_country = country;
 }

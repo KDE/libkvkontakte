@@ -33,8 +33,8 @@
 class LIBKVKONTAKTE_EXPORT NoteInfo : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString nid WRITE setNid READ nid)
-    Q_PROPERTY(QString uid WRITE setUid READ uid)
+    Q_PROPERTY(int nid WRITE setNid READ nid)
+    Q_PROPERTY(int uid WRITE setUid READ uid)
     Q_PROPERTY(QString title WRITE setTitle READ title)
     Q_PROPERTY(QString text WRITE setText READ text)
     Q_PROPERTY(QString text_wiki WRITE setTextWiki READ textWiki)
@@ -46,11 +46,11 @@ class LIBKVKONTAKTE_EXPORT NoteInfo : public QObject
 //    Q_PROPERTY(bool can_comment WRITE setCanComment READ canComment)
 
 public:
-    void setNid(const QString &id);
-    QString nid() const;
+    void setNid(int nid);
+    int nid() const;
 
-    void setUid(const QString &id);
-    QString uid() const;
+    void setUid(int uid);
+    int uid() const;
 
     /**
      * Set the subject of the note
@@ -109,8 +109,8 @@ public:
     KMime::Message::Ptr asNote() const;
 
 private:
-    QString m_nid;          /* Vkontakte id of the note. */
-    QString m_uid;        /* Creator of the note. */
+    int m_nid;          /* Vkontakte id of the note. */
+    int m_uid;        /* Creator of the note. */
     QString m_title;     /* Subject of the note. */
     QString m_text;     /* Actual content of the note. */
     QString m_textWiki;

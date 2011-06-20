@@ -45,22 +45,22 @@ KMime::Message::Ptr NoteInfo::asNote() const
     return KMime::Message::Ptr(note);
 }
 
-void NoteInfo::setNid(const QString &nid)
+void NoteInfo::setNid(int nid)
 {
     m_nid = nid;
 }
 
-QString NoteInfo::nid() const
+int NoteInfo::nid() const
 {
     return m_nid;
 }
 
-void NoteInfo::setUid(const QString &uid)
+void NoteInfo::setUid(int uid)
 {
     m_uid = uid;
 }
 
-QString NoteInfo::uid() const
+int NoteInfo::uid() const
 {
     return m_uid;
 }

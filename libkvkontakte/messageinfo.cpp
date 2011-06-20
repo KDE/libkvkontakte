@@ -40,22 +40,22 @@ KDateTime MessageInfo::date() const
     return unixTimeToKDateTime(m_date);
 }
 
-void MessageInfo::setUid(const QString &uid)
+void MessageInfo::setUid(int uid)
 {
     m_uid = uid;
 }
 
-QString MessageInfo::uid() const
+int MessageInfo::uid() const
 {
     return m_uid;
 }
 
-void MessageInfo::setMid(const QString &mid)
+void MessageInfo::setMid(int mid)
 {
     m_mid = mid;
 }
 
-QString MessageInfo::mid() const
+int MessageInfo::mid() const
 {
     return m_mid;
 }

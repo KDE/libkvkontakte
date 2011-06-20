@@ -38,15 +38,15 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 
     // uid, first_name, last_name, nickname, sex, bdate (birthdate), city, country,
     // timezone, photo, photo_medium, photo_big, photo_rec.
-    Q_PROPERTY(QString uid WRITE setUid READ uid)
+    Q_PROPERTY(int uid WRITE setUid READ uid)
     Q_PROPERTY(QString domain WRITE setDomain READ domain)
     Q_PROPERTY(QString first_name WRITE setFirstName READ firstName)
     Q_PROPERTY(QString last_name WRITE setLastName READ lastName)
     Q_PROPERTY(QString nickname WRITE setNickName READ nickName)
 //    Q_PROPERTY(QString sex WRITE setSex READ sex)
     Q_PROPERTY(QString bdate WRITE setBirthday READ birthdayAsString)
-    Q_PROPERTY(QString city WRITE setCity READ city)
-    Q_PROPERTY(QString country WRITE setCountry READ country)
+    Q_PROPERTY(int city WRITE setCity READ city)
+    Q_PROPERTY(int country WRITE setCountry READ country)
     Q_PROPERTY(int timezone WRITE setTimezone READ timezone)
     Q_PROPERTY(QString photo WRITE setPhoto READ photo)
     Q_PROPERTY(QString photo_medium WRITE setPhotoMedium READ photoMedium)
@@ -75,11 +75,11 @@ public:
     * @brief Sets the facebook id of a person
     * @param id The Vkontakte id
     */
-    void setUid(const QString &uid);
+    void setUid(int uid);
     /**
     * @return The vkontakte id of this person
     */
-    QString uid() const;
+    int uid() const;
 
     void setDomain(const QString &domain);
     QString domain() const;
@@ -132,17 +132,17 @@ public:
     * @brief Set the current city of this person.
     * @param city The current city of this person.
     */
-    void setCity( const QString &city );
+    void setCity(int city);
 
-    QString city() const;
+    int city() const;
 
     /**
     * @brief Set the current country of this person.
     * @param country The current country of this person.
     */
-    void setCountry( const QString &country );
+    void setCountry(int country);
 
-    QString country() const;
+    int country() const;
 
     void setCountryString(const QString &countryString);
     QString countryString() const;
@@ -196,16 +196,16 @@ public:
     static QStringList allQueryFields();
 
 private:
-    QString m_uid; // this could be an integer, but what if something will change?..
+    int m_uid; // this could be an integer, but what if something will change?..
     QString m_domain; // plain string
     QString m_firstName; // plain string
     QString m_lastName; // plain string
     QString m_nickName; // plain string
 
     QDate m_birthday;
-    QString m_country;
+    int m_country;
     QString m_countryString;
-    QString m_city;
+    int m_city;
     QString m_cityString;
     int m_timezone;
 

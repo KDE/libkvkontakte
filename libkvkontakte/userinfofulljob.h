@@ -10,9 +10,9 @@ class LIBKVKONTAKTE_EXPORT UserInfoFullJob : public KJob
 {
     Q_OBJECT
 public:
-    UserInfoFullJob(const QString &accessToken, const QStringList &uids,
+    UserInfoFullJob(const QString &accessToken, const QIntList &uids,
                     bool needCountryNames = true, bool needCityNames = true);
-    UserInfoFullJob(const QString &accessToken, const QString &uid,
+    UserInfoFullJob(const QString &accessToken, int uid,
                     bool needCountryNames = true, bool needCityNames = true);
 
     QList<UserInfoPtr> userInfo() const;
@@ -33,11 +33,11 @@ private:
 
 
     QString m_accessToken;
-    QStringList m_uids;
+    QIntList m_uids;
     bool m_needCountryNames;
     bool m_needCityNames;
-    QStringList m_countryIds;
-    QStringList m_cityIds;
+    QIntList m_countryIds;
+    QIntList m_cityIds;
 
     UserInfoJob *m_mainJob;
     CidsNamesJob *m_countriesJob;
