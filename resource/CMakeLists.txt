@@ -25,6 +25,7 @@ set( vkontakteresource_SRCS
   vkontakteresource_events.cpp
   vkontakteresource_friends.cpp
   vkontakteresource_notes.cpp
+  vkontakteresource_messages.cpp
   settings.cpp
   settingsdialog.cpp
 )

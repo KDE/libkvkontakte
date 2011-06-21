@@ -39,10 +39,12 @@
 #include <Akonadi/ItemFetchScope>
 #include <akonadi/changerecorder.h>
 #include <libkvkontakte/userinfofulljob.h>
+#include <libkvkontakte/allmessageslistjob.h>
 
 using namespace Akonadi;
 
 static const char * friendsRID = "friends";
+static const char * messagesRID = "private_messages";
 //static const char * eventsRID = "events";
 //static const char * eventMimeType = "application/x-vnd.akonadi.calendar.event";
 static const char * notesRID = "notes";
@@ -171,6 +173,16 @@ void VkontakteResource::retrieveItems( const Akonadi::Collection &collection )
         connect( notesJob, SIGNAL(result(KJob*)), this, SLOT(noteListFetched(KJob*)) );
         notesJob->start();
     }
+    else if ( collection.remoteId() == messagesRID )
+    {
+        m_idle = false;
+        emit status( Running, i18n( "Preparing sync of messages list." ) );
+        emit percent( 0 );
+        AllMessagesListJob * const messagesJob = new AllMessagesListJob(Settings::self()->accessToken(), 0);
+        m_currentJobs << messagesJob;
+        connect(messagesJob, SIGNAL(result(KJob*)), this, SLOT(messageListFetched(KJob*)));
+        messagesJob->start();
+    }
     else
     {
         // This can not happen
@@ -179,12 +191,13 @@ void VkontakteResource::retrieveItems( const Akonadi::Collection &collection )
     }
 }
 
-bool VkontakteResource::retrieveItem( const Akonadi::Item &item, const QSet<QByteArray> &parts )
+bool VkontakteResource::retrieveItem(const Akonadi::Item &item, const QSet<QByteArray> &parts)
 {
     Q_UNUSED( parts );
 
     kDebug() << item.mimeType();
 
+    // may be we should distinguish them by collection RID?
     if (item.mimeType() == "text/directory") {
         // TODO: Is this ever called??
         m_idle = false;
@@ -196,12 +209,21 @@ bool VkontakteResource::retrieveItem( const Akonadi::Item &item, const QSet<QByt
     }
     else if (item.mimeType() == "text/x-vnd.akonadi.note") {
         m_idle = false;
-        NoteJob * const noteJob = new NoteJob( item.remoteId(), Settings::self()->accessToken());
+        NoteJob * const noteJob = new NoteJob(Settings::self()->accessToken(), item.remoteId());
         m_currentJobs << noteJob;
         noteJob->setProperty( "Item", QVariant::fromValue( item ) );
         connect( noteJob, SIGNAL(result(KJob*)), this, SLOT(noteJobFinished(KJob*)) );
         noteJob->start();
     }
+    // this won't be called
+//     else if (item.mimeType() == KMime::Message::mimeType()) {
+//         m_idle = false;
+//         MessageJob * const messageJob = new MessageJob(Settings::self()->accessToken(), item.remoteId());
+//         m_currentJobs << messageJob;
+//         messageJob->setProperty( "Item", QVariant::fromValue( item ) );
+//         connect( messageJob, SIGNAL(result(KJob*)), this, SLOT(messageJobFinished(KJob*)) );
+//         messageJob->start();
+//     }
     return true;
 }
 
@@ -237,7 +259,17 @@ void VkontakteResource::retrieveCollections()
     notesDisplayAttribute->setIconName( "vkontakteresource" );
     notes.addAttribute( notesDisplayAttribute );
 
-    collectionsRetrieved( Collection::List() << friends /*<< events*/ << notes );
+    Collection messages;
+    messages.setRemoteId(messagesRID);
+    messages.setName( i18n( "Vkontakte Private Messages" ) );
+    messages.setParentCollection( Akonadi::Collection::root() );
+    messages.setContentMimeTypes( QStringList() << KMime::Message::mimeType() << Collection::mimeType() );
+    messages.setRights(Collection::ReadOnly);
+    EntityDisplayAttribute * const messagesDisplayAttribute = new EntityDisplayAttribute();
+    messagesDisplayAttribute->setIconName( "vkontakteresource" );
+    messages.addAttribute( messagesDisplayAttribute );
+
+    collectionsRetrieved( Collection::List() << friends /*<< events*/ << notes << messages );
 }
 
 /*void VkontakteResource::itemRemoved(const Akonadi::Item &item)

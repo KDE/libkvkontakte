@@ -84,6 +84,7 @@ void VkontakteResource::noteJobFinished(KJob* job)
     } else {
         Item note = noteJob->property( "Item" ).value<Item>();
         note.setPayload( noteJob->noteInfo()->asNote() );
+        // how about note.setSize(noteJob->noteInfo()->asNote()->size()) ?
         itemRetrieved( note );
         resetState();
     }

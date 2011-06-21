@@ -25,6 +25,7 @@
 #include <KDateTime>
 #include <QSharedPointer>
 #include <QDate>
+#include <KMime/Message>
 
 /**
 * Class that describes a private message on vkontakte.ru
@@ -93,6 +94,9 @@ public:
 
     void setChatActive(const QString &chatActive);
     QString chatActive() const;
+
+    QString remoteId() const;
+    KMime::Message::Ptr asMessage() const;
 
 private:
     QString m_date;
