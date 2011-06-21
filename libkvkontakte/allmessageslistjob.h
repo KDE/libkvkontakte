@@ -48,7 +48,7 @@ protected:
     /** Kill the currentjobs and its subjobs */
     virtual bool doKill();
 
-    void startNewJob(int offset, int count);
+    void startNewJob(int offset, int count, int out);
 
 private slots:
     void jobFinished(KJob *job);
@@ -60,7 +60,7 @@ private:
     int m_filters;
     int m_timeOffset;
 
-    int m_totalCount;
+    int m_totalCount[2];
     QList<MessageInfoPtr> m_list;
 
     QList<MessagesListJob *> m_jobs;

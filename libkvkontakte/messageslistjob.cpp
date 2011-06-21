@@ -6,6 +6,7 @@ MessagesListJob::MessagesListJob(const QString &accessToken,
                                  int offset, int count, int previewLength,
                                  int filters, int timeOffset)
     : VkontakteJob("messages.get", accessToken)
+    , m_out(out)
 {
     addQueryItem("out", QString::number(out));
     addQueryItem("offset", QString::number(offset));
@@ -40,4 +41,9 @@ QList<MessageInfoPtr> MessagesListJob::list() const
 int MessagesListJob::totalCount() const
 {
     return m_totalCount;
+}
+
+int MessagesListJob::out() const
+{
+    return m_out;
 }

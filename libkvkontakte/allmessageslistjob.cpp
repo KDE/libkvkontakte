@@ -31,8 +31,9 @@ AllMessagesListJob::AllMessagesListJob(const QString& accessToken,
     , m_previewLength(previewLength)
     , m_filters(filters)
     , m_timeOffset(timeOffset)
-    , m_totalCount(-1)
 {
+    m_totalCount[0] = -1; // for incoming messages
+    m_totalCount[1] = -1; // for outgoing messages
 }
 
 bool AllMessagesListJob::doKill()
@@ -45,9 +46,11 @@ bool AllMessagesListJob::doKill()
     return KJob::doKill();
 }
 
-void AllMessagesListJob::startNewJob(int offset, int count)
+void AllMessagesListJob::startNewJob(int offset, int count, int out)
 {
-    MessagesListJob *job = new MessagesListJob(m_accessToken, m_out,
+    Q_ASSERT(out == 0 || out == 1);
+
+    MessagesListJob *job = new MessagesListJob(m_accessToken, out,
                                                offset, count,
                                                m_previewLength, m_filters, m_timeOffset);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
@@ -57,8 +60,11 @@ void AllMessagesListJob::startNewJob(int offset, int count)
 
 void AllMessagesListJob::start()
 {
-    // TODO: make m_out=-1 working
-    startNewJob(0, 100);
+    // m_out=-1 means to retrieve both incoming and outgoing messages
+    if (m_out == 0 || m_out == -1) // incoming
+        startNewJob(0, 100, 0);
+    if (m_out == 1 || m_out == -1) // outgoing
+        startNewJob(0, 100, 1);
 }
 
 void AllMessagesListJob::jobFinished(KJob* job)
@@ -74,15 +80,19 @@ void AllMessagesListJob::jobFinished(KJob* job)
     }
 
     m_list.append(listJob->list());
-    if (m_totalCount == -1) { // this was the first job, starting all others
-        m_totalCount = listJob->totalCount();
-        for (int offset = 100; offset < m_totalCount; offset += 100) {
-            startNewJob(offset, qMin(100, m_totalCount - offset));
+
+    int out = listJob->out(); // incoming or outgoing
+    Q_ASSERT(out == 0 || out == 1);
+    // If this was the first job, start all others
+    if (m_totalCount[out] == -1) {
+        m_totalCount[out] = listJob->totalCount();
+        for (int offset = 100; offset < m_totalCount[out]; offset += 100) {
+            startNewJob(offset, qMin(100, m_totalCount[out] - offset), out);
         }
     }
     else {
         // TODO: some new messages might have been added, what should we do then?
-        Q_ASSERT(m_totalCount == listJob->totalCount());
+        Q_ASSERT(m_totalCount[out] == listJob->totalCount());
     }
 
     // All jobs have finished

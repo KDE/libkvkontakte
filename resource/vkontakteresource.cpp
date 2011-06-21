@@ -178,7 +178,7 @@ void VkontakteResource::retrieveItems( const Akonadi::Collection &collection )
         m_idle = false;
         emit status( Running, i18n( "Preparing sync of messages list." ) );
         emit percent( 0 );
-        AllMessagesListJob * const messagesJob = new AllMessagesListJob(Settings::self()->accessToken(), 0);
+        AllMessagesListJob * const messagesJob = new AllMessagesListJob(Settings::self()->accessToken());
         m_currentJobs << messagesJob;
         connect(messagesJob, SIGNAL(result(KJob*)), this, SLOT(messageListFetched(KJob*)));
         messagesJob->start();
