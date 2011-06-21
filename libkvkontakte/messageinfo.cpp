@@ -74,6 +74,13 @@ QString MessageInfo::title() const
 void MessageInfo::setBody(const QString &body)
 {
     m_body = body;
+
+    m_body.replace("\n", QString());
+    m_body.replace("<br>", "\n");
+    m_body.replace("&lt;", "<");
+    m_body.replace("&gt;", ">");
+    m_body.replace("&quot;", "\"");
+    m_body.replace("&amp;", "&");
 }
 
 QString MessageInfo::body() const
