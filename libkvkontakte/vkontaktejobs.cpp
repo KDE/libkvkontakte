@@ -37,6 +37,18 @@ bool KJobWithSubjob::doKill()
 
 //---------------------------------------------------------------
 
+bool KJobWithSubjobs::doKill()
+{
+    foreach (KJob *job, m_jobs) {
+        job->kill(KJob::Quietly);
+    }
+    m_jobs.clear();
+
+    return KJob::doKill();
+}
+
+//---------------------------------------------------------------
+
 /*
  * VkontakteJobs base class
  */

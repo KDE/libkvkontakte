@@ -25,7 +25,7 @@
 AllMessagesListJob::AllMessagesListJob(const QString& accessToken,
                                        int out, int previewLength,
                                        int filters, int timeOffset)
-    : KJob()
+    : KJobWithSubjobs()
     , m_accessToken(accessToken)
     , m_out(out)
     , m_previewLength(previewLength)
@@ -34,16 +34,6 @@ AllMessagesListJob::AllMessagesListJob(const QString& accessToken,
 {
     m_totalCount[0] = -1; // for incoming messages
     m_totalCount[1] = -1; // for outgoing messages
-}
-
-bool AllMessagesListJob::doKill()
-{
-    foreach (MessagesListJob *job, m_jobs) {
-        job->kill(KJob::Quietly);
-    }
-    m_jobs.clear();
-
-    return KJob::doKill();
 }
 
 void AllMessagesListJob::startNewJob(int offset, int count, int out)

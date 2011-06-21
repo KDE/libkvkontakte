@@ -22,7 +22,7 @@
 #include <KJob>
 #include "messageslistjob.h"
 
-class LIBKVKONTAKTE_EXPORT AllMessagesListJob : public KJob
+class LIBKVKONTAKTE_EXPORT AllMessagesListJob : public KJobWithSubjobs
 {
     Q_OBJECT
 public:
@@ -45,9 +45,6 @@ public:
     int count() const;
 
 protected:
-    /** Kill the currentjobs and its subjobs */
-    virtual bool doKill();
-
     void startNewJob(int offset, int count, int out);
 
 private slots:
@@ -62,8 +59,6 @@ private:
 
     int m_totalCount[2];
     QList<MessageInfoPtr> m_list;
-
-    QList<MessagesListJob *> m_jobs;
 };
 
 #endif // ALLMESSAGESLISTJOB_H

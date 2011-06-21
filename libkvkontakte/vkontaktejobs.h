@@ -37,6 +37,15 @@ protected:
     QPointer<KJob> m_job; /** Pointer to the running job */
 };
 
+class LIBKVKONTAKTE_EXPORT KJobWithSubjobs : public KJob
+{
+protected:
+    /** Kill the currentjobs and its subjobs */
+    virtual bool doKill();
+
+    QList<KJob *> m_jobs; /** Pointers to running jobs */
+};
+
 /**
  * VkontakteJob base class
  */
