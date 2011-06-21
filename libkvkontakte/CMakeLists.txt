@@ -22,6 +22,7 @@ set(libkvkontakte_SRCS
     messageslistjob.cpp
     noteinfo.cpp
     noteaddjob.cpp
+    allmessageslistjob.cpp
 
     qintlist.cpp
     util.cpp
