@@ -39,14 +39,14 @@ UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
     : VkontakteJob("getProfiles", accessToken)
 {
     setFields(UserInfo::allQueryFields());
-    m_uids << uid;
+    addQueryItem("uids", QString::number(uid));
 }
 
 UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
     : VkontakteJob("getProfiles", accessToken)
 {
     setFields ( UserInfo::allQueryFields() );
-    m_uids = uids;
+    addQueryItem("uids", uids.join());
 
     // TODO: make this working for more than 1000 uids
     // ("getProfiles" allows requesting only 1000 users at once)
@@ -64,8 +64,6 @@ void UserInfoJob::setFields(const QStringList &fields)
 
 void UserInfoJob::prepareQueryItems()
 {
-    addQueryItem("uids", m_uids.join());
-
     if (!m_fields.isEmpty())
         addQueryItem ("fields", m_fields.join(","));
 }

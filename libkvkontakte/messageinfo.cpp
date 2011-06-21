@@ -133,14 +133,24 @@ QString MessageInfo::remoteId() const
     return QString("uid%1/mid%2").arg(uid()).arg(mid());
 }
 
+void MessageInfo::setUserAddress(const QString& userAddress)
+{
+    m_userAddress = userAddress;
+}
+
+void MessageInfo::setOwnAddress(const QString& ownAddress)
+{
+    m_ownAddress = ownAddress;
+}
+
 KMime::Message::Ptr MessageInfo::asMessage() const
 {
     // http://api.kde.org/4.x-api/kdepimlibs-apidocs/kmime/html/classKMime_1_1Message.html#a5614aa32a42b034f5290d6d7a56cc433
     KMime::Message *mail = new KMime::Message();
 
-    mail->from()->fromUnicodeString( "some@mailaddy.com", "utf-8" );
-    mail->to()->fromUnicodeString( "someother@mailaddy.com", "utf-8" );
-    mail->cc()->fromUnicodeString( "some@mailaddy.com", "utf-8" );
+    mail->from()->fromUnicodeString( m_out ? m_ownAddress : m_userAddress, "utf-8" );
+    mail->to()->fromUnicodeString( !m_out ? m_ownAddress : m_userAddress, "utf-8" );
+    //mail->cc()->fromUnicodeString( "some@mailaddy.com", "utf-8" );
     mail->date()->setDateTime( date() );
     mail->subject()->fromUnicodeString( title(), "utf-8" );
 
@@ -153,4 +163,9 @@ KMime::Message::Ptr MessageInfo::asMessage() const
     mail->assemble();
 
     return KMime::Message::Ptr(mail);
+}
+
+bool MessageInfo::operator<(const MessageInfo &o) const
+{
+    return mid() < o.mid();
 }

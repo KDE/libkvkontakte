@@ -98,6 +98,14 @@ public:
     QString remoteId() const;
     KMime::Message::Ptr asMessage() const;
 
+    void setUserAddress(const QString &userAddress);
+    void setOwnAddress(const QString &ownAddress);
+
+    /**
+     * @brief Compares by message ID (m_mid)
+     **/
+    bool operator<(const MessageInfo &o) const;
+
 private:
     QString m_date;
     int m_uid;
@@ -109,6 +117,9 @@ private:
 
     QString m_chatId;
     QString m_chatActive;
+
+    QString m_userAddress;
+    QString m_ownAddress;
 };
 
 typedef QSharedPointer<MessageInfo> MessageInfoPtr;

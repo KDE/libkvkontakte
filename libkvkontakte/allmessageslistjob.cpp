@@ -87,6 +87,7 @@ void AllMessagesListJob::jobFinished(KJob* job)
 
     // All jobs have finished
     if (m_jobs.size() == 0)
+        qSort(m_list); // sort by message ID (which should be equvalent to sorting by date)
         emitResult();
 }
 

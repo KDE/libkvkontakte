@@ -29,8 +29,7 @@
  *
  * Uses VKontakte API method "getProfiles".
  */
-// TODO: support retrieval of multiple users' data. Currently only first uid
-// from the string list is processed, which is kinda strange.
+// TODO: support working with more than 1000 users
 class LIBKVKONTAKTE_EXPORT UserInfoJob : public VkontakteJob
 {
     Q_OBJECT
@@ -55,7 +54,6 @@ public:
     */
     QList<UserInfoPtr> userInfo() const;
 
-    //void addUid(QString uid);
     void setFields(const QStringList &fields);
 
 protected:

@@ -124,7 +124,7 @@ void VkontakteResource::fetchNewOrChangedFriends()
     friendJob->start();
 }
 
-// UserInfoJob for new friends was finished
+// UserInfoFullJob for new friends was finished
 void VkontakteResource::detailedFriendListJobFinished( KJob* job )
 {
     Q_ASSERT(!m_idle);

@@ -22,6 +22,7 @@
 #define VKONTAKTERESOURCE_H
 
 #include <libkvkontakte/userinfo.h>
+#include <libkvkontakte/messageinfo.h>
 #include <Akonadi/ResourceBase>
 #include <QPointer>
 #include <QMutex>
@@ -76,6 +77,7 @@ private Q_SLOTS:
 
     // Messages
     void messageListFetched(KJob *job);
+    void messageListUsersFetched(KJob *job);
 //     void messageJobFinished(KJob *job);
     //void noteAddJobFinished( KJob *job );
     //void deleteJobFinished( KJob *job );
@@ -103,6 +105,9 @@ private:
     // Total number of new & changed friends
     int m_numFriends;
     int m_numPhotosFetched;
+
+    // For messages retrieval
+    QList<MessageInfoPtr> m_allMessages;
 
     bool m_idle;
     QList< QPointer<KJob> > m_currentJobs;

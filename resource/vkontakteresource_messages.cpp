@@ -42,7 +42,7 @@ void VkontakteResource::messageListFetched(KJob *job)
     Q_ASSERT( listJob );
     m_currentJobs.removeAll(job);
 
-    if ( listJob->error() ) {
+    if (listJob->error()) {
         abortWithError( i18n( "Unable to get messages from server: %1", listJob->errorString() ),
                         listJob->error() == VkontakteJob::AuthenticationProblem );
         return;
@@ -51,11 +51,51 @@ void VkontakteResource::messageListFetched(KJob *job)
 
     setItemStreamingEnabled( true ); // how does this work???
 
+    m_allMessages = listJob->list();
+
+    // IDs of users that you communicated with using messages
+    QSet<int> uidsSet; // this will remove duplicates
+    foreach (const MessageInfoPtr &item, m_allMessages) {
+        uidsSet.insert(item->uid());
+    }
+
+    UserInfoJob * const usersJob = new UserInfoJob(Settings::self()->accessToken(), uidsSet.toList());
+    m_currentJobs << usersJob;
+    connect(usersJob, SIGNAL(result(KJob*)), this, SLOT(messageListUsersFetched(KJob*)));
+    usersJob->start();
+}
+
+void VkontakteResource::messageListUsersFetched(KJob *job)
+{
+    Q_ASSERT(!m_idle);
+    UserInfoJob * const usersJob = dynamic_cast<UserInfoJob*>(job);
+    Q_ASSERT(usersJob);
+    m_currentJobs.removeAll(job);
+
+    if (usersJob->error()) {
+        abortWithError( i18n( "Unable to get users for message list from server: %1", usersJob->errorString() ),
+                        usersJob->error() == VkontakteJob::AuthenticationProblem );
+        return;
+    }
+
+    // TODO: UserInfoJob::userInfoMap
+    QList<UserInfoPtr> usersList = usersJob->userInfo();
+    QMap<int, UserInfoPtr> usersMap;
+    foreach (const UserInfoPtr user, usersList) {
+        usersMap.insert(user->uid(), user);
+    }
+
     Item::List items;
-    foreach( const MessageInfoPtr &messageInfo, listJob->list() ) {
+    foreach( const MessageInfoPtr &messageInfo, m_allMessages ) {
         // TODO: Multiple-user messages ("chat messages") should be handled differently
         if (!messageInfo->chatId().isEmpty() || !messageInfo->chatActive().isEmpty())
             continue;
+
+        UserInfoPtr user = usersMap[messageInfo->uid()];
+        if (!user.isNull()) {
+            messageInfo->setOwnAddress(QString("%1 <you@vkontakte>").arg(Settings::self()->userName()));
+            messageInfo->setUserAddress(QString("%1 %2 <%3@vkontakte>").arg(user->firstName()).arg(user->lastName()).arg(user->uid()));
+        }
 
         KMime::Message::Ptr mail = messageInfo->asMessage();
 
