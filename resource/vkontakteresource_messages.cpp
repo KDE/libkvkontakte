@@ -53,6 +53,10 @@ void VkontakteResource::messageListFetched(KJob *job)
 
     Item::List items;
     foreach( const MessageInfoPtr &messageInfo, listJob->list() ) {
+        // TODO: Multiple-user messages ("chat messages") should be handled differently
+        if (!messageInfo->chatId().isEmpty() || !messageInfo->chatActive().isEmpty())
+            continue;
+
         KMime::Message::Ptr mail = messageInfo->asMessage();
 
         Item item;
