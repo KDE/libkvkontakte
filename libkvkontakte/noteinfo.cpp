@@ -29,16 +29,19 @@ KMime::Message::Ptr NoteInfo::asNote() const
 {
     KMime::Message * const note = new KMime::Message();
 
+    note->date()->fromUnicodeString( date().toString(KDateTime::RFCDateDay), "utf-8" );
+    note->contentType()->setMimeType("text/html");
+    note->contentType()->setCharset("utf-8");
+
+    note->subject()->fromUnicodeString( title(), "utf-8" );
+    note->from()->fromUnicodeString( "you@vkontakte", "utf-8" );
+    note->contentTransferEncoding()->setEncoding(KMime::Headers::CEquPr);
+
     QString m = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n";
     m += "<html><head></head><body>\n";
     m += text();
     m += "</body>";
-
-    note->mainBodyPart()->fromUnicodeString(m);
-    note->date()->fromUnicodeString( date().toString(KDateTime::RFCDateDay), "utf-8" );
-    note->contentType()->fromUnicodeString( "text/html", "utf-8" );
-    note->subject()->fromUnicodeString( title(), "utf-8" );
-    note->from()->fromUnicodeString( "you@vkontakte", "utf-8" );
+    note->fromUnicodeString(m);
 
     note->assemble();
 
