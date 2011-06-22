@@ -24,6 +24,8 @@ void DiscussionsListJob::handleData(const QVariant& data)
     foreach (const QVariant &item, list) {
         handleItem(item);
     }
+
+    qSort(m_list); // sort by message ID (which should be equivalent to sorting by date)
 }
 
 QList<MessageInfoPtr> DiscussionsListJob::list() const

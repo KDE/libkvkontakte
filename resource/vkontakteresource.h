@@ -78,6 +78,7 @@ private Q_SLOTS:
     // Messages
     void messageListFetched(KJob *job);
     void messageListUsersFetched(KJob *job);
+    void messageDiscussionsFetched(KJob *job);
 //     void messageJobFinished(KJob *job);
     //void noteAddJobFinished( KJob *job );
     //void deleteJobFinished( KJob *job );
@@ -108,6 +109,7 @@ private:
 
     // For messages retrieval
     QList<MessageInfoPtr> m_allMessages;
+    QMap<int, UserInfoPtr> m_messagesUsersMap;
 
     bool m_idle;
     QList< QPointer<KJob> > m_currentJobs;

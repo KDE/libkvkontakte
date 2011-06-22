@@ -63,7 +63,10 @@ int MessageInfo::mid() const
 
 void MessageInfo::setTitle(const QString &title)
 {
-    m_title = title;
+    // vkontakte.ru puts "..." into the title when the subject is not specified
+    QRegExp rx("(Re(\\(\\d+\\))?: )?( ?)\\.\\.\\.( ?)");
+    if (!rx.exactMatch(title))
+        m_title = title;
 }
 
 QString MessageInfo::title() const
@@ -130,27 +133,22 @@ QString MessageInfo::chatActive() const
 
 QString MessageInfo::remoteId() const
 {
-    return QString("uid%1/mid%2").arg(uid()).arg(mid());
+    return QString("priv_mid%1").arg(mid(), 6, 10, QLatin1Char('0'));
 }
 
-void MessageInfo::setUserAddress(const QString& userAddress)
+KMime::Message::Ptr MessageInfo::asMessage(QString userAddress, QString ownAddress,
+                                           QString messageId, QString inReplyTo) const
 {
-    m_userAddress = userAddress;
-}
+    if (userAddress.isEmpty())
+        userAddress = QString("<unknown@vkontakte>");
+    if (ownAddress.isEmpty())
+        ownAddress = QString("<you@vkontakte>");
 
-void MessageInfo::setOwnAddress(const QString& ownAddress)
-{
-    m_ownAddress = ownAddress;
-}
-
-KMime::Message::Ptr MessageInfo::asMessage() const
-{
     // http://api.kde.org/4.x-api/kdepimlibs-apidocs/kmime/html/classKMime_1_1Message.html#a5614aa32a42b034f5290d6d7a56cc433
     KMime::Message *mail = new KMime::Message();
 
-    mail->from()->fromUnicodeString( m_out ? m_ownAddress : m_userAddress, "utf-8" );
-    mail->to()->fromUnicodeString( !m_out ? m_ownAddress : m_userAddress, "utf-8" );
-    //mail->cc()->fromUnicodeString( "some@mailaddy.com", "utf-8" );
+    mail->from()->fromUnicodeString( m_out ? ownAddress : userAddress, "utf-8" );
+    mail->to()->fromUnicodeString( !m_out ? ownAddress : userAddress, "utf-8" );
     mail->date()->setDateTime( date() );
     mail->subject()->fromUnicodeString( title(), "utf-8" );
 
@@ -160,12 +158,24 @@ KMime::Message::Ptr MessageInfo::asMessage() const
     mail->fromUnicodeString( body() );
     mail->contentTransferEncoding()->setEncoding(KMime::Headers::CEbase64);
 
+    if (!messageId.isEmpty())
+        mail->messageID()->from7BitString(messageId.toAscii());
+    if (!inReplyTo.isEmpty()) {
+        mail->inReplyTo()->from7BitString(inReplyTo.toAscii());
+        mail->references()->from7BitString(inReplyTo.toAscii());
+    }
+
     mail->assemble();
 
     return KMime::Message::Ptr(mail);
 }
 
-bool MessageInfo::operator<(const MessageInfo &o) const
+MessageInfoPtr::MessageInfoPtr(MessageInfo* ptr)
+    : QSharedPointer<MessageInfo>(ptr)
 {
-    return mid() < o.mid();
+}
+
+bool MessageInfoPtr::operator<(const MessageInfoPtr &o) const
+{
+    return (*this)->mid() < o->mid();
 }

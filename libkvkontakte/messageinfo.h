@@ -25,6 +25,7 @@
 #include <KDateTime>
 #include <QSharedPointer>
 #include <QDate>
+#include <QString>
 #include <KMime/Message>
 
 /**
@@ -96,15 +97,10 @@ public:
     QString chatActive() const;
 
     QString remoteId() const;
-    KMime::Message::Ptr asMessage() const;
-
-    void setUserAddress(const QString &userAddress);
-    void setOwnAddress(const QString &ownAddress);
-
-    /**
-     * @brief Compares by message ID (m_mid)
-     **/
-    bool operator<(const MessageInfo &o) const;
+    KMime::Message::Ptr asMessage(QString userAddress = QString(),
+                                  QString ownAddress = QString(),
+                                  QString messageId = QString(),
+                                  QString inReplyTo = QString()) const;
 
 private:
     QString m_date;
@@ -117,11 +113,20 @@ private:
 
     QString m_chatId;
     QString m_chatActive;
-
-    QString m_userAddress;
-    QString m_ownAddress;
 };
 
-typedef QSharedPointer<MessageInfo> MessageInfoPtr;
+/**
+ * @brief This class is needed for using qSort on QLists of MessageInfoPtrs
+ **/
+class MessageInfoPtr : public QSharedPointer<MessageInfo>
+{
+public:
+    explicit MessageInfoPtr(MessageInfo* ptr);
+
+    /**
+     * @brief Compares by message ID (MessageInfo::m_mid)
+     **/
+    bool operator<(const MessageInfoPtr &o) const;
+};
 
 #endif // MESSAGEINFO_H

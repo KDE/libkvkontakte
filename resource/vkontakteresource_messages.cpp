@@ -32,6 +32,7 @@
 #include <libkvkontakte/userinfofulljob.h>
 #include <libkvkontakte/profilephotojob.h>
 #include <libkvkontakte/allmessageslistjob.h>
+#include <libkvkontakte/discussionslistjob.h>
 
 using namespace Akonadi;
 
@@ -80,24 +81,76 @@ void VkontakteResource::messageListUsersFetched(KJob *job)
 
     // TODO: UserInfoJob::userInfoMap
     QList<UserInfoPtr> usersList = usersJob->userInfo();
-    QMap<int, UserInfoPtr> usersMap;
     foreach (const UserInfoPtr user, usersList) {
-        usersMap.insert(user->uid(), user);
+        m_messagesUsersMap.insert(user->uid(), user);
+    }
+
+    DiscussionsListJob * const discussionsJob = new DiscussionsListJob(Settings::self()->accessToken());
+    m_currentJobs << discussionsJob;
+    connect(discussionsJob, SIGNAL(result(KJob*)), this, SLOT(messageDiscussionsFetched(KJob*)));
+    discussionsJob->start();
+}
+
+void VkontakteResource::messageDiscussionsFetched(KJob *job)
+{
+    Q_ASSERT(!m_idle);
+    DiscussionsListJob * const discussionsJob = dynamic_cast<DiscussionsListJob*>(job);
+    Q_ASSERT(discussionsJob);
+    m_currentJobs.removeAll(job);
+
+    if (discussionsJob->error()) {
+        abortWithError( i18n( "Unable to get discussion list from server: %1", discussionsJob->errorString() ),
+                        discussionsJob->error() == VkontakteJob::AuthenticationProblem );
+        return;
+    }
+
+    QSet<int> discussionIds;
+    foreach (const MessageInfoPtr &message, discussionsJob->list()) {
+        discussionIds.insert(message->mid());
     }
 
     Item::List items;
-    foreach( const MessageInfoPtr &messageInfo, m_allMessages ) {
+    for (int i = 0; i < m_allMessages.size(); i ++) {
+        const MessageInfoPtr &messageInfo = m_allMessages[i];
+
         // TODO: Multiple-user messages ("chat messages") should be handled differently
         if (!messageInfo->chatId().isEmpty() || !messageInfo->chatActive().isEmpty())
             continue;
 
-        UserInfoPtr user = usersMap[messageInfo->uid()];
+        UserInfoPtr user = m_messagesUsersMap[messageInfo->uid()];
+        QString userAddress;
+        QString ownAddress;
         if (!user.isNull()) {
-            messageInfo->setOwnAddress(QString("%1 <you@vkontakte>").arg(Settings::self()->userName()));
-            messageInfo->setUserAddress(QString("%1 %2 <%3@vkontakte>").arg(user->firstName()).arg(user->lastName()).arg(user->uid()));
+            userAddress = QString("%1 %2 <%3@vkontakte>").arg(user->firstName()).arg(user->lastName()).arg(user->uid());
+            ownAddress = QString("%1 <you@vkontakte>").arg(Settings::self()->userName());
         }
 
-        KMime::Message::Ptr mail = messageInfo->asMessage();
+        // Trying to find the previous message in the same discussion
+        int j = i - 1;
+        while (j >= 0 && m_allMessages[j]->uid() != messageInfo->uid())
+            j --;
+        // If we bump into the next discussion (older one), then
+        // not attaching our message to it.
+        if (j >= 0 && discussionIds.contains(m_allMessages[j]->mid())) {
+            kDebug() << "next discussion starts:" << m_allMessages[j]->mid();
+            j = -1;
+        }
+
+        kWarning() << "message threading: " << i << "->" << j << ", mid: " << m_allMessages[i]->mid() << "->" << (j == -1 ? -1 : m_allMessages[j]->mid());
+
+        if (messageInfo->title().isEmpty()) {
+            messageInfo->setTitle(j >= 0 ? m_allMessages[j]->title() : QString("No subject <mid%1>").arg(messageInfo->mid()));
+        }
+
+        // Cut the thread when subject changes
+        if (j >= 0 && messageInfo->title() != m_allMessages[j]->title()) {
+            j = -1;
+        }
+
+        KMime::Message::Ptr mail =
+            messageInfo->asMessage(userAddress, ownAddress,
+                                   QString("<%1@vkontakte>").arg(m_allMessages[i]->remoteId()),
+                                   j >= 0 ? QString("<%1@vkontakte>").arg(m_allMessages[j]->remoteId()) : QString());
 
         Item item;
         item.setRemoteId( messageInfo->remoteId() );
