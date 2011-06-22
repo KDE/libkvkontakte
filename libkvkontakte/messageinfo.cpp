@@ -152,6 +152,7 @@ KMime::Message::Ptr MessageInfo::asMessage(QString userAddress, QString ownAddre
     mail->date()->setDateTime( date() );
     mail->subject()->fromUnicodeString( title(), "utf-8" );
 
+    // http://api.kde.org/4.x-api/kdepimlibs-apidocs/kmime/html/index.html
     // This snippet was written by Thomas McGuire
     mail->contentType()->setMimeType( "text/plain" );
     mail->contentType()->setCharset("utf-8");
