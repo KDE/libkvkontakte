@@ -109,13 +109,17 @@ void VkontakteResource::messageDiscussionsFetched(KJob *job)
         discussionIds.insert(message->mid());
     }
 
-    Item::List items;
-    for (int i = 0; i < m_allMessages.size(); i ++) {
-        const MessageInfoPtr &messageInfo = m_allMessages[i];
-
+    // TODO: function for this
+    QList<MessageInfoPtr> singleUserMsgs;
+    foreach (const MessageInfoPtr &item, m_allMessages) {
         // TODO: Multiple-user messages ("chat messages") should be handled differently
-        if (!messageInfo->chatId().isEmpty() || !messageInfo->chatActive().isEmpty())
-            continue;
+        if (item->chatId().isEmpty() && item->chatActive().isEmpty())
+            singleUserMsgs.append(item);
+    }
+
+    Item::List items;
+    for (int i = 0; i < singleUserMsgs.size(); i ++) {
+        const MessageInfoPtr &messageInfo = singleUserMsgs[i];
 
         UserInfoPtr user = m_messagesUsersMap[messageInfo->uid()];
         QString userAddress;
@@ -127,30 +131,30 @@ void VkontakteResource::messageDiscussionsFetched(KJob *job)
 
         // Trying to find the previous message in the same discussion
         int j = i - 1;
-        while (j >= 0 && m_allMessages[j]->uid() != messageInfo->uid())
+        while (j >= 0 && singleUserMsgs[j]->uid() != messageInfo->uid())
             j --;
         // If we bump into the next discussion (older one), then
         // not attaching our message to it.
-        if (j >= 0 && discussionIds.contains(m_allMessages[j]->mid())) {
-            kDebug() << "next discussion starts:" << m_allMessages[j]->mid();
+        if (j >= 0 && discussionIds.contains(singleUserMsgs[j]->mid())) {
+            kDebug() << "next discussion starts:" << singleUserMsgs[j]->mid();
             j = -1;
         }
 
-        kWarning() << "message threading: " << i << "->" << j << ", mid: " << m_allMessages[i]->mid() << "->" << (j == -1 ? -1 : m_allMessages[j]->mid());
+        kWarning() << "message threading: " << i << "->" << j << ", mid: " << singleUserMsgs[i]->mid() << "->" << (j == -1 ? -1 : singleUserMsgs[j]->mid());
 
         if (messageInfo->title().isEmpty()) {
-            messageInfo->setTitle(j >= 0 ? m_allMessages[j]->title() : QString("No subject <mid%1>").arg(messageInfo->mid()));
+            messageInfo->setTitle(j >= 0 ? singleUserMsgs[j]->title() : QString("No subject <mid%1>").arg(messageInfo->mid()));
         }
 
         // Cut the thread when subject changes
-        if (j >= 0 && messageInfo->title() != m_allMessages[j]->title()) {
+        if (j >= 0 && messageInfo->title() != singleUserMsgs[j]->title()) {
             j = -1;
         }
 
         KMime::Message::Ptr mail =
             messageInfo->asMessage(userAddress, ownAddress,
-                                   QString("<%1@vkontakte>").arg(m_allMessages[i]->remoteId()),
-                                   j >= 0 ? QString("<%1@vkontakte>").arg(m_allMessages[j]->remoteId()) : QString());
+                                   QString("<%1@vkontakte>").arg(singleUserMsgs[i]->remoteId()),
+                                   j >= 0 ? QString("<%1@vkontakte>").arg(singleUserMsgs[j]->remoteId()) : QString());
 
         Item item;
         item.setRemoteId( messageInfo->remoteId() );
