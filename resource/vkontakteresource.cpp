@@ -209,7 +209,7 @@ bool VkontakteResource::retrieveItem(const Akonadi::Item &item, const QSet<QByte
     }
     else if (item.mimeType() == "text/x-vnd.akonadi.note") {
         m_idle = false;
-        NoteJob * const noteJob = new NoteJob(Settings::self()->accessToken(), item.remoteId());
+        NoteJob * const noteJob = new NoteJob(Settings::self()->accessToken(), item.remoteId().toInt());
         m_currentJobs << noteJob;
         noteJob->setProperty( "Item", QVariant::fromValue( item ) );
         connect( noteJob, SIGNAL(result(KJob*)), this, SLOT(noteJobFinished(KJob*)) );

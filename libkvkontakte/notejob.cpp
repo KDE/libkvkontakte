@@ -17,17 +17,20 @@
    Boston, MA 02110-1301, USA.
 */
 #include "notejob.h"
+#include <qjson/qobjecthelper.h>
 
-NoteJob::NoteJob(const QString& accessToken, const QString& nid)
-    : VkontakteJob(nid, accessToken)
+// http://vkontakte.ru/developers.php?o=-1&p=notes.getById
+NoteJob::NoteJob(const QString& accessToken, int nid)
+    : VkontakteJob("notes.getById", accessToken)
 {
-    addQueryItem("nid", nid);
+    addQueryItem("nid", QString::number(nid));
     addQueryItem("need_wiki", "1"); // works only for current user's notes
 }
 
 void NoteJob::handleData(const QVariant& data)
 {
-    // ???????????
+    m_noteInfo = NoteInfoPtr(new NoteInfo());
+    QJson::QObjectHelper::qvariant2qobject(data.toMap(), m_noteInfo.data());
 }
 
 NoteInfoPtr NoteJob::noteInfo()

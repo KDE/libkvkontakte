@@ -26,7 +26,7 @@ class LIBKVKONTAKTE_EXPORT NoteJob : public VkontakteJob
 {
     Q_OBJECT
 public:
-    NoteJob(const QString &accessToken, const QString &nid);
+    NoteJob(const QString &accessToken, int nid);
 
     NoteInfoPtr noteInfo();
     
