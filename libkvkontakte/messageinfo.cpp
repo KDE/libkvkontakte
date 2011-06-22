@@ -74,6 +74,13 @@ QString MessageInfo::title() const
     return m_title;
 }
 
+QString MessageInfo::coreTitle() const
+{
+    QString res = m_title;
+    res.remove(QRegExp("^Re(\\(\\d+\\))?: "));
+    return res;
+}
+
 void MessageInfo::setBody(const QString &body)
 {
     m_body = body;
@@ -163,7 +170,7 @@ KMime::Message::Ptr MessageInfo::asMessage(QString userAddress, QString ownAddre
         mail->messageID()->from7BitString(messageId.toAscii());
     if (!inReplyTo.isEmpty()) {
         mail->inReplyTo()->from7BitString(inReplyTo.toAscii());
-        mail->references()->from7BitString(inReplyTo.toAscii());
+        //mail->references()->from7BitString(inReplyTo.toAscii());
     }
 
     mail->assemble();

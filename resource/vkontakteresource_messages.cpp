@@ -117,17 +117,9 @@ void VkontakteResource::messageDiscussionsFetched(KJob *job)
             singleUserMsgs.append(item);
     }
 
-    Item::List items;
+    QMap<int, int> inReplyToMsg;
     for (int i = 0; i < singleUserMsgs.size(); i ++) {
         const MessageInfoPtr &messageInfo = singleUserMsgs[i];
-
-        UserInfoPtr user = m_messagesUsersMap[messageInfo->uid()];
-        QString userAddress;
-        QString ownAddress;
-        if (!user.isNull()) {
-            userAddress = QString("%1 %2 <%3@vkontakte>").arg(user->firstName()).arg(user->lastName()).arg(user->uid());
-            ownAddress = QString("%1 <you@vkontakte>").arg(Settings::self()->userName());
-        }
 
         // Trying to find the previous message in the same discussion
         int j = i - 1;
@@ -135,20 +127,39 @@ void VkontakteResource::messageDiscussionsFetched(KJob *job)
             j --;
         // If we bump into the next discussion (older one), then
         // not attaching our message to it.
-        if (j >= 0 && discussionIds.contains(singleUserMsgs[j]->mid())) {
-            kDebug() << "next discussion starts:" << singleUserMsgs[j]->mid();
+        if (j >= 0 && discussionIds.contains(singleUserMsgs[j]->mid()))
             j = -1;
-        }
 
-        kWarning() << "message threading: " << i << "->" << j << ", mid: " << singleUserMsgs[i]->mid() << "->" << (j == -1 ? -1 : singleUserMsgs[j]->mid());
-
-        if (messageInfo->title().isEmpty()) {
-            messageInfo->setTitle(j >= 0 ? singleUserMsgs[j]->title() : QString("No subject <mid%1>").arg(messageInfo->mid()));
-        }
+        if (messageInfo->title().isEmpty())
+            messageInfo->setTitle(j >= 0 ? singleUserMsgs[j]->title() : QString("No subject [#%1]").arg(messageInfo->mid()));
 
         // Cut the thread when subject changes
-        if (j >= 0 && messageInfo->title() != singleUserMsgs[j]->title()) {
+        if (j >= 0 && messageInfo->coreTitle() != singleUserMsgs[j]->coreTitle())
             j = -1;
+
+        inReplyToMsg[i] = j;
+    }
+
+    for (int i = 0; i < singleUserMsgs.size(); i ++) {
+        int j = i;
+        while (inReplyToMsg[j] >= 0)
+            j = inReplyToMsg[j]; // and we need to go deeper (c)
+
+        if (j != i)
+            inReplyToMsg[i] = j;
+    }
+
+    Item::List items;
+    for (int i = 0; i < singleUserMsgs.size(); i ++) {
+        const MessageInfoPtr &messageInfo = singleUserMsgs[i];
+        UserInfoPtr user = m_messagesUsersMap[messageInfo->uid()];
+        int j = inReplyToMsg[i];
+
+        QString userAddress;
+        QString ownAddress;
+        if (!user.isNull()) {
+            userAddress = QString("%1 %2 <%3@vkontakte>").arg(user->firstName()).arg(user->lastName()).arg(user->uid());
+            ownAddress = QString("%1 <you@vkontakte>").arg(Settings::self()->userName());
         }
 
         KMime::Message::Ptr mail =

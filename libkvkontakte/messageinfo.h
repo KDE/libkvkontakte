@@ -81,6 +81,11 @@ public:
     void setTitle(const QString &title);
     QString title() const;
 
+    /**
+     * @brief Returns the title without "Re(n): " prefix
+     **/
+    QString coreTitle() const;
+
     void setBody(const QString &body);
     QString body() const;
 

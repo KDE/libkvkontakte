@@ -1,5 +1,4 @@
 * Private messages are truncated at around 2000 characters (vkontakte.ru issue?)
-* Flat threads of private messages
 * Sending private messages
 * Editing notes
 * Sync read/unread status of private messages
