@@ -139,6 +139,20 @@ KABC::Addressee UserInfo::toAddressee() const
         address.setLocality(cityString());
         addressee.insertAddress(address);
     }
+
+    if (!homePhone().isEmpty()) {
+        KABC::PhoneNumber number;
+        number.setNumber(homePhone());
+        number.setType(KABC::PhoneNumber::Home);
+        addressee.insertPhoneNumber(number);
+    }
+    if (!mobilePhone().isEmpty()) {
+        KABC::PhoneNumber number;
+        number.setNumber(mobilePhone());
+        number.setType(KABC::PhoneNumber::Cell);
+        addressee.insertPhoneNumber(number);
+    }
+
     return addressee;
 }
 
@@ -230,4 +244,24 @@ void UserInfo::setCityString(const QString& cityString)
 void UserInfo::setCountryString(const QString& countryString)
 {
     m_countryString = countryString;
+}
+
+void UserInfo::setHomePhone(const QString& homePhone)
+{
+    m_homePhone = homePhone;
+}
+
+QString UserInfo::homePhone() const
+{
+    return m_homePhone;
+}
+
+void UserInfo::setMobilePhone(const QString& mobilePhone)
+{
+    m_mobilePhone = mobilePhone;
+}
+
+QString UserInfo::mobilePhone() const
+{
+    return m_mobilePhone;
 }

@@ -56,8 +56,8 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 
     // If "contacts" was requested, then these fields will
     // be also available: home_phone, mobile_phone.
-    //Q_PROPERTY(QString home_phone WRITE setHomePhone READ homePhone)
-    //Q_PROPERTY(QString mobile_phone WRITE setMobilePhone READ mobilePhone)
+    Q_PROPERTY(QString home_phone WRITE setHomePhone READ homePhone)
+    Q_PROPERTY(QString mobile_phone WRITE setMobilePhone READ mobilePhone)
     //Q_PROPERTY(int has_mobile WRITE setHasMobile READ hasMobile)
 
 //     // If "education" was requested, then these fields will
@@ -184,6 +184,12 @@ public:
      **/
     QString photoMedium() const;
 
+    void setHomePhone(const QString &homePhone);
+    QString homePhone() const;
+
+    void setMobilePhone(const QString &mobilePhone);
+    QString mobilePhone() const;
+
     QString profileUrl() const;
 
     /**
@@ -211,6 +217,9 @@ private:
 
     QString m_photo;
     QString m_photoMedium;
+
+    QString m_homePhone;
+    QString m_mobilePhone;
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;
