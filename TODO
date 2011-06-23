@@ -7,3 +7,5 @@
 * Handle attachments in private messages
 * Parse phone numbers (requested by Nikolay Rysev)
 * vkontakte.ru support in Telepathy-KDE and/or Kopete (how about a messaging framework that could be used for both Kopete and Telepathy-KDE?)
+* Incremental loading of friends' photos
+* Incremental loading of private messages
