@@ -74,7 +74,7 @@ void VkontakteResource::friendListJobFinished( KJob* job )
     m_currentJobs.removeAll(job);
 
     if ( friendListJob->error() ) {
-        abortWithError( i18n( "Unable to get list of friends from server: %1", friendListJob->errorText() ),
+        abortWithError( i18n( "Unable to get list of friends from VKontakte server: %1", friendListJob->errorText() ),
                         friendListJob->error() == VkontakteJob::AuthenticationProblem );
     } else {
         // Figure out which items are new or changed

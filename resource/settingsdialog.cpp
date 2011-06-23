@@ -178,11 +178,11 @@ void SettingsDialog::slotButtonClicked( int button )
                               QByteArray(),
                               ki18n("Akonadi Vkontakte Resource"),
                               QByteArray( RESOURCE_VERSION ),
-                              ki18n( "Makes your friends, events, notes and messages on Vkontakte available in KDE via Akonadi." ),
+                              ki18n( "Makes your friends, notes and messages on Vkontakte available in KDE via Akonadi." ),
                               KAboutData::License_GPL_V2,
                               ki18n( "(С) 2011 Alexander Potashev" ) );
         aboutData.addAuthor( ki18n( "Alexander Potashev" ), ki18n( "Maintainer" ), "aspotashev@gmail.com" );
-        aboutData.addCredit( ki18n( "Thomas McGuire" ), ki18n( "Creator of akonadi-facebook" ), "mcguire@kde.org" );
+        aboutData.addCredit( ki18n( "Thomas McGuire" ), ki18n( "Author of akonadi-facebook" ), "mcguire@kde.org" );
         aboutData.setProgramIconName("vkontakteresource");
         aboutData.setTranslator( ki18nc("NAME OF TRANSLATORS", "Your names"),
                                  ki18nc("EMAIL OF TRANSLATORS", "Your emails"));

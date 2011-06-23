@@ -75,8 +75,11 @@ void VkontakteJob::handleError( const QVariant& data )
     const QString error_msg = errorMap["error_msg"].toString();
     kWarning() << "An error of type" << error_code << "occurred:" << error_msg;
 //     if ( type.toLower() != "oauthexception" ) {
-        setError( KJob::UserDefinedError );
-        setErrorText( i18n( "The VKontakte server returned (in reply to method %3) an error of type <i>%1</i>: <i>%2</i>" , error_code, error_msg, m_method ) );
+        setError(KJob::UserDefinedError);
+        setErrorText(i18n(
+            "The VKontakte server returned an error "
+            "of type <i>%1</i> in reply to method %2: <i>%3</i>",
+            error_code, m_method, error_msg));
 //     } else {
 //         setError( AuthenticationProblem );
 //         setErrorText( i18n( "Unable to login to the VKontakte server, authentication failure.\nThe server said: <i>%1</i>", message ) );
@@ -131,7 +134,7 @@ void VkontakteJob::jobFinished(KJob *job)
         } else {
             kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
             setError( KJob::UserDefinedError );
-            setErrorText( i18n( "Unable to parse data returned by the Facebook server: %1", parser.errorString() ) );
+            setErrorText( i18n( "Unable to parse data returned by the VKontakte server: %1", parser.errorString() ) );
         }
     }
     emitResult();
