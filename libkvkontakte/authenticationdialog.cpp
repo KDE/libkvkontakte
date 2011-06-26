@@ -74,6 +74,7 @@ void AuthenticationDialog::start()
 {
   Q_ASSERT( !mAppId.isEmpty() );
 
+  // display= {page, popup, touch, wap}
   const QString url = QString( "http://api.vkontakte.ru/oauth/authorize?"
                                "client_id=%1&"
                                "scope=%2&"
