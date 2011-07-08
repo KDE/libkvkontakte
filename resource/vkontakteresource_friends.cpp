@@ -104,7 +104,7 @@ void VkontakteResource::friendListJobFinished( KJob* job )
         if ( m_newOrChangedFriends.isEmpty() ) {
             finishFriendFetching();
         } else {
-            emit status( Running, i18n( "Retrieving friends' details. (%1 friends)" ).arg(m_newOrChangedFriends.size()) );
+            emit status( Running, i18nc( "%1 is the number of friends the currently logged in user has in VKontakte.", "Retrieving friends' details (%1 friends total)." ).arg(m_newOrChangedFriends.size()) );
             emit percent( 5 );
             fetchNewOrChangedFriends();
         }
