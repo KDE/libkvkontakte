@@ -21,11 +21,14 @@
 #ifndef VKONTAKTERESOURCE_H
 #define VKONTAKTERESOURCE_H
 
+#include <QtCore/QPointer>
+#include <QtCore/QMutex>
+#include <Akonadi/ResourceBase>
+#include <KABC/Addressee>
+#include <KMime/Message>
 #include <libkvkontakte/userinfo.h>
 #include <libkvkontakte/messageinfo.h>
-#include <Akonadi/ResourceBase>
-#include <QPointer>
-#include <QMutex>
+#include <libkvkontakte/noteinfo.h>
 
 class VkontakteResource : public Akonadi::ResourceBase,
     public Akonadi::AgentBase::Observer
@@ -94,6 +97,26 @@ private:
     void finishEventsFetching();
     void finishNotesFetching();
     void finishMessagesFetching();
+
+    /**
+    * @brief Created a KABC::Addressee for all the information we have about this person.
+    *
+    * @return A KABC::Addressee of this person.
+    */
+    static KABC::Addressee toPimAddressee(const UserInfo &o);
+
+    /**
+     * Generates a KMime::Message from this note and return a
+     * KMime::Message::Ptr to it.
+     */
+    static KMime::Message::Ptr toPimNote(const NoteInfo &o);
+
+    KMime::Message::Ptr toPimMessage(const MessageInfo &o,
+                                     QString userAddress = QString(),
+                                     QString ownAddress = QString(),
+                                     QString messageId = QString(),
+                                     QString inReplyTo = QString());
+
 
     // Friends that are already stored on the Akonadi server
     QMap<int, KDateTime> m_existingFriends;

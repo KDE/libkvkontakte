@@ -162,10 +162,10 @@ void VkontakteResource::messageDiscussionsFetched(KJob *job)
             ownAddress = QString("%1 <you@vkontakte>").arg(Settings::self()->userName());
         }
 
-        KMime::Message::Ptr mail =
-            messageInfo->asMessage(userAddress, ownAddress,
-                                   QString("<%1@vkontakte>").arg(singleUserMsgs[i]->remoteId()),
-                                   j >= 0 ? QString("<%1@vkontakte>").arg(singleUserMsgs[j]->remoteId()) : QString());
+        KMime::Message::Ptr mail = toPimMessage(
+            *messageInfo, userAddress, ownAddress,
+            QString("<%1@vkontakte>").arg(singleUserMsgs[i]->remoteId()),
+            j >= 0 ? QString("<%1@vkontakte>").arg(singleUserMsgs[j]->remoteId()) : QString());
 
         Item item;
         item.setRemoteId( messageInfo->remoteId() );

@@ -22,11 +22,10 @@
 #include "util.h"
 
 #include <KDebug>
-
-static const int invalidTimezone = 42;
+#include <QtCore/QStringList>
 
 UserInfo::UserInfo()
-    : m_timezone(invalidTimezone)
+    : m_timezone(INVALID_TIMEZONE)
 {
 }
 
@@ -116,44 +115,6 @@ QString UserInfo::profileUrl() const
         return "http://vkontakte.ru/id" + uid();
     else
         return "http://vkontakte.ru/" + domain();
-}
-
-KABC::Addressee UserInfo::toAddressee() const
-{
-    KABC::Addressee addressee;
-    addressee.setGivenName( firstName() );
-    addressee.setUid( QString::number(uid()) );
-    addressee.setFamilyName( lastName() );
-    //addressee.setFormattedName( name() );
-    addressee.setUrl( profileUrl() );
-    addressee.setBirthday( QDateTime( birthday() ) );
-    //addressee.setOrganization(mCompany);
-    if (m_timezone != invalidTimezone) {
-        addressee.setTimeZone(KABC::TimeZone(m_timezone));
-    }
-    //addressee.insertCustom("KADDRESSBOOK", "X-Profession", mProfession);
-    //addressee.insertCustom("KADDRESSBOOK", "X-SpousesName", mPartner);
-    if ( !countryString().isEmpty() || !cityString().isEmpty() ) {
-        KABC::Address address(KABC::Address::Home);
-        address.setRegion(countryString());
-        address.setLocality(cityString());
-        addressee.insertAddress(address);
-    }
-
-    if (!homePhone().isEmpty()) {
-        KABC::PhoneNumber number;
-        number.setNumber(homePhone());
-        number.setType(KABC::PhoneNumber::Home);
-        addressee.insertPhoneNumber(number);
-    }
-    if (!mobilePhone().isEmpty()) {
-        KABC::PhoneNumber number;
-        number.setNumber(mobilePhone());
-        number.setType(KABC::PhoneNumber::Cell);
-        addressee.insertPhoneNumber(number);
-    }
-
-    return addressee;
 }
 
 /**

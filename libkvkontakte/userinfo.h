@@ -22,7 +22,6 @@
 
 #include "libkvkontakte_export.h"
 
-#include <KABC/Addressee>
 #include <KDateTime>
 #include <QSharedPointer>
 #include <QDate>
@@ -69,6 +68,11 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 //     Q_PROPERTY(QString graduation WRITE setGraduation READ graduation)
 
 public:
+    enum
+    {
+        INVALID_TIMEZONE = 42
+    };
+
     UserInfo();
 
     /**
@@ -191,13 +195,6 @@ public:
     QString mobilePhone() const;
 
     QString profileUrl() const;
-
-    /**
-    * @brief Created a KABC::Addressee for all the information we have about this person.
-    *
-    * @return A KABC::Addressee of this person. 
-    */
-    KABC::Addressee toAddressee() const;
 
     static QStringList allQueryFields();
 

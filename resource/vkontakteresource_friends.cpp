@@ -185,7 +185,7 @@ void VkontakteResource::photoJobFinished(KJob* job)
         abortWithError( i18n( "Unable to retrieve friends' photo from server: %1", photoJob->errorText() ) );
     } else {
         // Create Item
-        KABC::Addressee addressee = user->toAddressee();
+        KABC::Addressee addressee = toPimAddressee(*user);
         addressee.setPhoto( KABC::Picture( photoJob->photo() ) );
         Item newUser;
         newUser.setRemoteId( QString::number(user->uid()) );
@@ -222,7 +222,7 @@ void VkontakteResource::friendJobFinished(KJob* job)
         abortWithError( i18n( "Unable to get information about friend from server: %1", friendJob->errorText() ) );
     } else {
         Item user = friendJob->property( "Item" ).value<Item>();
-        user.setPayload<KABC::Addressee>( friendJob->userInfo().first()->toAddressee() );
+        user.setPayload<KABC::Addressee>( toPimAddressee(*friendJob->userInfo().first()) );
         // TODO: What about picture here?
         itemRetrieved( user );
         resetState();

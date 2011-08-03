@@ -20,6 +20,8 @@
 #ifndef USERINFOJOB_H
 #define USERINFOJOB_H
 
+#include <QtCore/QStringList>
+
 #include "userinfo.h"
 #include "vkontaktejobs.h"
 #include "qintlist.h"

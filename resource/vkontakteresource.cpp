@@ -38,6 +38,7 @@
 #include <Akonadi/ItemFetchJob>
 #include <Akonadi/ItemFetchScope>
 #include <akonadi/changerecorder.h>
+#include <KMime/Message>
 #include <libkvkontakte/userinfofulljob.h>
 #include <libkvkontakte/allmessageslistjob.h>
 
@@ -326,5 +327,105 @@ void VkontakteResource::retrieveCollections()
 //     cancelTask();
 //   }
 // }
+
+// static
+KABC::Addressee VkontakteResource::toPimAddressee(const UserInfo &o)
+{
+    KABC::Addressee addressee;
+    addressee.setGivenName( o.firstName() );
+    addressee.setUid( QString::number(o.uid()) );
+    addressee.setFamilyName( o.lastName() );
+    //addressee.setFormattedName( name() );
+    addressee.setUrl( o.profileUrl() );
+    addressee.setBirthday( QDateTime( o.birthday() ) );
+    //addressee.setOrganization(mCompany);
+    if (o.timezone() != UserInfo::INVALID_TIMEZONE) {
+        addressee.setTimeZone(KABC::TimeZone(o.timezone()));
+    }
+    //addressee.insertCustom("KADDRESSBOOK", "X-Profession", mProfession);
+    //addressee.insertCustom("KADDRESSBOOK", "X-SpousesName", mPartner);
+    if ( !o.countryString().isEmpty() || !o.cityString().isEmpty() ) {
+        KABC::Address address(KABC::Address::Home);
+        address.setRegion(o.countryString());
+        address.setLocality(o.cityString());
+        addressee.insertAddress(address);
+    }
+
+    if (!o.homePhone().isEmpty()) {
+        KABC::PhoneNumber number;
+        number.setNumber(o.homePhone());
+        number.setType(KABC::PhoneNumber::Home);
+        addressee.insertPhoneNumber(number);
+    }
+    if (!o.mobilePhone().isEmpty()) {
+        KABC::PhoneNumber number;
+        number.setNumber(o.mobilePhone());
+        number.setType(KABC::PhoneNumber::Cell);
+        addressee.insertPhoneNumber(number);
+    }
+
+    return addressee;
+}
+
+// static
+KMime::Message::Ptr VkontakteResource::toPimNote(const NoteInfo &o)
+{
+    KMime::Message * const note = new KMime::Message();
+
+    note->date()->fromUnicodeString( o.date().toString(KDateTime::RFCDateDay), "utf-8" );
+    note->contentType()->setMimeType("text/html");
+    note->contentType()->setCharset("utf-8");
+
+    note->subject()->fromUnicodeString( o.title(), "utf-8" );
+    note->from()->fromUnicodeString( "you@vkontakte", "utf-8" );
+    note->contentTransferEncoding()->setEncoding(KMime::Headers::CEquPr);
+
+    QString m = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n";
+    m += "<html><head></head><body>\n";
+    m += o.text();
+    m += "</body>";
+    note->fromUnicodeString(m);
+
+    note->assemble();
+
+    return KMime::Message::Ptr(note);
+}
+
+KMime::Message::Ptr VkontakteResource::toPimMessage(
+    const MessageInfo &o,
+    QString userAddress, QString ownAddress,
+    QString messageId, QString inReplyTo)
+{
+    if (userAddress.isEmpty())
+        userAddress = QString("<unknown@vkontakte>");
+    if (ownAddress.isEmpty())
+        ownAddress = QString("<you@vkontakte>");
+
+    // http://api.kde.org/4.x-api/kdepimlibs-apidocs/kmime/html/classKMime_1_1Message.html#a5614aa32a42b034f5290d6d7a56cc433
+    KMime::Message *mail = new KMime::Message();
+
+    mail->from()->fromUnicodeString( o.out() ? ownAddress : userAddress, "utf-8" );
+    mail->to()->fromUnicodeString( !o.out() ? ownAddress : userAddress, "utf-8" );
+    mail->date()->setDateTime( o.date() );
+    mail->subject()->fromUnicodeString( o.title(), "utf-8" );
+
+    // http://api.kde.org/4.x-api/kdepimlibs-apidocs/kmime/html/index.html
+    // This snippet was written by Thomas McGuire
+    mail->contentType()->setMimeType( "text/plain" );
+    mail->contentType()->setCharset("utf-8");
+    mail->fromUnicodeString( o.body() );
+    mail->contentTransferEncoding()->setEncoding(KMime::Headers::CEbase64);
+
+    if (!messageId.isEmpty())
+        mail->messageID()->from7BitString(messageId.toAscii());
+    if (!inReplyTo.isEmpty()) {
+        mail->inReplyTo()->from7BitString(inReplyTo.toAscii());
+        //mail->references()->from7BitString(inReplyTo.toAscii());
+    }
+
+    mail->assemble();
+
+    return KMime::Message::Ptr(mail);
+}
 
 AKONADI_RESOURCE_MAIN( VkontakteResource )

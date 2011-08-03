@@ -21,12 +21,10 @@
 
 #include "libkvkontakte_export.h"
 
-#include <KABC/Addressee>
 #include <KDateTime>
-#include <QSharedPointer>
-#include <QDate>
-#include <QString>
-#include <KMime/Message>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QDate>
+#include <QtCore/QString>
 
 /**
 * Class that describes a private message on vkontakte.ru
@@ -102,10 +100,6 @@ public:
     QString chatActive() const;
 
     QString remoteId() const;
-    KMime::Message::Ptr asMessage(QString userAddress = QString(),
-                                  QString ownAddress = QString(),
-                                  QString messageId = QString(),
-                                  QString inReplyTo = QString()) const;
 
 private:
     QString m_date;

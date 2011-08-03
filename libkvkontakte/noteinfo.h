@@ -22,9 +22,8 @@
 
 #include "libkvkontakte_export.h"
 
-#include <KMime/Message>
 #include <KDateTime>
-#include <QObject>
+#include <QtCore/QObject>
 
 /**
  * Class to represent a facebook note
@@ -101,12 +100,6 @@ public:
 
     void setReadNcom(int readNcom);
     int readNcom() const;
-
-    /**
-     * Generates a KMime::Message from this note and return a
-     * KMime::Message::Ptr to it.
-     */
-    KMime::Message::Ptr asNote() const;
 
 private:
     int m_nid;          /* Vkontakte id of the note. */

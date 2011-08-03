@@ -18,6 +18,14 @@ if (XSLTPROC_EXECUTABLE)
   endmacro( kcfg_generate_dbus_interface )
 endif (XSLTPROC_EXECUTABLE)
 
+# Turn this off by default when KDEPIM 4.4 is not in use anymore
+option(KDEPIM_44_COMPAT "Don't crash when using KDEPIM runtime 4.4.x, at the cost of using deprecated KCal API" TRUE)
+if(KDEPIM_44_COMPAT)
+  add_definitions(-DWANT_DEPRECATED_KCAL_API)
+endif(KDEPIM_44_COMPAT)
+
+find_package(KdepimLibs 4.5.63 REQUIRED)
+
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}" )
 
 set( vkontakteresource_SRCS
@@ -49,6 +57,7 @@ endif (Q_WS_MAC)
 
 include_directories (
   ${Boost_INCLUDE_DIR}
+  ${KDEPIMLIBS_INCLUDE_DIRS}
 )
 
 target_link_libraries( akonadi_vkontakte_resource

@@ -32,6 +32,7 @@
 #include <Akonadi/ItemFetchJob>
 #include <Akonadi/ItemFetchScope>
 #include <akonadi/changerecorder.h>
+#include <KMime/Message>
 
 using namespace Akonadi;
 
@@ -52,8 +53,9 @@ void VkontakteResource::noteListFetched( KJob* job )
         foreach( const NoteInfoPtr &noteInfo, listJob->notes() ) {
             Item note;
             note.setRemoteId( QString::number(noteInfo->nid()) ); // FIXME: are all nids unique, or may be different users may have notes with the same nids?
-            note.setPayload<KMime::Message::Ptr>( noteInfo->asNote() );
-            note.setSize( noteInfo->asNote()->size() );
+            KMime::Message::Ptr msg = toPimNote(*noteInfo);
+            note.setPayload<KMime::Message::Ptr>( msg );
+            note.setSize( msg->size() );
             note.setMimeType( "text/x-vnd.akonadi.note" );
             noteItems.append(note);
         }
@@ -83,7 +85,7 @@ void VkontakteResource::noteJobFinished(KJob* job)
         abortWithError( i18n( "Unable to get information about note from server: %1", noteJob->errorText() ) );
     } else {
         Item note = noteJob->property( "Item" ).value<Item>();
-        note.setPayload( noteJob->noteInfo()->asNote() );
+        note.setPayload( toPimNote(*noteJob->noteInfo()) );
         // how about note.setSize(noteJob->noteInfo()->asNote()->size()) ?
         itemRetrieved( note );
         resetState();

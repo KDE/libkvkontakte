@@ -19,6 +19,7 @@
 #include "messageinfo.h"
 
 #include "util.h"
+#include <QtCore/QRegExp>
 #include <KDebug>
 
 MessageInfo::MessageInfo()
@@ -141,41 +142,6 @@ QString MessageInfo::chatActive() const
 QString MessageInfo::remoteId() const
 {
     return QString("priv_mid%1").arg(mid(), 6, 10, QLatin1Char('0'));
-}
-
-KMime::Message::Ptr MessageInfo::asMessage(QString userAddress, QString ownAddress,
-                                           QString messageId, QString inReplyTo) const
-{
-    if (userAddress.isEmpty())
-        userAddress = QString("<unknown@vkontakte>");
-    if (ownAddress.isEmpty())
-        ownAddress = QString("<you@vkontakte>");
-
-    // http://api.kde.org/4.x-api/kdepimlibs-apidocs/kmime/html/classKMime_1_1Message.html#a5614aa32a42b034f5290d6d7a56cc433
-    KMime::Message *mail = new KMime::Message();
-
-    mail->from()->fromUnicodeString( m_out ? ownAddress : userAddress, "utf-8" );
-    mail->to()->fromUnicodeString( !m_out ? ownAddress : userAddress, "utf-8" );
-    mail->date()->setDateTime( date() );
-    mail->subject()->fromUnicodeString( title(), "utf-8" );
-
-    // http://api.kde.org/4.x-api/kdepimlibs-apidocs/kmime/html/index.html
-    // This snippet was written by Thomas McGuire
-    mail->contentType()->setMimeType( "text/plain" );
-    mail->contentType()->setCharset("utf-8");
-    mail->fromUnicodeString( body() );
-    mail->contentTransferEncoding()->setEncoding(KMime::Headers::CEbase64);
-
-    if (!messageId.isEmpty())
-        mail->messageID()->from7BitString(messageId.toAscii());
-    if (!inReplyTo.isEmpty()) {
-        mail->inReplyTo()->from7BitString(inReplyTo.toAscii());
-        //mail->references()->from7BitString(inReplyTo.toAscii());
-    }
-
-    mail->assemble();
-
-    return KMime::Message::Ptr(mail);
 }
 
 MessageInfoPtr::MessageInfoPtr(MessageInfo* ptr)
