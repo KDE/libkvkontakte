@@ -9,6 +9,7 @@ SavePhotoJob::SavePhotoJob(const QString &accessToken,
     addQueryItem("photos_list", photoIdData["photos_list"].toString());
     addQueryItem("hash", photoIdData["hash"].toString());
 
+    // TODO: may be "gid" will also be in "photoIdData", so this argument is unnecessary?
     if (gid != -1)
         addQueryItem("gid", QString::number(gid));
 }
