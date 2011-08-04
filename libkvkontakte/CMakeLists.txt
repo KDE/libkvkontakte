@@ -26,6 +26,7 @@ set(libkvkontakte_SRCS
     albumlistjob.cpp
     albuminfo.cpp
     createalbumjob.cpp
+    deletealbumjob.cpp
 
     qintlist.cpp
     util.cpp
