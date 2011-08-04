@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QVariant>
+#include "photoinfo.h"
 
 class LIBKVKONTAKTE_EXPORT UploadPhotosJob : public KJobWithSubjobs
 {
@@ -33,7 +34,7 @@ public:
 
     virtual void start();
 
-//    QList<MessageInfoPtr> list() const;
+    QList<PhotoInfoPtr> list() const;
 
 protected:
     void startPostJob(int offset, int count);
@@ -51,8 +52,7 @@ private:
     int m_gid;
 
     QString m_uploadUrl;
-
-//    QList<MessageInfoPtr> m_list;
+    QList<PhotoInfoPtr> m_list;
 };
 
 #endif // UPLOADPHOTOSJOB_H

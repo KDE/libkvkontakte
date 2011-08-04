@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "savephotojob.h"
+#include <qjson/qobjecthelper.h>
 
 SavePhotoJob::SavePhotoJob(const QString &accessToken,
                            const QMap<QString, QVariant> &photoIdData, int gid)
@@ -32,8 +33,20 @@ SavePhotoJob::SavePhotoJob(const QString &accessToken,
         addQueryItem("gid", QString::number(gid));
 }
 
+void SavePhotoJob::handleItem(const QVariant &data)
+{
+    PhotoInfoPtr item(new PhotoInfo());
+    QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
+    m_list.append(item);
+}
+
 void SavePhotoJob::handleData(const QVariant &data)
 {
-    // TODO: class PhotoInfo
-    // QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
+    foreach (const QVariant &item, data.toList())
+        handleItem(item);
+}
+
+QList<PhotoInfoPtr> SavePhotoJob::list() const
+{
+    return m_list;
 }

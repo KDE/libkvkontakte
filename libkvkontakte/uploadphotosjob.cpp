@@ -113,9 +113,14 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
         return;
     }
 
-    // TODO: append photo to m_list
+    m_list.append(job->list());
 
     // All subjobs have finished
     if (m_jobs.size() == 0)
         emitResult();
+}
+
+QList<PhotoInfoPtr> UploadPhotosJob::list() const
+{
+    return m_list;
 }
