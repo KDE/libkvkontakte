@@ -103,7 +103,7 @@ void PhotoPostJob::jobFinished(KJob *job)
             if ( error.isValid() ) {
                 handleError( error );
             } else {
-                handleData( data.toMap()["response"] );
+                handleData(data);
             }
         } else {
             kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
