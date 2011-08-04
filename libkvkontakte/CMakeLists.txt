@@ -28,6 +28,8 @@ set(libkvkontakte_SRCS
     createalbumjob.cpp
     deletealbumjob.cpp
     getphotouploadserverjob.cpp
+    photopostjob.cpp
+    mpform.cpp
 
     qintlist.cpp
     util.cpp
