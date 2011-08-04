@@ -21,7 +21,7 @@
 #include <KDebug>
 
 DeleteAlbumJob::DeleteAlbumJob(const QString &accessToken, int aid)
-    : VkontakteJob("photos.deleteAlbum", accessToken)
+    : VkontakteJob("photos.deleteAlbum", accessToken, true)
 {
     addQueryItem("aid", QString::number(aid));
 }

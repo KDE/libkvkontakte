@@ -22,7 +22,7 @@
 #include <QVariant>
 
 NoteAddJob::NoteAddJob( const QString &accessToken, const QString &title, const QString &text )
-  : VkontakteJob( "notes.add", accessToken )
+  : VkontakteJob("notes.add", accessToken, true)
 {
     addQueryItem( "title", title );
     addQueryItem( "text", text );
