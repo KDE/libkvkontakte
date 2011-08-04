@@ -30,6 +30,7 @@ set(libkvkontakte_SRCS
     getphotouploadserverjob.cpp
     photopostjob.cpp
     mpform.cpp
+    savephotojob.cpp
 
     qintlist.cpp
     util.cpp
