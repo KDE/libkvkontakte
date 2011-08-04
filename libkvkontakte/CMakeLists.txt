@@ -33,6 +33,7 @@ set(libkvkontakte_SRCS
     savephotojob.cpp
     uploadphotosjob.cpp
     photoinfo.cpp
+    photolistjob.cpp
 
     qintlist.cpp
     util.cpp
