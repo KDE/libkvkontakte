@@ -22,8 +22,8 @@
 #define VKONTAKTEJOBS_H
 
 #include "libkvkontakte_export.h"
-#include <KJob>
-#include <QPointer>
+#include <KDE/KJob>
+#include <QtCore/QPointer>
 
 typedef QPair<QString, QString> QueryItem;
 
