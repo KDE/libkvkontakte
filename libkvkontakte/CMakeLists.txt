@@ -81,4 +81,21 @@ install(FILES
     createalbumjob.h
     uploadphotosjob.h
     photoinfo.h
+    userinfo.h
+    messageinfo.h
+    noteinfo.h
+    friendlistjob.h
+    friendjob.h
+    allnoteslistjob.h
+    profilephotojob.h
+    userinfofulljob.h
+    userinfojob.h
+    photojobbase.h
+    noteslistjob.h
+    notejob.h
+    noteaddjob.h
+    allmessageslistjob.h
+    messageslistjob.h
+    discussionslistjob.h
+    getvariablejob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
