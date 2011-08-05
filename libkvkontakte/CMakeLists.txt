@@ -34,6 +34,7 @@ set(libkvkontakte_SRCS
     uploadphotosjob.cpp
     photoinfo.cpp
     photolistjob.cpp
+    getapplicationpermissionsjob.cpp
 
     qintlist.cpp
     util.cpp
