@@ -13,7 +13,7 @@ set(LIBKVKONTAKTE_VERSION_ID "0x0${LIBKVKONTAKTE_VERSION_MAJOR}0${LIBKVKONTAKTE_
 # set up install directories. INCLUDE_INSTALL_DIR and LIB_INSTALL_DIR must not be absolute paths
 set(LIB_INSTALL_DIR_SUFFIX "" CACHE STRING "The directories where to install libraries to")
 set(LIB_INSTALL_DIR lib${LIB_INSTALL_DIR_SUFFIX} )
-set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/libkvkontakte )
+set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/LibKVkontakte )
 
 # Use a versioned install directory for the headers so multiple versions can be installed in parallel
 set(INCLUDE_INSTALL_DIR include )
