@@ -1,5 +1,3 @@
-project(libkvkontakte)
-
 set(libkvkontakte_SRCS
     authenticationdialog.cpp
     userinfojob.cpp
@@ -42,8 +40,7 @@ set(libkvkontakte_SRCS
 )
 
 kde4_add_library(kvkontakte SHARED ${libkvkontakte_SRCS})
-
-set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 # Yes, QJSON_LIBRARIES and QJSON_LIBRARY are both needed, as otherwise it will break either
 # on Linux or on Mac.
@@ -61,16 +58,19 @@ target_link_libraries(kvkontakte
   ${KDEPIMLIBS_KMIME_LIBS}
 )
 
-if(KDEPIM_44_COMPAT)
-  target_link_libraries(kvkontakte ${KDEPIMLIBS_KCAL_LIBS})
-else(KDEPIM_44_COMPAT)
-  target_link_libraries(kvkontakte ${KDEPIMLIBS_KCALCORE_LIBS})
-endif(KDEPIM_44_COMPAT)
+set_target_properties(kvkontakte
+	PROPERTIES
+	VERSION ${LIBKVKONTAKTE_VERSION}
+	SOVERSION ${LIBKVKONTAKTE_VERSION_MAJOR})
 
-set_target_properties(kvkontakte PROPERTIES VERSION ${LIB_VERSION} SOVERSION ${LIB_SOVERSION})
-install(TARGETS kvkontakte ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kvkontakte
+	EXPORT LibKVkontakteExport
+	LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+	ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+	RUNTIME DESTINATION ${BIN_INSTALL_DIR} )
 
 install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/version.h
     libkvkontakte_export.h
     albuminfo.h
     getapplicationpermissionsjob.h
