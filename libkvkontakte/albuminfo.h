@@ -39,6 +39,7 @@ class LIBKVKONTAKTE_EXPORT AlbumInfo : public QObject
     Q_PROPERTY(QString updated WRITE setDateUpdatedString READ dateUpdatedString)
     Q_PROPERTY(int size WRITE setSize READ size)
     Q_PROPERTY(int privacy WRITE setPrivacy READ privacy)
+    Q_PROPERTY(int comment_privacy WRITE setPrivacy READ privacy)
 
 public:
     enum
@@ -91,6 +92,9 @@ public:
     void setPrivacy(int privacy);
     int privacy() const;
 
+    void setCommentPrivacy(int commentPrivacy);
+    int commentPrivacy() const;
+
 private:
     int m_aid;
     int m_thumbId;
@@ -101,6 +105,7 @@ private:
     QString m_dateUpdated;
     int m_size; // number of photos in the album
     int m_privacy;
+    int m_commentPrivacy;
 };
 
 typedef QSharedPointer<AlbumInfo> AlbumInfoPtr;

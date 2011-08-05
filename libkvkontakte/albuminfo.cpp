@@ -24,7 +24,8 @@
 #include <KLocalizedString>
 
 AlbumInfo::AlbumInfo()
-    : m_aid(-1), m_thumbId(-1), m_uid(-1), m_size(-1), m_privacy(PRIVACY_UNKNOWN)
+    : m_aid(-1), m_thumbId(-1), m_uid(-1), m_size(-1)
+    , m_privacy(PRIVACY_UNKNOWN), m_commentPrivacy(PRIVACY_UNKNOWN)
 {
 }
 
@@ -126,4 +127,14 @@ void AlbumInfo::setPrivacy(int privacy)
 int AlbumInfo::privacy() const
 {
     return m_privacy;
+}
+
+void AlbumInfo::setCommentPrivacy(int commentPrivacy)
+{
+    m_commentPrivacy = commentPrivacy;
+}
+
+int AlbumInfo::commentPrivacy() const
+{
+    return m_commentPrivacy;
 }
