@@ -69,3 +69,16 @@ endif(KDEPIM_44_COMPAT)
 
 set_target_properties(kvkontakte PROPERTIES VERSION ${LIB_VERSION} SOVERSION ${LIB_SOVERSION})
 install(TARGETS kvkontakte ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install(FILES
+    libkvkontakte_export.h
+    albuminfo.h
+    getapplicationpermissionsjob.h
+    vkontaktejobs.h
+    authenticationdialog.h
+    albumlistjob.h
+    qintlist.h
+    createalbumjob.h
+    uploadphotosjob.h
+    photoinfo.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
