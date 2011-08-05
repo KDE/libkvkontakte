@@ -10,3 +10,4 @@
 * Incremental loading of friends' photos
 * Incremental loading of private messages
 * News from vkontakte.ru in Akregator (http://vkontakte.ru/developers.php?o=-1&p=newsfeed.get)
+* Use C++ namespace "Vkontakte" for library classes
