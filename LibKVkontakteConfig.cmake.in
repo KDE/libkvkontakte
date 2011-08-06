@@ -15,3 +15,6 @@ include(${myDir}/LibKVkontakteTargets.cmake)
 
 # set the expected library variable
 set(LIBKVKONTAKTE_LIBRARIES kvkontakte )
+
+# system has libkvkontakte
+set(LIBKVKONTAKTE_FOUND true)
