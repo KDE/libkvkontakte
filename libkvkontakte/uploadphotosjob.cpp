@@ -37,6 +37,8 @@ UploadPhotosJob::UploadPhotosJob(const QString &accessToken,
 
 void UploadPhotosJob::start()
 {
+    emit progress(0);
+
     GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(m_accessToken, m_aid, m_gid);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(serverJobFinished(KJob*)));
     m_jobs.append(job);
@@ -117,6 +119,7 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
     }
 
     m_list.append(job->list());
+    emit progress(100 * m_list.size() / m_files.size());
 
     // All subjobs have finished
     if (m_jobs.size() == 0)

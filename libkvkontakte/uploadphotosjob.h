@@ -43,6 +43,9 @@ protected:
     void startPostJob(int offset, int count);
     void startSaveJob(const QMap<QString, QVariant> &photoIdData);
 
+signals:
+    void progress(int);
+
 private slots:
     void serverJobFinished(KJob *);
     void postJobFinished(KJob *);
