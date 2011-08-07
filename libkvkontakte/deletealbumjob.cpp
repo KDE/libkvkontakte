@@ -19,6 +19,7 @@
 #include "deletealbumjob.h"
 #include <QVariant>
 #include <KDebug>
+#include <KLocalizedString>
 
 DeleteAlbumJob::DeleteAlbumJob(const QString &accessToken, int aid)
     : VkontakteJob("photos.deleteAlbum", accessToken, true)
@@ -32,7 +33,7 @@ void DeleteAlbumJob::handleData(const QVariant &data)
     if (data.toInt(&ok) != 1 || !ok)
     {
         setError(1);
-        setErrorText(QString("Failed to delete album"));
+        setErrorText(QString(i18n("Failed to delete album")));
         kWarning() << "Failed to delete album";
     }
 }
