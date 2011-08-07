@@ -24,20 +24,20 @@
 namespace Vkontakte
 {
 
-NoteAddJob::NoteAddJob( const QString &accessToken, const QString &title, const QString &text )
-  : VkontakteJob("notes.add", accessToken, true)
+NoteAddJob::NoteAddJob(const QString &accessToken, const QString &title, const QString &text)
+    : VkontakteJob("notes.add", accessToken, true)
 {
-    addQueryItem( "title", title );
-    addQueryItem( "text", text );
-    addQueryItem( "privacy", "3" );
+    addQueryItem("title", title);
+    addQueryItem("text", text);
+    addQueryItem("privacy", "3");
 }
 
-void NoteAddJob::handleData(const QVariant& data)
+void NoteAddJob::handleData(const QVariant &data)
 {
-    m_nid = data.toMap()["nid"].toString();
+    m_nid = data.toMap()["nid"].toInt();
 }
 
-QString NoteAddJob::nid() const
+int NoteAddJob::nid() const
 {
     return m_nid;
 }

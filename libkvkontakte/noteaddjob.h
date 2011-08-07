@@ -40,15 +40,15 @@ public:
     * @param message The actual content of the note.
     * @param accessToken The accessToken to add content to facebook
     */
-    NoteAddJob( const QString &subject, const QString &message, const QString &accessToken );
-    
-    QString nid() const;
+    NoteAddJob(const QString &subject, const QString &message, const QString &accessToken);
+
+    int nid() const;
 
 protected:
-    virtual void handleData( const QVariant& data );
+    virtual void handleData(const QVariant &data);
     
 private:
-    QString m_nid;
+    int m_nid;
 };
 
 } /* namespace Vkontakte */
