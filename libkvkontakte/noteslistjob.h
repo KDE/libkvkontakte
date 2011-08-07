@@ -36,9 +36,9 @@ public:
     * @param offset Offset in the list of all notes
     * @param count Number of notes to retrieve (limited to 100)
     **/
-    NotesListJob( const QString &accessToken, const QString &uid, int offset, int count );
+    NotesListJob(const QString &accessToken, int uid, int offset, int count);
 
-    QList<NoteInfoPtr> notes() const;
+    QList<NoteInfoPtr> list() const;
     int totalCount() const;
 
 protected:
@@ -46,13 +46,13 @@ protected:
     * @brief Handles the data returned by the VkontakteGetJob
     * @param data A JSON string containing the data.
     */
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
 
-    void handleItem(const QVariant& data);
+    void handleItem(const QVariant &data);
 
 private:
     int m_totalCount; // number of all notes, not only notes retrieved in this request
-    QList<NoteInfoPtr> m_notes;
+    QList<NoteInfoPtr> m_list;
 };
 
 } /* namespace Vkontakte */

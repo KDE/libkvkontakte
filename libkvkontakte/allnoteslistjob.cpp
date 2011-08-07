@@ -17,13 +17,74 @@
    Boston, MA 02110-1301, USA.
 */
 #include "allnoteslistjob.h"
+#include <KDebug>
 
 namespace Vkontakte
 {
 
-AllNotesListJob::AllNotesListJob(const QString& accessToken, const QString& uid)
-    : NotesListJob(accessToken, uid, 0, 100)
+AllNotesListJob::AllNotesListJob(const QString &accessToken, int uid)
+    : KJobWithSubjobs()
+    , m_accessToken(accessToken)
+    , m_uid(uid)
 {
+    m_totalCount = -1;
+}
+
+void AllNotesListJob::startNewJob(int offset, int count)
+{
+    Q_ASSERT(out == 0 || out == 1);
+
+    NotesListJob *job = new NotesListJob(m_accessToken, m_uid, offset, count);
+    connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
+    m_jobs.append(job);
+    job->start();
+}
+
+void AllNotesListJob::start()
+{
+    startNewJob(0, 100);
+}
+
+void AllNotesListJob::jobFinished(KJob *kjob)
+{
+    NotesListJob *job = dynamic_cast<NotesListJob *>(kjob);
+    Q_ASSERT(job);
+    m_jobs.removeAll(job);
+    if (job->error()) {
+        setError(job->error());
+        setErrorText(job->errorText());
+        kWarning() << "Job error: " << job->errorString();
+        return;
+    }
+
+    m_list.append(job->list());
+
+    // If this was the first job, start all others
+    if (m_totalCount == -1) {
+        m_totalCount = job->totalCount();
+        for (int offset = 100; offset < m_totalCount; offset += 100)
+            startNewJob(offset, qMin(100, m_totalCount - offset));
+    }
+    else {
+        // TODO: some new notes might have been added, what should we do then?
+        Q_ASSERT(m_totalCount == listJob->totalCount());
+    }
+
+    // All jobs have finished
+    if (m_jobs.size() == 0) {
+//        qSort(m_list); // sort by message ID (which should be equivalent to sorting by date)
+        emitResult();
+    }
+}
+
+QList<NoteInfoPtr> AllNotesListJob::list() const
+{
+    return m_list;
+}
+
+int AllNotesListJob::count() const
+{
+    return m_list.size();
 }
 
 } /* namespace Vkontakte */

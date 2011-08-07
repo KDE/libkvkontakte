@@ -23,38 +23,37 @@
 namespace Vkontakte
 {
 
-NotesListJob::NotesListJob(const QString& accessToken,
-                           const QString& uid, int offset, int count)
+NotesListJob::NotesListJob(const QString &accessToken,
+                           int uid, int offset, int count)
     : VkontakteJob ("notes.get", accessToken)
 {
     // Not passing "nids", because we want all notes.
 
-    addQueryItem("uid", uid);
+    addQueryItem("uid", QString::number(uid));
     addQueryItem("sort", "1"); // ascending by date
     addQueryItem("count", QString::number(count));
     addQueryItem("offset", QString::number(offset));
 }
 
-void NotesListJob::handleItem(const QVariant& data)
+void NotesListJob::handleItem(const QVariant &data)
 {
     NoteInfoPtr item(new NoteInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    m_notes.append(item);
+    m_list.append(item);
 }
 
-void NotesListJob::handleData(const QVariant& data)
+void NotesListJob::handleData(const QVariant &data)
 {
     QVariantList list = data.toList();
     m_totalCount = list[0].toInt();
     list.pop_front();
-    foreach (const QVariant &item, list) {
+    foreach (const QVariant &item, list)
         handleItem(item);
-    }
 }
 
-QList<NoteInfoPtr> NotesListJob::notes() const
+QList<NoteInfoPtr> NotesListJob::list() const
 {
-    return m_notes;
+    return m_list;
 }
 
 int NotesListJob::totalCount() const

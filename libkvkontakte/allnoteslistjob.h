@@ -24,11 +24,29 @@
 namespace Vkontakte
 {
 
-// FIXME: stub, this returns only 100 notes!
-class LIBKVKONTAKTE_EXPORT AllNotesListJob : public NotesListJob
+class LIBKVKONTAKTE_EXPORT AllNotesListJob : public KJobWithSubjobs
 {
+    Q_OBJECT
 public:
-    AllNotesListJob(const QString &accessToken, const QString &uid);
+    AllNotesListJob(const QString &accessToken, int uid);
+
+    virtual void start();
+
+    QList<NoteInfoPtr> list() const;
+    int count() const;
+
+protected:
+    void startNewJob(int offset, int count);
+
+private slots:
+    void jobFinished(KJob *kjob);
+
+private:
+    QString m_accessToken;
+    int m_uid;
+
+    int m_totalCount;
+    QList<NoteInfoPtr> m_list;
 };
 
 } /* namespace Vkontakte */
