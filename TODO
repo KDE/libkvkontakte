@@ -1,13 +1,6 @@
 * Private messages are truncated at around 2000 characters (vkontakte.ru issue?)
 * Sending private messages
-* Editing notes
-* Sync read/unread status of private messages
-* KIPI plugin for photo albums
-* Handle chat messages (multi-user discussions using private messages)
 * Handle attachments in private messages
-* Parse phone numbers (requested by Nikolay Rysev)
 * vkontakte.ru support in Telepathy-KDE and/or Kopete (how about a messaging framework that could be used for both Kopete and Telepathy-KDE?)
-* Incremental loading of friends' photos
-* Incremental loading of private messages
 * News from vkontakte.ru in Akregator (http://vkontakte.ru/developers.php?o=-1&p=newsfeed.get)
 * Use C++ namespace "Vkontakte" for library classes
