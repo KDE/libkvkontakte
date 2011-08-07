@@ -26,12 +26,13 @@ namespace Vkontakte
 {
 
 UploadPhotosJob::UploadPhotosJob(const QString &accessToken,
-                                 const QStringList &files, int aid, int gid)
+                                 const QStringList &files, bool saveBig, int aid, int gid)
     : KJobWithSubjobs()
     , m_accessToken(accessToken)
     , m_files(files)
     , m_aid(aid)
     , m_gid(gid)
+    , m_saveBig(saveBig)
 {
 }
 
@@ -39,7 +40,7 @@ void UploadPhotosJob::start()
 {
     emit progress(0);
 
-    GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(m_accessToken, m_aid, m_gid);
+    GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(m_accessToken, m_saveBig, m_aid, m_gid);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(serverJobFinished(KJob*)));
     m_jobs.append(job);
     job->start();

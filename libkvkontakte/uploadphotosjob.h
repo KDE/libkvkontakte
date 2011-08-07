@@ -33,7 +33,7 @@ class LIBKVKONTAKTE_EXPORT UploadPhotosJob : public KJobWithSubjobs
     Q_OBJECT
 public:
     UploadPhotosJob(const QString &accessToken,
-                    const QStringList &files, int aid, int gid = -1);
+                    const QStringList &files, bool saveBig, int aid, int gid = -1);
 
     virtual void start();
 
@@ -56,6 +56,7 @@ private:
     QStringList m_files;
     int m_aid;
     int m_gid;
+    bool m_saveBig;
 
     QString m_uploadUrl;
     QList<PhotoInfoPtr> m_list;

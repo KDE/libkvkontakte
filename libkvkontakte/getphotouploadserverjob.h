@@ -27,7 +27,7 @@ namespace Vkontakte
 class LIBKVKONTAKTE_EXPORT GetPhotoUploadServerJob : public VkontakteJob
 {
 public:
-    GetPhotoUploadServerJob(const QString &accessToken, int aid, int gid = -1);
+    GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid = -1);
 
     QString uploadUrl() const;
 

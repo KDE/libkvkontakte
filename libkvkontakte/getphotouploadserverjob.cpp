@@ -22,12 +22,14 @@
 namespace Vkontakte
 {
 
-GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, int aid, int gid)
+GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid)
     : VkontakteJob("photos.getUploadServer", accessToken)
 {
     addQueryItem("aid", QString::number(aid));
     if (gid != -1)
         addQueryItem("gid", QString::number(gid));
+    if (saveBig)
+        addQueryItem("save_big", "1");
 }
 
 void GetPhotoUploadServerJob::handleData(const QVariant &data)
