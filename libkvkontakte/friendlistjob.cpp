@@ -21,6 +21,9 @@
 
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 FriendListJob::FriendListJob( const QString& accessToken, const QString &uid )
     : VkontakteJob( "friends.get", accessToken )
 {
@@ -41,5 +44,7 @@ void FriendListJob::handleData( const QVariant& data )
         m_friends.append( userInfo );
     }
 }
+
+} /* namespace Vkontakte */
 
 #include "friendlistjob.moc"

@@ -62,4 +62,4 @@
 //     QList<UserInfoPtr> mFriendInfo;
 // };
 
-#endif
+#endif // FRIENDJOB_H

@@ -23,6 +23,9 @@
 #include <KDebug>
 #include <KLocalizedString>
 
+namespace Vkontakte
+{
+
 AlbumInfo::AlbumInfo()
     : m_aid(-1), m_thumbId(-1), m_uid(-1), m_size(-1)
     , m_privacy(PRIVACY_UNKNOWN), m_commentPrivacy(PRIVACY_UNKNOWN)
@@ -138,3 +141,5 @@ int AlbumInfo::commentPrivacy() const
 {
     return m_commentPrivacy;
 }
+
+} /* namespace Vkontakte */

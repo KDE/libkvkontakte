@@ -26,6 +26,8 @@
 #include <KDebug>
 #include <KLocale>
 
+namespace Vkontakte
+{
 
 bool KJobWithSubjob::doKill()
 {
@@ -340,5 +342,7 @@ void VkontakteGetIdJob::handleData(const QVariant &data)
     }
   }
 }*/
+
+} /* namespace Vkontakte */
 
 #include "vkontaktejobs.moc"

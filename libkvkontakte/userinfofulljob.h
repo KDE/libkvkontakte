@@ -22,6 +22,9 @@
 #include <KJob>
 #include "userinfojob.h"
 
+namespace Vkontakte
+{
+
 class CidsNamesJob;
 
 class LIBKVKONTAKTE_EXPORT UserInfoFullJob : public KJob
@@ -63,5 +66,7 @@ private:
 
     QList<UserInfoPtr> m_userInfo;
 };
+
+} /* namespace Vkontakte */
 
 #endif // USERINFOFULLJOB_H

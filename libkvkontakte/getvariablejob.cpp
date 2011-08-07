@@ -18,6 +18,9 @@
 */
 #include "getvariablejob.h"
 
+namespace Vkontakte
+{
+
 GetVariableJob::GetVariableJob(const QString& accessToken, int index)
     : VkontakteJob("getVariable", accessToken)
 {
@@ -33,3 +36,5 @@ QVariant GetVariableJob::variable() const
 {
     return m_variable;
 }
+
+} /* namespace Vkontakte */

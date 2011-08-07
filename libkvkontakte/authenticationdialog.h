@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef AUTHENTICATIONWIDGET_H
-#define AUTHENTICATIONWIDGET_H
+#ifndef AUTHENTICATIONDIALOG_H
+#define AUTHENTICATIONDIALOG_H
 
 #include "libkvkontakte_export.h"
 
@@ -26,6 +26,9 @@
 
 class KWebView;
 class QProgressBar;
+
+namespace Vkontakte
+{
 
 class LIBKVKONTAKTE_EXPORT AuthenticationDialog : public KDialog
 {
@@ -54,4 +57,6 @@ class LIBKVKONTAKTE_EXPORT AuthenticationDialog : public KDialog
     QString mErrorDescription;
 };
 
-#endif
+} /* namespace Vkontakte */
+
+#endif // AUTHENTICATIONDIALOG_H

@@ -19,7 +19,12 @@
 #include "profilephotojob.h"
 #include "userinfo.h"
 
+namespace Vkontakte
+{
+
 ProfilePhotoJob::ProfilePhotoJob(const UserInfoPtr &userInfo)
     : PhotoJobBase( KUrl(userInfo->photoMedium()) )
 {
 }
+
+} /* namespace Vkontakte */

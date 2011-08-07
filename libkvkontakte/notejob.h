@@ -22,6 +22,9 @@
 #include "vkontaktejobs.h"
 #include "noteinfo.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT NoteJob : public VkontakteJob
 {
     Q_OBJECT
@@ -36,5 +39,7 @@ protected:
 private:
     NoteInfoPtr m_noteInfo;
 };
+
+} /* namespace Vkontakte */
 
 #endif // NOTEJOB_H

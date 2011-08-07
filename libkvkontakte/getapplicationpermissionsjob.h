@@ -21,6 +21,9 @@
 
 #include "vkontaktejobs.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT GetApplicationPermissionsJob : public VkontakteJob
 {
 public:
@@ -34,5 +37,7 @@ protected:
 private:
     int m_permissions;
 };
+
+} /* namespace Vkontakte */
 
 #endif // GETAPPLICATIONPERMISSIONSJOB_H

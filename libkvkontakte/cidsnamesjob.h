@@ -23,6 +23,8 @@
 #include <QtCore/QMap>
 #include "qintlist.h"
 
+namespace Vkontakte
+{
 
 class CidsNamesJob : public VkontakteJob
 {
@@ -39,5 +41,7 @@ protected:
     QIntList m_cids;
     QMap<int, QString> m_names; // cid -> name
 };
+
+} /* namespace Vkontakte */
 
 #endif // CIDSNAMESJOB_H

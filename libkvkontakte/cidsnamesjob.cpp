@@ -20,6 +20,9 @@
 #include <QtCore/QMap>
 #include <QVariant>
 
+namespace Vkontakte
+{
+
 // http://vkontakte.ru/developers.php?o=-1&p=places.getCountryById
 CidsNamesJob::CidsNamesJob(const QString &method,
                            const QString& accessToken,
@@ -44,3 +47,5 @@ QMap<int, QString> CidsNamesJob::names() const
 {
     return m_names;
 }
+
+} /* namespace Vkontakte */

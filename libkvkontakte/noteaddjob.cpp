@@ -21,6 +21,9 @@
 
 #include <QVariant>
 
+namespace Vkontakte
+{
+
 NoteAddJob::NoteAddJob( const QString &accessToken, const QString &title, const QString &text )
   : VkontakteJob("notes.add", accessToken, true)
 {
@@ -38,5 +41,7 @@ QString NoteAddJob::nid() const
 {
     return m_nid;
 }
+
+} /* namespace Vkontakte */
 
 #include "noteaddjob.moc"

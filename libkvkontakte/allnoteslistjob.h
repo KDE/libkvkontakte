@@ -21,6 +21,8 @@
 
 #include <libkvkontakte/noteslistjob.h>
 
+namespace Vkontakte
+{
 
 // FIXME: stub, this returns only 100 notes!
 class LIBKVKONTAKTE_EXPORT AllNotesListJob : public NotesListJob
@@ -28,5 +30,7 @@ class LIBKVKONTAKTE_EXPORT AllNotesListJob : public NotesListJob
 public:
     AllNotesListJob(const QString &accessToken, const QString &uid);
 };
+
+} /* namespace Vkontakte */
 
 #endif // ALLNOTESLISTJOB_H

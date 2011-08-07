@@ -53,4 +53,4 @@ private:
     QByteArray m_boundary;
 };
 
-#endif /* MPFORM_H */
+#endif // MPFORM_H

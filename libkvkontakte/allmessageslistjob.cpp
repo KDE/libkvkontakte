@@ -22,6 +22,9 @@
 
 #include <KDebug>
 
+namespace Vkontakte
+{
+
 AllMessagesListJob::AllMessagesListJob(const QString& accessToken,
                                        int out, int previewLength,
                                        int filters, int timeOffset)
@@ -101,3 +104,5 @@ int AllMessagesListJob::count() const
 {
     return m_list.size();
 }
+
+} /* namespace Vkontakte */

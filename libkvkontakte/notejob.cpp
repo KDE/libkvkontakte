@@ -19,6 +19,9 @@
 #include "notejob.h"
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 // http://vkontakte.ru/developers.php?o=-1&p=notes.getById
 NoteJob::NoteJob(const QString& accessToken, int nid)
     : VkontakteJob("notes.getById", accessToken)
@@ -37,3 +40,5 @@ NoteInfoPtr NoteJob::noteInfo()
 {
     return m_noteInfo;
 }
+
+} /* namespace Vkontakte */

@@ -25,6 +25,9 @@
 #include <QVariant>
 #include "photoinfo.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT UploadPhotosJob : public KJobWithSubjobs
 {
     Q_OBJECT
@@ -54,5 +57,7 @@ private:
     QString m_uploadUrl;
     QList<PhotoInfoPtr> m_list;
 };
+
+} /* namespace Vkontakte */
 
 #endif // UPLOADPHOTOSJOB_H

@@ -26,6 +26,9 @@
 #include <QSharedPointer>
 #include <QDate>
 
+namespace Vkontakte
+{
+
 /**
 * Class that describes a person on facebook
 */
@@ -220,6 +223,9 @@ private:
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;
-Q_DECLARE_METATYPE(UserInfoPtr)
+
+} /* namespace Vkontakte */
+
+Q_DECLARE_METATYPE(Vkontakte::UserInfoPtr)
 
 #endif // USERINFO_H

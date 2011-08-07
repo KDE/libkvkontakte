@@ -19,6 +19,9 @@
 #include "albumlistjob.h"
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 AlbumListJob::AlbumListJob(const QString &accessToken, int uid, const QIntList &aids)
     : VkontakteJob("photos.getAlbums", accessToken)
 {
@@ -45,3 +48,5 @@ QList<AlbumInfoPtr> AlbumListJob::list() const
 {
     return m_list;
 }
+
+} /* namespace Vkontakte */

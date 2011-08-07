@@ -28,6 +28,9 @@
 #include <QLabel>
 #include <QProgressBar>
 
+namespace Vkontakte
+{
+
 AuthenticationDialog::AuthenticationDialog( QWidget* parent )
   : KDialog(parent)
 {
@@ -122,5 +125,6 @@ void AuthenticationDialog::urlChanged( const QUrl& url )
   }
 }
 
+} /* namespace Vkontakte */
 
 #include "authenticationdialog.moc"

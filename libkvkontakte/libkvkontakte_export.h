@@ -33,4 +33,4 @@
 # endif
 #endif
 
-#endif
+#endif // LIBKVKONTAKTE_EXPORT_H

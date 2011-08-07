@@ -22,6 +22,9 @@
 #include <KJob>
 #include "messageslistjob.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT AllMessagesListJob : public KJobWithSubjobs
 {
     Q_OBJECT
@@ -60,5 +63,7 @@ private:
     int m_totalCount[2];
     QList<MessageInfoPtr> m_list;
 };
+
+} /* namespace Vkontakte */
 
 #endif // ALLMESSAGESLISTJOB_H

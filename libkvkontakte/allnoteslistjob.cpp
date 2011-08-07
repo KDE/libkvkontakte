@@ -18,7 +18,12 @@
 */
 #include "allnoteslistjob.h"
 
+namespace Vkontakte
+{
+
 AllNotesListJob::AllNotesListJob(const QString& accessToken, const QString& uid)
     : NotesListJob(accessToken, uid, 0, 100)
 {
 }
+
+} /* namespace Vkontakte */

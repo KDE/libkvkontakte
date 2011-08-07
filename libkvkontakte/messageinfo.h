@@ -26,6 +26,9 @@
 #include <QtCore/QDate>
 #include <QtCore/QString>
 
+namespace Vkontakte
+{
+
 /**
 * Class that describes a private message on vkontakte.ru
 */
@@ -127,5 +130,7 @@ public:
      **/
     bool operator<(const MessageInfoPtr &o) const;
 };
+
+} /* namespace Vkontakte */
 
 #endif // MESSAGEINFO_H

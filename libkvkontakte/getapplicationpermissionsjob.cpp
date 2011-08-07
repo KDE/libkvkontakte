@@ -19,6 +19,9 @@
 #include "getapplicationpermissionsjob.h"
 #include <QVariant>
 
+namespace Vkontakte
+{
+
 // http://vkontakte.ru/developers.php?o=-1&p=getUserSettings
 // http://vkontakte.ru/developers.php?o=-1&p=%CF%F0%E0%E2%E0%20%EF%F0%E8%EB%EE%E6%E5%ED%E8%E9
 GetApplicationPermissionsJob::GetApplicationPermissionsJob(const QString &accessToken)
@@ -35,3 +38,5 @@ int GetApplicationPermissionsJob::permissions() const
 {
     return m_permissions;
 }
+
+} /* namespace Vkontakte */

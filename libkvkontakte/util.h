@@ -27,4 +27,4 @@
  */
 KDateTime unixTimeToKDateTime(const QString& unixTime);
 
-#endif
+#endif // UTIL_H

@@ -22,6 +22,9 @@
 #include "vkontaktejobs.h"
 #include "albuminfo.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT CreateAlbumJob : public VkontakteJob
 {
 public:
@@ -38,5 +41,7 @@ protected:
 private:
     AlbumInfoPtr m_album;
 };
+
+} /* namespace Vkontakte */
 
 #endif // CREATEALBUMJOB_H

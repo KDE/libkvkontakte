@@ -24,6 +24,9 @@
 #include <KDebug>
 #include <KLocalizedString>
 
+namespace Vkontakte
+{
+
 void NoteInfo::setNid(int nid)
 {
     m_nid = nid;
@@ -108,3 +111,5 @@ void NoteInfo::setReadNcom (int readNcom)
 {
     m_readNcom = readNcom;
 }
+
+} /* namespace Vkontakte */

@@ -21,6 +21,9 @@
 
 #include "getvariablejob.h"
 
+namespace Vkontakte
+{
+
 /// For reading current user's id.
 class LIBKVKONTAKTE_EXPORT CurrentUserJob : public GetVariableJob
 {
@@ -30,5 +33,7 @@ public:
     
     QString uid() const;
 };
+
+} /* namespace Vkontakte */
 
 #endif // CURRENTUSERJOB_H

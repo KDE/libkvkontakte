@@ -25,6 +25,9 @@
 #include <KDebug>
 #include <KLocale>
 
+namespace Vkontakte
+{
+
 // http://vkontakte.ru/developers.php?o=-1&p=getProfiles
 UserInfoJob::UserInfoJob ( const QString& accessToken )
     : VkontakteJob ("getProfiles", accessToken)
@@ -81,5 +84,7 @@ void UserInfoJob::handleData(const QVariant& data)
         m_userInfo.append( handleSingleData(item) );
     }    
 }
+
+} /* namespace Vkontakte */
 
 #include "userinfojob.moc"

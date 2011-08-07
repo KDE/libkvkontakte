@@ -23,6 +23,9 @@
 #include "userinfo.h"
 #include "vkontaktejobs.h"
 
+namespace Vkontakte
+{
+
 /// Get a list of friends of the user
 class LIBKVKONTAKTE_EXPORT FriendListJob : public VkontakteJob
 {
@@ -38,4 +41,6 @@ private:
     QList<UserInfoPtr> m_friends;
 };
 
-#endif
+} /* namespace Vkontakte */
+
+#endif // FRIENDLISTJOB_H

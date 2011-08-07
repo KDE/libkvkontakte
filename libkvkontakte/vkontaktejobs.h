@@ -25,6 +25,9 @@
 #include <KDE/KJob>
 #include <QtCore/QPointer>
 
+namespace Vkontakte
+{
+
 typedef QPair<QString, QString> QueryItem;
 
 class LIBKVKONTAKTE_EXPORT KJobWithSubjob : public KJob
@@ -87,4 +90,6 @@ private slots:
     void jobFinished(KJob *job);
 };
 
-#endif
+} /* namespace Vkontakte */
+
+#endif // VKONTAKTEJOBS_H

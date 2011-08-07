@@ -21,6 +21,9 @@
 #include "userinfojob.h"
 #include "cidsnamesjob.h"
 
+namespace Vkontakte
+{
+
 UserInfoFullJob::UserInfoFullJob(const QString &accessToken,
                                  const QIntList &uids,
                                  bool needCountryNames, bool needCityNames)
@@ -148,3 +151,5 @@ QList<UserInfoPtr> UserInfoFullJob::userInfo() const
 {
     return m_userInfo;
 }
+
+} /* namespace Vkontakte */

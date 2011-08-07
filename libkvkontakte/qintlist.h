@@ -23,6 +23,9 @@
 
 #include <QtCore/QList>
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT QIntList : public QList<int>
 {
 public:
@@ -31,5 +34,7 @@ public:
 
     QString join() const;
 };
+
+} /* namespace Vkontakte */
 
 #endif // QINTLIST_H

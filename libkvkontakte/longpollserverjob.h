@@ -22,6 +22,8 @@
 #include <libkvkontakte/vkontaktejobs.h>
 #include "longpollserverinfo.h"
 
+namespace Vkontakte
+{
 
 class LIBKVKONTAKTE_EXPORT LongPollServerJob : public VkontakteJob
 {
@@ -36,5 +38,7 @@ protected:
 private:
     LongPollServerInfoPtr m_serverInfo;
 };
+
+} /* namespace Vkontakte */
 
 #endif // LONGPOLLSERVERJOB_H

@@ -22,6 +22,9 @@
 #include "vkontaktejobs.h"
 #include "noteinfo.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT NotesListJob : public VkontakteJob
 {
     Q_OBJECT
@@ -51,5 +54,7 @@ private:
     int m_totalCount; // number of all notes, not only notes retrieved in this request
     QList<NoteInfoPtr> m_notes;
 };
+
+} /* namespace Vkontakte */
 
 #endif // NOTESLISTJOB_H

@@ -24,6 +24,9 @@
 #include "vkontaktejobs.h"
 #include "photoinfo.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT SavePhotoJob : public VkontakteJob
 {
 public:
@@ -39,5 +42,7 @@ protected:
 private:
     QList<PhotoInfoPtr> m_list;
 };
+
+} /* namespace Vkontakte */
 
 #endif // SAVEPHOTOJOB_H

@@ -18,6 +18,9 @@
 */
 #include "currentuserjob.h"
 
+namespace Vkontakte
+{
+
 CurrentUserJob::CurrentUserJob(const QString& accessToken)
     : GetVariableJob(accessToken, 1280)
 {
@@ -27,3 +30,5 @@ QString CurrentUserJob::uid() const
 {
     return QString::number(variable().toInt());
 }
+
+} /* namespace Vkontakte */

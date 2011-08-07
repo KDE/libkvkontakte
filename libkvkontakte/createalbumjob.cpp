@@ -19,6 +19,9 @@
 #include "createalbumjob.h"
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 CreateAlbumJob::CreateAlbumJob(const QString &accessToken,
                                const QString &title, const QString &description,
                                int privacy, int comment_privacy)
@@ -43,3 +46,5 @@ AlbumInfoPtr CreateAlbumJob::album() const
 {
     return m_album;
 }
+
+} /* namespace Vkontakte */

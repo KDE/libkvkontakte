@@ -24,6 +24,9 @@
 #include <KDateTime>
 #include <QtCore/QObject>
 
+namespace Vkontakte
+{
+
 // http://vkontakte.ru/developers.php?o=-1&p=photos.get
 class LIBKVKONTAKTE_EXPORT PhotoInfo : public QObject
 {
@@ -100,5 +103,7 @@ private:
 };
 
 typedef QSharedPointer<PhotoInfo> PhotoInfoPtr;
+
+} /* namespace Vkontakte */
 
 #endif // PHOTOINFO_H

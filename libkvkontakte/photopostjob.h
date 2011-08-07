@@ -27,6 +27,9 @@
 #include <QVariant>
 #include "vkontaktejobs.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT PhotoPostJob : public KJobWithSubjob
 {
     Q_OBJECT
@@ -52,5 +55,7 @@ private:
     bool m_ok;
     QMap<QString, QVariant> m_response;
 };
+
+} /* namespace Vkontakte */
 
 #endif // PHOTOPOSTJOB_H

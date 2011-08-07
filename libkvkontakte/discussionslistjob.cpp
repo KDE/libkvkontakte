@@ -19,6 +19,9 @@
 #include "discussionslistjob.h"
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 DiscussionsListJob::DiscussionsListJob(const QString& accessToken, int offset, int count, int previewLength)
     : VkontakteJob("messages.getDialogs", accessToken)
 {
@@ -55,3 +58,5 @@ int DiscussionsListJob::totalCount() const
 {
     return m_totalCount;
 }
+
+} /* namespace Vkontakte */

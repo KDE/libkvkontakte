@@ -19,6 +19,9 @@
 #include "qintlist.h"
 #include <QtCore/QString>
 
+namespace Vkontakte
+{
+
 QIntList::QIntList()
 {
 }
@@ -40,3 +43,5 @@ QString QIntList::join() const
 
     return res;
 }
+
+} /* namespace Vkontakte */

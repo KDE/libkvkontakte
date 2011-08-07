@@ -20,6 +20,8 @@
 #include <KIO/Job>
 #include <KDebug>
 
+namespace Vkontakte
+{
 
 PhotoJobBase::PhotoJobBase(const KUrl &url)
     : m_url(url)
@@ -54,3 +56,5 @@ QImage PhotoJobBase::photo() const
 {
     return m_photo;
 }
+
+} /* namespace Vkontakte */

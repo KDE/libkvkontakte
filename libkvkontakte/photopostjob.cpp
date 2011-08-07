@@ -24,6 +24,9 @@
 #include "photopostjob.h"
 #include "mpform.h"
 
+namespace Vkontakte
+{
+
 PhotoPostJob::PhotoPostJob(const QString &url, const QStringList &files)
     : m_url(url)
     , m_files(files)
@@ -124,3 +127,5 @@ QMap<QString, QVariant> PhotoPostJob::response() const
 {
     return m_response;
 }
+
+} /* namespace Vkontakte */

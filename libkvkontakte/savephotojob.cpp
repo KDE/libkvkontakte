@@ -19,6 +19,9 @@
 #include "savephotojob.h"
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 SavePhotoJob::SavePhotoJob(const QString &accessToken,
                            const QMap<QString, QVariant> &photoIdData, int gid)
     : VkontakteJob("photos.save", accessToken, true)
@@ -50,3 +53,5 @@ QList<PhotoInfoPtr> SavePhotoJob::list() const
 {
     return m_list;
 }
+
+} /* namespace Vkontakte */

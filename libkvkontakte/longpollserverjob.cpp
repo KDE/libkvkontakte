@@ -19,6 +19,9 @@
 #include <qjson/qobjecthelper.h>
 #include "longpollserverjob.h"
 
+namespace Vkontakte
+{
+
 LongPollServerJob::LongPollServerJob(const QString& accessToken)
     : VkontakteJob("messages.getLongPollServer", accessToken)
 {
@@ -34,3 +37,5 @@ LongPollServerInfoPtr LongPollServerJob::serverInfo()
 {
     return m_serverInfo;
 }
+
+} /* namespace Vkontakte */

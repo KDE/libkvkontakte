@@ -21,6 +21,9 @@
 
 #include "vkontaktejobs.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT DeleteAlbumJob : public VkontakteJob
 {
 public:
@@ -29,5 +32,7 @@ public:
 protected:
     virtual void handleData(const QVariant &data);
 };
+
+} /* namespace Vkontakte */
 
 #endif // DELETEALBUMJOB_H

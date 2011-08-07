@@ -21,6 +21,9 @@
 #include <KDebug>
 #include <KLocalizedString>
 
+namespace Vkontakte
+{
+
 DeleteAlbumJob::DeleteAlbumJob(const QString &accessToken, int aid)
     : VkontakteJob("photos.deleteAlbum", accessToken, true)
 {
@@ -37,3 +40,5 @@ void DeleteAlbumJob::handleData(const QVariant &data)
         kWarning() << "Failed to delete album";
     }
 }
+
+} /* namespace Vkontakte */

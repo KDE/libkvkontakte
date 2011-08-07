@@ -21,6 +21,9 @@
 
 #include "vkontaktejobs.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT GetPhotoUploadServerJob : public VkontakteJob
 {
 public:
@@ -34,5 +37,7 @@ protected:
 private:
     QString m_uploadUrl;
 };
+
+} /* namespace Vkontakte */
 
 #endif // GETPHOTOUPLOADSERVERJOB_H

@@ -24,6 +24,9 @@
 #include <KDateTime>
 #include <QtCore/QObject>
 
+namespace Vkontakte
+{
+
 // http://vkontakte.ru/developers.php?o=-1&p=photos.getAlbums
 class LIBKVKONTAKTE_EXPORT AlbumInfo : public QObject
 {
@@ -109,5 +112,7 @@ private:
 };
 
 typedef QSharedPointer<AlbumInfo> AlbumInfoPtr;
+
+} /* namespace Vkontakte */
 
 #endif // ALBUMINFO_H

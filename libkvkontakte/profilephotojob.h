@@ -21,11 +21,16 @@
 
 #include "photojobbase.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT ProfilePhotoJob : public PhotoJobBase
 {
     Q_OBJECT
 public:
     ProfilePhotoJob(const UserInfoPtr &userInfo);
 };
+
+} /* namespace Vkontakte */
 
 #endif // PROFILEPHOTOJOB_H

@@ -22,6 +22,9 @@
 #include "photopostjob.h"
 #include "savephotojob.h"
 
+namespace Vkontakte
+{
+
 UploadPhotosJob::UploadPhotosJob(const QString &accessToken,
                                  const QStringList &files, int aid, int gid)
     : KJobWithSubjobs()
@@ -124,3 +127,5 @@ QList<PhotoInfoPtr> UploadPhotosJob::list() const
 {
     return m_list;
 }
+
+} /* namespace Vkontakte */

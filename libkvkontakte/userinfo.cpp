@@ -24,6 +24,9 @@
 #include <KDebug>
 #include <QtCore/QStringList>
 
+namespace Vkontakte
+{
+
 UserInfo::UserInfo()
     : m_timezone(INVALID_TIMEZONE)
 {
@@ -226,3 +229,5 @@ QString UserInfo::mobilePhone() const
 {
     return m_mobilePhone;
 }
+
+} /* namespace Vkontakte */

@@ -19,6 +19,9 @@
 #include "getphotouploadserverjob.h"
 #include <QVariant>
 
+namespace Vkontakte
+{
+
 GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, int aid, int gid)
     : VkontakteJob("photos.getUploadServer", accessToken)
 {
@@ -36,3 +39,5 @@ QString GetPhotoUploadServerJob::uploadUrl() const
 {
     return m_uploadUrl;
 }
+
+} /* namespace Vkontakte */

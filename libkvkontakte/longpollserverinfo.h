@@ -23,6 +23,9 @@
 
 #include <QSharedPointer>
 
+namespace Vkontakte
+{
+
 /**
 * Class that describes a person on facebook
 */
@@ -63,5 +66,7 @@ private:
 };
 
 typedef QSharedPointer<LongPollServerInfo> LongPollServerInfoPtr;
+
+} /* namespace Vkontakte */
 
 #endif // LONGPOLLSERVERINFO_H

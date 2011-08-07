@@ -22,6 +22,9 @@
 #include <QtCore/QRegExp>
 #include <KDebug>
 
+namespace Vkontakte
+{
+
 MessageInfo::MessageInfo()
     : m_readState(0), m_out(0)
 {
@@ -153,3 +156,5 @@ bool MessageInfoPtr::operator<(const MessageInfoPtr &o) const
 {
     return (*this)->mid() < o->mid();
 }
+
+} /* namespace Vkontakte */

@@ -21,6 +21,9 @@
 #include <KDebug>
 #include <KLocalizedString>
 
+namespace Vkontakte
+{
+
 EditAlbumJob::EditAlbumJob(const QString &accessToken,
                            int aid, const QString &title, const QString& description,
                            int privacy, int comment_privacy)
@@ -46,3 +49,5 @@ void EditAlbumJob::handleData(const QVariant &data)
         kWarning() << "Failed to edit album";
     }
 }
+
+} /* namespace Vkontakte */

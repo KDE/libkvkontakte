@@ -23,6 +23,9 @@
 #include "qintlist.h"
 #include "albuminfo.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT AlbumListJob : public VkontakteJob
 {
     Q_OBJECT
@@ -43,5 +46,7 @@ protected:
 private:
     QList<AlbumInfoPtr> m_list;
 };
+
+} /* namespace Vkontakte */
 
 #endif // ALBUMLISTJOB_H

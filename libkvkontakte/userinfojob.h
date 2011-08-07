@@ -26,6 +26,9 @@
 #include "vkontaktejobs.h"
 #include "qintlist.h"
 
+namespace Vkontakte
+{
+
 /**
  * Get information about multiple users
  *
@@ -80,4 +83,6 @@ private:
     bool m_needCountryNames;
 };
 
-#endif
+} /* namespace Vkontakte */
+
+#endif // USERINFOJOB_H

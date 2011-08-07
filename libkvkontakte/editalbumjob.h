@@ -22,6 +22,9 @@
 #include "vkontaktejobs.h"
 #include "albuminfo.h"
 
+namespace Vkontakte
+{
+
 class LIBKVKONTAKTE_EXPORT EditAlbumJob : public VkontakteJob
 {
 public:
@@ -33,5 +36,7 @@ public:
 protected:
     virtual void handleData(const QVariant &data);
 };
+
+} /* namespace Vkontakte */
 
 #endif // EDITALBUMJOB_H

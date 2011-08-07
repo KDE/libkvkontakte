@@ -23,6 +23,9 @@
 #include <KDebug>
 #include <KLocalizedString>
 
+namespace Vkontakte
+{
+
 PhotoInfo::PhotoInfo()
     : m_pid(-1), m_aid(-1), m_uid(-1)
 {
@@ -132,3 +135,5 @@ KDateTime PhotoInfo::dateCreated() const
 {
     return unixTimeToKDateTime(m_dateCreated);
 }
+
+} /* namespace Vkontakte */

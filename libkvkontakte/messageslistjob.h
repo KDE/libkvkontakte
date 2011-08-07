@@ -22,6 +22,8 @@
 #include <libkvkontakte/vkontaktejobs.h>
 #include <libkvkontakte/messageinfo.h>
 
+namespace Vkontakte
+{
 
 class LIBKVKONTAKTE_EXPORT MessagesListJob : public VkontakteJob
 {
@@ -61,5 +63,7 @@ private:
     int m_totalCount; // number of all messages, not only messages retrieved in this request
     QList<MessageInfoPtr> m_list;
 };
+
+} /* namespace Vkontakte */
 
 #endif // MESSAGESLISTJOB_H

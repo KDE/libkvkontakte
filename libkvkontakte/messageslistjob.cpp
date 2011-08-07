@@ -19,6 +19,9 @@
 #include "messageslistjob.h"
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 MessagesListJob::MessagesListJob(const QString &accessToken,
                                  int out,
                                  int offset, int count, int previewLength,
@@ -65,3 +68,5 @@ int MessagesListJob::out() const
 {
     return m_out;
 }
+
+} /* namespace Vkontakte */

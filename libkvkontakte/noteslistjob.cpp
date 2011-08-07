@@ -20,6 +20,9 @@
 #include <QVariant>
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 NotesListJob::NotesListJob(const QString& accessToken,
                            const QString& uid, int offset, int count)
     : VkontakteJob ("notes.get", accessToken)
@@ -58,3 +61,5 @@ int NotesListJob::totalCount() const
 {
     return m_totalCount;
 }
+
+} /* namespace Vkontakte */

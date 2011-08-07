@@ -19,6 +19,9 @@
 #include "photolistjob.h"
 #include <qjson/qobjecthelper.h>
 
+namespace Vkontakte
+{
+
 // http://vkontakte.ru/developers.php?o=-1&p=photos.get
 //
 // The API also allows to set "limit" and "offset", but that
@@ -50,3 +53,5 @@ QList<PhotoInfoPtr> PhotoListJob::list() const
 {
     return m_list;
 }
+
+} /* namespace Vkontakte */

@@ -25,6 +25,8 @@
 #include "vkontaktejobs.h"
 #include "userinfo.h"
 
+namespace Vkontakte
+{
 
 // KJobWithSubjob::doKill will be inherited
 class LIBKVKONTAKTE_EXPORT PhotoJobBase : public KJobWithSubjob
@@ -43,5 +45,7 @@ private:
     KUrl m_url;
     QImage m_photo;
 };
+
+} /* namespace Vkontakte */
 
 #endif // PHOTOJOBBASE_H

@@ -25,6 +25,9 @@
 #include <KDateTime>
 #include <QtCore/QObject>
 
+namespace Vkontakte
+{
+
 /**
  * Class to represent a facebook note
  */
@@ -114,4 +117,6 @@ private:
 
 typedef QSharedPointer<NoteInfo> NoteInfoPtr;
 
-#endif
+} /* namespace Vkontakte */
+
+#endif // NOTEINFO_H

@@ -21,6 +21,9 @@
 
 #include <KDebug>
 
+namespace Vkontakte
+{
+
 LongPollServerInfo::LongPollServerInfo()
 {
 }
@@ -54,3 +57,5 @@ QString LongPollServerInfo::ts() const
 {
     return m_ts;
 }
+
+} /* namespace Vkontakte */

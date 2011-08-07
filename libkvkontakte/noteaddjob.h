@@ -23,6 +23,8 @@
 #include "vkontaktejobs.h"
 #include "noteinfo.h"
 
+namespace Vkontakte
+{
 
 /**
 * Add a note to vkontakte
@@ -49,4 +51,6 @@ private:
     QString m_nid;
 };
 
-#endif
+} /* namespace Vkontakte */
+
+#endif // NOTEADDJOB_H
