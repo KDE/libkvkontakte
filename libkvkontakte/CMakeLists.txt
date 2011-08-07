@@ -24,6 +24,7 @@ set(libkvkontakte_SRCS
     albumlistjob.cpp
     albuminfo.cpp
     createalbumjob.cpp
+    editalbumjob.cpp
     deletealbumjob.cpp
     getphotouploadserverjob.cpp
     photopostjob.cpp
@@ -79,6 +80,7 @@ install(FILES
     albumlistjob.h
     qintlist.h
     createalbumjob.h
+    editalbumjob.h
     uploadphotosjob.h
     photoinfo.h
     userinfo.h
