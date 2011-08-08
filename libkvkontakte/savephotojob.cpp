@@ -24,7 +24,7 @@ namespace Vkontakte
 
 SavePhotoJob::SavePhotoJob(const QString &accessToken,
                            const QMap<QString, QVariant> &photoIdData, int gid)
-    : VkontakteJob("photos.save", accessToken, true)
+    : VkontakteJob(accessToken, "photos.save", true)
 {
     addQueryItem("aid", photoIdData["aid"].toString());
     addQueryItem("server", photoIdData["server"].toString());

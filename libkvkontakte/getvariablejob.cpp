@@ -22,7 +22,7 @@ namespace Vkontakte
 {
 
 GetVariableJob::GetVariableJob(const QString& accessToken, int index)
-    : VkontakteJob("getVariable", accessToken)
+    : VkontakteJob(accessToken, "getVariable")
 {
     addQueryItem("key", QString::number(index));
 }

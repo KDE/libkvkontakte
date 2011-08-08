@@ -26,7 +26,7 @@ MessagesListJob::MessagesListJob(const QString &accessToken,
                                  int out,
                                  int offset, int count, int previewLength,
                                  int filters, int timeOffset)
-    : VkontakteJob("messages.get", accessToken)
+    : VkontakteJob(accessToken, "messages.get")
     , m_out(out)
 {
     addQueryItem("out", QString::number(out));

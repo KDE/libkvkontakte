@@ -23,7 +23,7 @@ namespace Vkontakte
 {
 
 LongPollServerJob::LongPollServerJob(const QString& accessToken)
-    : VkontakteJob("messages.getLongPollServer", accessToken)
+    : VkontakteJob(accessToken, "messages.getLongPollServer")
 {
 }
 

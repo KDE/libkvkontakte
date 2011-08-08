@@ -23,7 +23,7 @@ namespace Vkontakte
 {
 
 DiscussionsListJob::DiscussionsListJob(const QString& accessToken, int offset, int count, int previewLength)
-    : VkontakteJob("messages.getDialogs", accessToken)
+    : VkontakteJob(accessToken, "messages.getDialogs")
 {
     addQueryItem("offset", QString::number(offset));
     addQueryItem("count", QString::number(count));

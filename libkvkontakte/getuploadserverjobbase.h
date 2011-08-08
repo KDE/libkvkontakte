@@ -27,7 +27,7 @@ namespace Vkontakte
 class LIBKVKONTAKTE_EXPORT GetUploadServerJobBase : public VkontakteJob
 {
 public:
-    GetUploadServerJobBase(const QString &method, const QString &accessToken);
+    GetUploadServerJobBase(const QString &accessToken, const QString &method);
 
     QString uploadUrl() const;
 

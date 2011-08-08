@@ -27,7 +27,7 @@ namespace Vkontakte
 CidsNamesJob::CidsNamesJob(const QString &method,
                            const QString& accessToken,
                            const QIntList &cids)
-    : VkontakteJob(method, accessToken)
+    : VkontakteJob(accessToken, method)
 {
     m_cids = cids;
     addQueryItem("cids", cids.join());

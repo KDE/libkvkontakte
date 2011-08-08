@@ -63,7 +63,7 @@ public:
      * @param accessToken The accessToken to access our data on vkontakte
      * @param httpPost Whether to make a POST http request instead of GET ("false" by default)
      * */
-    VkontakteJob(const QString &method, const QString &accessToken, bool httpPost = false);
+    VkontakteJob(const QString &accessToken, const QString &method, bool httpPost = false);
 
     virtual void start();
 

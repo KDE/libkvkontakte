@@ -25,7 +25,7 @@ namespace Vkontakte
 {
 
 FriendListJob::FriendListJob( const QString& accessToken, const QString &uid )
-    : VkontakteJob( "friends.get", accessToken )
+    : VkontakteJob(accessToken, "friends.get")
 {
     addQueryItem("uid", uid);
     addQueryItem("fields", UserInfo::allQueryFields().join( "," ));

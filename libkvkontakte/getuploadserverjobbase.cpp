@@ -22,8 +22,8 @@
 namespace Vkontakte
 {
 
-GetUploadServerJobBase::GetUploadServerJobBase(const QString &method, const QString &accessToken)
-    : VkontakteJob(method, accessToken)
+GetUploadServerJobBase::GetUploadServerJobBase(const QString &accessToken, const QString &method)
+    : VkontakteJob(accessToken, method)
 {
 }
 

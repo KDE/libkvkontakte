@@ -23,7 +23,7 @@
 #include <qjson/qobjecthelper.h>
 
 // FriendJob::FriendJob( const QString& friendId, const QString& accessToken )
-//   : VkontakteJob(......friends.get......??, accessToken)
+//   : VkontakteJob(accessToken, ......friends.get......??)
 // {
 //   setFields( friendFields() );
 // }

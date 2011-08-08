@@ -25,7 +25,7 @@ namespace Vkontakte
 CreateAlbumJob::CreateAlbumJob(const QString &accessToken,
                                const QString &title, const QString &description,
                                int privacy, int comment_privacy)
-    : VkontakteJob("photos.createAlbum", accessToken, true)
+    : VkontakteJob(accessToken, "photos.createAlbum", true)
 {
     addQueryItem("title", title);
     if (!description.isEmpty())

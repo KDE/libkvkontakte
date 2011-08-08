@@ -54,7 +54,7 @@ bool KJobWithSubjobs::doKill()
 /*
  * VkontakteJobs base class
  */
-VkontakteJob::VkontakteJob( const QString& method, const QString& accessToken, bool httpPost )
+VkontakteJob::VkontakteJob(const QString &accessToken, const QString &method, bool httpPost)
     : m_accessToken( accessToken ),
       m_method( method ),
       m_httpPost( httpPost )
