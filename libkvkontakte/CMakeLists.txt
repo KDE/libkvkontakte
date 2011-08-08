@@ -36,6 +36,7 @@ set(libkvkontakte_SRCS
     getapplicationpermissionsjob.cpp
     getuploadserverjobbase.cpp
     getprofilephotouploadserverjob.cpp
+    getwallphotouploadserverjob.cpp
 
     qintlist.cpp
     util.cpp
@@ -104,4 +105,5 @@ install(FILES
     getvariablejob.h
     getuploadserverjobbase.h
     getprofilephotouploadserverjob.h
+    getwallphotouploadserverjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
