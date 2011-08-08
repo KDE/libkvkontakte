@@ -23,14 +23,14 @@ namespace Vkontakte
 {
 
 // http://vkontakte.ru/developers.php?o=-1&p=notes.getById
-NoteJob::NoteJob(const QString& accessToken, int nid)
+NoteJob::NoteJob(const QString &accessToken, int nid)
     : VkontakteJob(accessToken, "notes.getById")
 {
     addQueryItem("nid", QString::number(nid));
     addQueryItem("need_wiki", "1"); // works only for current user's notes
 }
 
-void NoteJob::handleData(const QVariant& data)
+void NoteJob::handleData(const QVariant &data)
 {
     m_noteInfo = NoteInfoPtr(new NoteInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), m_noteInfo.data());

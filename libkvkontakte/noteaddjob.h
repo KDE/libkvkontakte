@@ -33,14 +33,7 @@ class LIBKVKONTAKTE_EXPORT NoteAddJob : public VkontakteJob
 {
     Q_OBJECT
 public:
-    /**
-    * @brief Add a note to vkontakte.
-    *
-    * @param subject The subject of the new note.
-    * @param message The actual content of the note.
-    * @param accessToken The accessToken to add content to facebook
-    */
-    NoteAddJob(const QString &subject, const QString &message, const QString &accessToken);
+    NoteAddJob(const QString &accessToken, const QString &title, const QString &text);
 
     int nid() const;
 

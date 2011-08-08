@@ -38,7 +38,7 @@ PhotoPostJob::PhotoPostJob(const QString &url, const QStringList &files)
         m_ok = false;
 }
 
-void PhotoPostJob::handleError(const QVariant& data)
+void PhotoPostJob::handleError(const QVariant &data)
 {
     const QVariantMap errorMap = data.toMap();
     int error_code = errorMap["error_code"].toInt();
@@ -100,7 +100,7 @@ void PhotoPostJob::jobFinished(KJob *job)
         kDebug() << "Got data: " << QString::fromAscii(transferJob->data().data());
         QJson::Parser parser;
         bool ok;
-        const QVariant data = parser.parse( transferJob->data(), &ok );
+        const QVariant data = parser.parse(transferJob->data(), &ok);
         if ( ok ) {
             const QVariant error = data.toMap()["error"];
             if ( error.isValid() ) {
@@ -109,9 +109,9 @@ void PhotoPostJob::jobFinished(KJob *job)
                 handleData(data);
             }
         } else {
-            kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
+            kWarning() << "Unable to parse JSON data: " << QString::fromAscii(transferJob->data().data());
             setError( KJob::UserDefinedError );
-            setErrorText( i18n( "Unable to parse data returned by the VKontakte server: %1", parser.errorString() ) );
+            setErrorText(i18n("Unable to parse data returned by the VKontakte server: %1", parser.errorString()));
         }
     }
     emitResult();

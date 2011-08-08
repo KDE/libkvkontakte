@@ -22,7 +22,7 @@
 namespace Vkontakte
 {
 
-DiscussionsListJob::DiscussionsListJob(const QString& accessToken, int offset, int count, int previewLength)
+DiscussionsListJob::DiscussionsListJob(const QString &accessToken, int offset, int count, int previewLength)
     : VkontakteJob(accessToken, "messages.getDialogs")
 {
     addQueryItem("offset", QString::number(offset));
@@ -30,21 +30,20 @@ DiscussionsListJob::DiscussionsListJob(const QString& accessToken, int offset, i
     addQueryItem("preview_length", QString::number(previewLength));
 }
 
-void DiscussionsListJob::handleItem(const QVariant& data)
+void DiscussionsListJob::handleItem(const QVariant &data)
 {
     MessageInfoPtr item(new MessageInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
     m_list.append(item);
 }
 
-void DiscussionsListJob::handleData(const QVariant& data)
+void DiscussionsListJob::handleData(const QVariant &data)
 {
     QVariantList list = data.toList();
     m_totalCount = list[0].toInt();
     list.pop_front();
-    foreach (const QVariant &item, list) {
+    foreach (const QVariant &item, list)
         handleItem(item);
-    }
 
     qSort(m_list); // sort by message ID (which should be equivalent to sorting by date)
 }

@@ -24,11 +24,11 @@
 namespace Vkontakte
 {
 
-FriendListJob::FriendListJob( const QString& accessToken, const QString &uid )
+FriendListJob::FriendListJob(const QString &accessToken, const QString &uid)
     : VkontakteJob(accessToken, "friends.get")
 {
     addQueryItem("uid", uid);
-    addQueryItem("fields", UserInfo::allQueryFields().join( "," ));
+    addQueryItem("fields", UserInfo::allQueryFields().join(","));
 }
 
 QList< UserInfoPtr > FriendListJob::friends() const
@@ -36,12 +36,13 @@ QList< UserInfoPtr > FriendListJob::friends() const
     return m_friends;
 }
 
-void FriendListJob::handleData( const QVariant& data )
+void FriendListJob::handleData(const QVariant &data)
 {
-    foreach( const QVariant &user, data.toList() ) {
-        UserInfoPtr userInfo( new UserInfo() );
-        QJson::QObjectHelper::qvariant2qobject( user.toMap(), userInfo.data() );
-        m_friends.append( userInfo );
+    foreach (const QVariant &user, data.toList())
+    {
+        UserInfoPtr userInfo(new UserInfo());
+        QJson::QObjectHelper::qvariant2qobject(user.toMap(), userInfo.data());
+        m_friends.append(userInfo);
     }
 }
 

@@ -29,7 +29,7 @@ namespace Vkontakte
 {
 
 // http://vkontakte.ru/developers.php?o=-1&p=getProfiles
-UserInfoJob::UserInfoJob ( const QString& accessToken )
+UserInfoJob::UserInfoJob (const QString &accessToken)
     : VkontakteJob(accessToken, "getProfiles")
 {
     // The complete list of fields
@@ -48,7 +48,7 @@ UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
 UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
     : VkontakteJob(accessToken, "getProfiles")
 {
-    setFields ( UserInfo::allQueryFields() );
+    setFields(UserInfo::allQueryFields());
     addQueryItem("uids", uids.join());
 
     // TODO: make this working for more than 1000 uids
@@ -68,21 +68,20 @@ void UserInfoJob::setFields(const QStringList &fields)
 void UserInfoJob::prepareQueryItems()
 {
     if (!m_fields.isEmpty())
-        addQueryItem ("fields", m_fields.join(","));
+        addQueryItem("fields", m_fields.join(","));
 }
 
-UserInfoPtr UserInfoJob::handleSingleData(const QVariant& data)
+UserInfoPtr UserInfoJob::handleSingleData(const QVariant &data)
 {
-     UserInfoPtr userInfo = UserInfoPtr ( new UserInfo() );
-     QJson::QObjectHelper::qvariant2qobject ( data.toMap(), userInfo.data() );
+     UserInfoPtr userInfo = UserInfoPtr(new UserInfo());
+     QJson::QObjectHelper::qvariant2qobject(data.toMap(), userInfo.data());
      return userInfo;
 }
 
-void UserInfoJob::handleData(const QVariant& data)
+void UserInfoJob::handleData(const QVariant &data)
 {
-    foreach( const QVariant &item, data.toList() ) {
-        m_userInfo.append( handleSingleData(item) );
-    }    
+    foreach (const QVariant &item, data.toList())
+        m_userInfo.append(handleSingleData(item));
 }
 
 } /* namespace Vkontakte */

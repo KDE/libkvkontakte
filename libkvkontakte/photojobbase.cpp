@@ -31,23 +31,25 @@ PhotoJobBase::PhotoJobBase(const KUrl &url)
 void PhotoJobBase::start()
 {
     kDebug() << "Starting photo download" << m_url;
-    KIO::StoredTransferJob * const job = KIO::storedGet( m_url, KIO::Reload, KIO::HideProgressInfo );
+    KIO::StoredTransferJob * const job = KIO::storedGet(m_url, KIO::Reload, KIO::HideProgressInfo);
     m_job = job;
-    connect( job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)) );
+    connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
     job->start();
 }
 
 void PhotoJobBase::jobFinished(KJob *job)
 {
-    KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
-    Q_ASSERT( transferJob );
-    if ( transferJob->error() ) {
-        setError( transferJob->error() );
-        setErrorText( KIO::buildErrorString( error(), transferJob->errorText() ) );
+    KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>(job);
+    Q_ASSERT(transferJob);
+    if (transferJob->error())
+    {
+        setError(transferJob->error());
+        setErrorText(KIO::buildErrorString(error(), transferJob->errorText()));
         kWarning() << "Job error: " << transferJob->errorString();
-    } else {
-        m_photo = QImage::fromData(transferJob->data());
     }
+    else
+        m_photo = QImage::fromData(transferJob->data());
+
     emitResult();
     m_job = 0;
 }

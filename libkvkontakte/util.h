@@ -25,6 +25,6 @@
 /**
  * Convert a QString containing a UNIX timestamp to a KDateTime object
  */
-KDateTime unixTimeToKDateTime(const QString& unixTime);
+KDateTime unixTimeToKDateTime(const QString &unixTime);
 
 #endif // UTIL_H

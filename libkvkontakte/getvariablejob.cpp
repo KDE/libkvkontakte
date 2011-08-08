@@ -27,7 +27,7 @@ GetVariableJob::GetVariableJob(const QString& accessToken, int index)
     addQueryItem("key", QString::number(index));
 }
 
-void GetVariableJob::handleData(const QVariant& data)
+void GetVariableJob::handleData(const QVariant &data)
 {
     m_variable = data;
 }

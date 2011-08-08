@@ -31,11 +31,11 @@ class LIBKVKONTAKTE_EXPORT FriendListJob : public VkontakteJob
 {
     Q_OBJECT
 public:
-    FriendListJob( const QString &accessToken, const QString &uid );
+    FriendListJob(const QString &accessToken, const QString &uid);
     QList<UserInfoPtr> friends() const;
 
 protected:
-    virtual void handleData( const QVariant& data );
+    virtual void handleData(const QVariant &data);
 
 private:
     QList<UserInfoPtr> m_friends;

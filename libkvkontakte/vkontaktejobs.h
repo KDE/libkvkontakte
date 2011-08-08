@@ -76,7 +76,7 @@ protected:
     /** Check for a return error and set the appropiate error messags */
     void handleError(const QVariant &data);
 
-    virtual void handleData(const QVariant& data) = 0;
+    virtual void handleData(const QVariant &data) = 0;
 
     /** Called right before sending request to server */
     virtual void prepareQueryItems() {}

@@ -31,9 +31,8 @@ namespace Vkontakte
 
 bool KJobWithSubjob::doKill()
 {
-    if (m_job) {
+    if (m_job)
         m_job->kill(KJob::Quietly);
-    }
     return KJob::doKill();
 }
 
@@ -41,9 +40,8 @@ bool KJobWithSubjob::doKill()
 
 bool KJobWithSubjobs::doKill()
 {
-    foreach (KJob *job, m_jobs) {
+    foreach (KJob *job, m_jobs)
         job->kill(KJob::Quietly);
-    }
     m_jobs.clear();
 
     return KJob::doKill();
@@ -55,22 +53,22 @@ bool KJobWithSubjobs::doKill()
  * VkontakteJobs base class
  */
 VkontakteJob::VkontakteJob(const QString &accessToken, const QString &method, bool httpPost)
-    : m_accessToken( accessToken ),
-      m_method( method ),
-      m_httpPost( httpPost )
+    : m_accessToken(accessToken)
+    , m_method(method)
+    , m_httpPost(httpPost)
 {
     setCapabilities(KJob::Killable);
 }
 
-void VkontakteJob::addQueryItem( const QString& key, const QString& value )
+void VkontakteJob::addQueryItem(const QString &key, const QString &value)
 {
     QueryItem item;
     item.first = key;
     item.second = value;
-    m_queryItems.append( item );
+    m_queryItems.append(item);
 }
 
-void VkontakteJob::handleError( const QVariant& data )
+void VkontakteJob::handleError(const QVariant &data)
 {
     const QVariantMap errorMap = data.toMap();
     int error_code = errorMap["error_code"].toInt();
@@ -91,52 +89,56 @@ void VkontakteJob::handleError( const QVariant& data )
 void VkontakteJob::start()
 {
     KUrl url;
-    url.setProtocol( "https" );
-    url.setHost( "api.vkontakte.ru" );
-    url.setPath( "/method/" + m_method );
+    url.setProtocol("https");
+    url.setHost("api.vkontakte.ru");
+    url.setPath("/method/" + m_method);
 
     prepareQueryItems();
-    foreach( const QueryItem &item, m_queryItems ) {
-        url.addQueryItem( item.first, item.second );
-    }
-    url.addQueryItem( "access_token", m_accessToken );
+    foreach (const QueryItem &item, m_queryItems)
+        url.addQueryItem(item.first, item.second);
+    url.addQueryItem("access_token", m_accessToken);
 
     kDebug() << "Starting request" << url;
     KIO::StoredTransferJob *job;
     if (m_httpPost)
-        job = KIO::storedHttpPost( QByteArray(), url, KIO::HideProgressInfo );
+        job = KIO::storedHttpPost(QByteArray(), url, KIO::HideProgressInfo);
     else
-        job = KIO::storedGet( url, KIO::Reload, KIO::HideProgressInfo );
+        job = KIO::storedGet(url, KIO::Reload, KIO::HideProgressInfo);
 
     m_job = job;
-    connect( job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)) );
+    connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
     job->start();
 }
 
 void VkontakteJob::jobFinished(KJob *job)
 {
-    KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>( job );
-    Q_ASSERT( transferJob );
-    if ( transferJob->error() ) {
-        setError( transferJob->error() );
-        setErrorText( KIO::buildErrorString( error(), transferJob->errorText() ) );
+    KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>(job);
+    Q_ASSERT(transferJob);
+    if (transferJob->error())
+    {
+        setError(transferJob->error());
+        setErrorText(KIO::buildErrorString(error(), transferJob->errorText()));
         kWarning() << "Job error: " << transferJob->errorString();
-    } else {
-        kDebug() << "Got data: " << QString::fromAscii( transferJob->data().data() );
+    }
+    else
+    {
+        kDebug() << "Got data: " << QString::fromAscii(transferJob->data().data());
         QJson::Parser parser;
         bool ok;
-        const QVariant data = parser.parse( transferJob->data(), &ok );
-        if ( ok ) {
+        const QVariant data = parser.parse(transferJob->data(), &ok);
+        if (ok)
+        {
             const QVariant error = data.toMap()["error"];
-            if ( error.isValid() ) {
-                handleError( error );
-            } else {
-                handleData( data.toMap()["response"] );
-            }
-        } else {
-            kWarning() << "Unable to parse JSON data: " << QString::fromAscii( transferJob->data().data() );
+            if (error.isValid())
+                handleError(error);
+            else
+                handleData(data.toMap()["response"]);
+        }
+        else
+        {
+            kWarning() << "Unable to parse JSON data: " << QString::fromAscii(transferJob->data().data());
             setError( KJob::UserDefinedError );
-            setErrorText( i18n( "Unable to parse data returned by the VKontakte server: %1", parser.errorString() ) );
+            setErrorText(i18n("Unable to parse data returned by the VKontakte server: %1", parser.errorString()));
         }
     }
     emitResult();

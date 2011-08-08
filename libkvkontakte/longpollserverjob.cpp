@@ -22,12 +22,12 @@
 namespace Vkontakte
 {
 
-LongPollServerJob::LongPollServerJob(const QString& accessToken)
+LongPollServerJob::LongPollServerJob(const QString &accessToken)
     : VkontakteJob(accessToken, "messages.getLongPollServer")
 {
 }
 
-void LongPollServerJob::handleData(const QVariant& data)
+void LongPollServerJob::handleData(const QVariant &data)
 {
      m_serverInfo = LongPollServerInfoPtr(new LongPollServerInfo());
      QJson::QObjectHelper::qvariant2qobject(data.toMap(), m_serverInfo.data());

@@ -43,9 +43,9 @@ public:
     int totalCount() const;
 
 protected:
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
 
-    void handleItem(const QVariant& data);
+    void handleItem(const QVariant &data);
 
 private:
     int m_totalCount; // number of all discussions, not only discussions retrieved in this request

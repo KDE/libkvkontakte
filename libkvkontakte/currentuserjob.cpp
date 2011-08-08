@@ -21,7 +21,7 @@
 namespace Vkontakte
 {
 
-CurrentUserJob::CurrentUserJob(const QString& accessToken)
+CurrentUserJob::CurrentUserJob(const QString &accessToken)
     : GetVariableJob(accessToken, 1280)
 {
 }

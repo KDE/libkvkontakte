@@ -66,9 +66,9 @@ protected:
     * @brief Handles the data returned by the VkontakteGetJob
     * @param data A JSON string containing the data.
     */
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
 
-    UserInfoPtr handleSingleData(const QVariant& data);
+    UserInfoPtr handleSingleData(const QVariant &data);
 
     /**
      * @brief Prepares m_queryItems by several addQueryItem calls

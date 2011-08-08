@@ -32,29 +32,28 @@ namespace Vkontakte
 
 class LIBKVKONTAKTE_EXPORT AuthenticationDialog : public KDialog
 {
-  Q_OBJECT
-  public:
-    AuthenticationDialog( QWidget *parent );
-    void setAppId( const QString &appId );
-    void setPermissions( const QStringList &permissions );
+    Q_OBJECT
+public:
+    AuthenticationDialog(QWidget *parent);
+    void setAppId(const QString &appId);
+    void setPermissions(const QStringList &permissions);
     void start();
 
-  signals:
-    void authenticated( const QString &accessToken );
+signals:
+    void authenticated(const QString &accessToken);
     void canceled();
 
-  private slots:
-
-    void urlChanged( const QUrl &url );
+private slots:
+    void urlChanged(const QUrl &url);
     void showErrorDialog();
 
-  private:
-    QString mAppId;
-    QStringList mPermissions;
-    KWebView *mWebView;
-    QProgressBar *mProgressBar;
-    QString mError;
-    QString mErrorDescription;
+private:
+    QString m_appId;
+    QStringList m_permissions;
+    KWebView *m_webView;
+    QProgressBar *m_progressBar;
+    QString m_error;
+    QString m_errorDescription;
 };
 
 } /* namespace Vkontakte */

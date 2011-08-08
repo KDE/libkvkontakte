@@ -19,7 +19,7 @@
 */
 #include "util.h"
 
-KDateTime unixTimeToKDateTime(const QString& unixTime)
+KDateTime unixTimeToKDateTime(const QString &unixTime)
 {
     KDateTime res;
     res.setTime_t(unixTime.toLongLong());

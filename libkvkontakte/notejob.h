@@ -34,7 +34,7 @@ public:
     NoteInfoPtr noteInfo();
     
 protected:
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
     
 private:
     NoteInfoPtr m_noteInfo;

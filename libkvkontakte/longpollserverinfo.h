@@ -49,16 +49,6 @@ public:
     void setTs(const QString &ts);
     QString ts() const;
 
-
-//     /**
-//     * @brief Created a KABC::Addressee for all the information we have about this person.
-//     *
-//     * @return A KABC::Addressee of this person. 
-//     */
-//     KABC::Addressee toAddressee() const;
-// 
-//     static QStringList allQueryFields();
-
 private:
     QString m_key;
     QString m_server;

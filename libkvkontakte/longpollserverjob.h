@@ -33,7 +33,7 @@ public:
     LongPollServerInfoPtr serverInfo();
 
 protected:
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
 
 private:
     LongPollServerInfoPtr m_serverInfo;

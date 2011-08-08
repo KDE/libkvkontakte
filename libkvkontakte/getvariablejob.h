@@ -36,7 +36,7 @@ public:
     QVariant variable() const;
 
 protected:
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
     
 private:
     QVariant m_variable;

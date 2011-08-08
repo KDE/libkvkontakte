@@ -37,21 +37,20 @@ MessagesListJob::MessagesListJob(const QString &accessToken,
     addQueryItem("time_offset", QString::number(timeOffset));
 }
 
-void MessagesListJob::handleItem(const QVariant& data)
+void MessagesListJob::handleItem(const QVariant &data)
 {
     MessageInfoPtr item(new MessageInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
     m_list.append(item);
 }
 
-void MessagesListJob::handleData(const QVariant& data)
+void MessagesListJob::handleData(const QVariant &data)
 {
     QVariantList list = data.toList();
     m_totalCount = list[0].toInt();
     list.pop_front();
-    foreach (const QVariant &item, list) {
+    foreach (const QVariant &item, list)
         handleItem(item);
-    }
 }
 
 QList<MessageInfoPtr> MessagesListJob::list() const

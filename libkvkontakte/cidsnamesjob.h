@@ -36,7 +36,7 @@ public:
     QMap<int, QString> names() const;
 
 protected:
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
 
     QIntList m_cids;
     QMap<int, QString> m_names; // cid -> name
