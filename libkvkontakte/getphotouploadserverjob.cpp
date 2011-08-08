@@ -23,23 +23,13 @@ namespace Vkontakte
 {
 
 GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid)
-    : VkontakteJob("photos.getUploadServer", accessToken)
+    : GetUploadServerJobBase("photos.getUploadServer", accessToken)
 {
     addQueryItem("aid", QString::number(aid));
     if (gid != -1)
         addQueryItem("gid", QString::number(gid));
     if (saveBig)
         addQueryItem("save_big", "1");
-}
-
-void GetPhotoUploadServerJob::handleData(const QVariant &data)
-{
-    m_uploadUrl = data.toMap()["upload_url"].toString();
-}
-
-QString GetPhotoUploadServerJob::uploadUrl() const
-{
-    return m_uploadUrl;
 }
 
 } /* namespace Vkontakte */

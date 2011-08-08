@@ -16,20 +16,25 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef GETPHOTOUPLOADSERVERJOB_H
-#define GETPHOTOUPLOADSERVERJOB_H
-
 #include "getuploadserverjobbase.h"
+#include <QVariant>
 
 namespace Vkontakte
 {
 
-class LIBKVKONTAKTE_EXPORT GetPhotoUploadServerJob : public GetUploadServerJobBase
+GetUploadServerJobBase::GetUploadServerJobBase(const QString &method, const QString &accessToken)
+    : VkontakteJob(method, accessToken)
 {
-public:
-    GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid = -1);
-};
+}
+
+void GetUploadServerJobBase::handleData(const QVariant &data)
+{
+    m_uploadUrl = data.toMap()["upload_url"].toString();
+}
+
+QString GetUploadServerJobBase::uploadUrl() const
+{
+    return m_uploadUrl;
+}
 
 } /* namespace Vkontakte */
-
-#endif // GETPHOTOUPLOADSERVERJOB_H
