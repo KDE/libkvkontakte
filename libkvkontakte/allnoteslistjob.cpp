@@ -18,6 +18,7 @@
 */
 #include "allnoteslistjob.h"
 #include <KDebug>
+#include <KLocalizedString>
 
 namespace Vkontakte
 {
@@ -32,8 +33,6 @@ AllNotesListJob::AllNotesListJob(const QString &accessToken, int uid)
 
 void AllNotesListJob::startNewJob(int offset, int count)
 {
-    Q_ASSERT(out == 0 || out == 1);
-
     NotesListJob *job = new NotesListJob(m_accessToken, m_uid, offset, count);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
     m_jobs.append(job);
@@ -65,9 +64,15 @@ void AllNotesListJob::jobFinished(KJob *kjob)
         for (int offset = 100; offset < m_totalCount; offset += 100)
             startNewJob(offset, qMin(100, m_totalCount - offset));
     }
-    else {
+    else if (m_totalCount != job->totalCount())
+    {
         // TODO: some new notes might have been added, what should we do then?
-        Q_ASSERT(m_totalCount == listJob->totalCount());
+        doKill();
+        setError(KJob::UserDefinedError + 1);
+        setErrorText(i18n("The number of notes has changed between requests."));
+        kWarning() << "Job error: " << job->errorString();
+        emitResult();
+        return;
     }
 
     // All jobs have finished

@@ -75,7 +75,7 @@ void AuthenticationDialog::setPermissions(const QStringList &permissions)
 
 void AuthenticationDialog::start()
 {
-    Q_ASSERT(!mAppId.isEmpty());
+    Q_ASSERT(!m_appId.isEmpty());
 
     // display= {page, popup, touch, wap}
     const QString url = QString("http://api.vkontakte.ru/oauth/authorize?"

@@ -21,6 +21,7 @@
 #include "messageslistjob.h"
 
 #include <KDebug>
+#include <KLocalizedString>
 
 namespace Vkontakte
 {
@@ -83,9 +84,17 @@ void AllMessagesListJob::jobFinished(KJob* job)
             startNewJob(offset, qMin(100, m_totalCount[out] - offset), out);
         }
     }
-    else {
+    else if (m_totalCount[out] != listJob->totalCount())
+    {
         // TODO: some new messages might have been added, what should we do then?
-        Q_ASSERT(m_totalCount[out] == listJob->totalCount());
+        doKill();
+        setError(KJob::UserDefinedError + 2);
+        setErrorText(i18nc("%1 can be \'incoming\' or \'outgoing\'",
+                            "The number of %1 messages has changed between requests.",
+                            out ? i18n("outgoing") : i18n("incoming")));
+        kWarning() << "Job error: " << listJob->errorString();
+        emitResult();
+        return;
     }
 
     // All jobs have finished
