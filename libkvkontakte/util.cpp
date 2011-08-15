@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 #include "util.h"
+#include <KGlobal>
+
+static const KCatalogLoader loader("libkvkontakte");
 
 KDateTime unixTimeToKDateTime(const QString &unixTime)
 {
