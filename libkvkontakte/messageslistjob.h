@@ -53,9 +53,9 @@ public:
     int out() const;
 
 protected:
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
 
-    void handleItem(const QVariant& data);
+    void handleItem(const QVariant &data);
 
 private:
     int m_out;

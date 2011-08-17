@@ -123,7 +123,7 @@ private:
 class MessageInfoPtr : public QSharedPointer<MessageInfo>
 {
 public:
-    explicit MessageInfoPtr(MessageInfo* ptr);
+    explicit MessageInfoPtr(MessageInfo *ptr);
 
     /**
      * @brief Compares by message ID (MessageInfo::m_mid)

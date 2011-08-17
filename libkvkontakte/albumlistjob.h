@@ -35,13 +35,9 @@ public:
     QList<AlbumInfoPtr> list() const;
 
 protected:
-    /**
-    * @brief Handles the data returned by the VkontakteGetJob
-    * @param data A JSON string containing the data.
-    */
-    virtual void handleData(const QVariant& data);
+    virtual void handleData(const QVariant &data);
 
-    void handleItem(const QVariant& data);
+    void handleItem(const QVariant &data);
 
 private:
     QList<AlbumInfoPtr> m_list;

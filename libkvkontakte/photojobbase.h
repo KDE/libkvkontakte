@@ -39,7 +39,7 @@ public:
     QImage photo() const;
 
 private slots:
-    void jobFinished( KJob *job );
+    void jobFinished(KJob *job);
 
 private:
     KUrl m_url;
