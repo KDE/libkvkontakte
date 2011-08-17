@@ -8,7 +8,6 @@ set(libkvkontakte_SRCS
     allnoteslistjob.cpp
     notejob.cpp
     getvariablejob.cpp
-    currentuserjob.cpp
     profilephotojob.cpp
     userinfofulljob.cpp
     cidsnamesjob.cpp
