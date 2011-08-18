@@ -36,7 +36,7 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     , d(0)
 {
     setButtons(KDialog::Cancel);
-    setCaption(i18n( "Authenticate with VKontakte"));
+    setCaption(i18n("Authenticate with VKontakte"));
     setAttribute(Qt::WA_DeleteOnClose, true);
 
     QWidget *widget = new QWidget(this);
