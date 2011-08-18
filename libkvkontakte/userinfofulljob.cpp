@@ -56,8 +56,8 @@ void UserInfoFullJob::handleFinish()
 
 void UserInfoFullJob::handleError(KJob* job)
 {
-    setError( job->error() );
-    setErrorText( job->errorText() );
+    setError(job->error());
+    setErrorText(job->errorText());
     kWarning() << "Job error: " << job->errorString();
     handleFinish();
 }
@@ -71,10 +71,13 @@ void UserInfoFullJob::start()
 
 void UserInfoFullJob::mainJobFinished(KJob *)
 {
-    Q_ASSERT( m_mainJob );
-    if ( m_mainJob->error() ) {
+    Q_ASSERT(m_mainJob);
+    if (m_mainJob->error())
+    {
         handleError(m_mainJob);
-    } else {
+    }
+    else
+    {
         m_userInfo = m_mainJob->userInfo();
         if (m_needCountryNames)
             startCountriesJob();
@@ -90,10 +93,9 @@ void UserInfoFullJob::startCountriesJob()
 {
     // TODO: use usersPropertyToStringList
     QSet<int> cids; // this will remove duplicates
-    foreach (const UserInfoPtr& user, m_userInfo) {
+    foreach (const UserInfoPtr &user, m_userInfo)
         if (user->country())
             cids.insert(user->country());
-    }
     m_countryIds = cids.toList();
 
     m_countriesJob = new CidsNamesJob("places.getCountryById", m_accessToken, m_countryIds);
@@ -103,14 +105,16 @@ void UserInfoFullJob::startCountriesJob()
 
 void UserInfoFullJob::countriesJobFinished(KJob *)
 {
-    Q_ASSERT( m_countriesJob );
-    if ( m_countriesJob->error() ) {
+    Q_ASSERT(m_countriesJob);
+    if (m_countriesJob->error())
+    {
         handleError(m_countriesJob);
-    } else {
+    }
+    else
+    {
         QMap<int, QString> names = m_countriesJob->names();
-        foreach (const UserInfoPtr &user, m_userInfo) {
+        foreach (const UserInfoPtr &user, m_userInfo)
             user->setCountryString(names[user->country()]);
-        }
 
         if (m_needCityNames)
             startCitiesJob();
@@ -123,10 +127,9 @@ void UserInfoFullJob::startCitiesJob()
 {
     // TODO: use usersPropertyToStringList
     QSet<int> cids; // this will remove duplicates
-    foreach (const UserInfoPtr& user, m_userInfo) {
+    foreach (const UserInfoPtr& user, m_userInfo)
         if (user->city())
             cids.insert(user->city());
-    }
     m_cityIds = cids.toList();
 
     m_citiesJob = new CidsNamesJob("places.getCityById", m_accessToken, m_cityIds);
@@ -136,14 +139,16 @@ void UserInfoFullJob::startCitiesJob()
 
 void UserInfoFullJob::citiesJobFinished(KJob *)
 {
-    Q_ASSERT( m_citiesJob );
-    if ( m_citiesJob->error() ) {
+    Q_ASSERT(m_citiesJob);
+    if (m_citiesJob->error())
+    {
         handleError(m_citiesJob);
-    } else {
+    }
+    else
+    {
         QMap<int, QString> names = m_citiesJob->names();
-        foreach (const UserInfoPtr &user, m_userInfo) {
+        foreach (const UserInfoPtr &user, m_userInfo)
             user->setCityString(names[user->city()]);
-        }
 
         handleFinish();
     }
