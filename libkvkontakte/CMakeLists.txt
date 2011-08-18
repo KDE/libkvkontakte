@@ -8,7 +8,6 @@ set(libkvkontakte_SRCS
     allnoteslistjob.cpp
     notejob.cpp
     getvariablejob.cpp
-    profilephotojob.cpp
     userinfofulljob.cpp
     cidsnamesjob.cpp
     longpollserverjob.cpp
@@ -89,7 +88,6 @@ install(FILES
     noteinfo.h
     friendlistjob.h
     allnoteslistjob.h
-    profilephotojob.h
     userinfofulljob.h
     userinfojob.h
     photojobbase.h
