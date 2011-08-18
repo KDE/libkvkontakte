@@ -24,15 +24,17 @@
 namespace Vkontakte
 {
 
-FriendListJob::FriendListJob(const QString &accessToken, const QString &uid)
+// http://vkontakte.ru/developers.php?o=-1&p=friends.get
+FriendListJob::FriendListJob(const QString &accessToken, int uid)
     : VkontakteJob(accessToken, "friends.get")
     , d(0)
 {
-    addQueryItem("uid", uid);
+    if (uid != -1)
+        addQueryItem("uid", QString::number(uid));
     addQueryItem("fields", UserInfo::allQueryFields().join(","));
 }
 
-QList< UserInfoPtr > FriendListJob::friends() const
+QList<UserInfoPtr> FriendListJob::friends() const
 {
     return m_friends;
 }

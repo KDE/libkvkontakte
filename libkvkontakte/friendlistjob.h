@@ -31,8 +31,7 @@ class LIBKVKONTAKTE_EXPORT FriendListJob : public VkontakteJob
 {
     Q_OBJECT
 public:
-    // TODO: "uid" should be "int", not "QString"
-    FriendListJob(const QString &accessToken, const QString &uid);
+    FriendListJob(const QString &accessToken, int uid = -1);
     QList<UserInfoPtr> friends() const;
 
 protected:
