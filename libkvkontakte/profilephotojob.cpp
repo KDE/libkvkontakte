@@ -23,7 +23,7 @@ namespace Vkontakte
 {
 
 ProfilePhotoJob::ProfilePhotoJob(const UserInfoPtr &userInfo)
-    : PhotoJobBase( KUrl(userInfo->photoMedium()) )
+    : PhotoJobBase(KUrl(userInfo->photoMedium()))
 {
 }
 
