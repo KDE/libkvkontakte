@@ -25,7 +25,7 @@ namespace Vkontakte
 {
 
 EditAlbumJob::EditAlbumJob(const QString &accessToken,
-                           int aid, const QString &title, const QString& description,
+                           int aid, const QString &title, const QString &description,
                            int privacy, int comment_privacy)
     : VkontakteJob(accessToken, "photos.editAlbum", true)
     , d(0)
