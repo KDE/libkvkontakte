@@ -29,12 +29,11 @@ namespace Vkontakte
 {
 
 // KJobWithSubjob::doKill will be inherited
-// TODO: rename to PhotoJob, remove ProfilePhotoJob
-class LIBKVKONTAKTE_EXPORT PhotoJobBase : public KJobWithSubjob
+class LIBKVKONTAKTE_EXPORT PhotoJob : public KJobWithSubjob
 {
     Q_OBJECT
 public:
-    PhotoJobBase(const KUrl &urlString);
+    PhotoJob(const KUrl &urlString);
 
     virtual void start();
     QImage photo() const;

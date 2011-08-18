@@ -16,20 +16,20 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "photojobbase.h"
+#include "photojob.h"
 #include <KIO/Job>
 #include <KDebug>
 
 namespace Vkontakte
 {
 
-PhotoJobBase::PhotoJobBase(const KUrl &url)
+PhotoJob::PhotoJob(const KUrl &url)
     : m_url(url)
     , d(0)
 {
 }
 
-void PhotoJobBase::start()
+void PhotoJob::start()
 {
     kDebug() << "Starting photo download" << m_url;
     KIO::StoredTransferJob * const job = KIO::storedGet(m_url, KIO::Reload, KIO::HideProgressInfo);
@@ -38,7 +38,7 @@ void PhotoJobBase::start()
     job->start();
 }
 
-void PhotoJobBase::jobFinished(KJob *job)
+void PhotoJob::jobFinished(KJob *job)
 {
     KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>(job);
     Q_ASSERT(transferJob);
@@ -55,7 +55,7 @@ void PhotoJobBase::jobFinished(KJob *job)
     m_job = 0;
 }
 
-QImage PhotoJobBase::photo() const
+QImage PhotoJob::photo() const
 {
     return m_photo;
 }
