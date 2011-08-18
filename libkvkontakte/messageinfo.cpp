@@ -27,6 +27,7 @@ namespace Vkontakte
 
 MessageInfo::MessageInfo()
     : m_readState(0), m_out(0)
+    , d(0)
 {
 }
 

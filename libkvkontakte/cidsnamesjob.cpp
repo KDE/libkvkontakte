@@ -28,6 +28,7 @@ CidsNamesJob::CidsNamesJob(const QString &method,
                            const QString &accessToken,
                            const QIntList &cids)
     : VkontakteJob(accessToken, method)
+    , d(0)
 {
     m_cids = cids;
     addQueryItem("cids", cids.join());

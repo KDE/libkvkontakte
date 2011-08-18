@@ -54,6 +54,9 @@ private:
     QProgressBar *m_progressBar;
     QString m_error;
     QString m_errorDescription;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

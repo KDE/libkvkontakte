@@ -40,6 +40,9 @@ protected:
 
     QIntList m_cids;
     QMap<int, QString> m_names; // cid -> name
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

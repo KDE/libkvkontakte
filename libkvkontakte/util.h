@@ -17,6 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+// This file is not available to library's users
 #ifndef UTIL_H
 #define UTIL_H
 

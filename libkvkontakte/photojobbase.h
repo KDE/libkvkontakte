@@ -29,6 +29,7 @@ namespace Vkontakte
 {
 
 // KJobWithSubjob::doKill will be inherited
+// TODO: rename to PhotoJob, remove ProfilePhotoJob
 class LIBKVKONTAKTE_EXPORT PhotoJobBase : public KJobWithSubjob
 {
     Q_OBJECT
@@ -44,6 +45,9 @@ private slots:
 private:
     KUrl m_url;
     QImage m_photo;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

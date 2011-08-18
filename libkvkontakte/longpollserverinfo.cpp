@@ -25,6 +25,7 @@ namespace Vkontakte
 {
 
 LongPollServerInfo::LongPollServerInfo()
+    : d(0)
 {
 }
 

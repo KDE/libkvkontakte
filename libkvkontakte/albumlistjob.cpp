@@ -24,6 +24,7 @@ namespace Vkontakte
 
 AlbumListJob::AlbumListJob(const QString &accessToken, int uid, const QIntList &aids)
     : VkontakteJob(accessToken, "photos.getAlbums")
+    , d(0)
 {
     if (uid != -1)
         addQueryItem("uid", QString::number(uid));

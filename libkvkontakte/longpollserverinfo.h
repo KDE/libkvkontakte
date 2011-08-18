@@ -29,6 +29,7 @@ namespace Vkontakte
 /**
 * Class that describes a person on facebook
 */
+// TODO: use generic QMap<QString, QVariant> instead of this class
 class LIBKVKONTAKTE_EXPORT LongPollServerInfo : public QObject
 {
     Q_OBJECT
@@ -53,6 +54,9 @@ private:
     QString m_key;
     QString m_server;
     QString m_ts;
+
+    class Private;
+    Private * const d;
 };
 
 typedef QSharedPointer<LongPollServerInfo> LongPollServerInfoPtr;

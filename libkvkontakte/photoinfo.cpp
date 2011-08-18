@@ -28,6 +28,7 @@ namespace Vkontakte
 
 PhotoInfo::PhotoInfo()
     : m_pid(-1), m_aid(-1), m_uid(-1)
+    , d(0)
 {
 }
 

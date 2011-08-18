@@ -31,6 +31,7 @@ namespace Vkontakte
 // http://vkontakte.ru/developers.php?o=-1&p=getProfiles
 UserInfoJob::UserInfoJob (const QString &accessToken)
     : VkontakteJob(accessToken, "getProfiles")
+    , d(0)
 {
     // The complete list of fields
     setFields(UserInfo::allQueryFields());
@@ -40,6 +41,7 @@ UserInfoJob::UserInfoJob (const QString &accessToken)
 
 UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
     : VkontakteJob(accessToken, "getProfiles")
+    , d(0)
 {
     setFields(UserInfo::allQueryFields());
     addQueryItem("uids", QString::number(uid));
@@ -47,6 +49,7 @@ UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
 
 UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
     : VkontakteJob(accessToken, "getProfiles")
+    , d(0)
 {
     setFields(UserInfo::allQueryFields());
     addQueryItem("uids", uids.join());

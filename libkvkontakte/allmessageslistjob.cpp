@@ -35,6 +35,7 @@ AllMessagesListJob::AllMessagesListJob(const QString& accessToken,
     , m_previewLength(previewLength)
     , m_filters(filters)
     , m_timeOffset(timeOffset)
+    , d(0)
 {
     m_totalCount[0] = -1; // for incoming messages
     m_totalCount[1] = -1; // for outgoing messages

@@ -115,6 +115,9 @@ private:
 
     QString m_chatId;
     QString m_chatActive;
+
+    class Private;
+    Private * const d;
 };
 
 /**

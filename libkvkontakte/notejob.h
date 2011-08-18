@@ -38,6 +38,9 @@ protected:
     
 private:
     NoteInfoPtr m_noteInfo;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

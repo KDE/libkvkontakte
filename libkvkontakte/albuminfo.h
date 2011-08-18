@@ -109,6 +109,9 @@ private:
     int m_size; // number of photos in the album
     int m_privacy;
     int m_commentPrivacy;
+
+    class Private;
+    Private * const d;
 };
 
 typedef QSharedPointer<AlbumInfo> AlbumInfoPtr;

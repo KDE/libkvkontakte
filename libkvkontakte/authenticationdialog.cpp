@@ -33,6 +33,7 @@ namespace Vkontakte
 
 AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     : KDialog(parent)
+    , d(0)
 {
     setButtons(KDialog::Cancel);
     setCaption(i18n( "Authenticate with VKontakte"));

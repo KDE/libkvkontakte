@@ -43,11 +43,14 @@ class LIBKVKONTAKTE_EXPORT NoteInfo : public QObject
     Q_PROPERTY(QString date WRITE setDateString READ dateString)
     Q_PROPERTY(int ncom WRITE setNcom READ ncom)
     Q_PROPERTY(int readNcom WRITE setReadNcom READ readNcom)
+    // TODO: add all possible attributes/"properties" to this class
 //    Q_PROPERTY(int privacy WRITE setPrivacy READ privacy)
 //    Q_PROPERTY(int comment_privacy WRITE setCommentPrivacy READ commentPrivacy)
 //    Q_PROPERTY(bool can_comment WRITE setCanComment READ canComment)
 
 public:
+    NoteInfo();
+
     void setNid(int nid);
     int nid() const;
 
@@ -113,6 +116,9 @@ private:
     QString m_date; /* Creation time of the note. */
     int m_ncom; /* Number of comments. */
     int m_readNcom; /* Number of read comments. */
+
+    class Private;
+    Private * const d;
 };
 
 typedef QSharedPointer<NoteInfo> NoteInfoPtr;

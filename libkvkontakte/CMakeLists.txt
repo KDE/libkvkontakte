@@ -100,7 +100,4 @@ install(FILES
     messageslistjob.h
     discussionslistjob.h
     getvariablejob.h
-    getuploadserverjobbase.h
-    getprofilephotouploadserverjob.h
-    getwallphotouploadserverjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)

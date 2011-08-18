@@ -40,6 +40,9 @@ protected:
     
 private:
     QVariant m_variable;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

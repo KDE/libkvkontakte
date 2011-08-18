@@ -29,6 +29,7 @@ namespace Vkontakte
 
 UserInfo::UserInfo()
     : m_timezone(INVALID_TIMEZONE)
+    , d(0)
 {
 }
 

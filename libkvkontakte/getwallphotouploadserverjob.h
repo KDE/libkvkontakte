@@ -24,7 +24,10 @@
 namespace Vkontakte
 {
 
-class LIBKVKONTAKTE_EXPORT GetWallPhotoUploadServerJob : public GetUploadServerJobBase
+// This class is not exported, so:
+//    - we don't care about ABI of this class (not using Pimpl)
+//    - library's users should use higher-level "jobs"
+class GetWallPhotoUploadServerJob : public GetUploadServerJobBase
 {
 public:
     GetWallPhotoUploadServerJob(const QString &accessToken, int id, bool uploadToGroup = false);

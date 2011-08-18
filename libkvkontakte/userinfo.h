@@ -37,6 +37,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     Q_OBJECT
 
     // Some fields are commented out, because nobody uses them.
+    // TODO: add all possible attributes/"properties" to this class
 
     // uid, first_name, last_name, nickname, sex, bdate (birthdate), city, country,
     // timezone, photo, photo_medium, photo_big, photo_rec.
@@ -220,6 +221,9 @@ private:
 
     QString m_homePhone;
     QString m_mobilePhone;
+
+    class Private;
+    Private * const d;
 };
 
 typedef QSharedPointer<UserInfo> UserInfoPtr;

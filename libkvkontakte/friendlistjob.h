@@ -39,6 +39,9 @@ protected:
 
 private:
     QList<UserInfoPtr> m_friends;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

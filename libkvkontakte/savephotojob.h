@@ -27,7 +27,10 @@
 namespace Vkontakte
 {
 
-class LIBKVKONTAKTE_EXPORT SavePhotoJob : public VkontakteJob
+// This class is not exported, so:
+//    - we don't care about ABI of this class (not using Pimpl)
+//    - library's users should use class UploadPhotosJob
+class SavePhotoJob : public VkontakteJob
 {
 public:
     SavePhotoJob(const QString &accessToken,

@@ -100,6 +100,9 @@ private:
     QString m_srcXXBig;
     QString m_text;
     QString m_dateCreated;
+
+    class Private;
+    Private * const d;
 };
 
 typedef QSharedPointer<PhotoInfo> PhotoInfoPtr;

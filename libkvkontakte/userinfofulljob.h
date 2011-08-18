@@ -65,6 +65,9 @@ private:
     CidsNamesJob *m_citiesJob;
 
     QList<UserInfoPtr> m_userInfo;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

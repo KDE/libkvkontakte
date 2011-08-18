@@ -25,6 +25,7 @@
 namespace Vkontakte
 {
 
+// This class is too simple to expand, not using Pimpl here
 class LIBKVKONTAKTE_EXPORT CreateAlbumJob : public VkontakteJob
 {
 public:

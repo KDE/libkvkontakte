@@ -36,6 +36,9 @@ protected:
 
 private:
     int m_permissions;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

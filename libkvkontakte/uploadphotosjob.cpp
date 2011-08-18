@@ -33,6 +33,7 @@ UploadPhotosJob::UploadPhotosJob(const QString &accessToken,
     , m_aid(aid)
     , m_gid(gid)
     , m_saveBig(saveBig)
+    , d(0)
 {
 }
 

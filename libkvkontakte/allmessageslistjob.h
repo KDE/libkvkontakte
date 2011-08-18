@@ -62,6 +62,9 @@ private:
 
     int m_totalCount[2];
     QList<MessageInfoPtr> m_list;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

@@ -46,6 +46,9 @@ protected:
 
 private:
     QList<PhotoInfoPtr> m_list;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

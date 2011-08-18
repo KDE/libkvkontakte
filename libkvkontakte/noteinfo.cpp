@@ -27,6 +27,12 @@
 namespace Vkontakte
 {
 
+NoteInfo::NoteInfo()
+    : m_nid(-1), m_uid(-1), m_ncom(-1), m_readNcom(-1)
+    , d(0)
+{
+}
+
 void NoteInfo::setNid(int nid)
 {
     m_nid = nid;

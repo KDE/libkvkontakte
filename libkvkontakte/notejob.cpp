@@ -25,6 +25,7 @@ namespace Vkontakte
 // http://vkontakte.ru/developers.php?o=-1&p=notes.getById
 NoteJob::NoteJob(const QString &accessToken, int nid)
     : VkontakteJob(accessToken, "notes.getById")
+    , d(0)
 {
     addQueryItem("nid", QString::number(nid));
     addQueryItem("need_wiki", "1"); // works only for current user's notes

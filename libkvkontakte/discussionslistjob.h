@@ -50,6 +50,9 @@ protected:
 private:
     int m_totalCount; // number of all discussions, not only discussions retrieved in this request
     QList<MessageInfoPtr> m_list;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

@@ -81,6 +81,9 @@ private:
     QStringList m_fields;
     bool m_needCityNames;
     bool m_needCountryNames;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

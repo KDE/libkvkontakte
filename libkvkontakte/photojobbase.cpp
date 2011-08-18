@@ -25,6 +25,7 @@ namespace Vkontakte
 
 PhotoJobBase::PhotoJobBase(const KUrl &url)
     : m_url(url)
+    , d(0)
 {
 }
 

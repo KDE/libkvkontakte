@@ -27,6 +27,7 @@ AllNotesListJob::AllNotesListJob(const QString &accessToken, int uid)
     : KJobWithSubjobs()
     , m_accessToken(accessToken)
     , m_uid(uid)
+    , d(0)
 {
     m_totalCount = -1;
 }

@@ -29,6 +29,7 @@ namespace Vkontakte
 PhotoListJob::PhotoListJob(const QString &accessToken,
                            int uid, int aid, const QIntList &pids)
     : VkontakteJob(accessToken, "photos.get")
+    , d(0)
 {
     addQueryItem("uid", QString::number(uid));
     addQueryItem("aid", QString::number(aid));

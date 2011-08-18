@@ -26,6 +26,7 @@ namespace Vkontakte
 NotesListJob::NotesListJob(const QString &accessToken,
                            int uid, int offset, int count)
     : VkontakteJob(accessToken, "notes.get")
+    , d(0)
 {
     // Not passing "nids", because we want all notes.
 

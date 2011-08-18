@@ -26,6 +26,7 @@ namespace Vkontakte
 
 NoteAddJob::NoteAddJob(const QString &accessToken, const QString &title, const QString &text)
     : VkontakteJob(accessToken, "notes.add", true)
+    , d(0)
 {
     addQueryItem("title", title);
     addQueryItem("text", text);

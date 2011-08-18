@@ -31,6 +31,7 @@ UserInfoFullJob::UserInfoFullJob(const QString &accessToken,
     , m_accessToken(accessToken)
     , m_uids(uids)
     , m_needCountryNames(needCountryNames), m_needCityNames(needCityNames)
+    , d(0)
 {
 }
 
@@ -40,6 +41,7 @@ UserInfoFullJob::UserInfoFullJob(const QString &accessToken,
     : KJob()
     , m_accessToken(accessToken)
     , m_needCountryNames(needCountryNames), m_needCityNames(needCityNames)
+    , d(0)
 {
     m_uids << uid;
 }

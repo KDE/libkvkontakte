@@ -88,6 +88,10 @@ protected:
 
 private slots:
     void jobFinished(KJob *job);
+
+private:
+    class BasePrivate;
+    BasePrivate * const baseD;
 };
 
 } /* namespace Vkontakte */

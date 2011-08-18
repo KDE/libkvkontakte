@@ -47,6 +47,9 @@ private:
 
     int m_totalCount;
     QList<NoteInfoPtr> m_list;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

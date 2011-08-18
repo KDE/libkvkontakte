@@ -53,6 +53,9 @@ protected:
 private:
     int m_totalCount; // number of all notes, not only notes retrieved in this request
     QList<NoteInfoPtr> m_list;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

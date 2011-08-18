@@ -26,6 +26,7 @@ namespace Vkontakte
 // http://vkontakte.ru/developers.php?o=-1&p=%CF%F0%E0%E2%E0%20%EF%F0%E8%EB%EE%E6%E5%ED%E8%E9
 GetApplicationPermissionsJob::GetApplicationPermissionsJob(const QString &accessToken)
     : VkontakteJob(accessToken, "getUserSettings")
+    , d(0)
 {
 }
 

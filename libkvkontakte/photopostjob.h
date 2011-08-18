@@ -30,7 +30,10 @@
 namespace Vkontakte
 {
 
-class LIBKVKONTAKTE_EXPORT PhotoPostJob : public KJobWithSubjob
+// This class is not exported, so:
+//    - we don't care about ABI of this class (not using Pimpl)
+//    - library's users should use class UploadPhotosJob
+class PhotoPostJob : public KJobWithSubjob
 {
     Q_OBJECT
 public:

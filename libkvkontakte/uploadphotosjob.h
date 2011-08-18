@@ -60,6 +60,9 @@ private:
 
     QString m_uploadUrl;
     QList<PhotoInfoPtr> m_list;
+
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */
