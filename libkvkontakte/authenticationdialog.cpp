@@ -36,7 +36,7 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     , d(0)
 {
     setButtons(KDialog::Cancel);
-    setCaption(i18n("Authenticate with VKontakte"));
+    setCaption(i18nc("@title:window", "Authenticate with VKontakte"));
     setAttribute(Qt::WA_DeleteOnClose, true);
 
     QWidget *widget = new QWidget(this);
@@ -98,7 +98,7 @@ void AuthenticationDialog::showErrorDialog()
     const QString details = i18n("<b>VKontakte Error Description:</b> %1<br>"
                                  "<b>VKontakte Error:</b> %2<br>", m_errorDescription, m_error);
     KMessageBox::detailedSorry(this, i18n("Authentication with VKontakte was not successful."),
-                               details, i18n("Authentication Problem."));
+                               details, i18nc("@title:window", "Authentication Problem"));
     emit canceled();
     close();
 }
