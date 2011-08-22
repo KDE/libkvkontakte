@@ -16,7 +16,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <qjson/qobjecthelper.h>
 #include "longpollserverjob.h"
 
 namespace Vkontakte
@@ -29,11 +28,10 @@ LongPollServerJob::LongPollServerJob(const QString &accessToken)
 
 void LongPollServerJob::handleData(const QVariant &data)
 {
-     m_serverInfo = LongPollServerInfoPtr(new LongPollServerInfo());
-     QJson::QObjectHelper::qvariant2qobject(data.toMap(), m_serverInfo.data());
+     m_serverInfo = data.toMap();
 }
 
-LongPollServerInfoPtr LongPollServerJob::serverInfo()
+QVariantMap LongPollServerJob::serverInfo()
 {
     return m_serverInfo;
 }

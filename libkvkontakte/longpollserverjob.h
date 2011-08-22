@@ -20,7 +20,7 @@
 #define LONGPOLLSERVERJOB_H
 
 #include <libkvkontakte/vkontaktejobs.h>
-#include "longpollserverinfo.h"
+#include <QVariantMap>
 
 namespace Vkontakte
 {
@@ -31,13 +31,13 @@ class LIBKVKONTAKTE_EXPORT LongPollServerJob : public VkontakteJob
 public:
     LongPollServerJob(const QString &accessToken);
 
-    LongPollServerInfoPtr serverInfo();
+    QVariantMap serverInfo();
 
 protected:
     virtual void handleData(const QVariant &data);
 
 private:
-    LongPollServerInfoPtr m_serverInfo;
+    QVariantMap m_serverInfo;
 };
 
 } /* namespace Vkontakte */
