@@ -41,7 +41,7 @@ public:
 
 protected:
     void startPostJob(int offset, int count);
-    void startSaveJob(const QMap<QString, QVariant> &photoIdData);
+    void startSaveJob(const QVariantMap &photoIdData);
 
 signals:
     void progress(int);

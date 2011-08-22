@@ -99,7 +99,7 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
         emitResult();
 }
 
-void UploadPhotosJob::startSaveJob(const QMap<QString, QVariant> &photoIdData)
+void UploadPhotosJob::startSaveJob(const QVariantMap &photoIdData)
 {
     SavePhotoJob *job = new SavePhotoJob(m_accessToken, photoIdData);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(saveJobFinished(KJob*)));

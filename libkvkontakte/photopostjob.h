@@ -23,8 +23,7 @@
 #include <KJob>
 #include <QPointer>
 #include <QStringList>
-#include <QMap>
-#include <QVariant>
+#include <QVariantMap>
 #include "vkontaktejobs.h"
 
 namespace Vkontakte
@@ -41,7 +40,7 @@ public:
     PhotoPostJob(const QString &url, const QStringList &files);
 
     virtual void start();
-    QMap<QString, QVariant> response() const;
+    QVariantMap response() const;
 
 protected:
     /** Check for a return error and set the appropiate error messags */
@@ -56,7 +55,7 @@ private:
     QString m_url;
     QStringList m_files;
     bool m_ok;
-    QMap<QString, QVariant> m_response;
+    QVariantMap m_response;
 };
 
 } /* namespace Vkontakte */

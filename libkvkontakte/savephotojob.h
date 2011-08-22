@@ -19,8 +19,7 @@
 #ifndef SAVEPHOTOJOB_H
 #define SAVEPHOTOJOB_H
 
-#include <QMap>
-#include <QVariant>
+#include <QVariantMap>
 #include "vkontaktejobs.h"
 #include "photoinfo.h"
 
@@ -34,7 +33,7 @@ class SavePhotoJob : public VkontakteJob
 {
 public:
     SavePhotoJob(const QString &accessToken,
-                 const QMap<QString, QVariant> &photoIdData, int gid = -1);
+                 const QVariantMap &photoIdData, int gid = -1);
 
     QList<PhotoInfoPtr> list() const;
 

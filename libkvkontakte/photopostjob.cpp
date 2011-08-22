@@ -123,7 +123,7 @@ void PhotoPostJob::handleData(const QVariant &data)
     m_response = data.toMap();
 }
 
-QMap<QString, QVariant> PhotoPostJob::response() const
+QVariantMap PhotoPostJob::response() const
 {
     return m_response;
 }

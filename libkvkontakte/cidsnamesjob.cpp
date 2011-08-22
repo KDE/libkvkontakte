@@ -40,7 +40,7 @@ void CidsNamesJob::handleData(const QVariant &data)
     // (I did not check it, but they do not guarantee the same order as in "cids")
     foreach (const QVariant &item, data.toList())
     {
-        QMap<QString, QVariant> item_map = item.toMap();
+        QVariantMap item_map = item.toMap();
         m_names[item_map["cid"].toInt()] = item_map["name"].toString();
     }
 }
