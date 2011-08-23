@@ -28,13 +28,12 @@
 namespace Vkontakte
 {
 
-/**
- * Class to represent a facebook note
- */
 // http://vkontakte.ru/developers.php?o=-1&p=notes.getById
 class LIBKVKONTAKTE_EXPORT NoteInfo : public QObject
 {
     Q_OBJECT
+
+    // nid, uid, title, text, text_wiki, date, ncom, read_ncom, privacy, comment_privacy, can_comment
     Q_PROPERTY(int nid WRITE setNid READ nid)
     Q_PROPERTY(int uid WRITE setUid READ uid)
     Q_PROPERTY(QString title WRITE setTitle READ title)
@@ -42,11 +41,10 @@ class LIBKVKONTAKTE_EXPORT NoteInfo : public QObject
     Q_PROPERTY(QString text_wiki WRITE setTextWiki READ textWiki)
     Q_PROPERTY(QString date WRITE setDateString READ dateString)
     Q_PROPERTY(int ncom WRITE setNcom READ ncom)
-    Q_PROPERTY(int readNcom WRITE setReadNcom READ readNcom)
-    // TODO: add all possible attributes/"properties" to this class
-//    Q_PROPERTY(int privacy WRITE setPrivacy READ privacy)
-//    Q_PROPERTY(int comment_privacy WRITE setCommentPrivacy READ commentPrivacy)
-//    Q_PROPERTY(bool can_comment WRITE setCanComment READ canComment)
+    Q_PROPERTY(int read_ncom WRITE setReadNcom READ readNcom)
+    Q_PROPERTY(int privacy WRITE setPrivacy READ privacy)
+    Q_PROPERTY(int comment_privacy WRITE setCommentPrivacy READ commentPrivacy)
+    Q_PROPERTY(bool can_comment WRITE setCanComment READ canComment)
 
 public:
     NoteInfo();
@@ -107,6 +105,15 @@ public:
     void setReadNcom(int readNcom);
     int readNcom() const;
 
+    void setPrivacy(int privacy);
+    int privacy() const;
+
+    void setCommentPrivacy(int commentPrivacy);
+    int commentPrivacy() const;
+
+    void setCanComment(bool canComment);
+    bool canComment() const;
+
 private:
     int m_nid;          /* Vkontakte id of the note. */
     int m_uid;        /* Creator of the note. */
@@ -116,6 +123,9 @@ private:
     QString m_date; /* Creation time of the note. */
     int m_ncom; /* Number of comments. */
     int m_readNcom; /* Number of read comments. */
+    int m_privacy;
+    int m_commentPrivacy;
+    int m_canComment;
 
     class Private;
     Private * const d;

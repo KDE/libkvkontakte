@@ -29,6 +29,7 @@ namespace Vkontakte
 
 NoteInfo::NoteInfo()
     : m_nid(-1), m_uid(-1), m_ncom(-1), m_readNcom(-1)
+    , m_privacy(-1), m_commentPrivacy(-1), m_canComment(false)
     , d(0)
 {
 }
@@ -98,9 +99,19 @@ KDateTime NoteInfo::date() const
     return unixTimeToKDateTime(m_date);
 }
 
+void NoteInfo::setNcom (int ncom)
+{
+    m_ncom = ncom;
+}
+
 int NoteInfo::ncom() const
 {
     return m_ncom;
+}
+
+void NoteInfo::setReadNcom (int readNcom)
+{
+    m_readNcom = readNcom;
 }
 
 int NoteInfo::readNcom() const
@@ -108,14 +119,34 @@ int NoteInfo::readNcom() const
     return m_readNcom;
 }
 
-void NoteInfo::setNcom (int ncom)
+void NoteInfo::setPrivacy(int privacy)
 {
-    m_ncom = ncom;
+    m_privacy = privacy;
 }
 
-void NoteInfo::setReadNcom (int readNcom)
+int NoteInfo::privacy() const
 {
-    m_readNcom = readNcom;
+    return m_privacy;
+}
+
+void NoteInfo::setCommentPrivacy(int commentPrivacy)
+{
+    m_commentPrivacy = commentPrivacy;
+}
+
+int NoteInfo::commentPrivacy() const
+{
+    return m_commentPrivacy;
+}
+
+void NoteInfo::setCanComment(bool canComment)
+{
+    m_canComment = canComment;
+}
+
+bool NoteInfo::canComment() const
+{
+    return m_canComment;
 }
 
 } /* namespace Vkontakte */
