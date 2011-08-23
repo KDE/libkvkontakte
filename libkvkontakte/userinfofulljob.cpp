@@ -54,7 +54,7 @@ void UserInfoFullJob::handleFinish()
     m_citiesJob = 0;
 }
 
-void UserInfoFullJob::handleError(KJob* job)
+void UserInfoFullJob::handleError(KJob *job)
 {
     setError(job->error());
     setErrorText(job->errorText());
