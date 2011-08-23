@@ -29,7 +29,7 @@ namespace Vkontakte
 {
 
 // http://vkontakte.ru/developers.php?o=-1&p=getProfiles
-UserInfoJob::UserInfoJob (const QString &accessToken)
+UserInfoJob::UserInfoJob(const QString &accessToken)
     : VkontakteJob(accessToken, "getProfiles")
     , d(0)
 {

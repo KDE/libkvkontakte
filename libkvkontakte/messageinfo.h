@@ -66,14 +66,7 @@ public:
      */
     KDateTime date() const;
 
-    /**
-    * @brief Sets the facebook id of a person
-    * @param id The Vkontakte id
-    */
     void setUid(int uid);
-    /**
-    * @return The vkontakte id of this person
-    */
     int uid() const;
 
     void setMid(int mid);
