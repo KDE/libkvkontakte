@@ -25,51 +25,109 @@
 #include <KDateTime>
 #include <QSharedPointer>
 #include <QDate>
+#include <QVariantMap>
 
 namespace Vkontakte
 {
 
-/**
-* Class that describes a person on facebook
-*/
+// http://vkontakte.ru/developers.php?o=-1&p=getProfiles
 class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 {
     Q_OBJECT
 
-    // Some fields are commented out, because nobody uses them.
-    // TODO: add all possible attributes/"properties" to this class
-
-    // uid, first_name, last_name, nickname, sex, bdate (birthdate), city, country,
-    // timezone, photo, photo_medium, photo_big, photo_rec.
+    // These fields will be always returned: uid, first_name, last_name.
     Q_PROPERTY(int uid WRITE setUid READ uid)
-    Q_PROPERTY(QString domain WRITE setDomain READ domain)
     Q_PROPERTY(QString first_name WRITE setFirstName READ firstName)
     Q_PROPERTY(QString last_name WRITE setLastName READ lastName)
+
+    // If "nickname" was requested, then this field will
+    // be also available: nickname.
     Q_PROPERTY(QString nickname WRITE setNickName READ nickName)
-//    Q_PROPERTY(QString sex WRITE setSex READ sex)
+
+    // If "sex" was requested, then this field will
+    // be also available: sex.
+    Q_PROPERTY(int sex WRITE setSex READ sex)
+
+    // If "online" was requested, then this field will
+    // be also available: online.
+    Q_PROPERTY(bool online WRITE setOnline READ online)
+
+    // If "bdate" was requested, then this field will
+    // be also available: bdate.
     Q_PROPERTY(QString bdate WRITE setBirthday READ birthdayAsString)
+
+    // If "city" was requested, then this field will
+    // be also available: city.
     Q_PROPERTY(int city WRITE setCity READ city)
+
+    // If "country" was requested, then this field will
+    // be also available: country.
     Q_PROPERTY(int country WRITE setCountry READ country)
-    Q_PROPERTY(int timezone WRITE setTimezone READ timezone)
+
+    // If "photo" was requested, then this field will
+    // be also available: photo.
     Q_PROPERTY(QString photo WRITE setPhoto READ photo)
+
+    // If "photo_medium" was requested, then this field will
+    // be also available: photo_medium.
     Q_PROPERTY(QString photo_medium WRITE setPhotoMedium READ photoMedium)
-//     Q_PROPERTY(QString photo_big WRITE setPhotoBig READ photoBig)
-//     Q_PROPERTY(QString photo_rec WRITE setPhotoRec READ photoRec)
-//     Q_PROPERTY(int online WRITE setOnline READ online)
+
+    // If "photo_medium_rec" was requested, then this field will
+    // be also available: photo_medium_rec.
+    Q_PROPERTY(QString photo_medium_rec WRITE setPhotoMediumRec READ photoMediumRec)
+
+    // If "photo_big" was requested, then this field will
+    // be also available: photo_big.
+    Q_PROPERTY(QString photo_big WRITE setPhotoBig READ photoBig)
+
+    // If "photo_rec" was requested, then this field will
+    // be also available: photo_rec.
+    Q_PROPERTY(QString photo_rec WRITE setPhotoRec READ photoRec)
+
+    // TODO: add "lists" field
+
+    // If "screen_name" was requested, then this field will
+    // be also available: screen_name.
+    Q_PROPERTY(QString screen_name WRITE setDomain READ domain)
+    // http://vkontakte.ru/developers.php?oid=-1&p=friends.get
+    Q_PROPERTY(QString domain WRITE setDomain READ domain)
+
+    // If "has_mobile" was requested, then this field will
+    // be also available: has_mobile.
+    Q_PROPERTY(bool has_mobile WRITE setHasMobile READ hasMobile)
+
+    // If "rate" was requested, then this field will
+    // be also available: rate.
+    Q_PROPERTY(int rate WRITE setRate READ rate)
 
     // If "contacts" was requested, then these fields will
     // be also available: home_phone, mobile_phone.
     Q_PROPERTY(QString home_phone WRITE setHomePhone READ homePhone)
     Q_PROPERTY(QString mobile_phone WRITE setMobilePhone READ mobilePhone)
-    //Q_PROPERTY(int has_mobile WRITE setHasMobile READ hasMobile)
 
-//     // If "education" was requested, then these fields will
-//     // be also available: university, university_name, faculty, faculty_name, graduation.
-//     Q_PROPERTY(QString university WRITE setUniversity READ university)
-//     Q_PROPERTY(QString university_name WRITE setUniversityName READ universityName)
-//     Q_PROPERTY(QString faculty WRITE setFaculty READ faculty)
-//     Q_PROPERTY(QString faculty_name WRITE setFacultyName READ facultyName)
-//     Q_PROPERTY(QString graduation WRITE setGraduation READ graduation)
+    // If "education" was requested, then these fields will
+    // be also available: university, university_name, faculty, faculty_name, graduation.
+    Q_PROPERTY(int university WRITE setUniversity READ university)
+    Q_PROPERTY(QString university_name WRITE setUniversityName READ universityName)
+    Q_PROPERTY(int faculty WRITE setFaculty READ faculty)
+    Q_PROPERTY(QString faculty_name WRITE setFacultyName READ facultyName)
+    Q_PROPERTY(int graduation WRITE setGraduation READ graduation)
+
+    // If "can_post" was requested, then this field will
+    // be also available: can_post.
+    Q_PROPERTY(bool can_post WRITE setCanPost READ canPost)
+
+    // If "can_write_private_message" was requested, then this field will
+    // be also available: can_write_private_message.
+    Q_PROPERTY(bool can_write_private_message WRITE setCanWritePrivateMessage READ canWritePrivateMessage)
+
+    // If "counters" was requested, then this field will
+    // be also available: counters.
+    Q_PROPERTY(QVariantMap counters WRITE setCounters READ counters)
+
+    // If "timezone" was requested, then this field will
+    // be also available: timezone.
+    Q_PROPERTY(int timezone WRITE setTimezone READ timezone)
 
 public:
     enum
@@ -79,118 +137,64 @@ public:
 
     UserInfo();
 
-    /**
-    * @brief Sets the facebook id of a person
-    * @param id The Vkontakte id
-    */
     void setUid(int uid);
-    /**
-    * @return The vkontakte id of this person
-    */
     int uid() const;
 
-    void setDomain(const QString &domain);
-    QString domain() const;
-
-    /**
-    * @brief Set the first name of this person.
-    * @param firstName The first name of this person.
-    */
     void setFirstName(const QString &firstName);
-    /**
-    * @return The first name of this person.
-    */
     QString firstName() const;
 
-    /**
-    * @brief Set the last name of this person.
-    * @param lastName The last name of this person.
-    */
     void setLastName(const QString &lastName);
-    /**
-    * @return The last name of this person.
-    */
     QString lastName() const;
 
-    /**
-    * @brief Set the nickname of this person.
-    * @param nickName The nickname of this person.
-    */
-    void setNickName( const QString &nickName );
-    /**
-    * @return The nickname of this person.
-    */
+    void setNickName(const QString &nickName);
     QString nickName() const;
 
-    /**
-    * @brief Set the birthday of this person.
-    * @param birthday The birthday in "facebook format"
-    */
-    void setBirthday( const QString &birthday );
-    /**
-    * @return The birthday as a QString in "facebook format"
-    */
+    void setSex(int sex);
+    int sex() const;
+
+    void setOnline(bool online);
+    bool online() const;
+
+    void setBirthday(const QString &birthday);
     QString birthdayAsString() const;
     /**
     * @return The birthday of this person as a QDate.
     */
     QDate birthday() const;
 
-    /**
-    * @brief Set the current city of this person.
-    * @param city The current city of this person.
-    */
     void setCity(int city);
-
     int city() const;
-
-    /**
-    * @brief Set the current country of this person.
-    * @param country The current country of this person.
-    */
-    void setCountry(int country);
-
-    int country() const;
-
-    void setCountryString(const QString &countryString);
-    QString countryString() const;
-
     void setCityString(const QString &cityString);
     QString cityString() const;
 
-    /**
-    * @brief Set the timezone of this person.
-    * @param timezone The timezone of this person.
-    */
-    void setTimezone(int timezone);
-    /**
-    * @return The timezone of this person.
-    */
-    int timezone() const;
+    void setCountry(int country);
+    int country() const;
+    void setCountryString(const QString &countryString);
+    QString countryString() const;
 
-    /**
-     * @brief Set the URL of the profile photo
-     *
-     * @param photo URL of the profile photo
-     **/
     void setPhoto(const QString &photo);
-
-    /**
-     * @return The URL of this user's photo
-     **/
     QString photo() const;
 
-    /**
-     * @brief Set the URL of the medium-sized profile photo
-     *
-     * @param photoMedium URL of the medium-sized profile photo
-     **/
     void setPhotoMedium(const QString &photoMedium);
-
-    /**
-     * @return The URL of this user's medium-sized photo
-     **/
     QString photoMedium() const;
+
+    void setPhotoMediumRec(const QString &photoMediumRec);
+    QString photoMediumRec() const;
+
+    void setPhotoBig(const QString &photoBig);
+    QString photoBig() const;
+
+    void setPhotoRec(const QString &photoRec);
+    QString photoRec() const;
+
+    void setDomain(const QString &domain);
+    QString domain() const;
+
+    void setHasMobile(bool hasMobile);
+    bool hasMobile() const;
+
+    void setRate(int rate);
+    int rate() const;
 
     void setHomePhone(const QString &homePhone);
     QString homePhone() const;
@@ -198,29 +202,84 @@ public:
     void setMobilePhone(const QString &mobilePhone);
     QString mobilePhone() const;
 
-    QString profileUrl() const;
+    void setUniversity(int university);
+    int university() const;
 
+    void setUniversityName(const QString &universityName);
+    QString universityName() const;
+
+    void setFaculty(int faculty);
+    int faculty() const;
+
+    void setFacultyName(const QString &facultyName);
+    QString facultyName() const;
+
+    void setGraduation(int graduation);
+    int graduation() const;
+
+    void setCanPost(bool canPost);
+    bool canPost() const;
+
+    void setCanWritePrivateMessage(bool canWritePrivateMessage);
+    bool canWritePrivateMessage() const;
+
+    void setCounters(const QVariantMap &counters);
+    QVariantMap counters() const;
+
+    void setTimezone(int timezone);
+    int timezone() const;
+
+
+    QString profileUrl() const;
     static QStringList allQueryFields();
 
 private:
     int m_uid; // this could be an integer, but what if something will change?..
-    QString m_domain; // plain string
-    QString m_firstName; // plain string
-    QString m_lastName; // plain string
-    QString m_nickName; // plain string
+    QString m_firstName;
+    QString m_lastName;
+
+    QString m_nickName;
+
+    int m_sex;
+
+    bool m_online;
 
     QDate m_birthday;
-    int m_country;
-    QString m_countryString;
+
     int m_city;
     QString m_cityString;
-    int m_timezone;
+
+    int m_country;
+    QString m_countryString;
 
     QString m_photo;
     QString m_photoMedium;
+    QString m_photoMediumRec;
+    QString m_photoBig;
+    QString m_photoRec;
+
+    QString m_domain; // domain / screen_name
+
+    bool m_hasMobile;
+
+    int m_rate;
 
     QString m_homePhone;
     QString m_mobilePhone;
+
+    int m_university;
+    QString m_universityName;
+    int m_faculty;
+    QString m_facultyName;
+    int m_graduation; // graduation year
+
+    bool m_canPost;
+    bool m_canWritePrivateMessage;
+
+    QVariantMap m_counters; // TODO: split into a few integers? Use "QMap<QString, int>"?
+
+    int m_timezone;
+
 
     class Private;
     Private * const d;

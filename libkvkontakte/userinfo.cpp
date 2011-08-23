@@ -28,14 +28,13 @@ namespace Vkontakte
 {
 
 UserInfo::UserInfo()
-    : m_timezone(INVALID_TIMEZONE)
+    : m_uid(-1), m_sex(-1), m_online(false)
+    , m_city(-1), m_country(-1), m_hasMobile(false), m_rate(-1)
+    , m_university(-1), m_faculty(-1), m_graduation(-1)
+    , m_canPost(false), m_canWritePrivateMessage(false)
+    , m_timezone(INVALID_TIMEZONE)
     , d(0)
 {
-}
-
-int UserInfo::uid() const
-{
-    return m_uid;
 }
 
 void UserInfo::setUid(int uid)
@@ -43,14 +42,59 @@ void UserInfo::setUid(int uid)
     m_uid = uid;
 }
 
-QString UserInfo::domain() const
+int UserInfo::uid() const
 {
-    return m_domain;
+    return m_uid;
 }
 
-void UserInfo::setDomain(const QString &domain)
+void UserInfo::setFirstName(const QString &firstName)
 {
-    m_domain = domain;
+    m_firstName = firstName;
+}
+
+QString UserInfo::firstName() const
+{
+    return m_firstName;
+}
+
+void UserInfo::setLastName(const QString &lastName)
+{
+    m_lastName = lastName;
+}
+
+QString UserInfo::lastName() const
+{
+    return m_lastName;
+}
+
+void UserInfo::setNickName(const QString& nickName)
+{
+    m_nickName = nickName;
+}
+
+QString UserInfo::nickName() const
+{
+    return m_nickName;
+}
+
+void UserInfo::setSex(int sex)
+{
+    m_sex = sex;
+}
+
+int UserInfo::sex() const
+{
+    return m_sex;
+}
+
+void UserInfo::setOnline(bool online)
+{
+    m_online = online;
+}
+
+bool UserInfo::online() const
+{
+    return m_online;
 }
 
 // "[day].[month].[year]" or "[day].[month]"
@@ -63,44 +107,234 @@ void UserInfo::setBirthday(const QString& birthday)
     }
 }
 
-QDate UserInfo::birthday() const
-{
-    return m_birthday;
-}
-
 QString UserInfo::birthdayAsString() const
 {
     return m_birthday.toString();
 }
 
-QString UserInfo::firstName() const
+QDate UserInfo::birthday() const
 {
-    return m_firstName;
+    return m_birthday;
 }
 
-QString UserInfo::lastName() const
+void UserInfo::setCity(int city)
 {
-    return m_lastName;
+    m_city = city;
 }
 
-QString UserInfo::nickName() const
+int UserInfo::city() const
 {
-    return m_nickName;
+    return m_city;
 }
 
-void UserInfo::setFirstName(const QString& firstName)
+void UserInfo::setCityString(const QString &cityString)
 {
-    m_firstName = firstName;
+    m_cityString = cityString;
 }
 
-void UserInfo::setLastName(const QString& lastName)
+QString UserInfo::cityString() const
 {
-    m_lastName = lastName;
+    return m_cityString;
 }
 
-void UserInfo::setNickName(const QString& nickName)
+void UserInfo::setCountry(int country)
 {
-    m_nickName = nickName;
+    m_country = country;
+}
+
+int UserInfo::country() const
+{
+    return m_country;
+}
+
+void UserInfo::setCountryString(const QString &countryString)
+{
+    m_countryString = countryString;
+}
+
+QString UserInfo::countryString() const
+{
+    return m_countryString;
+}
+
+void UserInfo::setPhoto(const QString &photo)
+{
+    m_photo = photo;
+}
+
+QString UserInfo::photo() const
+{
+    return m_photo;
+}
+
+void UserInfo::setPhotoMedium(const QString &photoMedium)
+{
+    m_photoMedium = photoMedium;
+}
+
+QString UserInfo::photoMedium() const
+{
+    return m_photoMedium;
+}
+
+void UserInfo::setPhotoMediumRec(const QString &photoMediumRec)
+{
+    m_photoMediumRec = photoMediumRec;
+}
+
+QString UserInfo::photoMediumRec() const
+{
+    return m_photoMediumRec;
+}
+
+void UserInfo::setPhotoBig(const QString &photoBig)
+{
+    m_photoBig = photoBig;
+}
+
+QString UserInfo::photoBig() const
+{
+    return m_photoBig;
+}
+
+void UserInfo::setPhotoRec(const QString &photoRec)
+{
+    m_photoRec = photoRec;
+}
+
+QString UserInfo::photoRec() const
+{
+    return m_photoRec;
+}
+
+void UserInfo::setDomain(const QString &domain)
+{
+    m_domain = domain;
+}
+
+QString UserInfo::domain() const
+{
+    return m_domain;
+}
+
+void UserInfo::setHasMobile(bool hasMobile)
+{
+    m_hasMobile = hasMobile;
+}
+
+bool UserInfo::hasMobile() const
+{
+    return m_hasMobile;
+}
+
+void UserInfo::setRate(int rate)
+{
+    m_rate = rate;
+}
+
+int UserInfo::rate() const
+{
+    return m_rate;
+}
+
+void UserInfo::setHomePhone(const QString &homePhone)
+{
+    m_homePhone = homePhone;
+}
+
+QString UserInfo::homePhone() const
+{
+    return m_homePhone;
+}
+
+void UserInfo::setMobilePhone(const QString &mobilePhone)
+{
+    m_mobilePhone = mobilePhone;
+}
+
+QString UserInfo::mobilePhone() const
+{
+    return m_mobilePhone;
+}
+
+void UserInfo::setUniversity(int university)
+{
+    m_university = university;
+}
+
+int UserInfo::university() const
+{
+    return m_university;
+}
+
+void UserInfo::setUniversityName(const QString &universityName)
+{
+    m_universityName = universityName;
+}
+
+QString UserInfo::universityName() const
+{
+    return m_universityName;
+}
+
+void UserInfo::setFaculty(int faculty)
+{
+    m_faculty = faculty;
+}
+
+int UserInfo::faculty() const
+{
+    return m_faculty;
+}
+
+void UserInfo::setFacultyName(const QString &facultyName)
+{
+    m_facultyName = facultyName;
+}
+
+QString UserInfo::facultyName() const
+{
+    return m_facultyName;
+}
+
+void UserInfo::setGraduation(int graduation)
+{
+    m_graduation = graduation;
+}
+
+int UserInfo::graduation() const
+{
+    return m_graduation;
+}
+
+void UserInfo::setCanPost(bool canPost)
+{
+    m_canPost = canPost;
+}
+
+bool UserInfo::canPost() const
+{
+    return m_canPost;
+}
+
+void UserInfo::setCanWritePrivateMessage(bool canWritePrivateMessage)
+{
+    m_canWritePrivateMessage = canWritePrivateMessage;
+}
+
+bool UserInfo::canWritePrivateMessage() const
+{
+    return m_canWritePrivateMessage;
+}
+
+void UserInfo::setCounters(const QVariantMap &counters)
+{
+    m_counters = counters;
+}
+
+QVariantMap UserInfo::counters() const
+{
+    return m_counters;
 }
 
 void UserInfo::setTimezone(int timezone)
@@ -127,6 +361,7 @@ QString UserInfo::profileUrl() const
  *
  * @return The list of strings to pass as "fields" argument to a method.
  **/
+// static
 QStringList UserInfo::allQueryFields()
 {
     QStringList fields;
@@ -149,86 +384,6 @@ QStringList UserInfo::allQueryFields()
            << "education"
            << "online";
     return fields;
-}
-
-QString UserInfo::photo() const
-{
-    return m_photo;
-}
-
-void UserInfo::setPhoto(const QString& photo)
-{
-    m_photo = photo;
-}
-
-QString UserInfo::photoMedium() const
-{
-    return m_photoMedium;
-}
-
-void UserInfo::setPhotoMedium(const QString& photoMedium)
-{
-    m_photoMedium = photoMedium;
-}
-
-int UserInfo::city() const
-{
-    return m_city;
-}
-
-int UserInfo::country() const
-{
-    return m_country;
-}
-
-void UserInfo::setCity(int city)
-{
-    m_city = city;
-}
-
-void UserInfo::setCountry(int country)
-{
-    m_country = country;
-}
-
-QString UserInfo::cityString() const
-{
-    return m_cityString;
-}
-
-QString UserInfo::countryString() const
-{
-    return m_countryString;
-}
-
-void UserInfo::setCityString(const QString& cityString)
-{
-    m_cityString = cityString;
-}
-
-void UserInfo::setCountryString(const QString& countryString)
-{
-    m_countryString = countryString;
-}
-
-void UserInfo::setHomePhone(const QString& homePhone)
-{
-    m_homePhone = homePhone;
-}
-
-QString UserInfo::homePhone() const
-{
-    return m_homePhone;
-}
-
-void UserInfo::setMobilePhone(const QString& mobilePhone)
-{
-    m_mobilePhone = mobilePhone;
-}
-
-QString UserInfo::mobilePhone() const
-{
-    return m_mobilePhone;
 }
 
 } /* namespace Vkontakte */
