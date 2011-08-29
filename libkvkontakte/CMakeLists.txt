@@ -97,4 +97,5 @@ install(FILES
     messageslistjob.h
     discussionslistjob.h
     getvariablejob.h
+    deletealbumjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
