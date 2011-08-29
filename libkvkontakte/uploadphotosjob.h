@@ -20,13 +20,14 @@
 #define UPLOADPHOTOSJOB_H
 
 #include "vkontaktejobs.h"
-#include <QStringList>
-#include <QMap>
-#include <QVariant>
 #include "photoinfo.h"
+#include <QStringList>
+#include <QVariantMap>
 
 namespace Vkontakte
 {
+
+class PhotoPostJob;
 
 class LIBKVKONTAKTE_EXPORT UploadPhotosJob : public KJobWithSubjobs
 {
@@ -40,6 +41,11 @@ public:
     QList<PhotoInfoPtr> list() const;
 
 protected:
+    static const int MAX_POST_JOBS = 2;
+    static const int REQUEST_FILES_COUNT = 1; // <= 5
+
+    bool mayStartPostJob();
+
     void startPostJob(int offset, int count);
     void startSaveJob(const QVariantMap &photoIdData);
 
@@ -60,6 +66,10 @@ private:
 
     QString m_uploadUrl;
     QList<PhotoInfoPtr> m_list;
+
+    QList<PhotoPostJob *> m_pendingPostJobs;
+    int m_workingPostJobs;
+
 
     class Private;
     Private * const d;

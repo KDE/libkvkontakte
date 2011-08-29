@@ -33,6 +33,7 @@ UploadPhotosJob::UploadPhotosJob(const QString &accessToken,
     , m_aid(aid)
     , m_gid(gid)
     , m_saveBig(saveBig)
+    , m_workingPostJobs(0)
     , d(0)
 {
 }
@@ -42,8 +43,8 @@ void UploadPhotosJob::start()
     emit progress(0);
 
     GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(m_accessToken, m_saveBig, m_aid, m_gid);
-    connect(job, SIGNAL(result(KJob*)), this, SLOT(serverJobFinished(KJob*)));
     m_jobs.append(job);
+    connect(job, SIGNAL(result(KJob*)), this, SLOT(serverJobFinished(KJob*)));
     job->start();
 }
 
@@ -63,20 +64,32 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
     m_uploadUrl = job->uploadUrl();
 
     int totalCount = m_files.size();
-    for (int offset = 0; offset < totalCount; offset += 5)
-        startPostJob(offset, qMin(5, totalCount - offset));
+    for (int offset = 0; offset < totalCount; offset += REQUEST_FILES_COUNT)
+        startPostJob(offset, qMin(REQUEST_FILES_COUNT, totalCount - offset));
 
     // All subjobs have finished
     if (m_jobs.size() == 0)
         emitResult();
 }
 
+bool UploadPhotosJob::mayStartPostJob()
+{
+    return m_workingPostJobs < MAX_POST_JOBS;
+}
+
 void UploadPhotosJob::startPostJob(int offset, int count)
 {
     PhotoPostJob *job = new PhotoPostJob(m_uploadUrl, m_files.mid(offset, count));
-    connect(job, SIGNAL(result(KJob*)), this, SLOT(postJobFinished(KJob*)));
     m_jobs.append(job);
-    job->start();
+    connect(job, SIGNAL(result(KJob*)), this, SLOT(postJobFinished(KJob*)));
+
+    if (mayStartPostJob())
+    {
+        m_workingPostJobs ++;
+        job->start();
+    }
+    else
+        m_pendingPostJobs.append(job);
 }
 
 void UploadPhotosJob::postJobFinished(KJob *kjob)
@@ -84,6 +97,18 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
     PhotoPostJob *job = dynamic_cast<PhotoPostJob *>(kjob);
     Q_ASSERT(job);
     m_jobs.removeAll(job);
+    m_workingPostJobs --;
+
+    // start one pending job if possible
+    if (mayStartPostJob() && !m_pendingPostJobs.empty())
+    {
+        PhotoPostJob *nextJob = m_pendingPostJobs.first();
+        m_pendingPostJobs.removeAll(nextJob);
+
+        m_workingPostJobs ++;
+        nextJob->start();
+    }
+
     if (job->error()) {
         setError(job->error());
         setErrorText(job->errorText());
@@ -102,8 +127,8 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
 void UploadPhotosJob::startSaveJob(const QVariantMap &photoIdData)
 {
     SavePhotoJob *job = new SavePhotoJob(m_accessToken, photoIdData);
-    connect(job, SIGNAL(result(KJob*)), this, SLOT(saveJobFinished(KJob*)));
     m_jobs.append(job);
+    connect(job, SIGNAL(result(KJob*)), this, SLOT(saveJobFinished(KJob*)));
     job->start();
 }
 
