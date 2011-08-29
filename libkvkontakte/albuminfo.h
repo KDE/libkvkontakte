@@ -55,6 +55,7 @@ public:
     };
 
     AlbumInfo();
+    ~AlbumInfo();
 
     void setAid(int aid);
     int aid() const;
@@ -99,16 +100,6 @@ public:
     int commentPrivacy() const;
 
 private:
-    int m_aid;
-    int m_thumbId;
-    int m_uid;
-    QString m_title;
-    QString m_description;
-    QString m_dateCreated;
-    QString m_dateUpdated;
-    int m_size; // number of photos in the album
-    int m_privacy;
-    int m_commentPrivacy;
 
     class Private;
     Private * const d;

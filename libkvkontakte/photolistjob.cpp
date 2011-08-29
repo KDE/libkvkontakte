@@ -22,6 +22,12 @@
 namespace Vkontakte
 {
 
+class PhotoListJob::Private
+{
+public:
+    QList<PhotoInfoPtr> list;
+};
+
 // http://vkontakte.ru/developers.php?o=-1&p=photos.get
 //
 // The API also allows to set "limit" and "offset", but that
@@ -29,7 +35,7 @@ namespace Vkontakte
 PhotoListJob::PhotoListJob(const QString &accessToken,
                            int uid, int aid, const QIntList &pids)
     : VkontakteJob(accessToken, "photos.get")
-    , d(0)
+    , d(new Private)
 {
     addQueryItem("uid", QString::number(uid));
     addQueryItem("aid", QString::number(aid));
@@ -37,11 +43,16 @@ PhotoListJob::PhotoListJob(const QString &accessToken,
         addQueryItem("pids", pids.join());
 }
 
+PhotoListJob::~PhotoListJob()
+{
+    delete d;
+}
+
 void PhotoListJob::handleItem(const QVariant &data)
 {
     PhotoInfoPtr item(new PhotoInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    m_list.append(item);
+    d->list.append(item);
 }
 
 void PhotoListJob::handleData(const QVariant &data)
@@ -52,7 +63,7 @@ void PhotoListJob::handleData(const QVariant &data)
 
 QList<PhotoInfoPtr> PhotoListJob::list() const
 {
-    return m_list;
+    return d->list;
 }
 
 } /* namespace Vkontakte */

@@ -24,23 +24,36 @@
 namespace Vkontakte
 {
 
+class NoteAddJob::Private
+{
+public:
+    int nid;
+};
+
 NoteAddJob::NoteAddJob(const QString &accessToken, const QString &title, const QString &text)
     : VkontakteJob(accessToken, "notes.add", true)
-    , d(0)
+    , d(new Private)
 {
+    d->nid = -1;
+
     addQueryItem("title", title);
     addQueryItem("text", text);
     addQueryItem("privacy", "3");
 }
 
+NoteAddJob::~NoteAddJob()
+{
+    delete d;
+}
+
 void NoteAddJob::handleData(const QVariant &data)
 {
-    m_nid = data.toMap()["nid"].toInt();
+    d->nid = data.toMap()["nid"].toInt();
 }
 
 int NoteAddJob::nid() const
 {
-    return m_nid;
+    return d->nid;
 }
 
 } /* namespace Vkontakte */

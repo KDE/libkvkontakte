@@ -28,10 +28,17 @@
 namespace Vkontakte
 {
 
+class UserInfoJob::Private
+{
+public:
+    QList<UserInfoPtr> userInfo;
+    QStringList fields;
+};
+
 // http://vkontakte.ru/developers.php?o=-1&p=getProfiles
 UserInfoJob::UserInfoJob(const QString &accessToken)
     : VkontakteJob(accessToken, "getProfiles")
-    , d(0)
+    , d(new Private)
 {
     // The complete list of fields
     setFields(UserInfo::allQueryFields());
@@ -41,7 +48,7 @@ UserInfoJob::UserInfoJob(const QString &accessToken)
 
 UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
     : VkontakteJob(accessToken, "getProfiles")
-    , d(0)
+    , d(new Private)
 {
     setFields(UserInfo::allQueryFields());
     addQueryItem("uids", QString::number(uid));
@@ -49,7 +56,7 @@ UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
 
 UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
     : VkontakteJob(accessToken, "getProfiles")
-    , d(0)
+    , d(new Private)
 {
     setFields(UserInfo::allQueryFields());
     addQueryItem("uids", uids.join());
@@ -58,20 +65,25 @@ UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
     // ("getProfiles" allows requesting only 1000 users at once)
 }
 
+UserInfoJob::~UserInfoJob()
+{
+    delete d;
+}
+
 QList<UserInfoPtr> UserInfoJob::userInfo() const
 {
-    return m_userInfo;
+    return d->userInfo;
 }
 
 void UserInfoJob::setFields(const QStringList &fields)
 {
-    m_fields = fields;
+    d->fields = fields;
 }
 
 void UserInfoJob::prepareQueryItems()
 {
-    if (!m_fields.isEmpty())
-        addQueryItem("fields", m_fields.join(","));
+    if (!d->fields.isEmpty())
+        addQueryItem("fields", d->fields.join(","));
 }
 
 UserInfoPtr UserInfoJob::handleSingleData(const QVariant &data)
@@ -84,7 +96,7 @@ UserInfoPtr UserInfoJob::handleSingleData(const QVariant &data)
 void UserInfoJob::handleData(const QVariant &data)
 {
     foreach (const QVariant &item, data.toList())
-        m_userInfo.append(handleSingleData(item));
+        d->userInfo.append(handleSingleData(item));
 }
 
 } /* namespace Vkontakte */

@@ -26,121 +26,146 @@
 namespace Vkontakte
 {
 
-AlbumInfo::AlbumInfo()
-    : m_aid(-1), m_thumbId(-1), m_uid(-1), m_size(-1)
-    , m_privacy(PRIVACY_UNKNOWN), m_commentPrivacy(PRIVACY_UNKNOWN)
-    , d(0)
+class AlbumInfo::Private
 {
+public:
+    int aid;
+    int thumbId;
+    int uid;
+    QString title;
+    QString description;
+    QString dateCreated;
+    QString dateUpdated;
+    int size; // number of photos in the album
+    int privacy;
+    int commentPrivacy;
+};
+
+AlbumInfo::AlbumInfo()
+    : d(new Private)
+{
+    d->aid = -1;
+    d->thumbId = -1;
+    d->uid = -1;
+    d->size = -1;
+
+    d->privacy = PRIVACY_UNKNOWN;
+    d->commentPrivacy = PRIVACY_UNKNOWN;
+}
+
+AlbumInfo::~AlbumInfo()
+{
+    delete d;
 }
 
 void AlbumInfo::setAid(int aid)
 {
-    m_aid = aid;
+    d->aid = aid;
 }
 
 int AlbumInfo::aid() const
 {
-    return m_aid;
+    return d->aid;
 }
 
 void AlbumInfo::setThumbId(int thumbId)
 {
-    m_thumbId = thumbId;
+    d->thumbId = thumbId;
 }
 
 int AlbumInfo::thumbId() const
 {
-    return m_thumbId;
+    return d->thumbId;
 }
 
 void AlbumInfo::setUid(int uid)
 {
-    m_uid = uid;
+    d->uid = uid;
 }
 
 int AlbumInfo::uid() const
 {
-    return m_uid;
+    return d->uid;
 }
 
 void AlbumInfo::setTitle(const QString &title)
 {
-    m_title = title;
+    d->title = title;
 }
 
 QString AlbumInfo::title() const
 {
-    return m_title;
+    return d->title;
 }
 
 void AlbumInfo::setDescription(const QString &description)
 {
-    m_description = description;
+    d->description = description;
 }
 
 QString AlbumInfo::description() const
 {
-    return m_description;
+    return d->description;
 }
 
 void AlbumInfo::setDateCreatedString(const QString &dateCreatedString)
 {
-    m_dateCreated = dateCreatedString;
+    d->dateCreated = dateCreatedString;
 }
 
 QString AlbumInfo::dateCreatedString() const
 {
-    return m_dateCreated;
+    return d->dateCreated;
 }
 
 KDateTime AlbumInfo::dateCreated() const
 {
-    return unixTimeToKDateTime(m_dateCreated);
+    return unixTimeToKDateTime(d->dateCreated);
 }
 
 void AlbumInfo::setDateUpdatedString(const QString &dateUpdatedString)
 {
-    m_dateUpdated = dateUpdatedString;
+    d->dateUpdated = dateUpdatedString;
 }
 
 QString AlbumInfo::dateUpdatedString() const
 {
-    return m_dateUpdated;
+    return d->dateUpdated;
 }
 
 KDateTime AlbumInfo::dateUpdated() const
 {
-    return unixTimeToKDateTime(m_dateUpdated);
+    return unixTimeToKDateTime(d->dateUpdated);
 }
 
 void AlbumInfo::setSize(int size)
 {
-    m_size = size;
+    d->size = size;
 }
 
 int AlbumInfo::size() const
 {
-    return m_size;
+    return d->size;
 }
 
 void AlbumInfo::setPrivacy(int privacy)
 {
-    m_privacy = privacy;
+    d->privacy = privacy;
 }
 
 int AlbumInfo::privacy() const
 {
-    return m_privacy;
+    return d->privacy;
 }
 
 void AlbumInfo::setCommentPrivacy(int commentPrivacy)
 {
-    m_commentPrivacy = commentPrivacy;
+    d->commentPrivacy = commentPrivacy;
 }
 
 int AlbumInfo::commentPrivacy() const
 {
-    return m_commentPrivacy;
+    return d->commentPrivacy;
 }
 
 } /* namespace Vkontakte */

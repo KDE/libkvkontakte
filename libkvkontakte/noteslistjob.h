@@ -37,6 +37,7 @@ public:
     * @param count Number of notes to retrieve (limited to 100)
     **/
     NotesListJob(const QString &accessToken, int uid, int offset, int count);
+    ~NotesListJob();
 
     QList<NoteInfoPtr> list() const;
     int totalCount() const;
@@ -51,9 +52,6 @@ protected:
     void handleItem(const QVariant &data);
 
 private:
-    int m_totalCount; // number of all notes, not only notes retrieved in this request
-    QList<NoteInfoPtr> m_list;
-
     class Private;
     Private * const d;
 };

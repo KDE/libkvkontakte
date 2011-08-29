@@ -41,6 +41,7 @@ public:
     AllMessagesListJob(const QString &accessToken,
                        int out = -1, int previewLength = 0,
                        int filters = 0, int timeOffset = 0);
+    ~AllMessagesListJob();
 
     virtual void start();
 
@@ -54,15 +55,6 @@ private slots:
     void jobFinished(KJob *job);
 
 private:
-    QString m_accessToken;         /** Vkontakte Access token */
-    int m_out;
-    int m_previewLength;
-    int m_filters;
-    int m_timeOffset;
-
-    int m_totalCount[2];
-    QList<MessageInfoPtr> m_list;
-
     class Private;
     Private * const d;
 };

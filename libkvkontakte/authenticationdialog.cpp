@@ -31,9 +31,20 @@
 namespace Vkontakte
 {
 
+class AuthenticationDialog::Private
+{
+public:
+    QString appId;
+    QStringList permissions;
+    KWebView *webView;
+    QProgressBar *progressBar;
+    QString error;
+    QString errorDescription;
+};
+
 AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     : KDialog(parent)
-    , d(0)
+    , d(new Private)
 {
     setButtons(KDialog::Cancel);
     setCaption(i18nc("@title:window", "Authenticate with VKontakte"));
@@ -46,37 +57,42 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     progressLayout->setMargin(0);
     layout->setMargin(0);
     setMainWidget(widget);
-    m_webView = new KWebView(this);
+    d->webView = new KWebView(this);
 
-    m_progressBar = new QProgressBar(this);
-    m_progressBar->setRange(0, 100);
+    d->progressBar = new QProgressBar(this);
+    d->progressBar->setRange(0, 100);
     QLabel *progressLabel = new QLabel(i18n("Loading Page:"), this);
     progressLayout->addWidget(progressLabel);
-    progressLayout->addWidget(m_progressBar);
+    progressLayout->addWidget(d->progressBar);
 
     layout->addWidget(progressWidget);
-    layout->addWidget(m_webView);
+    layout->addWidget(d->webView);
 
     connect(this, SIGNAL(cancelClicked()), SIGNAL(canceled()));
-    connect(m_webView, SIGNAL(urlChanged(QUrl)), this, SLOT(urlChanged(QUrl)));
-    connect(m_webView, SIGNAL(loadStarted()), progressWidget, SLOT(show()));
-    connect(m_webView, SIGNAL(loadFinished(bool)), progressWidget, SLOT(hide()));
-    connect(m_webView, SIGNAL(loadProgress(int)), m_progressBar, SLOT(setValue(int)));
+    connect(d->webView, SIGNAL(urlChanged(QUrl)), this, SLOT(urlChanged(QUrl)));
+    connect(d->webView, SIGNAL(loadStarted()), progressWidget, SLOT(show()));
+    connect(d->webView, SIGNAL(loadFinished(bool)), progressWidget, SLOT(hide()));
+    connect(d->webView, SIGNAL(loadProgress(int)), d->progressBar, SLOT(setValue(int)));
+}
+
+AuthenticationDialog::~AuthenticationDialog()
+{
+    delete d;
 }
 
 void AuthenticationDialog::setAppId(const QString &appId)
 {
-    m_appId = appId;
+    d->appId = appId;
 }
 
 void AuthenticationDialog::setPermissions(const QStringList &permissions)
 {
-    m_permissions = permissions;
+    d->permissions = permissions;
 }
 
 void AuthenticationDialog::start()
 {
-    Q_ASSERT(!m_appId.isEmpty());
+    Q_ASSERT(!d->appId.isEmpty());
 
     // display= {page, popup, touch, wap}
     const QString url = QString("http://api.vkontakte.ru/oauth/authorize?"
@@ -85,10 +101,10 @@ void AuthenticationDialog::start()
                                 "redirect_uri=http://api.vkontakte.ru/blank.html&"
                                 "display=page&" // TODO: this should be configurable
                                 "response_type=token")
-                                .arg(m_appId)
-                                .arg(m_permissions.join(","));
+                                .arg(d->appId)
+                                .arg(d->permissions.join(","));
     kDebug() << "Showing" << url;
-    m_webView->setUrl(QUrl::fromUserInput(url));
+    d->webView->setUrl(QUrl::fromUserInput(url));
     show();
 }
 
@@ -96,7 +112,7 @@ void AuthenticationDialog::showErrorDialog()
 {
     hide();
     const QString details = i18n("<b>VKontakte Error Description:</b> %1<br>"
-                                 "<b>VKontakte Error:</b> %2<br>", m_errorDescription, m_error);
+                                 "<b>VKontakte Error:</b> %2<br>", d->errorDescription, d->error);
     KMessageBox::detailedSorry(this, i18n("Authentication with VKontakte was not successful."),
                                details, i18nc("@title:window", "Authentication Problem"));
     emit canceled();
@@ -108,9 +124,9 @@ void AuthenticationDialog::urlChanged(const QUrl &url)
     kDebug() << "Navigating to" << url;
     if (url.host() == "api.vkontakte.ru" && url.path() == "/blank.html")
     {
-        m_error = url.queryItemValue("error");
-        m_errorDescription = url.queryItemValue("error_description").replace('+', ' ');
-        if (!m_error.isEmpty() || !m_errorDescription.isEmpty())
+        d->error = url.queryItemValue("error");
+        d->errorDescription = url.queryItemValue("error_description").replace('+', ' ');
+        if (!d->error.isEmpty() || !d->errorDescription.isEmpty())
         {
             QTimer::singleShot(0, this, SLOT(showErrorDialog()));
             return;

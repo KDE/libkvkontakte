@@ -54,6 +54,8 @@ public:
 
     UserInfoJob(const QString &accessToken, const QIntList &uids);
 
+    ~UserInfoJob();
+
     /**
     * @return A pointer to a userInfo object about the currently authenticated user.
     */
@@ -76,12 +78,6 @@ protected:
     virtual void prepareQueryItems();
 
 private:
-    QList<UserInfoPtr> m_userInfo;
-    QIntList m_uids;
-    QStringList m_fields;
-    bool m_needCityNames;
-    bool m_needCountryNames;
-
     class Private;
     Private * const d;
 };

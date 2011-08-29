@@ -136,6 +136,7 @@ public:
     };
 
     UserInfo();
+    ~UserInfo();
 
     void setUid(int uid);
     int uid() const;
@@ -234,53 +235,6 @@ public:
     static QStringList allQueryFields();
 
 private:
-    int m_uid; // this could be an integer, but what if something will change?..
-    QString m_firstName;
-    QString m_lastName;
-
-    QString m_nickName;
-
-    int m_sex;
-
-    bool m_online;
-
-    QDate m_birthday;
-
-    int m_city;
-    QString m_cityString;
-
-    int m_country;
-    QString m_countryString;
-
-    QString m_photo;
-    QString m_photoMedium;
-    QString m_photoMediumRec;
-    QString m_photoBig;
-    QString m_photoRec;
-
-    QString m_domain; // domain / screen_name
-
-    bool m_hasMobile;
-
-    int m_rate;
-
-    QString m_homePhone;
-    QString m_mobilePhone;
-
-    int m_university;
-    QString m_universityName;
-    int m_faculty;
-    QString m_facultyName;
-    int m_graduation; // graduation year
-
-    bool m_canPost;
-    bool m_canWritePrivateMessage;
-
-    QVariantMap m_counters; // TODO: split into a few integers? Use "QMap<QString, int>"?
-
-    int m_timezone;
-
-
     class Private;
     Private * const d;
 };

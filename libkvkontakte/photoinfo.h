@@ -47,6 +47,7 @@ class LIBKVKONTAKTE_EXPORT PhotoInfo : public QObject
 
 public:
     PhotoInfo();
+    ~PhotoInfo();
 
     void setPid(int pid);
     int pid() const;
@@ -90,17 +91,6 @@ public:
     KDateTime dateCreated() const;
 
 private:
-    int m_pid;
-    int m_aid;
-    int m_uid;
-    QString m_src;
-    QString m_srcSmall;
-    QString m_srcBig;
-    QString m_srcXBig;
-    QString m_srcXXBig;
-    QString m_text;
-    QString m_dateCreated;
-
     class Private;
     Private * const d;
 };

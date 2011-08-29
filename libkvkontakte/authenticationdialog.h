@@ -35,6 +35,8 @@ class LIBKVKONTAKTE_EXPORT AuthenticationDialog : public KDialog
     Q_OBJECT
 public:
     AuthenticationDialog(QWidget *parent);
+    ~AuthenticationDialog();
+
     void setAppId(const QString &appId);
     void setPermissions(const QStringList &permissions);
     void start();
@@ -48,13 +50,6 @@ private slots:
     void showErrorDialog();
 
 private:
-    QString m_appId;
-    QStringList m_permissions;
-    KWebView *m_webView;
-    QProgressBar *m_progressBar;
-    QString m_error;
-    QString m_errorDescription;
-
     class Private;
     Private * const d;
 };

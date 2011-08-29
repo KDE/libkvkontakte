@@ -35,6 +35,7 @@ class LIBKVKONTAKTE_EXPORT UploadPhotosJob : public KJobWithSubjobs
 public:
     UploadPhotosJob(const QString &accessToken,
                     const QStringList &files, bool saveBig, int aid, int gid = -1);
+    ~UploadPhotosJob();
 
     virtual void start();
 
@@ -58,19 +59,6 @@ private slots:
     void saveJobFinished(KJob *);
 
 private:
-    QString m_accessToken;
-    QStringList m_files;
-    int m_aid;
-    int m_gid;
-    bool m_saveBig;
-
-    QString m_uploadUrl;
-    QList<PhotoInfoPtr> m_list;
-
-    QList<PhotoPostJob *> m_pendingPostJobs;
-    int m_workingPostJobs;
-
-
     class Private;
     Private * const d;
 };

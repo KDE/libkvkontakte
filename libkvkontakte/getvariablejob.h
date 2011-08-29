@@ -32,6 +32,7 @@ class LIBKVKONTAKTE_EXPORT GetVariableJob : public VkontakteJob
 
 public:
     GetVariableJob(const QString &accessToken, int index);
+    ~GetVariableJob();
 
     QVariant variable() const;
 
@@ -39,8 +40,6 @@ protected:
     virtual void handleData(const QVariant &data);
     
 private:
-    QVariant m_variable;
-
     class Private;
     Private * const d;
 };

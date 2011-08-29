@@ -29,6 +29,7 @@ class LIBKVKONTAKTE_EXPORT AllNotesListJob : public KJobWithSubjobs
     Q_OBJECT
 public:
     AllNotesListJob(const QString &accessToken, int uid);
+    ~AllNotesListJob();
 
     virtual void start();
 
@@ -42,12 +43,6 @@ private slots:
     void jobFinished(KJob *kjob);
 
 private:
-    QString m_accessToken;
-    int m_uid;
-
-    int m_totalCount;
-    QList<NoteInfoPtr> m_list;
-
     class Private;
     Private * const d;
 };

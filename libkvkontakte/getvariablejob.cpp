@@ -21,21 +21,32 @@
 namespace Vkontakte
 {
 
+class GetVariableJob::Private
+{
+public:
+    QVariant variable;
+};
+
 GetVariableJob::GetVariableJob(const QString &accessToken, int index)
     : VkontakteJob(accessToken, "getVariable")
-    , d(0)
+    , d(new Private)
 {
     addQueryItem("key", QString::number(index));
 }
 
+GetVariableJob::~GetVariableJob()
+{
+    delete d;
+}
+
 void GetVariableJob::handleData(const QVariant &data)
 {
-    m_variable = data;
+    d->variable = data;
 }
 
 QVariant GetVariableJob::variable() const
 {
-    return m_variable;
+    return d->variable;
 }
 
 } /* namespace Vkontakte */

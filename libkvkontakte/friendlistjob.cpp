@@ -24,19 +24,30 @@
 namespace Vkontakte
 {
 
+class FriendListJob::Private
+{
+public:
+    QList<UserInfoPtr> list;
+};
+
 // http://vkontakte.ru/developers.php?o=-1&p=friends.get
 FriendListJob::FriendListJob(const QString &accessToken, int uid)
     : VkontakteJob(accessToken, "friends.get")
-    , d(0)
+    , d(new Private)
 {
     if (uid != -1)
         addQueryItem("uid", QString::number(uid));
     addQueryItem("fields", UserInfo::allQueryFields().join(","));
 }
 
-QList<UserInfoPtr> FriendListJob::friends() const
+FriendListJob::~FriendListJob()
 {
-    return m_friends;
+    delete d;
+}
+
+QList<UserInfoPtr> FriendListJob::list() const
+{
+    return d->list;
 }
 
 void FriendListJob::handleData(const QVariant &data)
@@ -45,7 +56,7 @@ void FriendListJob::handleData(const QVariant &data)
     {
         UserInfoPtr userInfo(new UserInfo());
         QJson::QObjectHelper::qvariant2qobject(user.toMap(), userInfo.data());
-        m_friends.append(userInfo);
+        d->list.append(userInfo);
     }
 }
 

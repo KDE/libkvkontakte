@@ -36,7 +36,6 @@ protected:
     /** Kill the currentjobs and its subjobs */
     virtual bool doKill();
 
-
     QPointer<KJob> m_job; /** Pointer to the running job */
 };
 
@@ -88,10 +87,6 @@ protected:
 
 private slots:
     void jobFinished(KJob *job);
-
-private:
-    class BasePrivate;
-    BasePrivate * const baseD;
 };
 
 } /* namespace Vkontakte */

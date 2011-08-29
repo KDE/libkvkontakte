@@ -56,7 +56,6 @@ VkontakteJob::VkontakteJob(const QString &accessToken, const QString &method, bo
     : m_accessToken(accessToken)
     , m_method(method)
     , m_httpPost(httpPost)
-    , baseD(0)
 {
     setCapabilities(KJob::Killable);
 }

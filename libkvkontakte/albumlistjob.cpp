@@ -22,9 +22,15 @@
 namespace Vkontakte
 {
 
+class AlbumListJob::Private
+{
+public:
+    QList<AlbumInfoPtr> list;
+};
+
 AlbumListJob::AlbumListJob(const QString &accessToken, int uid, const QIntList &aids)
     : VkontakteJob(accessToken, "photos.getAlbums")
-    , d(0)
+    , d(new Private)
 {
     if (uid != -1)
         addQueryItem("uid", QString::number(uid));
@@ -32,11 +38,16 @@ AlbumListJob::AlbumListJob(const QString &accessToken, int uid, const QIntList &
         addQueryItem("aids", aids.join());
 }
 
+AlbumListJob::~AlbumListJob()
+{
+    delete d;
+}
+
 void AlbumListJob::handleItem(const QVariant &data)
 {
     AlbumInfoPtr item(new AlbumInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    m_list.append(item);
+    d->list.append(item);
 }
 
 void AlbumListJob::handleData(const QVariant &data)
@@ -47,7 +58,7 @@ void AlbumListJob::handleData(const QVariant &data)
 
 QList<AlbumInfoPtr> AlbumListJob::list() const
 {
-    return m_list;
+    return d->list;
 }
 
 } /* namespace Vkontakte */

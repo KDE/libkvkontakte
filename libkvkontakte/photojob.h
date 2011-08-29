@@ -34,6 +34,7 @@ class LIBKVKONTAKTE_EXPORT PhotoJob : public KJobWithSubjob
     Q_OBJECT
 public:
     PhotoJob(const KUrl &urlString);
+    ~PhotoJob();
 
     virtual void start();
     QImage photo() const;
@@ -42,9 +43,6 @@ private slots:
     void jobFinished(KJob *job);
 
 private:
-    KUrl m_url;
-    QImage m_photo;
-
     class Private;
     Private * const d;
 };

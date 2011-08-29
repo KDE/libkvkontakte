@@ -22,14 +22,25 @@
 namespace Vkontakte
 {
 
+class MessagesListJob::Private
+{
+public:
+    int out;
+
+    int totalCount; // number of all messages, not only messages retrieved in this request
+    QList<MessageInfoPtr> list;
+};
+
 MessagesListJob::MessagesListJob(const QString &accessToken,
                                  int out,
                                  int offset, int count, int previewLength,
                                  int filters, int timeOffset)
     : VkontakteJob(accessToken, "messages.get")
-    , m_out(out)
-    , d(0)
+    , d(new Private)
 {
+    d->out = out;
+    d->totalCount = 0;
+
     addQueryItem("out", QString::number(out));
     addQueryItem("offset", QString::number(offset));
     addQueryItem("count", QString::number(count));
@@ -38,17 +49,22 @@ MessagesListJob::MessagesListJob(const QString &accessToken,
     addQueryItem("time_offset", QString::number(timeOffset));
 }
 
+MessagesListJob::~MessagesListJob()
+{
+    delete d;
+}
+
 void MessagesListJob::handleItem(const QVariant &data)
 {
     MessageInfoPtr item(new MessageInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    m_list.append(item);
+    d->list.append(item);
 }
 
 void MessagesListJob::handleData(const QVariant &data)
 {
     QVariantList list = data.toList();
-    m_totalCount = list[0].toInt();
+    d->totalCount = list[0].toInt();
     list.pop_front();
     foreach (const QVariant &item, list)
         handleItem(item);
@@ -56,17 +72,17 @@ void MessagesListJob::handleData(const QVariant &data)
 
 QList<MessageInfoPtr> MessagesListJob::list() const
 {
-    return m_list;
+    return d->list;
 }
 
 int MessagesListJob::totalCount() const
 {
-    return m_totalCount;
+    return d->totalCount;
 }
 
 int MessagesListJob::out() const
 {
-    return m_out;
+    return d->out;
 }
 
 } /* namespace Vkontakte */

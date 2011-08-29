@@ -31,6 +31,7 @@ class LIBKVKONTAKTE_EXPORT AlbumListJob : public VkontakteJob
     Q_OBJECT
 public:
     AlbumListJob(const QString &accessToken, int uid = -1, const QIntList &aids = QIntList());
+    ~AlbumListJob();
 
     QList<AlbumInfoPtr> list() const;
 
@@ -40,8 +41,6 @@ protected:
     void handleItem(const QVariant &data);
 
 private:
-    QList<AlbumInfoPtr> m_list;
-
     class Private;
     Private * const d;
 };

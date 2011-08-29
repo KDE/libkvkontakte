@@ -28,6 +28,7 @@ class LIBKVKONTAKTE_EXPORT GetApplicationPermissionsJob : public VkontakteJob
 {
 public:
     GetApplicationPermissionsJob(const QString &accessToken);
+    ~GetApplicationPermissionsJob();
 
     int permissions() const;
 
@@ -35,8 +36,6 @@ protected:
     virtual void handleData(const QVariant &data);
 
 private:
-    int m_permissions;
-
     class Private;
     Private * const d;
 };

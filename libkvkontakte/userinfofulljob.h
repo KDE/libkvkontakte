@@ -35,6 +35,7 @@ public:
                     bool needCountryNames = true, bool needCityNames = true);
     UserInfoFullJob(const QString &accessToken, int uid,
                     bool needCountryNames = true, bool needCityNames = true);
+    ~UserInfoFullJob();
 
     QList<UserInfoPtr> userInfo() const;
 
@@ -52,19 +53,6 @@ private:
     void startCountriesJob();
     void startCitiesJob();
 
-
-    QString m_accessToken;
-    QIntList m_uids;
-    bool m_needCountryNames;
-    bool m_needCityNames;
-    QIntList m_countryIds;
-    QIntList m_cityIds;
-
-    UserInfoJob *m_mainJob;
-    CidsNamesJob *m_countriesJob;
-    CidsNamesJob *m_citiesJob;
-
-    QList<UserInfoPtr> m_userInfo;
 
     class Private;
     Private * const d;

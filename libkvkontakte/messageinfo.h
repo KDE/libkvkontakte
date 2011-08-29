@@ -51,6 +51,7 @@ class LIBKVKONTAKTE_EXPORT MessageInfo : public QObject
 
 public:
     MessageInfo();
+    ~MessageInfo();
 
     /**
      * Set the creation time of the note
@@ -98,17 +99,6 @@ public:
     QString remoteId() const;
 
 private:
-    QString m_date;
-    int m_uid;
-    int m_mid;
-    QString m_title;
-    QString m_body;
-    int m_readState;
-    int m_out;
-
-    QString m_chatId;
-    QString m_chatActive;
-
     class Private;
     Private * const d;
 };

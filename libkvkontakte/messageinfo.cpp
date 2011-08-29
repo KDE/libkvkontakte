@@ -25,45 +25,68 @@
 namespace Vkontakte
 {
 
-MessageInfo::MessageInfo()
-    : m_readState(0), m_out(0)
-    , d(0)
+class MessageInfo::Private
 {
+public:
+    QString date;
+    int uid;
+    int mid;
+    QString title;
+    QString body;
+    int readState;
+    int out;
+
+    QString chatId;
+    QString chatActive;
+};
+
+MessageInfo::MessageInfo()
+    : d(new Private)
+{
+    d->uid = -1;
+    d->mid = -1;
+    d->readState = 0;
+    d->out = 0;
+}
+
+MessageInfo::~MessageInfo()
+{
+    delete d;
 }
 
 void MessageInfo::setDateString(const QString &createdDate)
 {
-    m_date = createdDate;
+    d->date = createdDate;
 }
 
 QString MessageInfo::dateString() const
 {
-    return m_date;
+    return d->date;
 }
 
 KDateTime MessageInfo::date() const
 {
-    return unixTimeToKDateTime(m_date);
+    return unixTimeToKDateTime(d->date);
 }
 
 void MessageInfo::setUid(int uid)
 {
-    m_uid = uid;
+    d->uid = uid;
 }
 
 int MessageInfo::uid() const
 {
-    return m_uid;
+    return d->uid;
 }
 
 void MessageInfo::setMid(int mid)
 {
-    m_mid = mid;
+    d->mid = mid;
 }
 
 int MessageInfo::mid() const
 {
-    return m_mid;
+    return d->mid;
 }
 
 void MessageInfo::setTitle(const QString &title)
@@ -71,76 +94,76 @@ void MessageInfo::setTitle(const QString &title)
     // vkontakte.ru puts "..." into the title when the subject is not specified
     QRegExp rx("(Re(\\(\\d+\\))?: )?( ?)\\.\\.\\.( ?)");
     if (!rx.exactMatch(title))
-        m_title = title;
+        d->title = title;
 }
 
 QString MessageInfo::title() const
 {
-    return m_title;
+    return d->title;
 }
 
 QString MessageInfo::coreTitle() const
 {
-    QString res = m_title;
+    QString res = d->title;
     res.remove(QRegExp("^Re(\\(\\d+\\))?: "));
     return res;
 }
 
 void MessageInfo::setBody(const QString &body)
 {
-    m_body = body;
+    d->body = body;
 
-    m_body.replace("\n", QString());
-    m_body.replace("<br>", "\n");
-    m_body.replace("&lt;", "<");
-    m_body.replace("&gt;", ">");
-    m_body.replace("&quot;", "\"");
-    m_body.replace("&amp;", "&");
+    d->body.replace("\n", QString());
+    d->body.replace("<br>", "\n");
+    d->body.replace("&lt;", "<");
+    d->body.replace("&gt;", ">");
+    d->body.replace("&quot;", "\"");
+    d->body.replace("&amp;", "&");
 }
 
 QString MessageInfo::body() const
 {
-    return m_body;
+    return d->body;
 }
 
 void MessageInfo::setReadState(int readState)
 {
-    m_readState = readState;
+    d->readState = readState;
 }
 
 int MessageInfo::readState() const
 {
-    return m_readState;
+    return d->readState;
 }
 
 void MessageInfo::setOut(int out)
 {
-    m_out = out;
+    d->out = out;
 }
 
 int MessageInfo::out() const
 {
-    return m_out;
+    return d->out;
 }
 
 void MessageInfo::setChatId(const QString &chatId)
 {
-    m_chatId = chatId;
+    d->chatId = chatId;
 }
 
 QString MessageInfo::chatId() const
 {
-    return m_chatId;
+    return d->chatId;
 }
 
 void MessageInfo::setChatActive(const QString &chatActive)
 {
-    m_chatActive = chatActive;
+    d->chatActive = chatActive;
 }
 
 QString MessageInfo::chatActive() const
 {
-    return m_chatActive;
+    return d->chatActive;
 }
 
 QString MessageInfo::remoteId() const

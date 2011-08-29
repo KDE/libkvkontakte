@@ -22,24 +22,35 @@
 namespace Vkontakte
 {
 
+class NoteJob::Private
+{
+public:
+    NoteInfoPtr noteInfo;
+};
+
 // http://vkontakte.ru/developers.php?o=-1&p=notes.getById
 NoteJob::NoteJob(const QString &accessToken, int nid)
     : VkontakteJob(accessToken, "notes.getById")
-    , d(0)
+    , d(new Private)
 {
     addQueryItem("nid", QString::number(nid));
     addQueryItem("need_wiki", "1"); // works only for current user's notes
 }
 
+NoteJob::~NoteJob()
+{
+    delete d;
+}
+
 void NoteJob::handleData(const QVariant &data)
 {
-    m_noteInfo = NoteInfoPtr(new NoteInfo());
-    QJson::QObjectHelper::qvariant2qobject(data.toMap(), m_noteInfo.data());
+    d->noteInfo = NoteInfoPtr(new NoteInfo());
+    QJson::QObjectHelper::qvariant2qobject(data.toMap(), d->noteInfo.data());
 }
 
 NoteInfoPtr NoteJob::noteInfo()
 {
-    return m_noteInfo;
+    return d->noteInfo;
 }
 
 } /* namespace Vkontakte */

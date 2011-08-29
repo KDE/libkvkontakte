@@ -23,16 +23,28 @@
 namespace Vkontakte
 {
 
-PhotoJob::PhotoJob(const KUrl &url)
-    : m_url(url)
-    , d(0)
+class PhotoJob::Private
 {
+public:
+    KUrl url;
+    QImage photo;
+};
+
+PhotoJob::PhotoJob(const KUrl &url)
+    : d(new Private)
+{
+    d->url = url;
+}
+
+PhotoJob::~PhotoJob()
+{
+    delete d;
 }
 
 void PhotoJob::start()
 {
-    kDebug() << "Starting photo download" << m_url;
-    KIO::StoredTransferJob * const job = KIO::storedGet(m_url, KIO::Reload, KIO::HideProgressInfo);
+    kDebug() << "Starting photo download" << d->url;
+    KIO::StoredTransferJob * const job = KIO::storedGet(d->url, KIO::Reload, KIO::HideProgressInfo);
     m_job = job;
     connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
     job->start();
@@ -49,7 +61,7 @@ void PhotoJob::jobFinished(KJob *job)
         kWarning() << "Job error: " << transferJob->errorString();
     }
     else
-        m_photo = QImage::fromData(transferJob->data());
+        d->photo = QImage::fromData(transferJob->data());
 
     emitResult();
     m_job = 0;
@@ -57,7 +69,7 @@ void PhotoJob::jobFinished(KJob *job)
 
 QImage PhotoJob::photo() const
 {
-    return m_photo;
+    return d->photo;
 }
 
 } /* namespace Vkontakte */

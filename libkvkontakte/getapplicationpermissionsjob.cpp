@@ -22,22 +22,33 @@
 namespace Vkontakte
 {
 
+class GetApplicationPermissionsJob::Private
+{
+public:
+    int permissions;
+};
+
 // http://vkontakte.ru/developers.php?o=-1&p=getUserSettings
 // http://vkontakte.ru/developers.php?o=-1&p=%CF%F0%E0%E2%E0%20%EF%F0%E8%EB%EE%E6%E5%ED%E8%E9
 GetApplicationPermissionsJob::GetApplicationPermissionsJob(const QString &accessToken)
     : VkontakteJob(accessToken, "getUserSettings")
-    , d(0)
+    , d(new Private)
 {
+}
+
+GetApplicationPermissionsJob::~GetApplicationPermissionsJob()
+{
+    delete d;
 }
 
 void GetApplicationPermissionsJob::handleData(const QVariant &data)
 {
-    m_permissions = data.toInt();
+    d->permissions = data.toInt();
 }
 
 int GetApplicationPermissionsJob::permissions() const
 {
-    return m_permissions;
+    return d->permissions;
 }
 
 } /* namespace Vkontakte */

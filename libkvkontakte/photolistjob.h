@@ -32,6 +32,7 @@ class LIBKVKONTAKTE_EXPORT PhotoListJob : public VkontakteJob
 public:
     PhotoListJob(const QString &accessToken,
                  int uid, int aid, const QIntList &pids = QIntList());
+    ~PhotoListJob();
 
     QList<PhotoInfoPtr> list() const;
 
@@ -45,8 +46,6 @@ protected:
     void handleItem(const QVariant &data);
 
 private:
-    QList<PhotoInfoPtr> m_list;
-
     class Private;
     Private * const d;
 };

@@ -32,14 +32,12 @@ public:
     CidsNamesJob(const QString &method,
                  const QString &accessToken,
                  const QIntList &cids);
+    ~CidsNamesJob();
 
     QMap<int, QString> names() const;
 
 protected:
     virtual void handleData(const QVariant &data);
-
-    QIntList m_cids;
-    QMap<int, QString> m_names; // cid -> name
 
     class Private;
     Private * const d;

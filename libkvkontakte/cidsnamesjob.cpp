@@ -23,15 +23,27 @@
 namespace Vkontakte
 {
 
+class CidsNamesJob::Private
+{
+public:
+    QIntList cids;
+    QMap<int, QString> names; // cid -> name
+};
+
 // http://vkontakte.ru/developers.php?o=-1&p=places.getCountryById
 CidsNamesJob::CidsNamesJob(const QString &method,
                            const QString &accessToken,
                            const QIntList &cids)
     : VkontakteJob(accessToken, method)
-    , d(0)
+    , d(new Private)
 {
-    m_cids = cids;
+    d->cids = cids;
     addQueryItem("cids", cids.join());
+}
+
+CidsNamesJob::~CidsNamesJob()
+{
+    delete d;
 }
 
 void CidsNamesJob::handleData(const QVariant &data)
@@ -41,13 +53,13 @@ void CidsNamesJob::handleData(const QVariant &data)
     foreach (const QVariant &item, data.toList())
     {
         QVariantMap item_map = item.toMap();
-        m_names[item_map["cid"].toInt()] = item_map["name"].toString();
+        d->names[item_map["cid"].toInt()] = item_map["name"].toString();
     }
 }
 
 QMap<int, QString> CidsNamesJob::names() const
 {
-    return m_names;
+    return d->names;
 }
 
 } /* namespace Vkontakte */

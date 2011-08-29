@@ -32,14 +32,14 @@ class LIBKVKONTAKTE_EXPORT FriendListJob : public VkontakteJob
     Q_OBJECT
 public:
     FriendListJob(const QString &accessToken, int uid = -1);
-    QList<UserInfoPtr> friends() const;
+    ~FriendListJob();
+
+    QList<UserInfoPtr> list() const;
 
 protected:
     virtual void handleData(const QVariant &data);
 
 private:
-    QList<UserInfoPtr> m_friends;
-
     class Private;
     Private * const d;
 };

@@ -34,6 +34,7 @@ class LIBKVKONTAKTE_EXPORT NoteAddJob : public VkontakteJob
     Q_OBJECT
 public:
     NoteAddJob(const QString &accessToken, const QString &title, const QString &text);
+    ~NoteAddJob();
 
     int nid() const;
 
@@ -41,8 +42,6 @@ protected:
     virtual void handleData(const QVariant &data);
     
 private:
-    int m_nid;
-
     class Private;
     Private * const d;
 };

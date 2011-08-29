@@ -26,28 +26,46 @@
 namespace Vkontakte
 {
 
-AllMessagesListJob::AllMessagesListJob(const QString& accessToken,
+class AllMessagesListJob::Private
+{
+public:
+    QString accessToken;         /** Vkontakte Access token */
+    int out;
+    int previewLength;
+    int filters;
+    int timeOffset;
+
+    int totalCount[2];
+    QList<MessageInfoPtr> list;
+};
+
+AllMessagesListJob::AllMessagesListJob(const QString &accessToken,
                                        int out, int previewLength,
                                        int filters, int timeOffset)
     : KJobWithSubjobs()
-    , m_accessToken(accessToken)
-    , m_out(out)
-    , m_previewLength(previewLength)
-    , m_filters(filters)
-    , m_timeOffset(timeOffset)
-    , d(0)
+    , d(new Private)
 {
-    m_totalCount[0] = -1; // for incoming messages
-    m_totalCount[1] = -1; // for outgoing messages
+    d->accessToken = accessToken;
+    d->out = out;
+    d->previewLength = previewLength;
+    d->filters = filters;
+    d->timeOffset = timeOffset;
+    d->totalCount[0] = -1; // for incoming messages
+    d->totalCount[1] = -1; // for outgoing messages
+}
+
+AllMessagesListJob::~AllMessagesListJob()
+{
+    delete d;
 }
 
 void AllMessagesListJob::startNewJob(int offset, int count, int out)
 {
     Q_ASSERT(out == 0 || out == 1);
 
-    MessagesListJob *job = new MessagesListJob(m_accessToken, out,
+    MessagesListJob *job = new MessagesListJob(d->accessToken, out,
                                                offset, count,
-                                               m_previewLength, m_filters, m_timeOffset);
+                                               d->previewLength, d->filters, d->timeOffset);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
     m_jobs.append(job);
     job->start();
@@ -55,10 +73,10 @@ void AllMessagesListJob::startNewJob(int offset, int count, int out)
 
 void AllMessagesListJob::start()
 {
-    // m_out=-1 means to retrieve both incoming and outgoing messages
-    if (m_out == 0 || m_out == -1) // incoming
+    // out=-1 means to retrieve both incoming and outgoing messages
+    if (d->out == 0 || d->out == -1) // incoming
         startNewJob(0, 100, 0);
-    if (m_out == 1 || m_out == -1) // outgoing
+    if (d->out == 1 || d->out == -1) // outgoing
         startNewJob(0, 100, 1);
 }
 
@@ -74,18 +92,18 @@ void AllMessagesListJob::jobFinished(KJob* job)
         return;
     }
 
-    m_list.append(listJob->list());
+    d->list.append(listJob->list());
 
     int out = listJob->out(); // incoming or outgoing
     Q_ASSERT(out == 0 || out == 1);
     // If this was the first job, start all others
-    if (m_totalCount[out] == -1) {
-        m_totalCount[out] = listJob->totalCount();
-        for (int offset = 100; offset < m_totalCount[out]; offset += 100) {
-            startNewJob(offset, qMin(100, m_totalCount[out] - offset), out);
+    if (d->totalCount[out] == -1) {
+        d->totalCount[out] = listJob->totalCount();
+        for (int offset = 100; offset < d->totalCount[out]; offset += 100) {
+            startNewJob(offset, qMin(100, d->totalCount[out] - offset), out);
         }
     }
-    else if (m_totalCount[out] != listJob->totalCount())
+    else if (d->totalCount[out] != listJob->totalCount())
     {
         // TODO: some new messages might have been added, what should we do then?
         doKill();
@@ -100,19 +118,19 @@ void AllMessagesListJob::jobFinished(KJob* job)
 
     // All jobs have finished
     if (m_jobs.size() == 0) {
-        qSort(m_list); // sort by message ID (which should be equivalent to sorting by date)
+        qSort(d->list); // sort by message ID (which should be equivalent to sorting by date)
         emitResult();
     }
 }
 
 QList<MessageInfoPtr> AllMessagesListJob::list() const
 {
-    return m_list;
+    return d->list;
 }
 
 int AllMessagesListJob::count() const
 {
-    return m_list.size();
+    return d->list.size();
 }
 
 } /* namespace Vkontakte */

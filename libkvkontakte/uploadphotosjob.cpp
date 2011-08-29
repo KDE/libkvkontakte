@@ -25,24 +25,45 @@
 namespace Vkontakte
 {
 
+class UploadPhotosJob::Private
+{
+public:
+    QString accessToken;
+    QStringList files;
+    int aid;
+    int gid;
+    bool saveBig;
+
+    QString uploadUrl;
+    QList<PhotoInfoPtr> list;
+
+    QList<PhotoPostJob *> pendingPostJobs;
+    int workingPostJobs;
+};
+
 UploadPhotosJob::UploadPhotosJob(const QString &accessToken,
                                  const QStringList &files, bool saveBig, int aid, int gid)
     : KJobWithSubjobs()
-    , m_accessToken(accessToken)
-    , m_files(files)
-    , m_aid(aid)
-    , m_gid(gid)
-    , m_saveBig(saveBig)
-    , m_workingPostJobs(0)
-    , d(0)
+    , d(new Private)
 {
+    d->accessToken = accessToken;
+    d->files = files;
+    d->aid = aid;
+    d->gid = gid;
+    d->saveBig = saveBig;
+    d->workingPostJobs = 0;
+}
+
+UploadPhotosJob::~UploadPhotosJob()
+{
+    delete d;
 }
 
 void UploadPhotosJob::start()
 {
     emit progress(0);
 
-    GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(m_accessToken, m_saveBig, m_aid, m_gid);
+    GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(d->accessToken, d->saveBig, d->aid, d->gid);
     m_jobs.append(job);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(serverJobFinished(KJob*)));
     job->start();
@@ -61,9 +82,9 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
         return;
     }
 
-    m_uploadUrl = job->uploadUrl();
+    d->uploadUrl = job->uploadUrl();
 
-    int totalCount = m_files.size();
+    int totalCount = d->files.size();
     for (int offset = 0; offset < totalCount; offset += REQUEST_FILES_COUNT)
         startPostJob(offset, qMin(REQUEST_FILES_COUNT, totalCount - offset));
 
@@ -74,22 +95,22 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
 
 bool UploadPhotosJob::mayStartPostJob()
 {
-    return m_workingPostJobs < MAX_POST_JOBS;
+    return d->workingPostJobs < MAX_POST_JOBS;
 }
 
 void UploadPhotosJob::startPostJob(int offset, int count)
 {
-    PhotoPostJob *job = new PhotoPostJob(m_uploadUrl, m_files.mid(offset, count));
+    PhotoPostJob *job = new PhotoPostJob(d->uploadUrl, d->files.mid(offset, count));
     m_jobs.append(job);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(postJobFinished(KJob*)));
 
     if (mayStartPostJob())
     {
-        m_workingPostJobs ++;
+        d->workingPostJobs ++;
         job->start();
     }
     else
-        m_pendingPostJobs.append(job);
+        d->pendingPostJobs.append(job);
 }
 
 void UploadPhotosJob::postJobFinished(KJob *kjob)
@@ -97,15 +118,15 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
     PhotoPostJob *job = dynamic_cast<PhotoPostJob *>(kjob);
     Q_ASSERT(job);
     m_jobs.removeAll(job);
-    m_workingPostJobs --;
+    d->workingPostJobs --;
 
     // start one pending job if possible
-    if (mayStartPostJob() && !m_pendingPostJobs.empty())
+    if (mayStartPostJob() && !d->pendingPostJobs.empty())
     {
-        PhotoPostJob *nextJob = m_pendingPostJobs.first();
-        m_pendingPostJobs.removeAll(nextJob);
+        PhotoPostJob *nextJob = d->pendingPostJobs.first();
+        d->pendingPostJobs.removeAll(nextJob);
 
-        m_workingPostJobs ++;
+        d->workingPostJobs ++;
         nextJob->start();
     }
 
@@ -126,7 +147,7 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
 
 void UploadPhotosJob::startSaveJob(const QVariantMap &photoIdData)
 {
-    SavePhotoJob *job = new SavePhotoJob(m_accessToken, photoIdData);
+    SavePhotoJob *job = new SavePhotoJob(d->accessToken, photoIdData);
     m_jobs.append(job);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(saveJobFinished(KJob*)));
     job->start();
@@ -145,8 +166,8 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
         return;
     }
 
-    m_list.append(job->list());
-    emit progress(100 * m_list.size() / m_files.size());
+    d->list.append(job->list());
+    emit progress(100 * d->list.size() / d->files.size());
 
     // All subjobs have finished
     if (m_jobs.size() == 0)
@@ -155,7 +176,7 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
 
 QList<PhotoInfoPtr> UploadPhotosJob::list() const
 {
-    return m_list;
+    return d->list;
 }
 
 } /* namespace Vkontakte */

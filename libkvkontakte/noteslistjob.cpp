@@ -23,10 +23,17 @@
 namespace Vkontakte
 {
 
+class NotesListJob::Private
+{
+public:
+    int totalCount; // number of all notes, not only notes retrieved in this request
+    QList<NoteInfoPtr> list;
+};
+
 NotesListJob::NotesListJob(const QString &accessToken,
                            int uid, int offset, int count)
     : VkontakteJob(accessToken, "notes.get")
-    , d(0)
+    , d(new Private)
 {
     // Not passing "nids", because we want all notes.
 
@@ -36,17 +43,22 @@ NotesListJob::NotesListJob(const QString &accessToken,
     addQueryItem("offset", QString::number(offset));
 }
 
+NotesListJob::~NotesListJob()
+{
+    delete d;
+}
+
 void NotesListJob::handleItem(const QVariant &data)
 {
     NoteInfoPtr item(new NoteInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    m_list.append(item);
+    d->list.append(item);
 }
 
 void NotesListJob::handleData(const QVariant &data)
 {
     QVariantList list = data.toList();
-    m_totalCount = list[0].toInt();
+    d->totalCount = list[0].toInt();
     list.pop_front();
     foreach (const QVariant &item, list)
         handleItem(item);
@@ -54,12 +66,12 @@ void NotesListJob::handleData(const QVariant &data)
 
 QList<NoteInfoPtr> NotesListJob::list() const
 {
-    return m_list;
+    return d->list;
 }
 
 int NotesListJob::totalCount() const
 {
-    return m_totalCount;
+    return d->totalCount;
 }
 
 } /* namespace Vkontakte */

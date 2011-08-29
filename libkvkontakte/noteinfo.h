@@ -48,6 +48,7 @@ class LIBKVKONTAKTE_EXPORT NoteInfo : public QObject
 
 public:
     NoteInfo();
+    ~NoteInfo();
 
     void setNid(int nid);
     int nid() const;
@@ -115,18 +116,6 @@ public:
     bool canComment() const;
 
 private:
-    int m_nid;          /* Vkontakte id of the note. */
-    int m_uid;        /* Creator of the note. */
-    QString m_title;     /* Subject of the note. */
-    QString m_text;     /* Actual content of the note. */
-    QString m_textWiki;
-    QString m_date; /* Creation time of the note. */
-    int m_ncom; /* Number of comments. */
-    int m_readNcom; /* Number of read comments. */
-    int m_privacy;
-    int m_commentPrivacy;
-    int m_canComment;
-
     class Private;
     Private * const d;
 };

@@ -27,324 +27,388 @@
 namespace Vkontakte
 {
 
-UserInfo::UserInfo()
-    : m_uid(-1), m_sex(-1), m_online(false)
-    , m_city(-1), m_country(-1), m_hasMobile(false), m_rate(-1)
-    , m_university(-1), m_faculty(-1), m_graduation(-1)
-    , m_canPost(false), m_canWritePrivateMessage(false)
-    , m_timezone(INVALID_TIMEZONE)
-    , d(0)
+class UserInfo::Private
 {
+public:
+    int uid; // this could be an integer, but what if something will change?..
+    QString firstName;
+    QString lastName;
+
+    QString nickName;
+
+    int sex;
+
+    bool online;
+
+    QDate birthday;
+
+    int city;
+    QString cityString;
+
+    int country;
+    QString countryString;
+
+    QString photo;
+    QString photoMedium;
+    QString photoMediumRec;
+    QString photoBig;
+    QString photoRec;
+
+    QString domain; // domain / screen_name
+
+    bool hasMobile;
+
+    int rate;
+
+    QString homePhone;
+    QString mobilePhone;
+
+    int university;
+    QString universityName;
+    int faculty;
+    QString facultyName;
+    int graduation; // graduation year
+
+    bool canPost;
+    bool canWritePrivateMessage;
+
+    QVariantMap counters; // TODO: split into a few integers? Use "QMap<QString, int>"?
+
+    int timezone;
+};
+
+UserInfo::UserInfo()
+    : d(new Private)
+{
+    d->uid = -1;
+    d->sex = -1;
+    d->online = false;
+    d->city = -1;
+    d->country = -1;
+    d->hasMobile = false;
+    d->rate = -1;
+    d->university = -1;
+    d->faculty = -1;
+    d->graduation = -1;
+    d->canPost = false;
+    d->canWritePrivateMessage = false;
+    d->timezone = INVALID_TIMEZONE;
+}
+
+UserInfo::~UserInfo()
+{
+    delete d;
 }
 
 void UserInfo::setUid(int uid)
 {
-    m_uid = uid;
+    d->uid = uid;
 }
 
 int UserInfo::uid() const
 {
-    return m_uid;
+    return d->uid;
 }
 
 void UserInfo::setFirstName(const QString &firstName)
 {
-    m_firstName = firstName;
+    d->firstName = firstName;
 }
 
 QString UserInfo::firstName() const
 {
-    return m_firstName;
+    return d->firstName;
 }
 
 void UserInfo::setLastName(const QString &lastName)
 {
-    m_lastName = lastName;
+    d->lastName = lastName;
 }
 
 QString UserInfo::lastName() const
 {
-    return m_lastName;
+    return d->lastName;
 }
 
 void UserInfo::setNickName(const QString& nickName)
 {
-    m_nickName = nickName;
+    d->nickName = nickName;
 }
 
 QString UserInfo::nickName() const
 {
-    return m_nickName;
+    return d->nickName;
 }
 
 void UserInfo::setSex(int sex)
 {
-    m_sex = sex;
+    d->sex = sex;
 }
 
 int UserInfo::sex() const
 {
-    return m_sex;
+    return d->sex;
 }
 
 void UserInfo::setOnline(bool online)
 {
-    m_online = online;
+    d->online = online;
 }
 
 bool UserInfo::online() const
 {
-    return m_online;
+    return d->online;
 }
 
 // "[day].[month].[year]" or "[day].[month]"
-void UserInfo::setBirthday(const QString& birthday)
+void UserInfo::setBirthday(const QString &birthday)
 {
-    m_birthday = QDate::fromString( birthday, "dd.MM.yyyy" );
-    if ( !m_birthday.isValid() ) {
+    d->birthday = QDate::fromString(birthday, "dd.MM.yyyy");
+    if (!d->birthday.isValid())
+    {
         // Some users don't tell the year of their birthday.
-        m_birthday = QDate::fromString( birthday + ".0001", "dd.MM.yyyy" );
+        d->birthday = QDate::fromString(birthday + ".0001", "dd.MM.yyyy");
     }
 }
 
 QString UserInfo::birthdayAsString() const
 {
-    return m_birthday.toString();
+    return d->birthday.toString();
 }
 
 QDate UserInfo::birthday() const
 {
-    return m_birthday;
+    return d->birthday;
 }
 
 void UserInfo::setCity(int city)
 {
-    m_city = city;
+    d->city = city;
 }
 
 int UserInfo::city() const
 {
-    return m_city;
+    return d->city;
 }
 
 void UserInfo::setCityString(const QString &cityString)
 {
-    m_cityString = cityString;
+    d->cityString = cityString;
 }
 
 QString UserInfo::cityString() const
 {
-    return m_cityString;
+    return d->cityString;
 }
 
 void UserInfo::setCountry(int country)
 {
-    m_country = country;
+    d->country = country;
 }
 
 int UserInfo::country() const
 {
-    return m_country;
+    return d->country;
 }
 
 void UserInfo::setCountryString(const QString &countryString)
 {
-    m_countryString = countryString;
+    d->countryString = countryString;
 }
 
 QString UserInfo::countryString() const
 {
-    return m_countryString;
+    return d->countryString;
 }
 
 void UserInfo::setPhoto(const QString &photo)
 {
-    m_photo = photo;
+    d->photo = photo;
 }
 
 QString UserInfo::photo() const
 {
-    return m_photo;
+    return d->photo;
 }
 
 void UserInfo::setPhotoMedium(const QString &photoMedium)
 {
-    m_photoMedium = photoMedium;
+    d->photoMedium = photoMedium;
 }
 
 QString UserInfo::photoMedium() const
 {
-    return m_photoMedium;
+    return d->photoMedium;
 }
 
 void UserInfo::setPhotoMediumRec(const QString &photoMediumRec)
 {
-    m_photoMediumRec = photoMediumRec;
+    d->photoMediumRec = photoMediumRec;
 }
 
 QString UserInfo::photoMediumRec() const
 {
-    return m_photoMediumRec;
+    return d->photoMediumRec;
 }
 
 void UserInfo::setPhotoBig(const QString &photoBig)
 {
-    m_photoBig = photoBig;
+    d->photoBig = photoBig;
 }
 
 QString UserInfo::photoBig() const
 {
-    return m_photoBig;
+    return d->photoBig;
 }
 
 void UserInfo::setPhotoRec(const QString &photoRec)
 {
-    m_photoRec = photoRec;
+    d->photoRec = photoRec;
 }
 
 QString UserInfo::photoRec() const
 {
-    return m_photoRec;
+    return d->photoRec;
 }
 
 void UserInfo::setDomain(const QString &domain)
 {
-    m_domain = domain;
+    d->domain = domain;
 }
 
 QString UserInfo::domain() const
 {
-    return m_domain;
+    return d->domain;
 }
 
 void UserInfo::setHasMobile(bool hasMobile)
 {
-    m_hasMobile = hasMobile;
+    d->hasMobile = hasMobile;
 }
 
 bool UserInfo::hasMobile() const
 {
-    return m_hasMobile;
+    return d->hasMobile;
 }
 
 void UserInfo::setRate(int rate)
 {
-    m_rate = rate;
+    d->rate = rate;
 }
 
 int UserInfo::rate() const
 {
-    return m_rate;
+    return d->rate;
 }
 
 void UserInfo::setHomePhone(const QString &homePhone)
 {
-    m_homePhone = homePhone;
+    d->homePhone = homePhone;
 }
 
 QString UserInfo::homePhone() const
 {
-    return m_homePhone;
+    return d->homePhone;
 }
 
 void UserInfo::setMobilePhone(const QString &mobilePhone)
 {
-    m_mobilePhone = mobilePhone;
+    d->mobilePhone = mobilePhone;
 }
 
 QString UserInfo::mobilePhone() const
 {
-    return m_mobilePhone;
+    return d->mobilePhone;
 }
 
 void UserInfo::setUniversity(int university)
 {
-    m_university = university;
+    d->university = university;
 }
 
 int UserInfo::university() const
 {
-    return m_university;
+    return d->university;
 }
 
 void UserInfo::setUniversityName(const QString &universityName)
 {
-    m_universityName = universityName;
+    d->universityName = universityName;
 }
 
 QString UserInfo::universityName() const
 {
-    return m_universityName;
+    return d->universityName;
 }
 
 void UserInfo::setFaculty(int faculty)
 {
-    m_faculty = faculty;
+    d->faculty = faculty;
 }
 
 int UserInfo::faculty() const
 {
-    return m_faculty;
+    return d->faculty;
 }
 
 void UserInfo::setFacultyName(const QString &facultyName)
 {
-    m_facultyName = facultyName;
+    d->facultyName = facultyName;
 }
 
 QString UserInfo::facultyName() const
 {
-    return m_facultyName;
+    return d->facultyName;
 }
 
 void UserInfo::setGraduation(int graduation)
 {
-    m_graduation = graduation;
+    d->graduation = graduation;
 }
 
 int UserInfo::graduation() const
 {
-    return m_graduation;
+    return d->graduation;
 }
 
 void UserInfo::setCanPost(bool canPost)
 {
-    m_canPost = canPost;
+    d->canPost = canPost;
 }
 
 bool UserInfo::canPost() const
 {
-    return m_canPost;
+    return d->canPost;
 }
 
 void UserInfo::setCanWritePrivateMessage(bool canWritePrivateMessage)
 {
-    m_canWritePrivateMessage = canWritePrivateMessage;
+    d->canWritePrivateMessage = canWritePrivateMessage;
 }
 
 bool UserInfo::canWritePrivateMessage() const
 {
-    return m_canWritePrivateMessage;
+    return d->canWritePrivateMessage;
 }
 
 void UserInfo::setCounters(const QVariantMap &counters)
 {
-    m_counters = counters;
+    d->counters = counters;
 }
 
 QVariantMap UserInfo::counters() const
 {
-    return m_counters;
+    return d->counters;
 }
 
 void UserInfo::setTimezone(int timezone)
 {
-    m_timezone = timezone;
+    d->timezone = timezone;
 }
 
 int UserInfo::timezone() const
 {
-    return m_timezone;
+    return d->timezone;
 }
 
 QString UserInfo::profileUrl() const

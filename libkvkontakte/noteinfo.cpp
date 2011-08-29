@@ -27,126 +27,152 @@
 namespace Vkontakte
 {
 
-NoteInfo::NoteInfo()
-    : m_nid(-1), m_uid(-1), m_ncom(-1), m_readNcom(-1)
-    , m_privacy(-1), m_commentPrivacy(-1), m_canComment(false)
-    , d(0)
+class NoteInfo::Private
 {
+public:
+    int nid;          /* Vkontakte id of the note. */
+    int uid;        /* Creator of the note. */
+    QString title;     /* Subject of the note. */
+    QString text;     /* Actual content of the note. */
+    QString textWiki;
+    QString date; /* Creation time of the note. */
+    int ncom; /* Number of comments. */
+    int readNcom; /* Number of read comments. */
+    int privacy;
+    int commentPrivacy;
+    int canComment;
+};
+
+NoteInfo::NoteInfo()
+    : d(new Private)
+{
+    d->nid = -1;
+    d->uid = -1;
+    d->ncom = -1;
+    d->readNcom = -1;
+    d->privacy = -1;
+    d->commentPrivacy = -1;
+    d->canComment = false;
+}
+
+NoteInfo::~NoteInfo()
+{
+    delete d;
 }
 
 void NoteInfo::setNid(int nid)
 {
-    m_nid = nid;
+    d->nid = nid;
 }
 
 int NoteInfo::nid() const
 {
-    return m_nid;
+    return d->nid;
 }
 
 void NoteInfo::setUid(int uid)
 {
-    m_uid = uid;
+    d->uid = uid;
 }
 
 int NoteInfo::uid() const
 {
-    return m_uid;
+    return d->uid;
 }
 
 void NoteInfo::setTitle(const QString &title)
 {
-    m_title = title;
+    d->title = title;
 }
 
 QString NoteInfo::title() const
 {
-    return m_title;
+    return d->title;
 }
 
 void NoteInfo::setText(const QString &text)
 {
-    m_text = text;
+    d->text = text;
 }
 
 QString NoteInfo::text() const
 {
-    return QString(m_text).remove(QChar::ByteOrderMark);
+    return QString(d->text).remove(QChar::ByteOrderMark);
 }
 
 void NoteInfo::setTextWiki(const QString &textWiki)
 {
-    m_textWiki = textWiki;
+    d->textWiki = textWiki;
 }
 
 QString NoteInfo::textWiki() const
 {
-    return m_textWiki;
+    return d->textWiki;
 }
 
 void NoteInfo::setDateString(const QString &createdDate)
 {
-    m_date = createdDate;
+    d->date = createdDate;
 }
 
 QString NoteInfo::dateString() const
 {
-    return m_date;
+    return d->date;
 }
 
 KDateTime NoteInfo::date() const
 {
-    return unixTimeToKDateTime(m_date);
+    return unixTimeToKDateTime(d->date);
 }
 
 void NoteInfo::setNcom (int ncom)
 {
-    m_ncom = ncom;
+    d->ncom = ncom;
 }
 
 int NoteInfo::ncom() const
 {
-    return m_ncom;
+    return d->ncom;
 }
 
 void NoteInfo::setReadNcom (int readNcom)
 {
-    m_readNcom = readNcom;
+    d->readNcom = readNcom;
 }
 
 int NoteInfo::readNcom() const
 {
-    return m_readNcom;
+    return d->readNcom;
 }
 
 void NoteInfo::setPrivacy(int privacy)
 {
-    m_privacy = privacy;
+    d->privacy = privacy;
 }
 
 int NoteInfo::privacy() const
 {
-    return m_privacy;
+    return d->privacy;
 }
 
 void NoteInfo::setCommentPrivacy(int commentPrivacy)
 {
-    m_commentPrivacy = commentPrivacy;
+    d->commentPrivacy = commentPrivacy;
 }
 
 int NoteInfo::commentPrivacy() const
 {
-    return m_commentPrivacy;
+    return d->commentPrivacy;
 }
 
 void NoteInfo::setCanComment(bool canComment)
 {
-    m_canComment = canComment;
+    d->canComment = canComment;
 }
 
 bool NoteInfo::canComment() const
 {
-    return m_canComment;
+    return d->canComment;
 }
 
 } /* namespace Vkontakte */

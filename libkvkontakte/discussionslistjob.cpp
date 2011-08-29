@@ -22,41 +22,53 @@
 namespace Vkontakte
 {
 
+class DiscussionsListJob::Private
+{
+public:
+    int totalCount; // number of all discussions, not only discussions retrieved in this request
+    QList<MessageInfoPtr> list;
+};
+
 DiscussionsListJob::DiscussionsListJob(const QString &accessToken, int offset, int count, int previewLength)
     : VkontakteJob(accessToken, "messages.getDialogs")
-    , d(0)
+    , d(new Private)
 {
     addQueryItem("offset", QString::number(offset));
     addQueryItem("count", QString::number(count));
     addQueryItem("preview_length", QString::number(previewLength));
 }
 
+DiscussionsListJob::~DiscussionsListJob()
+{
+    delete d;
+}
+
 void DiscussionsListJob::handleItem(const QVariant &data)
 {
     MessageInfoPtr item(new MessageInfo());
     QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    m_list.append(item);
+    d->list.append(item);
 }
 
 void DiscussionsListJob::handleData(const QVariant &data)
 {
     QVariantList list = data.toList();
-    m_totalCount = list[0].toInt();
+    d->totalCount = list[0].toInt();
     list.pop_front();
     foreach (const QVariant &item, list)
         handleItem(item);
 
-    qSort(m_list); // sort by message ID (which should be equivalent to sorting by date)
+    qSort(d->list); // sort by message ID (which should be equivalent to sorting by date)
 }
 
 QList<MessageInfoPtr> DiscussionsListJob::list() const
 {
-    return m_list;
+    return d->list;
 }
 
 int DiscussionsListJob::totalCount() const
 {
-    return m_totalCount;
+    return d->totalCount;
 }
 
 } /* namespace Vkontakte */

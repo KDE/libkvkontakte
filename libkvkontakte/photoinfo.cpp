@@ -26,115 +26,137 @@
 namespace Vkontakte
 {
 
-PhotoInfo::PhotoInfo()
-    : m_pid(-1), m_aid(-1), m_uid(-1)
-    , d(0)
+class PhotoInfo::Private
 {
+public:
+    int pid;
+    int aid;
+    int uid;
+    QString src;
+    QString srcSmall;
+    QString srcBig;
+    QString srcXBig;
+    QString srcXXBig;
+    QString text;
+    QString dateCreated;
+};
+
+PhotoInfo::PhotoInfo()
+    : d(new Private)
+{
+    d->pid = -1;
+    d->aid = -1;
+    d->uid = -1;
+}
+
+PhotoInfo::~PhotoInfo()
+{
+    delete d;
 }
 
 void PhotoInfo::setPid(int pid)
 {
-    m_pid = pid;
+    d->pid = pid;
 }
 
 int PhotoInfo::pid() const
 {
-    return m_pid;
+    return d->pid;
 }
 
 void PhotoInfo::setAid(int aid)
 {
-    m_aid = aid;
+    d->aid = aid;
 }
 
 int PhotoInfo::aid() const
 {
-    return m_aid;
+    return d->aid;
 }
 
 void PhotoInfo::setUid(int uid)
 {
-    m_uid = uid;
+    d->uid = uid;
 }
 
 int PhotoInfo::uid() const
 {
-    return m_uid;
+    return d->uid;
 }
 
 void PhotoInfo::setSrc(const QString &src)
 {
-    m_src = src;
+    d->src = src;
 }
 
 QString PhotoInfo::src() const
 {
-    return m_src;
+    return d->src;
 }
 
 void PhotoInfo::setSrcSmall(const QString &srcSmall)
 {
-    m_srcSmall = srcSmall;
+    d->srcSmall = srcSmall;
 }
 
 QString PhotoInfo::srcSmall() const
 {
-    return m_srcSmall;
+    return d->srcSmall;
 }
 
 void PhotoInfo::setSrcBig(const QString &srcBig)
 {
-    m_srcBig = srcBig;
+    d->srcBig = srcBig;
 }
 
 QString PhotoInfo::srcBig() const
 {
-    return m_srcBig;
+    return d->srcBig;
 }
 
 void PhotoInfo::setSrcXBig(const QString &srcXBig)
 {
-    m_srcXBig = srcXBig;
+    d->srcXBig = srcXBig;
 }
 
 QString PhotoInfo::srcXBig() const
 {
-    return m_srcXBig;
+    return d->srcXBig;
 }
 
 void PhotoInfo::setSrcXXBig(const QString &srcXXBig)
 {
-    m_srcXXBig = srcXXBig;
+    d->srcXXBig = srcXXBig;
 }
 
 QString PhotoInfo::srcXXBig() const
 {
-    return m_srcXXBig;
+    return d->srcXXBig;
 }
 
 void PhotoInfo::setText(const QString &text)
 {
-    m_text = text;
+    d->text = text;
 }
 
 QString PhotoInfo::text() const
 {
-    return m_text;
+    return d->text;
 }
 
 void PhotoInfo::setDateCreatedString(const QString &dateCreatedString)
 {
-    m_dateCreated = dateCreatedString;
+    d->dateCreated = dateCreatedString;
 }
 
 QString PhotoInfo::dateCreatedString() const
 {
-    return m_dateCreated;
+    return d->dateCreated;
 }
 
 KDateTime PhotoInfo::dateCreated() const
 {
-    return unixTimeToKDateTime(m_dateCreated);
+    return unixTimeToKDateTime(d->dateCreated);
 }
 
 } /* namespace Vkontakte */
