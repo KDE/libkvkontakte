@@ -26,6 +26,7 @@ namespace Vkontakte
 
 DeleteAlbumJob::DeleteAlbumJob(const QString &accessToken, int aid)
     : VkontakteJob(accessToken, "photos.deleteAlbum", true)
+    , d(0)
 {
     addQueryItem("aid", QString::number(aid));
 }

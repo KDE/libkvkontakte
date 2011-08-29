@@ -33,6 +33,7 @@ public:
                    const QString &title, const QString &description = QString(),
                    int privacy = AlbumInfo::PRIVACY_UNKNOWN,
                    int comment_privacy = AlbumInfo::PRIVACY_UNKNOWN);
+    ~CreateAlbumJob();
 
     AlbumInfoPtr album() const;
 
@@ -40,7 +41,8 @@ protected:
     virtual void handleData(const QVariant &data);
 
 private:
-    AlbumInfoPtr m_album;
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

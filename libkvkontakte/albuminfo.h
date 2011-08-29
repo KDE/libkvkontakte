@@ -100,7 +100,6 @@ public:
     int commentPrivacy() const;
 
 private:
-
     class Private;
     Private * const d;
 };

@@ -21,19 +21,31 @@
 namespace Vkontakte
 {
 
+class LongPollServerJob::Private
+{
+public:
+    QVariantMap serverInfo;
+};
+
 LongPollServerJob::LongPollServerJob(const QString &accessToken)
     : VkontakteJob(accessToken, "messages.getLongPollServer")
+    , d(new Private)
 {
+}
+
+LongPollServerJob::~LongPollServerJob()
+{
+    delete d;
 }
 
 void LongPollServerJob::handleData(const QVariant &data)
 {
-     m_serverInfo = data.toMap();
+     d->serverInfo = data.toMap();
 }
 
 QVariantMap LongPollServerJob::serverInfo()
 {
-    return m_serverInfo;
+    return d->serverInfo;
 }
 
 } /* namespace Vkontakte */

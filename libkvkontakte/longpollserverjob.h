@@ -25,11 +25,11 @@
 namespace Vkontakte
 {
 
-// This class is too simple to expand, not using Pimpl here
 class LIBKVKONTAKTE_EXPORT LongPollServerJob : public VkontakteJob
 {
 public:
     LongPollServerJob(const QString &accessToken);
+    ~LongPollServerJob();
 
     QVariantMap serverInfo();
 
@@ -37,7 +37,8 @@ protected:
     virtual void handleData(const QVariant &data);
 
 private:
-    QVariantMap m_serverInfo;
+    class Private;
+    Private * const d;
 };
 
 } /* namespace Vkontakte */

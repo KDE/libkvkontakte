@@ -32,6 +32,10 @@ public:
 
 protected:
     virtual void handleData(const QVariant &data);
+
+private:
+    class Private;
+    Private * const d; // not used
 };
 
 } /* namespace Vkontakte */

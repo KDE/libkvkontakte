@@ -22,10 +22,17 @@
 namespace Vkontakte
 {
 
+class CreateAlbumJob::Private
+{
+public:
+    AlbumInfoPtr album;
+};
+
 CreateAlbumJob::CreateAlbumJob(const QString &accessToken,
                                const QString &title, const QString &description,
                                int privacy, int comment_privacy)
     : VkontakteJob(accessToken, "photos.createAlbum", true)
+    , d(new Private)
 {
     addQueryItem("title", title);
     if (!description.isEmpty())
@@ -36,15 +43,20 @@ CreateAlbumJob::CreateAlbumJob(const QString &accessToken,
         addQueryItem("comment_privacy", QString::number(comment_privacy));
 }
 
+CreateAlbumJob::~CreateAlbumJob()
+{
+    delete d;
+}
+
 void CreateAlbumJob::handleData(const QVariant &data)
 {
-    m_album = AlbumInfoPtr(new AlbumInfo());
-    QJson::QObjectHelper::qvariant2qobject(data.toMap(), m_album.data());
+    d->album = AlbumInfoPtr(new AlbumInfo());
+    QJson::QObjectHelper::qvariant2qobject(data.toMap(), d->album.data());
 }
 
 AlbumInfoPtr CreateAlbumJob::album() const
 {
-    return m_album;
+    return d->album;
 }
 
 } /* namespace Vkontakte */
