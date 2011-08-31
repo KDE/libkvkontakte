@@ -16,36 +16,37 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "longpollserverjob.h"
+#include "getinfojob.h"
 
 namespace Vkontakte
 {
 
-class LongPollServerJob::Private
+class GetInfoJob::Private
 {
 public:
-    QVariantMap serverInfo;
+    QVariantMap info;
 };
 
-LongPollServerJob::LongPollServerJob(const QString &accessToken)
-    : VkontakteJob(accessToken, "messages.getLongPollServer")
+// example 'method': "messages.getLongPollServer"
+GetInfoJob::GetInfoJob(const QString &accessToken, const QString &method)
+    : VkontakteJob(accessToken, method)
     , d(new Private)
 {
 }
 
-LongPollServerJob::~LongPollServerJob()
+GetInfoJob::~GetInfoJob()
 {
     delete d;
 }
 
-void LongPollServerJob::handleData(const QVariant &data)
+void GetInfoJob::handleData(const QVariant &data)
 {
-     d->serverInfo = data.toMap();
+     d->info = data.toMap();
 }
 
-QVariantMap LongPollServerJob::serverInfo()
+QVariantMap GetInfoJob::info()
 {
-    return d->serverInfo;
+    return d->info;
 }
 
 } /* namespace Vkontakte */

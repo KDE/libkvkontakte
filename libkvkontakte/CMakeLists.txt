@@ -10,7 +10,7 @@ set(libkvkontakte_SRCS
     getvariablejob.cpp
     userinfofulljob.cpp
     cidsnamesjob.cpp
-    longpollserverjob.cpp
+    getinfojob.cpp
     messageinfo.cpp
     discussionslistjob.cpp
     messageslistjob.cpp

@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef LONGPOLLSERVERJOB_H
-#define LONGPOLLSERVERJOB_H
+#ifndef GETINFOJOB_H
+#define GETINFOJOB_H
 
 #include <libkvkontakte/vkontaktejobs.h>
 #include <QVariantMap>
@@ -25,13 +25,13 @@
 namespace Vkontakte
 {
 
-class LIBKVKONTAKTE_EXPORT LongPollServerJob : public VkontakteJob
+class LIBKVKONTAKTE_EXPORT GetInfoJob : public VkontakteJob
 {
 public:
-    LongPollServerJob(const QString &accessToken);
-    ~LongPollServerJob();
+    GetInfoJob(const QString &accessToken, const QString &method);
+    ~GetInfoJob();
 
-    QVariantMap serverInfo();
+    QVariantMap info();
 
 protected:
     virtual void handleData(const QVariant &data);
@@ -43,4 +43,4 @@ private:
 
 } /* namespace Vkontakte */
 
-#endif // LONGPOLLSERVERJOB_H
+#endif // GETINFOJOB_H
