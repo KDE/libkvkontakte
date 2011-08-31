@@ -25,6 +25,9 @@
 namespace Vkontakte
 {
 
+const int UploadPhotosJob::MAX_POST_JOBS = 2;
+const int UploadPhotosJob::REQUEST_FILES_COUNT = 1; // <= 5
+
 class UploadPhotosJob::Private
 {
 public:

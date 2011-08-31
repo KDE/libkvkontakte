@@ -42,8 +42,8 @@ public:
     QList<PhotoInfoPtr> list() const;
 
 protected:
-    static const int MAX_POST_JOBS = 2;
-    static const int REQUEST_FILES_COUNT = 1; // <= 5
+    static const int MAX_POST_JOBS;
+    static const int REQUEST_FILES_COUNT;
 
     bool mayStartPostJob();
 
