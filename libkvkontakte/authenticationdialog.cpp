@@ -73,6 +73,7 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     connect(d->webView, SIGNAL(loadStarted()), progressWidget, SLOT(show()));
     connect(d->webView, SIGNAL(loadFinished(bool)), progressWidget, SLOT(hide()));
     connect(d->webView, SIGNAL(loadProgress(int)), d->progressBar, SLOT(setValue(int)));
+    connect(d->webView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
 }
 
 AuthenticationDialog::~AuthenticationDialog()
@@ -142,6 +143,19 @@ void AuthenticationDialog::urlChanged(const QUrl &url)
             emit authenticated(accessToken);
             QTimer::singleShot(0, this, SLOT(close()));
         }
+    }
+}
+
+void AuthenticationDialog::loadFinished(bool ok)
+{
+    if (!ok)
+    {
+        emit canceled();
+        close();
+
+        KMessageBox::error(parentWidget(),
+                           i18n("There was a network error when trying to authenticate with VKontakte web service."),
+                           i18nc("@title:window", "Network Error"));
     }
 }
 

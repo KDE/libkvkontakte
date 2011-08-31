@@ -47,6 +47,7 @@ signals:
 
 private slots:
     void urlChanged(const QUrl &url);
+    void loadFinished(bool ok);
     void showErrorDialog();
 
 private:
