@@ -49,7 +49,7 @@ protected:
     virtual void handleData(const QVariant &data);
 
 private slots:
-    void jobFinished(KJob *job);
+    void jobFinished(KJob *kjob);
 
 private:
     QString m_url;

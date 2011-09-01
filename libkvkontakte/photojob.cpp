@@ -50,18 +50,18 @@ void PhotoJob::start()
     job->start();
 }
 
-void PhotoJob::jobFinished(KJob *job)
+void PhotoJob::jobFinished(KJob *kjob)
 {
-    KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>(job);
+    KIO::StoredTransferJob *job = dynamic_cast<KIO::StoredTransferJob *>(kjob);
     Q_ASSERT(transferJob);
-    if (transferJob->error())
+    if (job->error())
     {
-        setError(transferJob->error());
-        setErrorText(KIO::buildErrorString(error(), transferJob->errorText()));
-        kWarning() << "Job error: " << transferJob->errorString();
+        setError(job->error());
+        setErrorText(KIO::buildErrorString(error(), job->errorText()));
+        kWarning() << "Job error: " << job->errorString();
     }
     else
-        d->photo = QImage::fromData(transferJob->data());
+        d->photo = QImage::fromData(job->data());
 
     emitResult();
     m_job = 0;
