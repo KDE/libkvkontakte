@@ -36,8 +36,11 @@ class AuthenticationDialog::Private
 public:
     QString appId;
     QStringList permissions;
+    QString displayMode;
+
     KWebView *webView;
     QProgressBar *progressBar;
+
     QString error;
     QString errorDescription;
 };
@@ -46,6 +49,8 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     : KDialog(parent)
     , d(new Private)
 {
+    d->displayMode = "page";
+
     setButtons(KDialog::Cancel);
     setCaption(i18nc("@title:window", "Authenticate with VKontakte"));
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -91,19 +96,25 @@ void AuthenticationDialog::setPermissions(const QStringList &permissions)
     d->permissions = permissions;
 }
 
+// display= {page, popup, touch, wap}
+void AuthenticationDialog::setDisplayMode(const QString &displayMode)
+{
+    d->displayMode = displayMode;
+}
+
 void AuthenticationDialog::start()
 {
     Q_ASSERT(!d->appId.isEmpty());
 
-    // display= {page, popup, touch, wap}
     const QString url = QString("http://api.vkontakte.ru/oauth/authorize?"
                                 "client_id=%1&"
                                 "scope=%2&"
                                 "redirect_uri=http://api.vkontakte.ru/blank.html&"
-                                "display=page&" // TODO: this should be configurable
+                                "display=%3&"
                                 "response_type=token")
                                 .arg(d->appId)
-                                .arg(d->permissions.join(","));
+                                .arg(d->permissions.join(",")
+                                .arg(d->displayMode));
     kDebug() << "Showing" << url;
     d->webView->setUrl(QUrl::fromUserInput(url));
     show();

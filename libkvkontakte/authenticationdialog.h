@@ -39,6 +39,7 @@ public:
 
     void setAppId(const QString &appId);
     void setPermissions(const QStringList &permissions);
+    void setDisplayMode(const QString &displayMode);
     void start();
 
 signals:
