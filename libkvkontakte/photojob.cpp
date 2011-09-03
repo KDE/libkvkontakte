@@ -53,7 +53,7 @@ void PhotoJob::start()
 void PhotoJob::jobFinished(KJob *kjob)
 {
     KIO::StoredTransferJob *job = dynamic_cast<KIO::StoredTransferJob *>(kjob);
-    Q_ASSERT(transferJob);
+    Q_ASSERT(job);
     if (job->error())
     {
         setError(job->error());
