@@ -39,13 +39,13 @@ public:
     virtual void start();
 
 private slots:
-    void mainJobFinished(KJob *);
-    void countriesJobFinished(KJob *);
-    void citiesJobFinished(KJob *);
+    void mainJobFinished(KJob *kjob);
+    void countriesJobFinished(KJob *kjob);
+    void citiesJobFinished(KJob *kjob);
 
 private:
     void handleFinish();
-    void handleError(KJob *job);
+    void handleError(KJob *kjob);
 
     void startCountriesJob();
     void startCitiesJob();

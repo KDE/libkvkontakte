@@ -27,7 +27,7 @@
 namespace Vkontakte
 {
 
-class CidsNamesJob : public VkontakteJob
+class LIBKVKONTAKTE_EXPORT CidsNamesJob : public VkontakteJob
 {
 public:
     CidsNamesJob(const QString &method,

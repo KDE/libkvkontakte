@@ -110,22 +110,22 @@ void VkontakteJob::start()
     job->start();
 }
 
-void VkontakteJob::jobFinished(KJob *job)
+void VkontakteJob::jobFinished(KJob *kjob)
 {
-    KIO::StoredTransferJob *transferJob = dynamic_cast<KIO::StoredTransferJob *>(job);
-    Q_ASSERT(transferJob);
-    if (transferJob->error())
+    KIO::StoredTransferJob *job = dynamic_cast<KIO::StoredTransferJob *>(kjob);
+    Q_ASSERT(job);
+    if (job->error())
     {
-        setError(transferJob->error());
-        setErrorText(KIO::buildErrorString(error(), transferJob->errorText()));
-        kWarning() << "Job error: " << transferJob->errorString();
+        setError(job->error());
+        setErrorText(KIO::buildErrorString(error(), job->errorText()));
+        kWarning() << "Job error: " << job->errorString();
     }
     else
     {
-        kDebug() << "Got data: " << QString::fromAscii(transferJob->data().data());
+        kDebug() << "Got data: " << QString::fromAscii(job->data().data());
         QJson::Parser parser;
         bool ok;
-        const QVariant data = parser.parse(transferJob->data(), &ok);
+        const QVariant data = parser.parse(job->data(), &ok);
         if (ok)
         {
             const QVariant error = data.toMap()["error"];
@@ -136,7 +136,7 @@ void VkontakteJob::jobFinished(KJob *job)
         }
         else
         {
-            kWarning() << "Unable to parse JSON data: " << QString::fromAscii(transferJob->data().data());
+            kWarning() << "Unable to parse JSON data: " << QString::fromAscii(job->data().data());
             setError( KJob::UserDefinedError );
             setErrorText(i18n("Unable to parse data returned by the VKontakte server: %1", parser.errorString()));
         }

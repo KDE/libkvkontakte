@@ -78,11 +78,11 @@ void UserInfoFullJob::handleFinish()
     d->citiesJob = 0;
 }
 
-void UserInfoFullJob::handleError(KJob *job)
+void UserInfoFullJob::handleError(KJob *kjob)
 {
-    setError(job->error());
-    setErrorText(job->errorText());
-    kWarning() << "Job error: " << job->errorString();
+    setError(kjob->error());
+    setErrorText(kjob->errorText());
+    kWarning() << "Job error: " << kjob->errorString();
     handleFinish();
 }
 

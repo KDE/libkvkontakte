@@ -27,11 +27,11 @@ namespace Vkontakte
 class PhotoJob::Private
 {
 public:
-    KUrl url;
+    QUrl url;
     QImage photo;
 };
 
-PhotoJob::PhotoJob(const KUrl &url)
+PhotoJob::PhotoJob(const QUrl &url)
     : d(new Private)
 {
     d->url = url;

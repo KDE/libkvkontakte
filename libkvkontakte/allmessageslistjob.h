@@ -51,7 +51,7 @@ protected:
     void startNewJob(int offset, int count, int out);
 
 private slots:
-    void jobFinished(KJob *job);
+    void jobFinished(KJob *kjob);
 
 private:
     class Private;

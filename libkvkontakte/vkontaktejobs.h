@@ -87,7 +87,7 @@ protected:
     QList<QueryItem> m_queryItems; /** The query items */
 
 private slots:
-    void jobFinished(KJob *job);
+    void jobFinished(KJob *kjob);
 };
 
 } /* namespace Vkontakte */

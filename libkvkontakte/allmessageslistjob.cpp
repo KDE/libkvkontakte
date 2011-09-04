@@ -79,30 +79,30 @@ void AllMessagesListJob::start()
         startNewJob(0, 100, 1);
 }
 
-void AllMessagesListJob::jobFinished(KJob* job)
+void AllMessagesListJob::jobFinished(KJob *kjob)
 {
-    MessagesListJob *listJob = dynamic_cast<MessagesListJob *>(job);
-    Q_ASSERT(listJob);
-    m_jobs.removeAll(listJob);
-    if (listJob->error()) {
-        setError(listJob->error());
-        setErrorText(listJob->errorText());
-        kWarning() << "Job error: " << listJob->errorString();
+    MessagesListJob *job = dynamic_cast<MessagesListJob *>(kjob);
+    Q_ASSERT(job);
+    m_jobs.removeAll(job);
+    if (job->error()) {
+        setError(job->error());
+        setErrorText(job->errorText());
+        kWarning() << "Job error: " << job->errorString();
         return;
     }
 
-    d->list.append(listJob->list());
+    d->list.append(job->list());
 
-    int out = listJob->out(); // incoming or outgoing
+    int out = job->out(); // incoming or outgoing
     Q_ASSERT(out == 0 || out == 1);
     // If this was the first job, start all others
-    if (d->totalCount[out] == -1) {
-        d->totalCount[out] = listJob->totalCount();
-        for (int offset = 100; offset < d->totalCount[out]; offset += 100) {
+    if (d->totalCount[out] == -1)
+    {
+        d->totalCount[out] = job->totalCount();
+        for (int offset = 100; offset < d->totalCount[out]; offset += 100)
             startNewJob(offset, qMin(100, d->totalCount[out] - offset), out);
-        }
     }
-    else if (d->totalCount[out] != listJob->totalCount())
+    else if (d->totalCount[out] != job->totalCount())
     {
         // TODO: some new messages might have been added, what should we do then?
         doKill();
@@ -110,13 +110,14 @@ void AllMessagesListJob::jobFinished(KJob* job)
         setErrorText(i18nc("%1 can be \'incoming\' or \'outgoing\'",
                             "The number of %1 messages has changed between requests.",
                             out ? i18n("outgoing") : i18n("incoming")));
-        kWarning() << "Job error: " << listJob->errorString();
+        kWarning() << "Job error: " << job->errorString();
         emitResult();
         return;
     }
 
     // All jobs have finished
-    if (m_jobs.size() == 0) {
+    if (m_jobs.size() == 0)
+    {
         qSort(d->list); // sort by message ID (which should be equivalent to sorting by date)
         emitResult();
     }

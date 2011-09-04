@@ -30,7 +30,7 @@ class LIBKVKONTAKTE_EXPORT PhotoJob : public KJobWithSubjob
 {
     Q_OBJECT
 public:
-    PhotoJob(const KUrl &urlString);
+    PhotoJob(const QUrl &urlString);
     ~PhotoJob();
 
     virtual void start();
