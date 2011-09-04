@@ -19,7 +19,7 @@
 */
 #include "noteaddjob.h"
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 namespace Vkontakte
 {

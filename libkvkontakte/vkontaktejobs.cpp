@@ -21,7 +21,6 @@
 #include "vkontaktejobs.h"
 
 #include <qjson/parser.h>
-
 #include <KIO/Job>
 #include <KDebug>
 #include <KLocale>
@@ -74,16 +73,12 @@ void VkontakteJob::handleError(const QVariant &data)
     int error_code = errorMap["error_code"].toInt();
     const QString error_msg = errorMap["error_msg"].toString();
     kWarning() << "An error of type" << error_code << "occurred:" << error_msg;
-//     if ( type.toLower() != "oauthexception" ) {
-        setError(KJob::UserDefinedError);
-        setErrorText(i18n(
-            "The VKontakte server returned an error "
-            "of type <i>%1</i> in reply to method %2: <i>%3</i>",
-            error_code, m_method, error_msg));
-//     } else {
-//         setError( AuthenticationProblem );
-//         setErrorText( i18n( "Unable to login to the VKontakte server, authentication failure.\nThe server said: <i>%1</i>", message ) );
-//     }
+
+    setError(KJob::UserDefinedError);
+    setErrorText(i18n(
+        "The VKontakte server returned an error "
+        "of type <i>%1</i> in reply to method %2: <i>%3</i>",
+        error_code, m_method, error_msg));
 }
 
 void VkontakteJob::start()

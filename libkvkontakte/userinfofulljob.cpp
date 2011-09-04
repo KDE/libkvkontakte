@@ -16,10 +16,11 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <KDebug>
 #include "userinfofulljob.h"
 #include "userinfojob.h"
 #include "cidsnamesjob.h"
+
+#include <KDebug>
 
 namespace Vkontakte
 {

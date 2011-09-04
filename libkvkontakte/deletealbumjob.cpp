@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "deletealbumjob.h"
+
 #include <QVariant>
 #include <KDebug>
 #include <KLocalizedString>
@@ -37,7 +38,7 @@ void DeleteAlbumJob::handleData(const QVariant &data)
     if (data.toInt(&ok) != 1 || !ok)
     {
         setError(1);
-        setErrorText(QString(i18n("Failed to delete album")));
+        setErrorText(i18n("Failed to delete album"));
         kWarning() << "Failed to delete album";
     }
 }

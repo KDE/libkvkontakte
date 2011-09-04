@@ -18,9 +18,10 @@
 */
 #include "uploadphotosjob.h"
 #include "getphotouploadserverjob.h"
-#include <KDebug>
 #include "photopostjob.h"
 #include "savephotojob.h"
+
+#include <KDebug>
 
 namespace Vkontakte
 {

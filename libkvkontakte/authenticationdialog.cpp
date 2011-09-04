@@ -19,7 +19,7 @@
 */
 #include "authenticationdialog.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KWebView>
 #include <KMessageBox>
 #include <KDebug>

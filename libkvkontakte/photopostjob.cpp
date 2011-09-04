@@ -16,13 +16,13 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "photopostjob.h"
+#include "mpform.h"
+
 #include <qjson/parser.h>
 #include <KIO/Job>
 #include <KDebug>
 #include <KLocale>
-
-#include "photopostjob.h"
-#include "mpform.h"
 
 namespace Vkontakte
 {

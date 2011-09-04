@@ -20,7 +20,6 @@
 #include "userinfojob.h"
 
 #include <qjson/qobjecthelper.h>
-#include <qjson/parser.h>
 #include <KIO/Job>
 #include <KDebug>
 #include <KLocale>

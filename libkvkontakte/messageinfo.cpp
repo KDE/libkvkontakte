@@ -17,10 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 #include "messageinfo.h"
-
 #include "util.h"
+
 #include <QtCore/QRegExp>
-#include <KDebug>
 
 namespace Vkontakte
 {

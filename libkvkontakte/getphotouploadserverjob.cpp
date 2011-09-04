@@ -17,7 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 #include "getphotouploadserverjob.h"
-#include <QVariant>
+
+#include <QtCore/QVariant>
 
 namespace Vkontakte
 {

@@ -18,10 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 #include "noteinfo.h"
-
 #include "util.h"
 
-#include <KDebug>
 #include <KLocalizedString>
 
 namespace Vkontakte

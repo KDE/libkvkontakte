@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "albumlistjob.h"
+
 #include <qjson/qobjecthelper.h>
 
 namespace Vkontakte

@@ -17,7 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 #include "noteslistjob.h"
-#include <QVariant>
+
+#include <QtCore/QVariant>
 #include <qjson/qobjecthelper.h>
 
 namespace Vkontakte

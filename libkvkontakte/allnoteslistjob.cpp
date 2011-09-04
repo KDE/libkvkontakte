@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "allnoteslistjob.h"
+
 #include <KDebug>
 #include <KLocalizedString>
 

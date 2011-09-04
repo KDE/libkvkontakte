@@ -20,6 +20,7 @@
 #define PHOTOPOSTJOB_H
 
 #include <QStringList>
+#include <QVariantMap>
 
 #include "vkontaktejobs.h"
 

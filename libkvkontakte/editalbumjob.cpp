@@ -17,7 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 #include "editalbumjob.h"
-#include <qjson/qobjecthelper.h>
+
+#include <QtCore/QVariant>
 #include <KDebug>
 #include <KLocalizedString>
 

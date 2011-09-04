@@ -17,8 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 #include "cidsnamesjob.h"
+
 #include <QtCore/QMap>
-#include <QVariant>
+#include <QtCore/QVariant>
 
 namespace Vkontakte
 {

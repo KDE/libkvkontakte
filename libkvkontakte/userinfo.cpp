@@ -18,11 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 #include "userinfo.h"
-
 #include "util.h"
 
-#include <KDebug>
 #include <QtCore/QStringList>
+#include <KDebug>
 
 namespace Vkontakte
 {
