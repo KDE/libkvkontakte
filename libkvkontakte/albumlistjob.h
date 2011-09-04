@@ -19,9 +19,9 @@
 #ifndef ALBUMLISTJOB_H
 #define ALBUMLISTJOB_H
 
-#include "vkontaktejobs.h"
-#include "qintlist.h"
-#include "albuminfo.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/qintlist.h>
+#include <libkvkontakte/albuminfo.h>
 
 namespace Vkontakte
 {

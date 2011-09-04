@@ -20,12 +20,9 @@
 #ifndef AUTHENTICATIONDIALOG_H
 #define AUTHENTICATIONDIALOG_H
 
-#include "libkvkontakte_export.h"
-
 #include <KDialog>
 
-class KWebView;
-class QProgressBar;
+#include <libkvkontakte/libkvkontakte_export.h>
 
 namespace Vkontakte
 {

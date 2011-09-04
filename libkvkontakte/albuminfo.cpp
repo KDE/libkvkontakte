@@ -17,11 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "albuminfo.h"
-
 #include "util.h"
-
-#include <KDebug>
-#include <KLocalizedString>
 
 namespace Vkontakte
 {

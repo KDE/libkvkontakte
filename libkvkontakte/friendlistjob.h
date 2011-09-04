@@ -20,8 +20,8 @@
 #ifndef FRIENDLISTJOB_H
 #define FRIENDLISTJOB_H
 
-#include "userinfo.h"
-#include "vkontaktejobs.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/userinfo.h>
 
 namespace Vkontakte
 {

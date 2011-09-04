@@ -20,6 +20,7 @@
 #define SAVEPHOTOJOB_H
 
 #include <QVariantMap>
+
 #include "vkontaktejobs.h"
 #include "photoinfo.h"
 

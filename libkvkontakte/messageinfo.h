@@ -19,12 +19,9 @@
 #ifndef MESSAGEINFO_H
 #define MESSAGEINFO_H
 
-#include "libkvkontakte_export.h"
-
 #include <KDateTime>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QDate>
-#include <QtCore/QString>
+
+#include <libkvkontakte/libkvkontakte_export.h>
 
 namespace Vkontakte
 {

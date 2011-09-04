@@ -17,7 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 #include "allmessageslistjob.h"
-#include <QPointer>
 #include "messageslistjob.h"
 
 #include <KDebug>

@@ -19,8 +19,8 @@
 #ifndef NOTESLISTJOB_H
 #define NOTESLISTJOB_H
 
-#include "vkontaktejobs.h"
-#include "noteinfo.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/noteinfo.h>
 
 namespace Vkontakte
 {

@@ -19,9 +19,9 @@
 #ifndef QINTLIST_H
 #define QINTLIST_H
 
-#include <libkvkontakte/libkvkontakte_export.h>
-
 #include <QtCore/QList>
+
+#include <libkvkontakte/libkvkontakte_export.h>
 
 namespace Vkontakte
 {

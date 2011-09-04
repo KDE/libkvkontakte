@@ -19,10 +19,9 @@
 #ifndef ALBUMINFO_H
 #define ALBUMINFO_H
 
-#include "libkvkontakte_export.h"
-
 #include <KDateTime>
-#include <QtCore/QObject>
+
+#include <libkvkontakte/libkvkontakte_export.h>
 
 namespace Vkontakte
 {

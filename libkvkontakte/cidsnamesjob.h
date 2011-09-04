@@ -19,9 +19,10 @@
 #ifndef CIDSNAMESJOB_H
 #define CIDSNAMESJOB_H
 
-#include <vkontaktejobs.h>
 #include <QtCore/QMap>
-#include "qintlist.h"
+
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/qintlist.h>
 
 namespace Vkontakte
 {

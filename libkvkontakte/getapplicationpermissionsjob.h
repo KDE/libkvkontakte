@@ -19,7 +19,7 @@
 #ifndef GETAPPLICATIONPERMISSIONSJOB_H
 #define GETAPPLICATIONPERMISSIONSJOB_H
 
-#include "vkontaktejobs.h"
+#include <libkvkontakte/vkontaktejobs.h>
 
 namespace Vkontakte
 {

@@ -19,13 +19,10 @@
 #ifndef USERINFOFULLJOB_H
 #define USERINFOFULLJOB_H
 
-#include <KJob>
-#include "userinfojob.h"
+#include <libkvkontakte/userinfojob.h>
 
 namespace Vkontakte
 {
-
-class CidsNamesJob;
 
 class LIBKVKONTAKTE_EXPORT UserInfoFullJob : public KJob
 {

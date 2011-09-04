@@ -19,11 +19,8 @@
 #ifndef PHOTOPOSTJOB_H
 #define PHOTOPOSTJOB_H
 
-#include "libkvkontakte_export.h"
-#include <KJob>
-#include <QPointer>
 #include <QStringList>
-#include <QVariantMap>
+
 #include "vkontaktejobs.h"
 
 namespace Vkontakte

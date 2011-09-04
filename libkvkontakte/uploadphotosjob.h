@@ -19,15 +19,13 @@
 #ifndef UPLOADPHOTOSJOB_H
 #define UPLOADPHOTOSJOB_H
 
-#include "vkontaktejobs.h"
-#include "photoinfo.h"
-#include <QStringList>
 #include <QVariantMap>
+
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/photoinfo.h>
 
 namespace Vkontakte
 {
-
-class PhotoPostJob;
 
 class LIBKVKONTAKTE_EXPORT UploadPhotosJob : public KJobWithSubjobs
 {

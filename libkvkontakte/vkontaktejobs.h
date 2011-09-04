@@ -21,9 +21,10 @@
 #ifndef VKONTAKTEJOBS_H
 #define VKONTAKTEJOBS_H
 
-#include "libkvkontakte_export.h"
-#include <KDE/KJob>
 #include <QtCore/QPointer>
+#include <KDE/KJob>
+
+#include <libkvkontakte/libkvkontakte_export.h>
 
 namespace Vkontakte
 {

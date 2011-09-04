@@ -19,11 +19,8 @@
 #ifndef PHOTOJOBBASE_H
 #define PHOTOJOBBASE_H
 
-#include <QImage>
-#include <KJob>
-#include <KUrl>
-#include "vkontaktejobs.h"
-#include "userinfo.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/userinfo.h>
 
 namespace Vkontakte
 {

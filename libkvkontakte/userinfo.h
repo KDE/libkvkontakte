@@ -20,12 +20,10 @@
 #ifndef USERINFO_H
 #define USERINFO_H
 
-#include "libkvkontakte_export.h"
-
+#include <QtCore/QVariantMap>
 #include <KDateTime>
-#include <QSharedPointer>
-#include <QDate>
-#include <QVariantMap>
+
+#include <libkvkontakte/libkvkontakte_export.h>
 
 namespace Vkontakte
 {

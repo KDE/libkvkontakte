@@ -20,11 +20,9 @@
 #ifndef USERINFOJOB_H
 #define USERINFOJOB_H
 
-#include <QtCore/QStringList>
-
-#include "userinfo.h"
-#include "vkontaktejobs.h"
-#include "qintlist.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/userinfo.h>
+#include <libkvkontakte/qintlist.h>
 
 namespace Vkontakte
 {

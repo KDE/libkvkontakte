@@ -20,10 +20,9 @@
 #ifndef NOTEINFO_H
 #define NOTEINFO_H
 
-#include "libkvkontakte_export.h"
-
 #include <KDateTime>
-#include <QtCore/QObject>
+
+#include <libkvkontakte/libkvkontakte_export.h>
 
 namespace Vkontakte
 {

@@ -19,8 +19,8 @@
 #ifndef CREATEALBUMJOB_H
 #define CREATEALBUMJOB_H
 
-#include "vkontaktejobs.h"
-#include "albuminfo.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/albuminfo.h>
 
 namespace Vkontakte
 {
