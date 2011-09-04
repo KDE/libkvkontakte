@@ -10,7 +10,7 @@ set(libkvkontakte_SRCS
     getvariablejob.cpp
     userinfofulljob.cpp
     cidsnamesjob.cpp
-#    getinfojob.cpp
+    getinfojob.cpp
     messageinfo.cpp
     discussionslistjob.cpp
     messageslistjob.cpp
@@ -98,4 +98,7 @@ install(FILES
     discussionslistjob.h
     getvariablejob.h
     deletealbumjob.h
+    cidsnamesjob.h
+    getinfojob.h
+    photolistjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
