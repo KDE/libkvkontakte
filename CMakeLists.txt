@@ -4,10 +4,11 @@ project(kvkontakte)
 # the version number, needed for
 # - the library version
 # - version detection by cmake
-set(LIBKVKONTAKTE_VERSION_MAJOR 0)
-set(LIBKVKONTAKTE_VERSION_MINOR 1)
+set(LIBKVKONTAKTE_VERSION_MAJOR 1)
+set(LIBKVKONTAKTE_VERSION_MINOR 0)
 set(LIBKVKONTAKTE_VERSION_PATCH 0)
 set(LIBKVKONTAKTE_VERSION ${LIBKVKONTAKTE_VERSION_MAJOR}.${LIBKVKONTAKTE_VERSION_MINOR}.${LIBKVKONTAKTE_VERSION_PATCH} )
+# TODO: calculate the version id properly (here is currently a hack that won't work for 1.10.0):
 set(LIBKVKONTAKTE_VERSION_ID "0x0${LIBKVKONTAKTE_VERSION_MAJOR}0${LIBKVKONTAKTE_VERSION_MINOR}0${LIBKVKONTAKTE_VERSION_PATCH}")
 
 # set up install directories. INCLUDE_INSTALL_DIR and LIB_INSTALL_DIR must not be absolute paths
