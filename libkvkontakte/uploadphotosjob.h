@@ -19,7 +19,7 @@
 #ifndef UPLOADPHOTOSJOB_H
 #define UPLOADPHOTOSJOB_H
 
-#include <QVariantMap>
+#include <QtCore/QVariantMap>
 
 #include <libkvkontakte/vkontaktejobs.h>
 #include <libkvkontakte/photoinfo.h>

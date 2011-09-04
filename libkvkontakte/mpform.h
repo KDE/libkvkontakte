@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QByteArray>
-#include <QString>
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 class MPForm
 {

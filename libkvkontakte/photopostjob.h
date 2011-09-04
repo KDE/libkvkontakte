@@ -19,8 +19,8 @@
 #ifndef PHOTOPOSTJOB_H
 #define PHOTOPOSTJOB_H
 
-#include <QStringList>
-#include <QVariantMap>
+#include <QtCore/QStringList>
+#include <QtCore/QVariantMap>
 
 #include "vkontaktejobs.h"
 

@@ -19,7 +19,7 @@
 #ifndef MESSAGEINFO_H
 #define MESSAGEINFO_H
 
-#include <KDateTime>
+#include <KDE/KDateTime>
 
 #include <libkvkontakte/libkvkontakte_export.h>
 

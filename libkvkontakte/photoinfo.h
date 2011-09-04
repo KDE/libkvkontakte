@@ -19,7 +19,7 @@
 #ifndef PHOTOINFO_H
 #define PHOTOINFO_H
 
-#include <KDateTime>
+#include <KDE/KDateTime>
 
 #include <libkvkontakte/libkvkontakte_export.h>
 

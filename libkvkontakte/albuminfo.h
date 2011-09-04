@@ -19,7 +19,7 @@
 #ifndef ALBUMINFO_H
 #define ALBUMINFO_H
 
-#include <KDateTime>
+#include <KDE/KDateTime>
 
 #include <libkvkontakte/libkvkontakte_export.h>
 

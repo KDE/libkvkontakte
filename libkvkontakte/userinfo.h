@@ -21,7 +21,7 @@
 #define USERINFO_H
 
 #include <QtCore/QVariantMap>
-#include <KDateTime>
+#include <KDE/KDateTime>
 
 #include <libkvkontakte/libkvkontakte_export.h>
 

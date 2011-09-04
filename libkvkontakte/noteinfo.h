@@ -20,7 +20,7 @@
 #ifndef NOTEINFO_H
 #define NOTEINFO_H
 
-#include <KDateTime>
+#include <KDE/KDateTime>
 
 #include <libkvkontakte/libkvkontakte_export.h>
 

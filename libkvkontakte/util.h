@@ -21,7 +21,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include <KDateTime>
+#include <KDE/KDateTime>
 
 /**
  * Convert a QString containing a UNIX timestamp to a KDateTime object

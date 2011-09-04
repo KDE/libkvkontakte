@@ -20,7 +20,7 @@
 #ifndef AUTHENTICATIONDIALOG_H
 #define AUTHENTICATIONDIALOG_H
 
-#include <KDialog>
+#include <KDE/KDialog>
 
 #include <libkvkontakte/libkvkontakte_export.h>
 
