@@ -113,8 +113,8 @@ void AuthenticationDialog::start()
                                 "display=%3&"
                                 "response_type=token")
                                 .arg(d->appId)
-                                .arg(d->permissions.join(",")
-                                .arg(d->displayMode));
+                                .arg(d->permissions.join(","))
+                                .arg(d->displayMode);
     kDebug() << "Showing" << url;
     d->webView->setUrl(QUrl::fromUserInput(url));
     show();
