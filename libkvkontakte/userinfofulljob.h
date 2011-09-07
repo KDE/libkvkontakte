@@ -19,7 +19,7 @@
 #ifndef USERINFOFULLJOB_H
 #define USERINFOFULLJOB_H
 
-#include <libkvkontakte/userinfojob.h>
+#include "userinfojob.h"
 
 namespace Vkontakte
 {

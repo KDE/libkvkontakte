@@ -21,8 +21,8 @@
 
 #include <QtCore/QMap>
 
-#include <libkvkontakte/vkontaktejobs.h>
-#include <libkvkontakte/qintlist.h>
+#include "vkontaktejobs.h"
+#include "qintlist.h"
 
 namespace Vkontakte
 {

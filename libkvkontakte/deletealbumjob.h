@@ -19,7 +19,7 @@
 #ifndef DELETEALBUMJOB_H
 #define DELETEALBUMJOB_H
 
-#include <libkvkontakte/vkontaktejobs.h>
+#include "vkontaktejobs.h"
 
 namespace Vkontakte
 {

@@ -19,7 +19,7 @@
 #ifndef ALLMESSAGESLISTJOB_H
 #define ALLMESSAGESLISTJOB_H
 
-#include <libkvkontakte/messageslistjob.h>
+#include "messageslistjob.h"
 
 namespace Vkontakte
 {

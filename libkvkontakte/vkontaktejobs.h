@@ -24,7 +24,7 @@
 #include <QtCore/QPointer>
 #include <KDE/KJob>
 
-#include <libkvkontakte/libkvkontakte_export.h>
+#include "libkvkontakte_export.h"
 
 namespace Vkontakte
 {

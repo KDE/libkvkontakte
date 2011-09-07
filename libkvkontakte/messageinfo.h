@@ -21,7 +21,7 @@
 
 #include <KDE/KDateTime>
 
-#include <libkvkontakte/libkvkontakte_export.h>
+#include "libkvkontakte_export.h"
 
 namespace Vkontakte
 {

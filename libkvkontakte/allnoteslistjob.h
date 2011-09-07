@@ -19,7 +19,7 @@
 #ifndef ALLNOTESLISTJOB_H
 #define ALLNOTESLISTJOB_H
 
-#include <libkvkontakte/noteslistjob.h>
+#include "noteslistjob.h"
 
 namespace Vkontakte
 {

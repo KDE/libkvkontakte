@@ -19,9 +19,9 @@
 #ifndef PHOTOLISTJOB_H
 #define PHOTOLISTJOB_H
 
-#include <libkvkontakte/vkontaktejobs.h>
-#include <libkvkontakte/photoinfo.h>
-#include <libkvkontakte/qintlist.h>
+#include "vkontaktejobs.h"
+#include "photoinfo.h"
+#include "qintlist.h"
 
 namespace Vkontakte
 {

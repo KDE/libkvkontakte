@@ -19,8 +19,8 @@
 #ifndef DISCUSSIONSLISTJOB_H
 #define DISCUSSIONSLISTJOB_H
 
-#include <libkvkontakte/vkontaktejobs.h>
-#include <libkvkontakte/messageinfo.h>
+#include "vkontaktejobs.h"
+#include "messageinfo.h"
 
 namespace Vkontakte
 {

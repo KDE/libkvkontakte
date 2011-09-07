@@ -21,7 +21,7 @@
 
 #include <QtCore/QVariant>
 
-#include <libkvkontakte/vkontaktejobs.h>
+#include "vkontaktejobs.h"
 
 namespace Vkontakte
 {

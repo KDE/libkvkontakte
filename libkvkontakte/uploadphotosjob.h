@@ -21,8 +21,8 @@
 
 #include <QtCore/QVariantMap>
 
-#include <libkvkontakte/vkontaktejobs.h>
-#include <libkvkontakte/photoinfo.h>
+#include "vkontaktejobs.h"
+#include "photoinfo.h"
 
 namespace Vkontakte
 {
