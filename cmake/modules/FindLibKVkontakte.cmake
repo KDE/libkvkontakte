@@ -66,13 +66,13 @@ ELSE (VKONTAKTE_INCLUDE_DIR AND VKONTAKTE_LIBRARIES AND VKONTAKTE_DEFINITIONS)
       PKGCONFIG(libkvkontakte _VKONTAKTEIncDir _VKONTAKTELinkDir _VKONTAKTELinkFlags _VKONTAKTECflags)
 
       IF(_VKONTAKTELinkFlags)
-        # query pkg-config asking for a libkvkontakte >= 0.1.0
-        EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.1.0 libkvkontakte RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+        # query pkg-config asking for a libkvkontakte >= 1.0.0
+        EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=1.0.0 libkvkontakte RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
         IF(_return_VALUE STREQUAL "0")
-            MESSAGE(STATUS "Found libkvkontakte release >= 0.1.0")
+            MESSAGE(STATUS "Found libkvkontakte release >= 1.0.0")
             SET(VKONTAKTE_VERSION_GOOD_FOUND TRUE)
         ELSE(_return_VALUE STREQUAL "0")
-            MESSAGE(STATUS "Found libkvkontakte release < 0.1.0, too old")
+            MESSAGE(STATUS "Found libkvkontakte release < 1.0.0, too old")
             SET(VKONTAKTE_VERSION_GOOD_FOUND FALSE)
             SET(VKONTAKTE_FOUND FALSE)
         ENDIF(_return_VALUE STREQUAL "0")
