@@ -26,6 +26,7 @@
 namespace Vkontakte
 {
 
+// http://vkontakte.ru/developers.php?oid=-1&p=photos.getAlbums
 class LIBKVKONTAKTE_EXPORT AlbumListJob : public VkontakteJob
 {
     Q_OBJECT
