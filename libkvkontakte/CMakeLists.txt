@@ -65,7 +65,9 @@ set_target_properties(kvkontakte
 	VERSION ${LIBKVKONTAKTE_VERSION}
 	SOVERSION ${LIBKVKONTAKTE_VERSION_MAJOR})
 
-install(TARGETS kvkontakte ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kvkontakte
+	EXPORT LibKVkontakteExport
+	${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/version.h

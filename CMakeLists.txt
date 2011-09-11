@@ -41,6 +41,14 @@ include_directories(
 add_subdirectory(libkvkontakte)
 # === ------------------------------------- ===
 
+# This "exports" all targets which have been put into the export set "LibKVkontakteExport".
+# This means that cmake generates a file with the given filename, which can later on be loaded
+# by projects using this package.
+# This file contains add_library(bar IMPORTED) statements for each target in the export set, so
+# when loaded later on cmake will create "imported" library targets from these, which can be used
+# in many ways in the same way as a normal library target created via a normal add_library().
+install(EXPORT LibKVkontakteExport DESTINATION ${CMAKECONFIG_INSTALL_DIR} FILE LibKVkontakteTargets.cmake )
+
 # figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
 # runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
 # This relative path will be configured into the LibKVkontakteConfig.cmake
