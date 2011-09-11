@@ -16,9 +16,6 @@ set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/LibKVkontakte )
 # Use a versioned install directory for the headers so multiple versions can be installed in parallel
 set(INCLUDE_INSTALL_DIR include )
 
-# not changable, but we set a variable anyway for consistency
-set(BIN_INSTALL_DIR bin)
-
 
 # === Closer to the code, close to the body ===
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -43,14 +40,6 @@ include_directories(
 
 add_subdirectory(libkvkontakte)
 # === ------------------------------------- ===
-
-# This "exports" all targets which have been put into the export set "LibKVkontakteExport".
-# This means that cmake generates a file with the given filename, which can later on be loaded
-# by projects using this package.
-# This file contains add_library(bar IMPORTED) statements for each target in the export set, so
-# when loaded later on cmake will create "imported" library targets from these, which can be used
-# in many ways in the same way as a normal library target created via a normal add_library().
-install(EXPORT LibKVkontakteExport DESTINATION ${CMAKECONFIG_INSTALL_DIR} FILE LibKVkontakteTargets.cmake )
 
 # figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
 # runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
