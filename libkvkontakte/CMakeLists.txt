@@ -33,6 +33,8 @@ set(libkvkontakte_SRCS
     getuploadserverjobbase.cpp
     getprofilephotouploadserverjob.cpp
     getwallphotouploadserverjob.cpp
+    groupinfo.cpp
+    grouplistjob.cpp
 
     qintlist.cpp
     util.cpp
@@ -97,4 +99,6 @@ install(FILES
     cidsnamesjob.h
     getinfojob.h
     photolistjob.h
+    groupinfo.h
+    grouplistjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
