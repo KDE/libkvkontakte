@@ -38,6 +38,8 @@ GroupListJob::GroupListJob(const QString &accessToken, int uid, bool extended)
     : VkontakteJob(accessToken, "groups.get")
     , d(new Private)
 {
+    d->extended = extended;
+
     if (uid != -1)
         addQueryItem("uid", QString::number(uid));
     if (extended)
@@ -63,8 +65,24 @@ GroupInfoPtr GroupListJob::handleSingleData(const QVariant &data)
 
 void GroupListJob::handleData(const QVariant &data)
 {
-    foreach (const QVariant &item, data.toList())
-        d->list.append(handleSingleData(item));
+    if (d->extended)
+    {
+        QVariantList dataList = data.toList();
+        dataList.pop_front(); // total count (unused)
+        foreach (const QVariant &item, dataList)
+            d->list.append(handleSingleData(item));
+    }
+    else
+    {
+        // TODO: test with both extended={true, false}
+
+        foreach (const QVariant &item, data.toList())
+        {
+            GroupInfoPtr group = GroupInfoPtr(new GroupInfo());
+            group->setGid(item.toInt());
+            d->list.append(group);
+        }
+    }
 }
 
 } /* namespace Vkontakte */
