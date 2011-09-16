@@ -19,9 +19,12 @@
 */
 #include "util.h"
 
-#include <KGlobal>
+#include <kdeversion.h>
 
+#if KDE_IS_VERSION(4,6,2)
+#include <KDE/KGlobal>
 static const KCatalogLoader loader("libkvkontakte");
+#endif
 
 KDateTime unixTimeToKDateTime(const QString &unixTime)
 {
