@@ -38,7 +38,7 @@ public:
 
     virtual void start();
 
-private slots:
+private Q_SLOTS:
     void mainJobFinished(KJob *kjob);
     void countriesJobFinished(KJob *kjob);
     void citiesJobFinished(KJob *kjob);

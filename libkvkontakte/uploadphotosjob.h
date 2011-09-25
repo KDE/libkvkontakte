@@ -48,10 +48,10 @@ protected:
     void startPostJob(int offset, int count);
     void startSaveJob(const QVariantMap &photoIdData);
 
-signals:
+Q_SIGNALS:
     void progress(int);
 
-private slots:
+private Q_SLOTS:
     void serverJobFinished(KJob *);
     void postJobFinished(KJob *);
     void saveJobFinished(KJob *);

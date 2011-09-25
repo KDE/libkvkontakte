@@ -36,7 +36,7 @@ public:
     virtual void start();
     QImage photo() const;
 
-private slots:
+private Q_SLOTS:
     void jobFinished(KJob *kjob);
 
 private:

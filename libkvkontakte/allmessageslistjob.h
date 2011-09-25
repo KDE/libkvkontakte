@@ -50,7 +50,7 @@ public:
 protected:
     void startNewJob(int offset, int count, int out);
 
-private slots:
+private Q_SLOTS:
     void jobFinished(KJob *kjob);
 
 private:

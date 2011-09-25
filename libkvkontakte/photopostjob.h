@@ -46,7 +46,7 @@ protected:
 
     virtual void handleData(const QVariant &data);
 
-private slots:
+private Q_SLOTS:
     void jobFinished(KJob *kjob);
 
 private:

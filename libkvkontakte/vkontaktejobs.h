@@ -86,7 +86,7 @@ protected:
     bool m_httpPost;
     QList<QueryItem> m_queryItems; /** The query items */
 
-private slots:
+private Q_SLOTS:
     void jobFinished(KJob *kjob);
 };
 

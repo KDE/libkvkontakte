@@ -39,11 +39,11 @@ public:
     void setDisplayMode(const QString &displayMode);
     void start();
 
-signals:
+Q_SIGNALS:
     void authenticated(const QString &accessToken);
     void canceled();
 
-private slots:
+private Q_SLOTS:
     void urlChanged(const QUrl &url);
     void loadFinished(bool ok);
     void showErrorDialog();
