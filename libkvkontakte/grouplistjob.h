@@ -32,7 +32,7 @@ class LIBKVKONTAKTE_EXPORT GroupListJob : public VkontakteJob
 {
     Q_OBJECT
 public:
-    GroupListJob(const QString &accessToken, int uid = -1, bool extended = true);
+    explicit GroupListJob(const QString &accessToken, int uid = -1, bool extended = true);
     ~GroupListJob();
 
     QList<GroupInfoPtr> list() const;

@@ -73,7 +73,7 @@ protected:
     /** Add a query item to the list */
     void addQueryItem(const QString &key, const QString &value);
 
-    /** Check for a return error and set the appropiate error messags */
+    /** Check for a return error and set the appropriate error messages */
     void handleError(const QVariant &data);
 
     virtual void handleData(const QVariant &data) = 0;

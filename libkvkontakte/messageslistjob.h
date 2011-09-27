@@ -39,7 +39,7 @@ public:
      * @param filters ... Defaults to 0.
      * @param timeOffset ... Defaults to 0.
      **/
-    MessagesListJob(const QString &accessToken,
+    explicit MessagesListJob(const QString &accessToken,
                     int out = 0,
                     int offset = 0, int count = 100, int previewLength = 0,
                     int filters = 0, int timeOffset = 0);

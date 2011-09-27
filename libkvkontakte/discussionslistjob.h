@@ -36,7 +36,7 @@ public:
      * @param count Number of discussions to retrieve. Defaults to 100.
      * @param previewLength 0 means to not truncate messages. Defaults to 0.
      **/
-    DiscussionsListJob(const QString &accessToken,
+    explicit DiscussionsListJob(const QString &accessToken,
                        int offset = 0, int count = 100, int previewLength = 0);
     ~DiscussionsListJob();
 

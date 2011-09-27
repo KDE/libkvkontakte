@@ -41,7 +41,7 @@ public:
     QVariantMap response() const;
 
 protected:
-    /** Check for a return error and set the appropiate error messages */
+    /** Check for a return error and set the appropriate error messages */
     void handleError(const QVariant &data);
 
     virtual void handleData(const QVariant &data);

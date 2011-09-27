@@ -112,7 +112,7 @@ void MessageInfo::setBody(const QString &body)
 {
     d->body = body;
 
-    d->body.remove("\n");
+    d->body.remove('\n');
     d->body.replace("<br>", "\n");
     d->body.replace("&lt;", "<");
     d->body.replace("&gt;", ">");
