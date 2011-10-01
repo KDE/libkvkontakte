@@ -50,7 +50,7 @@ public:
         PRIVACY_PUBLIC = 0,
         PRIVACY_FRIENDS = 1,
         PRIVACY_FRIENDS_OF_FRIENDS = 2,
-        PRIVACY_PRIVATE = 3,
+        PRIVACY_PRIVATE = 3
     };
 
     AlbumInfo();
