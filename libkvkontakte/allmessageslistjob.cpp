@@ -107,9 +107,15 @@ void AllMessagesListJob::jobFinished(KJob *kjob)
         // TODO: some new messages might have been added, what should we do then?
         doKill();
         setError(KJob::UserDefinedError + 2);
-        setErrorText(i18nc("%1 can be \'incoming\' or \'outgoing\'",
-                            "The number of %1 messages has changed between requests.",
-                            out ? i18n("outgoing") : i18n("incoming")));
+        if (out == 1)
+        {
+            setErrorText(i18n("The number of outgoing messages has changed between requests."));
+        }
+        else // out == 0
+        {
+            setErrorText(i18n("The number of incoming messages has changed between requests."));
+        }
+
         kWarning() << "Job error: " << job->errorString();
         emitResult();
         return;
