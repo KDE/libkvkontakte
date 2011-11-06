@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef LIBKVKONTAKTE_EXPORT
-# if defined(MAKE_LIBKVKONTAKTE_LIB)
+# if defined(MAKE_KVKONTAKTE_LIB)
    /* We are building this library */
 #  define LIBKVKONTAKTE_EXPORT KDE_EXPORT
 # else
