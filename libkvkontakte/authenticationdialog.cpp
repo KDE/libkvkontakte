@@ -161,12 +161,14 @@ void AuthenticationDialog::loadFinished(bool ok)
 {
     if (!ok)
     {
-        emit canceled();
-        close();
+        hide();
 
         KMessageBox::error(parentWidget(),
                            i18n("There was a network error when trying to authenticate with VKontakte web service."),
                            i18nc("@title:window", "Network Error"));
+
+        emit canceled();
+        close();
     }
 }
 
