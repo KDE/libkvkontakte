@@ -118,7 +118,7 @@ void UserInfoFullJob::startCountriesJob()
 {
     // TODO: use usersPropertyToStringList
     QSet<int> cids; // this will remove duplicates
-    foreach (const UserInfoPtr &user, d->userInfo)
+    foreach(const UserInfoPtr &user, d->userInfo)
         if (user->country())
             cids.insert(user->country());
     d->countryIds = cids.toList();
@@ -138,7 +138,7 @@ void UserInfoFullJob::countriesJobFinished(KJob *)
     else
     {
         QMap<int, QString> names = d->countriesJob->names();
-        foreach (const UserInfoPtr &user, d->userInfo)
+        foreach(const UserInfoPtr &user, d->userInfo)
             user->setCountryString(names[user->country()]);
 
         if (d->needCityNames)
@@ -152,7 +152,7 @@ void UserInfoFullJob::startCitiesJob()
 {
     // TODO: use usersPropertyToStringList
     QSet<int> cids; // this will remove duplicates
-    foreach (const UserInfoPtr &user, d->userInfo)
+    foreach(const UserInfoPtr &user, d->userInfo)
         if (user->city())
             cids.insert(user->city());
     d->cityIds = cids.toList();
@@ -172,7 +172,7 @@ void UserInfoFullJob::citiesJobFinished(KJob *)
     else
     {
         QMap<int, QString> names = d->citiesJob->names();
-        foreach (const UserInfoPtr &user, d->userInfo)
+        foreach(const UserInfoPtr &user, d->userInfo)
             user->setCityString(names[user->city()]);
 
         handleFinish();

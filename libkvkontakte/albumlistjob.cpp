@@ -53,7 +53,7 @@ void AlbumListJob::handleItem(const QVariant &data)
 
 void AlbumListJob::handleData(const QVariant &data)
 {
-    foreach (const QVariant &item, data.toList())
+    foreach(const QVariant &item, data.toList())
         handleItem(item);
 }
 

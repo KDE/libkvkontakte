@@ -67,7 +67,7 @@ void MessagesListJob::handleData(const QVariant &data)
     QVariantList list = data.toList();
     d->totalCount = list[0].toInt();
     list.pop_front();
-    foreach (const QVariant &item, list)
+    foreach(const QVariant &item, list)
         handleItem(item);
 }
 

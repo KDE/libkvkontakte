@@ -39,7 +39,7 @@ bool KJobWithSubjob::doKill()
 
 bool KJobWithSubjobs::doKill()
 {
-    foreach (KJob *job, m_jobs)
+    foreach(KJob *job, m_jobs)
         job->kill(KJob::Quietly);
     m_jobs.clear();
 
@@ -89,7 +89,7 @@ void VkontakteJob::start()
     url.setPath("/method/" + m_method);
 
     prepareQueryItems();
-    foreach (const QueryItem &item, m_queryItems)
+    foreach(const QueryItem &item, m_queryItems)
         url.addQueryItem(item.first, item.second);
     url.addQueryItem("access_token", m_accessToken);
 

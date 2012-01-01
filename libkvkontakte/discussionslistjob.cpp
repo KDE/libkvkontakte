@@ -56,7 +56,7 @@ void DiscussionsListJob::handleData(const QVariant &data)
     QVariantList list = data.toList();
     d->totalCount = list[0].toInt();
     list.pop_front();
-    foreach (const QVariant &item, list)
+    foreach(const QVariant &item, list)
         handleItem(item);
 
     qSort(d->list); // sort by message ID (which should be equivalent to sorting by date)

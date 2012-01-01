@@ -58,7 +58,7 @@ void PhotoListJob::handleItem(const QVariant &data)
 
 void PhotoListJob::handleData(const QVariant &data)
 {
-    foreach (const QVariant &item, data.toList())
+    foreach(const QVariant &item, data.toList())
         handleItem(item);
 }
 

@@ -94,7 +94,7 @@ UserInfoPtr UserInfoJob::handleSingleData(const QVariant &data)
 
 void UserInfoJob::handleData(const QVariant &data)
 {
-    foreach (const QVariant &item, data.toList())
+    foreach(const QVariant &item, data.toList())
         d->userInfo.append(handleSingleData(item));
 }
 

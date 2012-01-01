@@ -52,7 +52,7 @@ QList<UserInfoPtr> FriendListJob::list() const
 
 void FriendListJob::handleData(const QVariant &data)
 {
-    foreach (const QVariant &user, data.toList())
+    foreach(const QVariant &user, data.toList())
     {
         UserInfoPtr userInfo(new UserInfo());
         QJson::QObjectHelper::qvariant2qobject(user.toMap(), userInfo.data());

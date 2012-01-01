@@ -69,14 +69,14 @@ void GroupListJob::handleData(const QVariant &data)
     {
         QVariantList dataList = data.toList();
         dataList.pop_front(); // total count (unused)
-        foreach (const QVariant &item, dataList)
+        foreach(const QVariant &item, dataList)
             d->list.append(handleSingleData(item));
     }
     else
     {
         // TODO: test with both extended={true, false}
 
-        foreach (const QVariant &item, data.toList())
+        foreach(const QVariant &item, data.toList())
         {
             GroupInfoPtr group = GroupInfoPtr(new GroupInfo());
             group->setGid(item.toInt());
