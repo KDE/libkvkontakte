@@ -2,6 +2,7 @@
  *
  * This file is a part of kipi-plugins project
  * http://www.kipi-plugins.org
+ * FIXME: this is not the right header?
  *
  * Date        : 2005-07-07
  * Description : a kipi plugin to export images to Flickr web service
