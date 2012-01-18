@@ -21,7 +21,7 @@ set(INCLUDE_INSTALL_DIR include )
 
 
 # === Closer to the code, close to the body ===
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
@@ -35,8 +35,8 @@ macro_log_feature(QJSON_FOUND "QJSON" "Qt library for handling JSON data" "http:
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 include_directories(
-  ${CMAKE_SOURCE_DIR}
-  ${CMAKE_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}
   ${KDE4_INCLUDES}
   ${QJSON_INCLUDE_DIR}
 )
