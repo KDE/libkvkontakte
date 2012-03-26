@@ -18,7 +18,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "vkontaktejobs.h"
+#include "vkontaktejobs.moc"
 
 #include <qjson/parser.h>
 #include <KIO/Job>
@@ -141,5 +141,3 @@ void VkontakteJob::jobFinished(KJob *kjob)
 }
 
 } /* namespace Vkontakte */
-
-#include "vkontaktejobs.moc"

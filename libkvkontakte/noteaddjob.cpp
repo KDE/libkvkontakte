@@ -17,7 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "noteaddjob.h"
+#include "noteaddjob.moc"
 
 #include <QtCore/QVariant>
 
@@ -57,5 +57,3 @@ int NoteAddJob::nid() const
 }
 
 } /* namespace Vkontakte */
-
-#include "noteaddjob.moc"

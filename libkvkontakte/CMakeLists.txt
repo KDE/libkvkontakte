@@ -38,7 +38,7 @@ set(libkvkontakte_SRCS
 
     qintlist.cpp
     util.cpp
-    vkontaktejobs.cpp  
+    vkontaktejobs.cpp
 )
 
 kde4_add_library(kvkontakte SHARED ${libkvkontakte_SRCS})

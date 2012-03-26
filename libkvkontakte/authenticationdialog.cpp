@@ -17,7 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "authenticationdialog.h"
+#include "authenticationdialog.moc"
 
 #include <KLocalizedString>
 #include <KWebView>
@@ -171,5 +171,3 @@ void AuthenticationDialog::loadFinished(bool ok)
 }
 
 } /* namespace Vkontakte */
-
-#include "authenticationdialog.moc"

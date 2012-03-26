@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "uploadphotosjob.h"
+#include "uploadphotosjob.moc"
 #include "getphotouploadserverjob.h"
 #include "photopostjob.h"
 #include "savephotojob.h"

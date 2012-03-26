@@ -17,7 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "friendlistjob.h"
+#include "friendlistjob.moc"
 
 #include <qjson/qobjecthelper.h>
 
@@ -61,5 +61,3 @@ void FriendListJob::handleData(const QVariant &data)
 }
 
 } /* namespace Vkontakte */
-
-#include "friendlistjob.moc"
