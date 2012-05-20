@@ -1,4 +1,4 @@
-/* Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
+/* Copyright 2011, 2012 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -19,7 +19,8 @@
 #ifndef GETPHOTOUPLOADSERVERJOB_H
 #define GETPHOTOUPLOADSERVERJOB_H
 
-#include "getuploadserverjobbase.h"
+#include "vkontaktejobs.h"
+#include "uploadphotosjob.h"
 
 namespace Vkontakte
 {
@@ -27,10 +28,27 @@ namespace Vkontakte
 // This class is not exported, so:
 //    - we don't care about ABI of this class (not using Pimpl)
 //    - library's users should use class UploadPhotosJob
-class GetPhotoUploadServerJob : public GetUploadServerJobBase
+class GetPhotoUploadServerJob : public VkontakteJob
 {
 public:
     GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid = -1);
+    GetPhotoUploadServerJob(const QString &accessToken, Vkontakte::UploadPhotosJob::Dest m_dest);
+
+    QString uploadUrl() const;
+
+protected:
+    static QString getMethod(enum UploadPhotosJob::Dest dest);
+    virtual void prepareQueryItems();
+    virtual void handleData(const QVariant &data);
+
+private:
+    UploadPhotosJob::Dest m_dest;
+    QString m_uploadUrl;
+
+    int m_aid;
+    int m_gid;
+    int m_uid;
+    bool m_saveBig;
 };
 
 } /* namespace Vkontakte */

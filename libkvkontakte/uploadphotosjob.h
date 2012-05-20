@@ -31,6 +31,12 @@ class LIBKVKONTAKTE_EXPORT UploadPhotosJob : public KJobWithSubjobs
 {
     Q_OBJECT
 public:
+    enum Dest {
+        DEST_ALBUM = 1,
+        DEST_PROFILE,
+        DEST_WALL,
+    };
+
     UploadPhotosJob(const QString &accessToken,
                     const QStringList &files, bool saveBig, int aid, int gid = -1);
     ~UploadPhotosJob();

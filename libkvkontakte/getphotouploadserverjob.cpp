@@ -1,4 +1,4 @@
-/* Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
+/* Copyright 2011, 2012 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -17,20 +17,106 @@
    Boston, MA 02110-1301, USA.
 */
 #include "getphotouploadserverjob.h"
+#include "uploadphotosjob.h"
 
 #include <QtCore/QVariant>
+#include <kdebug.h>
 
 namespace Vkontakte
 {
 
+// TBD: deprecate or remove this ctor
 GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid)
-    : GetUploadServerJobBase(accessToken, "photos.getUploadServer")
+    : VkontakteJob(accessToken, getMethod(Vkontakte::UploadPhotosJob::DEST_ALBUM))
 {
-    addQueryItem("aid", QString::number(aid));
-    if (gid != -1)
-        addQueryItem("gid", QString::number(gid));
-    if (saveBig)
-        addQueryItem("save_big", "1");
+    m_dest = Vkontakte::UploadPhotosJob::DEST_ALBUM;
+
+    m_aid = aid;
+    m_gid = gid;
+    m_uid = -1;
+    m_saveBig = saveBig;
+}
+
+GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, Vkontakte::UploadPhotosJob::Dest dest)
+    : VkontakteJob(accessToken, getMethod(dest))
+{
+    m_dest = dest;
+
+    m_aid = -1;
+    m_gid = -1;
+    m_uid = -1;
+    m_saveBig = false;
+}
+
+// static
+QString GetPhotoUploadServerJob::getMethod(Vkontakte::UploadPhotosJob::Dest dest)
+{
+    switch (dest)
+    {
+        case Vkontakte::UploadPhotosJob::DEST_ALBUM:
+            return QLatin1String("photos.getUploadServer");
+        case Vkontakte::UploadPhotosJob::DEST_PROFILE:
+            return QLatin1String("photos.getProfileUploadServer");
+        case Vkontakte::UploadPhotosJob::DEST_WALL:
+            return QLatin1String("photos.getWallUploadServer");
+        default:
+            return QLatin1String("");
+    }
+}
+
+void GetPhotoUploadServerJob::prepareQueryItems()
+{
+    switch (m_dest)
+    {
+        case Vkontakte::UploadPhotosJob::DEST_ALBUM:
+            if (m_aid == -1)
+            {
+                setError(KJob::UserDefinedError);
+                setErrorText("m_aid not set.");
+                kWarning() << "m_aid not set.";
+            }
+
+            addQueryItem("aid", QString::number(m_aid));
+            if (m_gid != -1)
+                addQueryItem("gid", QString::number(m_gid));
+            if (m_saveBig)
+                addQueryItem("save_big", "1");
+            break;
+
+        case Vkontakte::UploadPhotosJob::DEST_PROFILE:
+            // photos.getProfileUploadServer has not parameters
+            break;
+
+        case Vkontakte::UploadPhotosJob::DEST_WALL:
+            if (m_uid != -1 && m_gid != -1)
+            {
+                setError(KJob::UserDefinedError);
+                setErrorText("Only one parameter m_uid or m_gid should be set.");
+                kWarning() << "Only one parameter m_uid or m_gid should be set.";
+            }
+
+            if (m_uid != -1)
+                addQueryItem("uid", QString::number(m_uid));
+            if (m_gid != -1)
+                addQueryItem("gid", QString::number(m_gid));
+            break;
+
+        default:
+            setError(KJob::UserDefinedError);
+            setErrorText("Unsupported m_dest.");
+            kWarning() << "Unsupported m_dest.";
+            break;
+    }
+}
+
+void GetPhotoUploadServerJob::handleData(const QVariant &data)
+{
+    m_uploadUrl = data.toMap()["upload_url"].toString();
+}
+
+QString GetPhotoUploadServerJob::uploadUrl() const
+{
+    return m_uploadUrl;
 }
 
 } /* namespace Vkontakte */

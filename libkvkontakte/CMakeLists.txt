@@ -30,9 +30,6 @@ set(libkvkontakte_SRCS
     photoinfo.cpp
     photolistjob.cpp
     getapplicationpermissionsjob.cpp
-    getuploadserverjobbase.cpp
-    getprofilephotouploadserverjob.cpp
-    getwallphotouploadserverjob.cpp
     groupinfo.cpp
     grouplistjob.cpp
 
