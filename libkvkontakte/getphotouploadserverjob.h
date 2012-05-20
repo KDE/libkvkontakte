@@ -48,7 +48,6 @@ private:
     int m_aid;
     int m_gid;
     int m_uid;
-    bool m_saveBig;
 };
 
 } /* namespace Vkontakte */

@@ -29,12 +29,13 @@ namespace Vkontakte
 GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid)
     : VkontakteJob(accessToken, getMethod(Vkontakte::UploadPhotosJob::DEST_ALBUM))
 {
+    Q_UNUSED(saveBig);
+
     m_dest = Vkontakte::UploadPhotosJob::DEST_ALBUM;
 
     m_aid = aid;
     m_gid = gid;
     m_uid = -1;
-    m_saveBig = saveBig;
 }
 
 GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, Vkontakte::UploadPhotosJob::Dest dest)
@@ -45,7 +46,6 @@ GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, Vko
     m_aid = -1;
     m_gid = -1;
     m_uid = -1;
-    m_saveBig = false;
 }
 
 // static
@@ -79,8 +79,6 @@ void GetPhotoUploadServerJob::prepareQueryItems()
             addQueryItem("aid", QString::number(m_aid));
             if (m_gid != -1)
                 addQueryItem("gid", QString::number(m_gid));
-            if (m_saveBig)
-                addQueryItem("save_big", "1");
             break;
 
         case Vkontakte::UploadPhotosJob::DEST_PROFILE:
