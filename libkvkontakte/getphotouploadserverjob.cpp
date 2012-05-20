@@ -25,19 +25,6 @@
 namespace Vkontakte
 {
 
-// TBD: deprecate or remove this ctor
-GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid)
-    : VkontakteJob(accessToken, getMethod(Vkontakte::UploadPhotosJob::DEST_ALBUM))
-{
-    Q_UNUSED(saveBig);
-
-    m_dest = Vkontakte::UploadPhotosJob::DEST_ALBUM;
-
-    m_aid = aid;
-    m_gid = gid;
-    m_uid = -1;
-}
-
 GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, Vkontakte::UploadPhotosJob::Dest dest)
     : VkontakteJob(accessToken, getMethod(dest))
 {
@@ -46,6 +33,12 @@ GetPhotoUploadServerJob::GetPhotoUploadServerJob(const QString &accessToken, Vko
     m_aid = -1;
     m_gid = -1;
     m_uid = -1;
+}
+
+void GetPhotoUploadServerJob::initUploadAlbum(int aid, int gid)
+{
+    m_aid = aid;
+    m_gid = gid;
 }
 
 // static

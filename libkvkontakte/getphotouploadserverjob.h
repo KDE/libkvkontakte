@@ -31,8 +31,9 @@ namespace Vkontakte
 class GetPhotoUploadServerJob : public VkontakteJob
 {
 public:
-    GetPhotoUploadServerJob(const QString &accessToken, bool saveBig, int aid, int gid = -1);
     GetPhotoUploadServerJob(const QString &accessToken, Vkontakte::UploadPhotosJob::Dest m_dest);
+
+    void initUploadAlbum(int aid, int gid = -1);
 
     QString uploadUrl() const;
 

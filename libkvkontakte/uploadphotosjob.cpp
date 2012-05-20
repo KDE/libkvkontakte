@@ -1,4 +1,4 @@
-/* Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
+/* Copyright 2011, 2012 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -67,7 +67,9 @@ void UploadPhotosJob::start()
 {
     emit progress(0);
 
-    GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(d->accessToken, d->saveBig, d->aid, d->gid);
+    GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(d->accessToken, DEST_ALBUM);
+    job->initUploadAlbum(d->aid, d->gid);
+
     m_jobs.append(job);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(serverJobFinished(KJob*)));
     job->start();
