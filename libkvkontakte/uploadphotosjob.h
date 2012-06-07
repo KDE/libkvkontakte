@@ -34,7 +34,7 @@ public:
     enum Dest {
         DEST_ALBUM = 1,
         DEST_PROFILE,
-        DEST_WALL,
+        DEST_WALL
     };
 
     UploadPhotosJob(const QString &accessToken,
