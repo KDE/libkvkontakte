@@ -24,17 +24,56 @@ namespace Vkontakte
 {
 
 SavePhotoJob::SavePhotoJob(const QString &accessToken,
+                           UploadPhotosJob::Dest dest,
                            const QVariantMap &photoIdData, int gid)
-    : VkontakteJob(accessToken, "photos.save", true)
+    : VkontakteJob(accessToken, getMethod(dest), true)
 {
-    addQueryItem("aid", photoIdData["aid"].toString());
-    addQueryItem("server", photoIdData["server"].toString());
-    addQueryItem("photos_list", photoIdData["photos_list"].toString());
-    addQueryItem("hash", photoIdData["hash"].toString());
+    m_dest = dest;
 
-    // TODO: may be "gid" will also be in "photoIdData", so this argument is unnecessary?
-    if (gid != -1)
-        addQueryItem("gid", QString::number(gid));
+    switch (dest)
+    {
+        case Vkontakte::UploadPhotosJob::DEST_ALBUM:
+            addQueryItem("aid", photoIdData["aid"].toString());
+            addQueryItem("server", photoIdData["server"].toString());
+            addQueryItem("photos_list", photoIdData["photos_list"].toString());
+            addQueryItem("hash", photoIdData["hash"].toString());
+
+            // TODO: may be "gid" will also be in "photoIdData", so this argument is unnecessary?
+            if (gid != -1)
+                addQueryItem("gid", QString::number(gid));
+            break;
+        case Vkontakte::UploadPhotosJob::DEST_PROFILE:
+            addQueryItem("server", photoIdData["server"].toString());
+            addQueryItem("photo", photoIdData["photos"].toString());
+            addQueryItem("hash", photoIdData["hash"].toString());
+            break;
+        case Vkontakte::UploadPhotosJob::DEST_WALL:
+            // TODO: support optional parameters "uid" and "gid" (for posting to other users' and groups' walls)
+            // TODO: for posting onto a wall, we must also call the "wall.post" VK method
+            addQueryItem("server", photoIdData["server"].toString());
+            addQueryItem("photo", photoIdData["photo"].toString());
+            addQueryItem("hash", photoIdData["hash"].toString());
+            break;
+        default:
+            // TODO: handle unknown destination error
+            break;
+    }
+}
+
+// static
+QString SavePhotoJob::getMethod(Vkontakte::UploadPhotosJob::Dest dest)
+{
+    switch (dest)
+    {
+        case Vkontakte::UploadPhotosJob::DEST_ALBUM:
+            return QLatin1String("photos.save");
+        case Vkontakte::UploadPhotosJob::DEST_PROFILE:
+            return QLatin1String("photos.saveProfilePhoto");
+        case Vkontakte::UploadPhotosJob::DEST_WALL:
+            return QLatin1String("photos.saveWallPhoto");
+        default:
+            return QLatin1String("");
+    }
 }
 
 void SavePhotoJob::handleItem(const QVariant &data)
@@ -46,8 +85,19 @@ void SavePhotoJob::handleItem(const QVariant &data)
 
 void SavePhotoJob::handleData(const QVariant &data)
 {
-    foreach(const QVariant &item, data.toList())
-        handleItem(item);
+    switch (m_dest)
+    {
+        case Vkontakte::UploadPhotosJob::DEST_ALBUM:
+            foreach(const QVariant &item, data.toList())
+                handleItem(item);
+            break;
+        case Vkontakte::UploadPhotosJob::DEST_PROFILE:
+        case Vkontakte::UploadPhotosJob::DEST_WALL:
+            handleItem(data);
+            break;
+        default:
+            break;
+    }
 }
 
 QList<PhotoInfoPtr> SavePhotoJob::list() const

@@ -162,7 +162,7 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
 
 void UploadPhotosJob::startSaveJob(const QVariantMap &photoIdData)
 {
-    SavePhotoJob *job = new SavePhotoJob(d->accessToken, photoIdData);
+    SavePhotoJob *job = new SavePhotoJob(d->accessToken, d->dest, photoIdData);
     m_jobs.append(job);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(saveJobFinished(KJob*)));
     job->start();

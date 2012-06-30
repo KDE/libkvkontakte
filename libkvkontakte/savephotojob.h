@@ -23,6 +23,7 @@
 
 #include "vkontaktejobs.h"
 #include "photoinfo.h"
+#include "uploadphotosjob.h"
 
 namespace Vkontakte
 {
@@ -34,15 +35,18 @@ class SavePhotoJob : public VkontakteJob
 {
 public:
     SavePhotoJob(const QString &accessToken,
+                 UploadPhotosJob::Dest dest,
                  const QVariantMap &photoIdData, int gid = -1);
 
     QList<PhotoInfoPtr> list() const;
 
 protected:
+    QString getMethod(Vkontakte::UploadPhotosJob::Dest dest);
     virtual void handleData(const QVariant &data);
     void handleItem(const QVariant &data);
 
 private:
+    UploadPhotosJob::Dest m_dest;
     QList<PhotoInfoPtr> m_list;
 };
 
