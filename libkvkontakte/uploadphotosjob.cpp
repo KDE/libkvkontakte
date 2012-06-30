@@ -75,7 +75,7 @@ void UploadPhotosJob::start()
 {
     emit progress(0);
 
-    GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(d->accessToken, DEST_ALBUM);
+    GetPhotoUploadServerJob *job = new GetPhotoUploadServerJob(d->accessToken, d->dest);
     job->initUploadAlbum(d->aid, d->gid);
 
     m_jobs.append(job);
