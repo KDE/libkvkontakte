@@ -27,10 +27,12 @@
 namespace Vkontakte
 {
 
-PhotoPostJob::PhotoPostJob(const QString &url, const QStringList &files)
-    : m_url(url)
-    , m_files(files)
+PhotoPostJob::PhotoPostJob(Vkontakte::UploadPhotosJob::Dest dest, const QString &url, const QStringList &files)
 {
+    m_url = url;
+    m_files = files;
+    m_dest = dest;
+
     setCapabilities(KJob::Killable);
 
     m_ok = true;
@@ -61,13 +63,27 @@ void PhotoPostJob::start()
     }
 
     MPForm form;
-    // file1 .. file5
-    for (int i = 0; i < m_files.size(); i ++)
-        if (!form.addFile(QString("file%1").arg(i + 1), m_files[i]))
-        {
+    switch (m_dest)
+    {
+        case Vkontakte::UploadPhotosJob::DEST_ALBUM:
+            // "file1" .. "file5"
+            for (int i = 0; i < m_files.size(); i ++)
+                if (!form.addFile(QString("file%1").arg(i + 1), m_files[i]))
+                {
+                    m_ok = false;
+                    break;
+                }
+                break;
+        case Vkontakte::UploadPhotosJob::DEST_PROFILE:
+        case Vkontakte::UploadPhotosJob::DEST_WALL:
+            // "photo"
+            if (!form.addFile(QString("photo"), m_files[0]))
+                m_ok = false;
+            break;
+        default:
             m_ok = false;
             break;
-        }
+    }
     form.finish();
 
     if (!m_ok)

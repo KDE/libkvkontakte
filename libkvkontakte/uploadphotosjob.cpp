@@ -38,6 +38,8 @@ public:
     int gid;
     bool saveBig;
 
+    UploadPhotosJob::Dest dest;
+
     QString uploadUrl;
     QList<PhotoInfoPtr> list;
 
@@ -56,6 +58,7 @@ UploadPhotosJob::UploadPhotosJob(const QString &accessToken,
     d->gid = gid;
     d->saveBig = saveBig;
     d->workingPostJobs = 0;
+    d->dest = Vkontakte::UploadPhotosJob::DEST_ALBUM;
 }
 
 UploadPhotosJob::~UploadPhotosJob()
@@ -112,7 +115,7 @@ bool UploadPhotosJob::mayStartPostJob()
 
 void UploadPhotosJob::startPostJob(int offset, int count)
 {
-    PhotoPostJob *job = new PhotoPostJob(d->uploadUrl, d->files.mid(offset, count));
+    PhotoPostJob *job = new PhotoPostJob(d->dest, d->uploadUrl, d->files.mid(offset, count));
     m_jobs.append(job);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(postJobFinished(KJob*)));
 

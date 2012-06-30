@@ -23,6 +23,7 @@
 #include <QtCore/QVariantMap>
 
 #include "vkontaktejobs.h"
+#include "uploadphotosjob.h"
 
 namespace Vkontakte
 {
@@ -35,7 +36,7 @@ class PhotoPostJob : public KJobWithSubjob
     Q_OBJECT
 public:
     // files.size <= 5
-    PhotoPostJob(const QString &url, const QStringList &files);
+    PhotoPostJob(Vkontakte::UploadPhotosJob::Dest dest, const QString &url, const QStringList &files);
 
     virtual void start();
     QVariantMap response() const;
@@ -50,6 +51,7 @@ private Q_SLOTS:
     void jobFinished(KJob *kjob);
 
 private:
+    UploadPhotosJob::Dest m_dest;
     QString m_url;
     QStringList m_files;
     bool m_ok;
