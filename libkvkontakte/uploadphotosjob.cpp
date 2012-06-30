@@ -63,6 +63,11 @@ UploadPhotosJob::~UploadPhotosJob()
     delete d;
 }
 
+int UploadPhotosJob::getMaxRequestFilesCount() const
+{
+    return REQUEST_FILES_COUNT;
+}
+
 void UploadPhotosJob::start()
 {
     emit progress(0);
@@ -91,8 +96,9 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
     d->uploadUrl = job->uploadUrl();
 
     int totalCount = d->files.size();
-    for (int offset = 0; offset < totalCount; offset += REQUEST_FILES_COUNT)
-        startPostJob(offset, qMin(REQUEST_FILES_COUNT, totalCount - offset));
+    int requestFilesCount = getMaxRequestFilesCount();
+    for (int offset = 0; offset < totalCount; offset += requestFilesCount)
+        startPostJob(offset, qMin(requestFilesCount, totalCount - offset));
 
     // All subjobs have finished
     if (m_jobs.size() == 0)
@@ -161,6 +167,9 @@ void UploadPhotosJob::startSaveJob(const QVariantMap &photoIdData)
 
 void UploadPhotosJob::saveJobFinished(KJob *kjob)
 {
+    // TODO: Try to preserve the original order of photos.
+    // This task might be difficult when MAX_POST_JOBS > 1
+
     SavePhotoJob *job = dynamic_cast<SavePhotoJob *>(kjob);
     Q_ASSERT(job);
     m_jobs.removeAll(job);

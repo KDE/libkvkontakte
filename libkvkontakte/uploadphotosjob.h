@@ -49,6 +49,8 @@ protected:
     static const int MAX_POST_JOBS;
     static const int REQUEST_FILES_COUNT;
 
+    int getMaxRequestFilesCount() const;
+
     bool mayStartPostJob();
 
     void startPostJob(int offset, int count);
