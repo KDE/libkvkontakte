@@ -106,10 +106,10 @@ void AuthenticationDialog::start()
 {
     Q_ASSERT(!d->appId.isEmpty());
 
-    const QString url = QString("http://api.vkontakte.ru/oauth/authorize?"
+    const QString url = QString("http://oauth.vk.com/authorize?"
                                 "client_id=%1&"
                                 "scope=%2&"
-                                "redirect_uri=http://api.vkontakte.ru/blank.html&"
+                                "redirect_uri=http://oauth.vk.com/blank.html&"
                                 "display=%3&"
                                 "response_type=token")
                                 .arg(d->appId)
@@ -134,7 +134,7 @@ void AuthenticationDialog::showErrorDialog()
 void AuthenticationDialog::urlChanged(const QUrl &url)
 {
     kDebug() << "Navigating to" << url;
-    if (url.host() == "api.vkontakte.ru" && url.path() == "/blank.html")
+    if (url.host() == "oauth.vk.com" && url.path() == "/blank.html")
     {
         d->error = url.queryItemValue("error");
         d->errorDescription = url.queryItemValue("error_description").replace('+', ' ');
