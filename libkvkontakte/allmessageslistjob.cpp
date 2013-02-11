@@ -83,7 +83,10 @@ void AllMessagesListJob::jobFinished(KJob *kjob)
 {
     MessagesListJob *job = dynamic_cast<MessagesListJob *>(kjob);
     Q_ASSERT(job);
+
+    if (!job) return;
     m_jobs.removeAll(job);
+
     if (job->error()) {
         setError(job->error());
         setErrorText(job->errorText());

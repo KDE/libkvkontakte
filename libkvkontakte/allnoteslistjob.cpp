@@ -65,6 +65,7 @@ void AllNotesListJob::jobFinished(KJob *kjob)
 {
     NotesListJob *job = dynamic_cast<NotesListJob *>(kjob);
     Q_ASSERT(job);
+    if (!job) return;
     m_jobs.removeAll(job);
     if (job->error()) {
         setError(job->error());

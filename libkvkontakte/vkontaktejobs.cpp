@@ -109,7 +109,7 @@ void VkontakteJob::jobFinished(KJob *kjob)
 {
     KIO::StoredTransferJob *job = dynamic_cast<KIO::StoredTransferJob *>(kjob);
     Q_ASSERT(job);
-    if (job->error())
+    if (job && job->error())
     {
         setError(job->error());
         setErrorText(KIO::buildErrorString(error(), job->errorText()));

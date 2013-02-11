@@ -87,7 +87,10 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
 {
     GetPhotoUploadServerJob *job = dynamic_cast<GetPhotoUploadServerJob *>(kjob);
     Q_ASSERT(job);
+
+    if(!job) return;
     m_jobs.removeAll(job);
+
     if (job->error()) {
         setError(job->error());
         setErrorText(job->errorText());
@@ -132,7 +135,10 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
 {
     PhotoPostJob *job = dynamic_cast<PhotoPostJob *>(kjob);
     Q_ASSERT(job);
+
+    if (!job) return;
     m_jobs.removeAll(job);
+
     d->workingPostJobs --;
 
     // start one pending job if possible
@@ -175,7 +181,10 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
 
     SavePhotoJob *job = dynamic_cast<SavePhotoJob *>(kjob);
     Q_ASSERT(job);
+
+    if (!job) return;
     m_jobs.removeAll(job);
+
     if (job->error()) {
         setError(job->error());
         setErrorText(job->errorText());
