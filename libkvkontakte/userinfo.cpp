@@ -413,9 +413,9 @@ int UserInfo::timezone() const
 QString UserInfo::profileUrl() const
 {
     if (domain().isEmpty())
-        return "http://vkontakte.ru/id" + uid();
+        return QString("http://vkontakte.ru/id") + QString::number(uid());
     else
-        return "http://vkontakte.ru/" + domain();
+        return QString("http://vkontakte.ru/") + domain();
 }
 
 /**
