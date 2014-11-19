@@ -67,38 +67,42 @@ install(TARGETS kvkontakte
 	EXPORT LibKVkontakteExport
 	${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/version.h
-    libkvkontakte_export.h
-    albuminfo.h
-    getapplicationpermissionsjob.h
-    vkontaktejobs.h
-    authenticationdialog.h
-    albumlistjob.h
-    qintlist.h
-    createalbumjob.h
-    editalbumjob.h
-    uploadphotosjob.h
-    photoinfo.h
-    userinfo.h
-    messageinfo.h
-    noteinfo.h
-    friendlistjob.h
-    allnoteslistjob.h
-    userinfofulljob.h
-    userinfojob.h
-    photojob.h
-    noteslistjob.h
-    notejob.h
-    noteaddjob.h
-    allmessageslistjob.h
-    messageslistjob.h
-    discussionslistjob.h
-    getvariablejob.h
-    deletealbumjob.h
-    cidsnamesjob.h
-    getinfojob.h
-    photolistjob.h
-    groupinfo.h
-    grouplistjob.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
+if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
+
+    install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/version.h
+        libkvkontakte_export.h
+        albuminfo.h
+        getapplicationpermissionsjob.h
+        vkontaktejobs.h
+        authenticationdialog.h
+        albumlistjob.h
+        qintlist.h
+        createalbumjob.h
+        editalbumjob.h
+        uploadphotosjob.h
+        photoinfo.h
+        userinfo.h
+        messageinfo.h
+        noteinfo.h
+        friendlistjob.h
+        allnoteslistjob.h
+        userinfofulljob.h
+        userinfojob.h
+        photojob.h
+        noteslistjob.h
+        notejob.h
+        noteaddjob.h
+        allmessageslistjob.h
+        messageslistjob.h
+        discussionslistjob.h
+        getvariablejob.h
+        deletealbumjob.h
+        cidsnamesjob.h
+        getinfojob.h
+        photolistjob.h
+        groupinfo.h
+        grouplistjob.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
+
+endif()
