@@ -95,6 +95,9 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
         setError(job->error());
         setErrorText(job->errorText());
         kWarning() << "Job error: " << job->errorString();
+
+        // It is safe to emit result here because there are no jobs
+        // running in parallel with this one.
         emitResult();
         return;
     }
