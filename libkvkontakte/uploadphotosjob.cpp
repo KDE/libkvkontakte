@@ -89,7 +89,6 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
     Q_ASSERT(job);
 
     if(!job) return;
-    m_jobs.removeAll(job);
 
     if (job->error()) {
         setError(job->error());
@@ -99,6 +98,8 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
         // It is safe to emit result here because there are no jobs
         // running in parallel with this one.
         emitResult();
+
+        m_jobs.removeAll(job);
         return;
     }
 
@@ -109,9 +110,9 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
     for (int offset = 0; offset < totalCount; offset += requestFilesCount)
         startPostJob(offset, qMin(requestFilesCount, totalCount - offset));
 
-    // All subjobs have finished
-    if (m_jobs.size() == 0)
-        emitResult();
+    // Remove as the last step to avoid the situation when m_jobs is empty but
+    // there is something left to do.
+    m_jobs.removeAll(job);
 }
 
 bool UploadPhotosJob::mayStartPostJob()
@@ -140,9 +141,6 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
     Q_ASSERT(job);
 
     if (!job) return;
-    m_jobs.removeAll(job);
-
-    d->workingPostJobs --;
 
     // start one pending job if possible
     if (mayStartPostJob() && !d->pendingPostJobs.empty())
@@ -158,15 +156,23 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
         setError(job->error());
         setErrorText(job->errorText());
         kWarning() << "Job error: " << job->errorString();
-        emitResult();
+    }
+
+    if (error()) {
+        if (m_jobs.size() == 1)
+        {
+            emitResult();
+        }
+
+        d->workingPostJobs --;
+        m_jobs.removeAll(job);
         return;
     }
 
     startSaveJob(job->response());
 
-    // All subjobs have finished
-    if (m_jobs.size() == 0)
-        emitResult();
+    d->workingPostJobs --;
+    m_jobs.removeAll(job);
 }
 
 void UploadPhotosJob::startSaveJob(const QVariantMap &photoIdData)
@@ -186,13 +192,21 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
     Q_ASSERT(job);
 
     if (!job) return;
-    m_jobs.removeAll(job);
 
     if (job->error()) {
         setError(job->error());
         setErrorText(job->errorText());
         kWarning() << "Job error: " << job->errorString();
-        emitResult();
+    }
+
+    if (error()) {
+        // All subjobs have finished
+        if (m_jobs.size() == 1)
+        {
+            emitResult();
+        }
+
+        m_jobs.removeAll(job);
         return;
     }
 
@@ -200,8 +214,12 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
     emit progress(100 * d->list.size() / d->files.size());
 
     // All subjobs have finished
-    if (m_jobs.size() == 0)
+    if (m_jobs.size() == 1)
+    {
         emitResult();
+    }
+
+    m_jobs.removeAll(job);
 }
 
 QList<PhotoInfoPtr> UploadPhotosJob::list() const
