@@ -25,7 +25,6 @@
 #include <qtest_kde.h>
 
 #include <QtCore/QList>
-#include <QtGui/QMainWindow>
 
 #define VK_APP_ID   "2446321"
 
@@ -38,9 +37,7 @@ TestUserInfo::TestUserInfo()
 
 void TestUserInfo::initTestCase()
 {
-    QMainWindow *parentWidget = new QMainWindow();
-
-    m_vkapi = new KIPIVkontaktePlugin::VkAPI(parentWidget);
+    m_vkapi = new KIPIVkontaktePlugin::VkAPI(0);
     m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
     m_vkapi->startAuthentication(false);
 
