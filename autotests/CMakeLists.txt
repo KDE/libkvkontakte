@@ -11,3 +11,4 @@ function(add_vk_test name)
 endfunction(add_vk_test)
 
 add_vk_test(test_userinfo)
+add_vk_test(test_albums)
