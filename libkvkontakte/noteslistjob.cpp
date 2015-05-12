@@ -38,7 +38,10 @@ NotesListJob::NotesListJob(const QString &accessToken,
 {
     // Not passing "nids", because we want all notes.
 
-    addQueryItem("uid", QString::number(uid));
+    if (uid > 0) {
+        addQueryItem("user_id", QString::number(uid));
+    }
+
     addQueryItem("sort", "1"); // ascending by date
     addQueryItem("count", QString::number(count));
     addQueryItem("offset", QString::number(offset));
