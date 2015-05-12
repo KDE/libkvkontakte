@@ -81,7 +81,7 @@ void VkAPI::startAuthentication(bool forceLogout)
     else
     {
         QStringList permissions;
-        permissions << "photos" << "offline"; // TODO: rm hardcoded permission list
+        permissions << "photos" << "offline" << "notes"; // TODO: rm hardcoded permission list
         QPointer<Vkontakte::AuthenticationDialog> authDialog = new Vkontakte::AuthenticationDialog(m_parent);
         authDialog->setAppId(m_appId);
         authDialog->setPermissions(permissions);
