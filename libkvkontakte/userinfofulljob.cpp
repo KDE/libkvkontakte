@@ -123,7 +123,7 @@ void UserInfoFullJob::startCountriesJob()
             cids.insert(user->country());
     d->countryIds = cids.toList();
 
-    d->countriesJob = new CidsNamesJob("places.getCountryById", d->accessToken, d->countryIds);
+    d->countriesJob = new CidsNamesJob("database.getCountriesById", d->accessToken, d->countryIds);
     connect(d->countriesJob, SIGNAL(result(KJob*)), this, SLOT(countriesJobFinished(KJob*)));
     d->countriesJob->start();
 }
@@ -157,7 +157,7 @@ void UserInfoFullJob::startCitiesJob()
             cids.insert(user->city());
     d->cityIds = cids.toList();
 
-    d->citiesJob = new CidsNamesJob("places.getCityById", d->accessToken, d->cityIds);
+    d->citiesJob = new CidsNamesJob("database.getCitiesById", d->accessToken, d->cityIds);
     connect(d->citiesJob, SIGNAL(result(KJob*)), this, SLOT(citiesJobFinished(KJob*)));
     d->citiesJob->start();
 }

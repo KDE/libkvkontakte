@@ -31,7 +31,8 @@ public:
     QMap<int, QString> names; // cid -> name
 };
 
-// http://vkontakte.ru/developers.php?o=-1&p=places.getCountryById
+// https://vk.com/dev/database.getCountriesById
+// TODO: access token is not needed for this call
 CidsNamesJob::CidsNamesJob(const QString &method,
                            const QString &accessToken,
                            const QIntList &cids)
