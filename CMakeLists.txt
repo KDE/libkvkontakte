@@ -74,3 +74,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LibKVkontakteConfig.cmake ${CMAKE_CURR
 
 macro_display_feature_log()
 
+if (BUILD_TESTING)
+    add_subdirectory(autotests)
+endif (BUILD_TESTING)
