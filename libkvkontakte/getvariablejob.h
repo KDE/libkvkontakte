@@ -32,7 +32,8 @@ class LIBKVKONTAKTE_EXPORT GetVariableJob : public VkontakteJob
 {
 
 public:
-    GetVariableJob(const QString &accessToken, int index);
+    // "getVariable" is deprecated, please use "users.get" with empty user_ids
+    Q_DECL_DEPRECATED GetVariableJob(const QString &accessToken, int index);
     ~GetVariableJob();
 
     QVariant variable() const;
