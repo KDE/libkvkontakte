@@ -20,6 +20,8 @@
 #ifndef TEST_NOTES_H
 #define TEST_NOTES_H
 
+#include "vktestbase.h"
+
 #include <QtCore/QObject>
 #include <QtCore/QVector>
 
@@ -34,7 +36,7 @@ namespace KIPIVkontaktePlugin {
  *   class NoteAddJob - tested in initTestCase()
  *   class NoteJob
  */
-class TestNotes : public QObject
+class TestNotes : public VkTestBase
 {
     Q_OBJECT
 
@@ -49,7 +51,6 @@ private Q_SLOTS:
     void testNoteJob();
 
 private:
-    KIPIVkontaktePlugin::VkAPI *m_vkapi;
     QVector<int> m_noteIds;
 };
 

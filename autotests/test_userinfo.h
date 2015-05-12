@@ -20,6 +20,8 @@
 #ifndef TEST_USERINFO_H
 #define TEST_USERINFO_H
 
+#include "vktestbase.h"
+
 #include <QtCore/QObject>
 
 namespace KIPIVkontaktePlugin {
@@ -31,7 +33,7 @@ namespace KIPIVkontaktePlugin {
  *   class UserInfoJob
  *   class UserInfoFullJob
  */
-class TestUserInfo : public QObject
+class TestUserInfo : public VkTestBase
 {
     Q_OBJECT
 
@@ -43,9 +45,6 @@ private Q_SLOTS:
 
     void testUserInfoJob();
     void testUserInfoFullJob();
-
-private:
-    KIPIVkontaktePlugin::VkAPI *m_vkapi;
 };
 
 #endif // TEST_USERINFO_H

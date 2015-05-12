@@ -17,41 +17,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef TEST_ALBUMS_H
-#define TEST_ALBUMS_H
-
 #include "vktestbase.h"
+#include "vkapi.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QVector>
+#include <QtCore/QEventLoop>
+#include <QtTest/QTest>
 
-namespace KIPIVkontaktePlugin {
-    class VkAPI;
+#define VK_APP_ID   "2446321"
+
+VkTestBase::VkTestBase()
+    : m_vkapi(0)
+{
 }
 
-/*
- * What is tested here:
- *   class AlbumListJob
- *   class CreateAlbumJob - tested in initTestCase()
- *   class EditAlbumJob
- *   class DeleteAlbumJob
- */
-class TestAlbums : public VkTestBase
+void VkTestBase::authenticate()
 {
-    Q_OBJECT
+    m_vkapi = new KIPIVkontaktePlugin::VkAPI(0);
+    m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
+    m_vkapi->startAuthentication(false);
 
-public:
-    TestAlbums();
+    // Wait for authentication
+    QEventLoop loop;
+    // TODO: Wait for any outcome of the authentication process, including failure
+    connect(m_vkapi, SIGNAL(authenticated()), &loop, SLOT(quit()));
+    loop.exec();
 
-private Q_SLOTS:
-    void initTestCase();
+    QVERIFY(m_vkapi->isAuthenticated());
+}
 
-    void testListJob();
-    void testEditJob();
-    void testDeleteJob();
+QString VkTestBase::accessToken() const
+{
+    return m_vkapi->accessToken();
+}
 
-private:
-    QVector<int> m_albumIds;
-};
-
-#endif // TEST_ALBUMS_H
+#include "vktestbase.moc"

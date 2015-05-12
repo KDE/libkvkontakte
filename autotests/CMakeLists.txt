@@ -1,5 +1,5 @@
 function(add_vk_test name)
-    set(test_SRCS ${name}.cpp vkapi.cpp)
+    set(test_SRCS ${name}.cpp vktestbase.cpp vkapi.cpp)
     kde4_add_unit_test(${name} TEST ${test_SRCS})
     target_link_libraries(${name}
         kvkontakte

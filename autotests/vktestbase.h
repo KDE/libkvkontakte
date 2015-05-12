@@ -17,10 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef TEST_ALBUMS_H
-#define TEST_ALBUMS_H
-
-#include "vktestbase.h"
+#ifndef VKTESTBASE_H
+#define VKTESTBASE_H
 
 #include <QtCore/QObject>
 #include <QtCore/QVector>
@@ -29,29 +27,19 @@ namespace KIPIVkontaktePlugin {
     class VkAPI;
 }
 
-/*
- * What is tested here:
- *   class AlbumListJob
- *   class CreateAlbumJob - tested in initTestCase()
- *   class EditAlbumJob
- *   class DeleteAlbumJob
- */
-class TestAlbums : public VkTestBase
+class VkTestBase : public QObject
 {
     Q_OBJECT
 
 public:
-    TestAlbums();
+    VkTestBase();
 
-private Q_SLOTS:
-    void initTestCase();
-
-    void testListJob();
-    void testEditJob();
-    void testDeleteJob();
+protected:
+    void authenticate();
+    QString accessToken() const;
 
 private:
-    QVector<int> m_albumIds;
+    KIPIVkontaktePlugin::VkAPI *m_vkapi;
 };
 
-#endif // TEST_ALBUMS_H
+#endif // VKTESTBASE_H

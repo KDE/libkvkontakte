@@ -18,7 +18,6 @@
  */
 
 #include "test_userinfo.h"
-#include "vkapi.h"
 
 #include <libkvkontakte/userinfofulljob.h>
 
@@ -26,34 +25,22 @@
 
 #include <QtCore/QList>
 
-#define VK_APP_ID   "2446321"
-
 using namespace Vkontakte;
 
 TestUserInfo::TestUserInfo()
-    : m_vkapi(0)
+    : VkTestBase()
 {
 }
 
 void TestUserInfo::initTestCase()
 {
-    m_vkapi = new KIPIVkontaktePlugin::VkAPI(0);
-    m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
-    m_vkapi->startAuthentication(false);
-
-    // Wait for authentication
-    QEventLoop loop;
-    // TODO: Wait for any outcome of the authentication process, including failure
-    connect(m_vkapi, SIGNAL(authenticated()), &loop, SLOT(quit()));
-    loop.exec();
-
-    QVERIFY(m_vkapi->isAuthenticated());
+    authenticate();
 }
 
 void TestUserInfo::testUserInfoJob()
 {
     Vkontakte::UserInfoJob* const job = new Vkontakte::UserInfoJob(
-        m_vkapi->accessToken(), 1);
+        accessToken(), 1);
 
     job->exec();
 
@@ -68,7 +55,7 @@ void TestUserInfo::testUserInfoJob()
 void TestUserInfo::testUserInfoFullJob()
 {
     Vkontakte::UserInfoFullJob* const job = new Vkontakte::UserInfoFullJob(
-        m_vkapi->accessToken(), 1, true, true);
+        accessToken(), 1, true, true);
 
     job->exec();
 

@@ -18,7 +18,6 @@
  */
 
 #include "test_albums.h"
-#include "vkapi.h"
 
 #include <libkvkontakte/createalbumjob.h>
 #include <libkvkontakte/albumlistjob.h>
@@ -27,33 +26,19 @@
 
 #include <qtest_kde.h>
 
-#include <QtCore/QList>
-
-#define VK_APP_ID   "2446321"
-
 #define ALBUM1_NAME     "__album for unit testing of libkvkontakte #1"
 #define ALBUM2_NAME     "__album for unit testing of libkvkontakte #2"
 
 using namespace Vkontakte;
 
 TestAlbums::TestAlbums()
-    : m_vkapi(0)
+    : VkTestBase()
 {
 }
 
 void TestAlbums::initTestCase()
 {
-    m_vkapi = new KIPIVkontaktePlugin::VkAPI(0);
-    m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
-    m_vkapi->startAuthentication(false);
-
-    // Wait for authentication
-    QEventLoop loop;
-    // TODO: Wait for any outcome of the authentication process, including failure
-    connect(m_vkapi, SIGNAL(authenticated()), &loop, SLOT(quit()));
-    loop.exec();
-
-    QVERIFY(m_vkapi->isAuthenticated());
+    authenticate();
 
     // Create albums for testing
     QList<QString> albumNames;
@@ -62,7 +47,7 @@ void TestAlbums::initTestCase()
 
     foreach (const QString &name, albumNames) {
         CreateAlbumJob* const job = new CreateAlbumJob(
-            m_vkapi->accessToken(), name, QString("Description for %1").arg(name),
+            accessToken(), name, QString("Description for %1").arg(name),
             AlbumInfo::PRIVACY_PRIVATE, AlbumInfo::PRIVACY_PRIVATE);
         job->exec();
         QVERIFY(!job->error());
@@ -73,7 +58,7 @@ void TestAlbums::initTestCase()
 
 void TestAlbums::testListJob()
 {
-    AlbumListJob* const job = new AlbumListJob(m_vkapi->accessToken());
+    AlbumListJob* const job = new AlbumListJob(accessToken());
     job->exec();
     QVERIFY(!job->error());
 
@@ -93,14 +78,14 @@ void TestAlbums::testEditJob()
     // Change album title, description and permissions
     {
         EditAlbumJob* const job = new EditAlbumJob(
-            m_vkapi->accessToken(), albumId, newTitle, newDescription,
+            accessToken(), albumId, newTitle, newDescription,
             AlbumInfo::PRIVACY_PUBLIC, AlbumInfo::PRIVACY_FRIENDS);
         job->exec();
         QVERIFY(!job->error());
     }
 
     // Verify that album properties have changed
-    AlbumListJob* const listJob = new AlbumListJob(m_vkapi->accessToken(), -1, QIntList() << albumId);
+    AlbumListJob* const listJob = new AlbumListJob(accessToken(), -1, QIntList() << albumId);
     listJob->exec();
     QVERIFY(!listJob->error());
 
@@ -124,14 +109,13 @@ void TestAlbums::testDeleteJob()
 
     // Delete album
     {
-        DeleteAlbumJob* const job = new DeleteAlbumJob(
-            m_vkapi->accessToken(), albumId);
+        DeleteAlbumJob* const job = new DeleteAlbumJob(accessToken(), albumId);
         job->exec();
         QVERIFY(!job->error());
     }
 
     // Verify that the album does not exist anymore
-    AlbumListJob* const listJob = new AlbumListJob(m_vkapi->accessToken(), -1, QIntList() << albumId);
+    AlbumListJob* const listJob = new AlbumListJob(accessToken(), -1, QIntList() << albumId);
     listJob->exec();
     QVERIFY(!listJob->error());
 

@@ -18,7 +18,6 @@
  */
 
 #include "test_notes.h"
-#include "vkapi.h"
 
 #include <libkvkontakte/noteaddjob.h>
 #include <libkvkontakte/noteslistjob.h>
@@ -27,33 +26,19 @@
 
 #include <qtest_kde.h>
 
-#include <QtCore/QList>
-
-#define VK_APP_ID   "2446321"
-
 #define NOTE1_NAME     "__note for unit testing of libkvkontakte #1"
 #define NOTE2_NAME     "__note for unit testing of libkvkontakte #2"
 
 using namespace Vkontakte;
 
 TestNotes::TestNotes()
-    : m_vkapi(0)
+    : VkTestBase()
 {
 }
 
 void TestNotes::initTestCase()
 {
-    m_vkapi = new KIPIVkontaktePlugin::VkAPI(0);
-    m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
-    m_vkapi->startAuthentication(false);
-
-    // Wait for authentication
-    QEventLoop loop;
-    // TODO: Wait for any outcome of the authentication process, including failure
-    connect(m_vkapi, SIGNAL(authenticated()), &loop, SLOT(quit()));
-    loop.exec();
-
-    QVERIFY(m_vkapi->isAuthenticated());
+    authenticate();
 
     // Create notes for testing
     QList<QString> noteNames;
@@ -62,7 +47,7 @@ void TestNotes::initTestCase()
 
     foreach (const QString &name, noteNames) {
         NoteAddJob* const job = new NoteAddJob(
-            m_vkapi->accessToken(), name, QString("Text for %1").arg(name));
+            accessToken(), name, QString("Text for %1").arg(name));
         job->exec();
         QVERIFY(!job->error());
 
@@ -72,7 +57,7 @@ void TestNotes::initTestCase()
 
 void TestNotes::testNotesListJob()
 {
-    NotesListJob* const job = new NotesListJob(m_vkapi->accessToken(), 0, 0, 100);
+    NotesListJob* const job = new NotesListJob(accessToken(), 0, 0, 100);
     job->exec();
     QVERIFY(!job->error());
 
@@ -85,7 +70,7 @@ void TestNotes::testNotesListJob()
 
 void TestNotes::testAllNotesListJob()
 {
-    AllNotesListJob* const job = new AllNotesListJob(m_vkapi->accessToken(), 0);
+    AllNotesListJob* const job = new AllNotesListJob(accessToken(), 0);
     job->exec();
     QVERIFY(!job->error());
 
@@ -100,7 +85,7 @@ void TestNotes::testNoteJob()
 {
     int noteId = m_noteIds[0];
 
-    NoteJob* const job = new NoteJob(m_vkapi->accessToken(), noteId);
+    NoteJob* const job = new NoteJob(accessToken(), noteId);
     job->exec();
     QVERIFY(!job->error());
 
