@@ -25,6 +25,7 @@
 namespace Vkontakte
 {
 
+// TODO: do not export in KF5 version
 class LIBKVKONTAKTE_EXPORT MessagesListJob : public VkontakteJob
 {
 public:
