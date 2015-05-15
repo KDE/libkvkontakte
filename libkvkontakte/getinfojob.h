@@ -29,7 +29,8 @@ namespace Vkontakte
 class LIBKVKONTAKTE_EXPORT GetInfoJob : public VkontakteJob
 {
 public:
-    GetInfoJob(const QString &accessToken, const QString &method);
+    // This class was never used in KDE 4, will be removed in the KF5 version
+    Q_DECL_DEPRECATED GetInfoJob(const QString &accessToken, const QString &method);
     ~GetInfoJob();
 
     QVariantMap info();

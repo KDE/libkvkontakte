@@ -32,7 +32,8 @@ class LIBKVKONTAKTE_EXPORT GroupListJob : public VkontakteJob
 {
     Q_OBJECT
 public:
-    explicit GroupListJob(const QString &accessToken, int uid = -1, bool extended = true);
+    // This class was never used in KDE 4, will be removed in the KF5 version
+    Q_DECL_DEPRECATED explicit GroupListJob(const QString &accessToken, int uid = -1, bool extended = true);
     ~GroupListJob();
 
     QList<GroupInfoPtr> list() const;
