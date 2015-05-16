@@ -90,7 +90,7 @@ void VkAPI::startAuthentication(bool forceLogout)
                 this, SLOT(slotAuthenticationDialogDone(QString)));
 
         connect(authDialog, SIGNAL(canceled()),
-                this, SLOT(slotAuthenticationDialogCanceled()));
+                this, SIGNAL(canceled()));
 
         authDialog->start();
     }
@@ -110,10 +110,6 @@ void VkAPI::slotApplicationPermissionCheckDone(KJob* kjob)
         m_authenticated = true;
         emit authenticated();
     }
-}
-
-void VkAPI::slotAuthenticationDialogCanceled()
-{
 }
 
 void VkAPI::slotAuthenticationDialogDone(const QString& accessToken)

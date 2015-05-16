@@ -36,10 +36,10 @@ void VkTestBase::authenticate()
     m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
     m_vkapi->startAuthentication(false);
 
-    // Wait for authentication
+    // Wait for any outcome of the authentication process, including failure
     QEventLoop loop;
-    // TODO: Wait for any outcome of the authentication process, including failure
     connect(m_vkapi, SIGNAL(authenticated()), &loop, SLOT(quit()));
+    connect(m_vkapi, SIGNAL(canceled()), &loop, SLOT(quit()));
     loop.exec();
 
     QVERIFY(m_vkapi->isAuthenticated());

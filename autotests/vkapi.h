@@ -54,13 +54,13 @@ public:
 Q_SIGNALS:
 
     void authenticated();
+    void canceled();
 
 protected Q_SLOTS:
 
     // authentication
     void slotApplicationPermissionCheckDone(KJob* kjob);
     void slotAuthenticationDialogDone(const QString& accessToken);
-    void slotAuthenticationDialogCanceled();
 
 private:
 
