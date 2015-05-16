@@ -46,6 +46,7 @@ private Q_SLOTS:
     void initTestCase();
 
     void testPhotoListJob();
+    void testUploadMultiple();
 
 private:
     int m_albumId;

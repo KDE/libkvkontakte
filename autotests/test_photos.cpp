@@ -88,5 +88,23 @@ void TestPhotos::testPhotoListJob()
     QCOMPARE(image.size(), QSize(10, 10));
 }
 
+void TestPhotos::testUploadMultiple()
+{
+    // Upload multiple photos at once
+    const int count = 10;
+
+    QStringList files;
+    for (int i = 0; i < count; ++i)
+        files << QString(AUTOTESTS_DATA_DIR) + "/image1.png";
+
+    UploadPhotosJob* const job = new UploadPhotosJob(
+        accessToken(), files, true, m_albumId);
+    job->exec();
+    QVERIFY(!job->error());
+
+    QList<PhotoInfoPtr> list = job->list();
+    QCOMPARE(list.size(), count);
+}
+
 QTEST_KDEMAIN(TestPhotos, GUI)
 #include "test_photos.moc"
