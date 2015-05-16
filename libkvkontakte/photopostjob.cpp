@@ -73,7 +73,7 @@ void PhotoPostJob::start()
                     m_ok = false;
                     break;
                 }
-                break;
+            break;
         case Vkontakte::UploadPhotosJob::DEST_PROFILE:
         case Vkontakte::UploadPhotosJob::DEST_WALL:
             // "photo"
