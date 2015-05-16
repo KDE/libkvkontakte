@@ -42,7 +42,7 @@ void TestLoginProperties::testGetApplicationPermissionsJob()
     job->exec();
     QVERIFY(!job->error());
 
-    QCOMPARE(job->permissions(), 67588);
+    QCOMPARE(job->permissions(), 71684);
 }
 
 void TestLoginProperties::testGetVariableJob()
