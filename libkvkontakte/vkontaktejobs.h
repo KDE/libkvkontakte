@@ -75,12 +75,16 @@ protected:
 
 private:
     /** Check for a return error and set the appropriate error messages */
-    void handleError(const QVariant &data);
+    // Returns "true" if we will retry the call.
+    bool handleError(const QVariant &data);
 
     virtual void handleData(const QVariant &data) = 0;
 
     /** Called right before sending request to server */
     virtual void prepareQueryItems() {}
+
+    // TODO: cache url in a member variable
+    KJob* createHttpJob();
 
     QString m_accessToken;         /** Vkontakte Access token */
     QString m_method;
@@ -89,6 +93,7 @@ private:
 
 private Q_SLOTS:
     void jobFinished(KJob *kjob);
+    void slotRetry();
 };
 
 } /* namespace Vkontakte */

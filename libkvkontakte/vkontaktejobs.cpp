@@ -20,6 +20,7 @@
 */
 #include "vkontaktejobs.moc"
 
+#include <QtCore/QTimer>
 #include <qjson/parser.h>
 #include <KIO/Job>
 #include <KDebug>
@@ -67,21 +68,33 @@ void VkontakteJob::addQueryItem(const QString &key, const QString &value)
     m_queryItems.append(item);
 }
 
-void VkontakteJob::handleError(const QVariant &data)
+bool VkontakteJob::handleError(const QVariant &data)
 {
     const QVariantMap errorMap = data.toMap();
     int error_code = errorMap["error_code"].toInt();
     const QString error_msg = errorMap["error_msg"].toString();
     kWarning() << "An error of type" << error_code << "occurred:" << error_msg;
 
-    setError(KJob::UserDefinedError);
-    setErrorText(i18n(
-        "The VKontakte server returned an error "
-        "of type <i>%1</i> in reply to method %2: <i>%3</i>",
-        error_code, m_method, error_msg));
+    if (error_code == 6)
+    {
+        // "Too many requests per second", we will retry after a delay.
+        // VK API limit the rate of requests to 3 requests per second,
+        // so it should be OK if we wait for 340 ms.
+        QTimer::singleShot(340, this, SLOT(slotRetry()));
+        return true;
+    }
+    else
+    {
+        setError(KJob::UserDefinedError);
+        setErrorText(i18n(
+            "The VKontakte server returned an error "
+            "of type <i>%1</i> in reply to method %2: <i>%3</i>",
+            error_code, m_method, error_msg));
+        return false;
+    }
 }
 
-void VkontakteJob::start()
+KJob* VkontakteJob::createHttpJob()
 {
     KUrl url;
     url.setProtocol("https");
@@ -93,16 +106,27 @@ void VkontakteJob::start()
         url.addQueryItem(item.first, item.second);
     url.addQueryItem("access_token", m_accessToken);
 
-    kDebug() << "Starting request" << url;
-    KIO::StoredTransferJob *job;
-    if (m_httpPost)
-        job = KIO::storedHttpPost(QByteArray(), url, KIO::HideProgressInfo);
-    else
-        job = KIO::storedGet(url, KIO::Reload, KIO::HideProgressInfo);
+    // TODO: Save KUrl to reuse it if we need to retry the HTTP request
+//     m_url = url;
 
-    m_job = job;
-    connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
-    job->start();
+    kDebug() << "Starting request" << url;
+
+    if (m_httpPost)
+        return KIO::storedHttpPost(QByteArray(), url, KIO::HideProgressInfo);
+    else
+        return KIO::storedGet(url, KIO::Reload, KIO::HideProgressInfo);
+}
+
+void VkontakteJob::start()
+{
+    m_job = createHttpJob();
+    connect(m_job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
+    m_job->start();
+}
+
+void VkontakteJob::slotRetry()
+{
+    start();
 }
 
 void VkontakteJob::jobFinished(KJob *kjob)
@@ -125,9 +149,15 @@ void VkontakteJob::jobFinished(KJob *kjob)
         {
             const QVariant error = data.toMap()["error"];
             if (error.isValid())
-                handleError(error);
+            {
+                bool willRetry = handleError(error);
+                if (willRetry)
+                    return;
+            }
             else
+            {
                 handleData(data.toMap()["response"]);
+            }
         }
         else
         {
