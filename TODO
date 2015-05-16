@@ -4,3 +4,4 @@
 * vkontakte.ru support in Telepathy-KDE and/or Kopete (how about a messaging framework that could be used for both Kopete and Telepathy-KDE?)
 * News from vkontakte.ru in Akregator (http://vkontakte.ru/developers.php?o=-1&p=newsfeed.get)
 * Write to VKontakte administration via paper mail about their logo
+* Fix tests when user's default language is not Russian.
