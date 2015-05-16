@@ -41,8 +41,8 @@ void TestUserInfo::testUserInfoJob()
 {
     Vkontakte::UserInfoJob* const job = new Vkontakte::UserInfoJob(
         accessToken(), 1);
-
     job->exec();
+    QVERIFY(!job->error());
 
     QList<UserInfoPtr> res = job->userInfo();
     QCOMPARE(res.size(), 1);
@@ -56,8 +56,8 @@ void TestUserInfo::testUserInfoFullJob()
 {
     Vkontakte::UserInfoFullJob* const job = new Vkontakte::UserInfoFullJob(
         accessToken(), 1, true, true);
-
     job->exec();
+    QVERIFY(!job->error());
 
     QList<UserInfoPtr> res = job->userInfo();
     QCOMPARE(res.size(), 1);
