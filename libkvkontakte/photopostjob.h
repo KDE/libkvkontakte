@@ -25,13 +25,16 @@
 #include "vkontaktejobs.h"
 #include "uploadphotosjob.h"
 
+class QHttpMultiPart;
+class QNetworkReply;
+
 namespace Vkontakte
 {
 
 // This class is not exported, so:
 //    - we don't care about ABI of this class (not using Pimpl)
 //    - library's users should use class UploadPhotosJob
-class PhotoPostJob : public KJobWithSubjob
+class PhotoPostJob : public KJob
 {
     Q_OBJECT
 public:
@@ -48,9 +51,11 @@ protected:
     virtual void handleData(const QVariant &data);
 
 private Q_SLOTS:
-    void jobFinished(KJob *kjob);
+    void parseNetworkResponse(QNetworkReply *reply);
 
 private:
+    bool appendFile(QHttpMultiPart *multiPart, const QString &header, const QString &path);
+
     UploadPhotosJob::Dest m_dest;
     QString m_url;
     QStringList m_files;

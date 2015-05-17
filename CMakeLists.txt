@@ -22,7 +22,12 @@ set(INCLUDE_INSTALL_DIR include )
 
 # === Closer to the code, close to the body ===
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
-find_package(KDE4 REQUIRED)
+
+set(QT_MIN_VERSION  "4.8.0") # Qt 4.8 required for QHttpMultiPart
+set(KDE_MIN_VERSION "4.4.0")
+find_package(Qt4  ${QT_MIN_VERSION}  REQUIRED)
+find_package(KDE4 ${KDE_MIN_VERSION} REQUIRED)
+
 include(KDE4Defaults)
 include(MacroLibrary)
 

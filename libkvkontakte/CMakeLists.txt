@@ -24,7 +24,6 @@ set(libkvkontakte_SRCS
     deletealbumjob.cpp
     getphotouploadserverjob.cpp
     photopostjob.cpp
-    mpform.cpp
     savephotojob.cpp
     uploadphotosjob.cpp
     photoinfo.cpp

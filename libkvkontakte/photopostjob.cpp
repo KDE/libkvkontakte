@@ -17,12 +17,18 @@
    Boston, MA 02110-1301, USA.
 */
 #include "photopostjob.moc"
-#include "mpform.h"
+
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QHttpMultiPart>
 
 #include <qjson/parser.h>
 #include <KIO/Job>
 #include <KDebug>
 #include <KLocale>
+#include <KMimeType>
 
 namespace Vkontakte
 {
@@ -53,6 +59,34 @@ void PhotoPostJob::handleError(const QVariant &data)
         error_code, m_url, error_msg));
 }
 
+bool PhotoPostJob::appendFile(QHttpMultiPart* multiPart, const QString& header, const QString& path)
+{
+    KMimeType::Ptr ptr = KMimeType::findByUrl(path);
+    QString mime = ptr->name();
+    if (mime.isEmpty())
+        return false;
+
+    QFileInfo fileInfo(path);
+
+    QHttpPart imagePart;
+    imagePart.setHeader(QNetworkRequest::ContentDispositionHeader,
+                        QVariant(QString("form-data; name=\"%1\"; filename=\"%2\"").arg(header).arg(fileInfo.fileName())));
+    imagePart.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(fileInfo.size()));
+    imagePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant(mime));
+    QFile *file = new QFile(path);
+    if (!file->open(QIODevice::ReadOnly))
+    {
+        delete file;
+        return false;
+    }
+
+    imagePart.setBodyDevice(file);
+    file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
+
+    multiPart->append(imagePart);
+    return true;
+}
+
 void PhotoPostJob::start()
 {
     if (!m_ok)
@@ -62,13 +96,13 @@ void PhotoPostJob::start()
         emitResult();
     }
 
-    MPForm form;
+    QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
     switch (m_dest)
     {
         case Vkontakte::UploadPhotosJob::DEST_ALBUM:
             // "file1" .. "file5"
             for (int i = 0; i < m_files.size(); i ++)
-                if (!form.addFile(QString("file%1").arg(i + 1), m_files[i]))
+                if (!appendFile(multiPart, QString("file%1").arg(i + 1), m_files[i]))
                 {
                     m_ok = false;
                     break;
@@ -77,14 +111,13 @@ void PhotoPostJob::start()
         case Vkontakte::UploadPhotosJob::DEST_PROFILE:
         case Vkontakte::UploadPhotosJob::DEST_WALL:
             // "photo"
-            if (!form.addFile(QString("photo"), m_files[0]))
+            if (!appendFile(multiPart, QString("photo"), m_files[0]))
                 m_ok = false;
             break;
         default:
             m_ok = false;
             break;
     }
-    form.finish();
 
     if (!m_ok)
     {
@@ -93,33 +126,31 @@ void PhotoPostJob::start()
         emitResult();
     }
 
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    connect(manager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(parseNetworkResponse(QNetworkReply*)));
 
-    KUrl url(m_url);
-    kDebug() << "Starting request" << url;
-    KIO::StoredTransferJob *job = KIO::storedHttpPost(form.formData(), url, KIO::HideProgressInfo);
-    job->addMetaData("content-type", form.contentType());
-
-    m_job = job;
-    connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
-    job->start();
+    kDebug() << "Starting POST request" << m_url;
+    QNetworkReply *reply = manager->post(QNetworkRequest(m_url), multiPart);
+    multiPart->setParent(reply); // delete the multiPart with the reply
 }
 
-void PhotoPostJob::jobFinished(KJob *kjob)
+void PhotoPostJob::parseNetworkResponse(QNetworkReply *reply)
 {
-    KIO::StoredTransferJob *job = dynamic_cast<KIO::StoredTransferJob *>(kjob);
-    Q_ASSERT(job);
-    if (job && job->error())
+    if (reply->error() != QNetworkReply::NoError)
     {
-        setError(job->error());
-        setErrorText(KIO::buildErrorString(error(), job->errorText()));
-        kWarning() << "Job error: " << job->errorString();
+        // A communication error has occurred
+        setError(reply->error());
+        setErrorText(KIO::buildErrorString(error(), QString()));
+//         kWarning() << "Network error: " << reply->errorString();
     }
     else
     {
-        kDebug() << "Got data: " << QString::fromAscii(job->data().data());
+        QByteArray ba = reply->readAll();
+        kDebug() << "Got data: " << QString::fromAscii(ba.constData());
         QJson::Parser parser;
         bool ok;
-        const QVariant data = parser.parse(job->data(), &ok);
+        const QVariant data = parser.parse(ba, &ok);
         if (ok)
         {
             const QVariant error = data.toMap()["error"];
@@ -130,13 +161,13 @@ void PhotoPostJob::jobFinished(KJob *kjob)
         }
         else
         {
-            kWarning() << "Unable to parse JSON data: " << QString::fromAscii(job->data().data());
+            kWarning() << "Unable to parse JSON data: " << QString::fromAscii(ba.data());
             setError(KJob::UserDefinedError);
             setErrorText(i18n("Unable to parse data returned by the VKontakte server: %1", parser.errorString()));
         }
     }
+
     emitResult();
-    m_job = 0;
 }
 
 void PhotoPostJob::handleData(const QVariant &data)
