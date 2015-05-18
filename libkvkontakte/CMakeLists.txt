@@ -57,10 +57,9 @@ target_link_libraries(kvkontakte
     ${KDEPIMLIBS_KMIME_LIBS}
 )
 
-set_target_properties(kvkontakte
-    PROPERTIES
+set_target_properties(kvkontakte PROPERTIES
     VERSION ${LIBKVKONTAKTE_VERSION}
-    SOVERSION ${LIBKVKONTAKTE_VERSION_MAJOR}
+    SOVERSION ${LIBKVKONTAKTE_SOVERSION}
 )
 
 install(TARGETS kvkontakte
