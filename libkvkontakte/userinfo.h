@@ -28,7 +28,7 @@
 namespace Vkontakte
 {
 
-// http://vkontakte.ru/developers.php?o=-1&p=getProfiles
+// http://vk.com/dev/fields
 class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 {
     Q_OBJECT
@@ -62,25 +62,23 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     // be also available: country.
     Q_PROPERTY(int country WRITE setCountry READ country)
 
-    // If "photo" was requested, then this field will
-    // be also available: photo.
-    Q_PROPERTY(QString photo WRITE setPhoto READ photo)
+    // If "photo_50" was requested, then this field will
+    // be also available: photo_50.
+    Q_PROPERTY(QString photo_50 WRITE setPhoto READ photo)
 
-    // If "photo_medium" was requested, then this field will
-    // be also available: photo_medium.
-    Q_PROPERTY(QString photo_medium WRITE setPhotoMedium READ photoMedium)
+    // If "photo_100" was requested, then this field will
+    // be also available: photo_100.
+    Q_PROPERTY(QString photo_100 WRITE setPhotoMedium READ photoMedium)
 
-    // If "photo_medium_rec" was requested, then this field will
-    // be also available: photo_medium_rec.
+    // Obsolete, worked only with the API method "getProfiles"
     Q_PROPERTY(QString photo_medium_rec WRITE setPhotoMediumRec READ photoMediumRec)
 
-    // If "photo_big" was requested, then this field will
-    // be also available: photo_big.
-    Q_PROPERTY(QString photo_big WRITE setPhotoBig READ photoBig)
+    // If "photo_200_orig" was requested, then this field will
+    // be also available: photo_200_orig.
+    Q_PROPERTY(QString photo_200_orig WRITE setPhotoBig READ photoBig)
 
-    // If "photo_rec" was requested, then this field will
-    // be also available: photo_rec.
-    Q_PROPERTY(QString photo_rec WRITE setPhotoRec READ photoRec)
+    // Obsolete, worked only with the API method "getProfiles"
+    Q_PROPERTY(QString photo_200 WRITE setPhotoRec READ photoRec)
 
     // TODO: add "lists" field
 
@@ -94,8 +92,7 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
     // be also available: has_mobile.
     Q_PROPERTY(bool has_mobile WRITE setHasMobile READ hasMobile)
 
-    // If "rate" was requested, then this field will
-    // be also available: rate.
+    // Obsolete, worked only with the API method "getProfiles"
     Q_PROPERTY(int rate WRITE setRate READ rate)
 
     // If "contacts" was requested, then these fields will

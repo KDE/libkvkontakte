@@ -34,9 +34,9 @@ public:
     QStringList fields;
 };
 
-// http://vkontakte.ru/developers.php?o=-1&p=getProfiles
+// http://vk.com/dev/users.get
 UserInfoJob::UserInfoJob(const QString &accessToken)
-    : VkontakteJob(accessToken, "getProfiles")
+    : VkontakteJob(accessToken, "users.get")
     , d(new Private)
 {
     // The complete list of fields
@@ -46,22 +46,22 @@ UserInfoJob::UserInfoJob(const QString &accessToken)
 }
 
 UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
-    : VkontakteJob(accessToken, "getProfiles")
+    : VkontakteJob(accessToken, "users.get")
     , d(new Private)
 {
     setFields(UserInfo::allQueryFields());
-    addQueryItem("uids", QString::number(uid));
+    addQueryItem("user_ids", QString::number(uid));
 }
 
 UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
-    : VkontakteJob(accessToken, "getProfiles")
+    : VkontakteJob(accessToken, "users.get")
     , d(new Private)
 {
     setFields(UserInfo::allQueryFields());
-    addQueryItem("uids", uids.join());
+    addQueryItem("user_ids", uids.join());
 
     // TODO: make this working for more than 1000 uids
-    // ("getProfiles" allows requesting only 1000 users at once)
+    // ("users.get" allows requesting only 1000 users at once)
 }
 
 UserInfoJob::~UserInfoJob()

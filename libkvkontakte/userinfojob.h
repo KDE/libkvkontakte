@@ -30,7 +30,7 @@ namespace Vkontakte
 /**
  * Get information about multiple users
  *
- * Uses VKontakte API method "getProfiles".
+ * Uses VKontakte API method "users.get".
  */
 // TODO: support working with more than 1000 users
 class LIBKVKONTAKTE_EXPORT UserInfoJob : public VkontakteJob
