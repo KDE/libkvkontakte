@@ -39,6 +39,8 @@ protected:
     QString accessToken() const;
 
 private:
+    QString getSavedToken() const;
+
     KIPIVkontaktePlugin::VkAPI *m_vkapi;
 };
 

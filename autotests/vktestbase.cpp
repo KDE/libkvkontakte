@@ -21,6 +21,8 @@
 #include "vkapi.h"
 
 #include <QtCore/QEventLoop>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include <QtTest/QTest>
 
 #define VK_APP_ID   "2446321"
@@ -30,10 +32,30 @@ VkTestBase::VkTestBase()
 {
 }
 
+QString VkTestBase::getSavedToken() const
+{
+    QFile file(AUTOTESTS_API_TOKEN_PATH);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        return QString();
+    }
+
+    QTextStream in(&file);
+    QString line = in.readLine();
+    return line.trimmed();
+}
+
 void VkTestBase::authenticate()
 {
     m_vkapi = new KIPIVkontaktePlugin::VkAPI(0);
     m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
+
+    QString token = getSavedToken();
+    if (!token.isEmpty())
+    {
+        m_vkapi->setInitialAccessToken(token);
+    }
+
     m_vkapi->startAuthentication(false);
 
     // Wait for any outcome of the authentication process, including failure
