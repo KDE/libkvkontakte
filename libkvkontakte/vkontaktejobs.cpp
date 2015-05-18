@@ -98,7 +98,7 @@ KJob* VkontakteJob::createHttpJob()
 {
     KUrl url;
     url.setProtocol("https");
-    url.setHost("api.vkontakte.ru");
+    url.setHost("api.vk.com");
     url.setPath("/method/" + m_method);
 
     prepareQueryItems();
