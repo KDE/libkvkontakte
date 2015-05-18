@@ -1,0 +1,14 @@
+*****************************************************************************************************
+libkvkontakte 4.11.0 - Release date: 2015-05-24
+
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA:
+001 ==> 345358 - digiKam crash when vkontakte plugin failed to upload images
+
+OTHER CHANGES:
+
+*****************************************************************************************************
+libvkontakte 1.0.0 was not an exact version. The library was released as part
+of the digiKam SC tarball with digiKam SC versions 2.1.0 through 4.10.0.
+*****************************************************************************************************
