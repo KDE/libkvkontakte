@@ -44,6 +44,7 @@ private Q_SLOTS:
     void initTestCase();
 
     void testUserInfoJob();
+    void testSelfUserInfoJob();
     void testUserInfoFullJob();
 };
 

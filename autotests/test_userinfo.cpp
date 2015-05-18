@@ -72,6 +72,22 @@ void TestUserInfo::testUserInfoJob()
     QCOMPARE(user->timezone(), static_cast<int>(UserInfo::INVALID_TIMEZONE));
 }
 
+void TestUserInfo::testSelfUserInfoJob()
+{
+    Vkontakte::UserInfoJob* const job = new Vkontakte::UserInfoJob(accessToken());
+    job->exec();
+    QVERIFY(!job->error());
+
+    QList<UserInfoPtr> res = job->userInfo();
+    QCOMPARE(res.size(), 1);
+
+    UserInfoPtr user = res.first();
+    QVERIFY(user->uid() > 0);
+    QVERIFY(!user->domain().isEmpty());
+    // Timezone is returned only for the current user
+    QVERIFY(user->timezone() != static_cast<int>(UserInfo::INVALID_TIMEZONE));
+}
+
 void TestUserInfo::testUserInfoFullJob()
 {
     Vkontakte::UserInfoFullJob* const job = new Vkontakte::UserInfoFullJob(
