@@ -40,7 +40,7 @@ UserInfoJob::UserInfoJob(const QString &accessToken)
     , d(new Private)
 {
     // The complete list of fields
-    setFields(UserInfo::allQueryFields());
+    setFields(UserInfo::allQueryFields()); // TODO: do not pull extra fields by default
 
     // TODO: support "counters" request (probably in another KJob)
 }
@@ -49,7 +49,7 @@ UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
     : VkontakteJob(accessToken, "users.get")
     , d(new Private)
 {
-    setFields(UserInfo::allQueryFields());
+    setFields(UserInfo::allQueryFields()); // TODO: do not pull extra fields by default
     addQueryItem("user_ids", QString::number(uid));
 }
 
@@ -57,7 +57,7 @@ UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
     : VkontakteJob(accessToken, "users.get")
     , d(new Private)
 {
-    setFields(UserInfo::allQueryFields());
+    setFields(UserInfo::allQueryFields()); // TODO: do not pull extra fields by default
     addQueryItem("user_ids", uids.join());
 
     // TODO: make this working for more than 1000 uids
