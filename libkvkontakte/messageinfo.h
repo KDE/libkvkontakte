@@ -27,8 +27,8 @@ namespace Vkontakte
 {
 
 /**
-* Class that describes a private message on vkontakte.ru
-*/
+ * Class that describes a private message on vk.com
+ */
 class LIBKVKONTAKTE_EXPORT MessageInfo : public QObject
 {
     Q_OBJECT

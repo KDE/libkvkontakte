@@ -27,7 +27,7 @@
 namespace Vkontakte
 {
 
-// http://vkontakte.ru/developers.php?oid=-1&p=groups.get
+// http://vk.com/dev/groups.get
 class LIBKVKONTAKTE_EXPORT GroupInfo : public QObject
 {
     Q_OBJECT

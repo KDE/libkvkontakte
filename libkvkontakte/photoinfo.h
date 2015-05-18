@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-// http://vkontakte.ru/developers.php?o=-1&p=photos.get
+// http://vk.com/dev/photos.get
 class LIBKVKONTAKTE_EXPORT PhotoInfo : public QObject
 {
     Q_OBJECT

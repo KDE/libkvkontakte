@@ -29,7 +29,7 @@ public:
     QList<PhotoInfoPtr> list;
 };
 
-// http://vkontakte.ru/developers.php?o=-1&p=photos.get
+// http://vk.com/dev/photos.get
 //
 // The API also allows to set "limit" and "offset", but that
 // does not seem to be useful.

@@ -50,7 +50,7 @@ CidsNamesJob::~CidsNamesJob()
 
 void CidsNamesJob::handleData(const QVariant &data)
 {
-    // We need QMap, because vkontakte.ru might reorder results
+    // We need QMap, because VK server might reorder results
     // (I did not check it, but they do not guarantee the same order as in "cids")
     foreach(const QVariant &item, data.toList())
     {

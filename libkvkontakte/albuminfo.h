@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-// http://vkontakte.ru/developers.php?o=-1&p=photos.getAlbums
+// http://vk.com/dev/photos.getAlbums
 class LIBKVKONTAKTE_EXPORT AlbumInfo : public QObject
 {
     Q_OBJECT

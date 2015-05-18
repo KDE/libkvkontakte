@@ -30,9 +30,9 @@ class LIBKVKONTAKTE_EXPORT MessagesListJob : public VkontakteJob
 {
 public:
     /**
-     * @brief Constructs a job to retrieve an array of messages from vkontakte.ru.
+     * @brief Constructs a job to retrieve an array of messages from vk.com.
      *
-     * @param accessToken vkontakte.ru access token.
+     * @param accessToken vk.com access token.
      * @param out 1 if you want outgoing messages. Defaults to 0.
      * @param offset Offset in the list of all discussions. Defaults to 0.
      * @param count Number of discussions to retrieve. Defaults to 100.

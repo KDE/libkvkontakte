@@ -90,7 +90,7 @@ int MessageInfo::mid() const
 
 void MessageInfo::setTitle(const QString &title)
 {
-    // vkontakte.ru puts "..." into the title when the subject is not specified
+    // vk.com puts "..." into the title when the subject is not specified
     QRegExp rx("(Re(\\(\\d+\\))?: )?( ?)\\.\\.\\.( ?)");
     if (!rx.exactMatch(title))
         d->title = title;

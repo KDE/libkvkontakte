@@ -27,7 +27,7 @@
 namespace Vkontakte
 {
 
-// http://vkontakte.ru/developers.php?o=-1&p=notes.getById
+// http://vk.com/dev/notes.getById
 class LIBKVKONTAKTE_EXPORT NoteInfo : public QObject
 {
     Q_OBJECT

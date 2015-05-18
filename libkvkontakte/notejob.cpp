@@ -29,7 +29,7 @@ public:
     NoteInfoPtr noteInfo;
 };
 
-// http://vkontakte.ru/developers.php?o=-1&p=notes.getById
+// http://vk.com/dev/notes.getById
 NoteJob::NoteJob(const QString &accessToken, int nid)
     : VkontakteJob(accessToken, "notes.getById")
     , d(new Private)
