@@ -84,8 +84,12 @@ class LIBKVKONTAKTE_EXPORT UserInfo : public QObject
 
     // If "screen_name" was requested, then this field will
     // be also available: screen_name.
+    //
+    // "screen_name" is alias for "domain".
     Q_PROPERTY(QString screen_name WRITE setDomain READ domain)
-    // http://vkontakte.ru/developers.php?oid=-1&p=friends.get
+
+    // If "domain" was requested, then this field will
+    // be also available: domain.
     Q_PROPERTY(QString domain WRITE setDomain READ domain)
 
     // If "has_mobile" was requested, then this field will
