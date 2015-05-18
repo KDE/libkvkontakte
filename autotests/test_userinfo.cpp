@@ -48,8 +48,28 @@ void TestUserInfo::testUserInfoJob()
     QCOMPARE(res.size(), 1);
 
     UserInfoPtr user = res.first();
-    QCOMPARE(user->domain(), QString("durov"));
+    QCOMPARE(user->uid(), 1);
     QCOMPARE(user->firstName(), QString::fromUtf8("Павел"));
+    QCOMPARE(user->lastName(), QString::fromUtf8("Дуров"));
+    QCOMPARE(user->nickName(), QString::fromUtf8(""));
+    QCOMPARE(user->sex(), 2);
+    // TODO: verify that "online" status is received from server
+    QCOMPARE(user->birthday(), QDate(1984, 10, 10));
+    QCOMPARE(user->city(), 2); // Saint-Petersburg
+    QCOMPARE(user->country(), 1); // Russia
+    QCOMPARE(user->domain(), QString("durov"));
+    QCOMPARE(user->hasMobile(), true);
+    QCOMPARE(user->homePhone(), QString(""));
+    QCOMPARE(user->mobilePhone(), QString(""));
+    QCOMPARE(user->university(), 1); // SPbSU
+    QCOMPARE(user->universityName(), QString::fromUtf8("СПбГУ")); // SPbSU
+    QCOMPARE(user->faculty(), 0);
+    QCOMPARE(user->facultyName(), QString(""));
+    QCOMPARE(user->graduation(), 2006); // graduation year
+    QCOMPARE(user->canPost(), false);
+    QCOMPARE(user->canWritePrivateMessage(), false);
+    // Timezone is returned only for the current user
+    QCOMPARE(user->timezone(), static_cast<int>(UserInfo::INVALID_TIMEZONE));
 }
 
 void TestUserInfo::testUserInfoFullJob()
