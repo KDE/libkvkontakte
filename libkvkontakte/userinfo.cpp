@@ -418,12 +418,6 @@ QString UserInfo::profileUrl() const
         return QString("http://vkontakte.ru/") + domain();
 }
 
-/**
- * @brief Returns the stringlist of all possible field groups
- * that may be requested in VKontakte API methods "getProfiles" and "friends.get"
- *
- * @return The list of strings to pass as "fields" argument to a method.
- **/
 // static
 QStringList UserInfo::allQueryFields()
 {

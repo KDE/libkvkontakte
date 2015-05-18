@@ -227,6 +227,13 @@ public:
 
 
     QString profileUrl() const;
+
+    /**
+    * @brief Returns the stringlist of all possible field groups
+    * that may be requested in VK API method "users.get".
+    *
+    * @return The list of strings to pass as "fields" argument to a method.
+    **/
     static QStringList allQueryFields();
 
 private:
