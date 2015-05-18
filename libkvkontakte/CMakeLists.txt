@@ -43,18 +43,19 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 # Yes, QJSON_LIBRARIES and QJSON_LIBRARY are both needed, as otherwise it will break either
 # on Linux or on Mac.
 target_link_libraries(kvkontakte
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTWEBKIT_LIBRARY}
-    ${KDE4_KDEWEBKIT_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${QJSON_LIBRARIES}
-    ${QJSON_LIBRARY}
-    ${qjson_LIBRARIES}
-    ${KDEPIMLIBS_KABC_LIBS}
-    ${KDEPIMLIBS_KPIMUTILS_LIBS}
-    ${KDEPIMLIBS_KMIME_LIBS}
+    PRIVATE
+        ${KDE4_KDECORE_LIBS}
+        ${KDE4_KDEUI_LIBS}
+        ${QT_QTGUI_LIBRARY}
+        ${QT_QTWEBKIT_LIBRARY}
+        ${KDE4_KDEWEBKIT_LIBS}
+        ${KDE4_KIO_LIBS}
+        ${QJSON_LIBRARIES}
+        ${QJSON_LIBRARY}
+        ${qjson_LIBRARIES}
+        ${KDEPIMLIBS_KABC_LIBS}
+        ${KDEPIMLIBS_KPIMUTILS_LIBS}
+        ${KDEPIMLIBS_KMIME_LIBS}
 )
 
 set_target_properties(kvkontakte PROPERTIES
