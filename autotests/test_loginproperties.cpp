@@ -21,6 +21,7 @@
 
 #include <libkvkontakte/getapplicationpermissionsjob.h>
 #include <libkvkontakte/getvariablejob.h>
+#include <libkvkontakte/userinfojob.h>
 
 #include <qtest_kde.h>
 
@@ -47,6 +48,17 @@ void TestLoginProperties::testGetApplicationPermissionsJob()
 
 void TestLoginProperties::testGetVariableJob()
 {
+    // Retrieve user info with UserInfoJob
+    Vkontakte::UserInfoJob* const job = new Vkontakte::UserInfoJob(accessToken());
+    job->exec();
+    QVERIFY(!job->error());
+
+    QList<UserInfoPtr> res = job->userInfo();
+    QCOMPARE(res.size(), 1);
+
+    UserInfoPtr user = res.first();
+
+    // Test GetVariableJob
     foreach (int index, QList<int>() << 1280 << 1281) {
         GetVariableJob* const job = new GetVariableJob(accessToken(), index);
         job->exec();
@@ -55,8 +67,10 @@ void TestLoginProperties::testGetVariableJob()
         int type = static_cast<int>(job->variable().type());
         if (index == 1280) {
             QCOMPARE(type, static_cast<int>(QMetaType::ULongLong));
+            QCOMPARE(job->variable().toInt(), user->uid());
         } else { // 1281
             QCOMPARE(type, static_cast<int>(QMetaType::QString));
+            QCOMPARE(job->variable().toString(), QString("%1 %2").arg(user->firstName()).arg(user->lastName()));
         }
     }
 }
