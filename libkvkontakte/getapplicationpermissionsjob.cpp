@@ -1,4 +1,4 @@
-/* Copyright 2011 Alexander Potashev <aspotashev@gmail.com>
+/* Copyright 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published
@@ -29,10 +29,10 @@ public:
     int permissions;
 };
 
-// http://vkontakte.ru/developers.php?o=-1&p=getUserSettings
-// http://vkontakte.ru/developers.php?o=-1&p=%CF%F0%E0%E2%E0%20%EF%F0%E8%EB%EE%E6%E5%ED%E8%E9
+// http://vk.com/dev/account.getAppPermissions
+// http://vk.com/dev/permissions
 GetApplicationPermissionsJob::GetApplicationPermissionsJob(const QString &accessToken)
-    : VkontakteJob(accessToken, "getUserSettings")
+    : VkontakteJob(accessToken, "account.getAppPermissions")
     , d(new Private)
 {
 }
