@@ -35,6 +35,8 @@ using namespace Vkontakte;
 
 TestPhotos::TestPhotos()
     : VkTestBase()
+    , m_albumId(-1)
+    , m_photoId(-1)
 {
 }
 
