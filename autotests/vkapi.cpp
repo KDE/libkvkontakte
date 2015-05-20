@@ -35,8 +35,11 @@ namespace KIPIVkontaktePlugin
 {
 
 VkApi::VkApi(QWidget* const parent)
-    : m_parent(parent),
-      m_authenticated(false)
+    : m_parent(parent)
+    , m_appId()
+    , m_requiredPermissions(Vkontakte::AppPermissions::NoPermissions)
+    , m_accessToken()
+    , m_authenticated(false)
 {
 }
 
@@ -47,6 +50,11 @@ VkApi::~VkApi()
 void VkApi::setAppId(const QString &appId)
 {
     m_appId = appId;
+}
+
+void VkApi::setRequiredPermissions(Vkontakte::AppPermissions::Value permissions)
+{
+    m_requiredPermissions = permissions;
 }
 
 void VkApi::setInitialAccessToken(const QString& accessToken)
@@ -78,11 +86,9 @@ void VkApi::startAuthentication(bool forceLogout)
     }
     else
     {
-        QStringList permissions;
-        permissions << "photos" << "offline" << "notes" << "messages"; // TODO: rm hardcoded permission list
         QPointer<Vkontakte::AuthenticationDialog> authDialog = new Vkontakte::AuthenticationDialog(m_parent);
         authDialog->setAppId(m_appId);
-        authDialog->setPermissions(permissions);
+        authDialog->setPermissions(m_requiredPermissions);
 
         connect(authDialog, SIGNAL(authenticated(QString)),
                 this, SLOT(slotAuthenticationDialogDone(QString)));
@@ -99,14 +105,32 @@ void VkApi::slotApplicationPermissionCheckDone(KJob* kjob)
     Vkontakte::GetApplicationPermissionsJob* const job = dynamic_cast<Vkontakte::GetApplicationPermissionsJob *>(kjob);
     Q_ASSERT(job);
 
-    if (job && (job->error() || (job->permissions() & 4) != 4)) // TODO: rm hardcoded constant
+    bool havePermissions = true;
+    if (!job || job->error())
     {
-        startAuthentication(true);
+        // There was some error enumerating permissions, need to start over for sure
+        havePermissions = false;
     }
     else
     {
+        Vkontakte::AppPermissions::Value availablePermissions =
+            static_cast<Vkontakte::AppPermissions::Value>(job->permissions());
+
+        if ((availablePermissions & m_requiredPermissions) != m_requiredPermissions)
+        {
+            // Existing permissions are not enough, need to request more permissions
+            havePermissions = false;
+        }
+    }
+
+    if (havePermissions)
+    {
         m_authenticated = true;
         emit authenticated();
+    }
+    else
+    {
+        startAuthentication(true);
     }
 }
 

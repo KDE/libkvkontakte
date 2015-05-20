@@ -57,6 +57,9 @@ void VkTestBase::authenticate()
 {
     m_vkapi = new KIPIVkontaktePlugin::VkApi(0);
     m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
+    m_vkapi->setRequiredPermissions(
+        Vkontakte::AppPermissions::Photos | Vkontakte::AppPermissions::Offline |
+        Vkontakte::AppPermissions::Notes | Vkontakte::AppPermissions::Messages);
 
     QString token = getSavedToken();
     if (!token.isEmpty())

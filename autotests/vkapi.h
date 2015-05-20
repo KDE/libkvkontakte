@@ -23,6 +23,8 @@
 #ifndef VKAPI_H
 #define VKAPI_H
 
+#include <libkvkontakte/apppermissions.h>
+
 // Qt includes
 
 #include <QObject>
@@ -43,6 +45,7 @@ public:
     ~VkApi();
 
     void setAppId(const QString& appId);
+    void setRequiredPermissions(Vkontakte::AppPermissions::Value permissions);
 
     void setInitialAccessToken(const QString& accessToken);
     QString accessToken() const;
@@ -64,8 +67,9 @@ protected Q_SLOTS:
 
 private:
 
-    QString  m_appId;
     QWidget* m_parent;
+    QString  m_appId;
+    Vkontakte::AppPermissions::Value m_requiredPermissions;
     QString  m_accessToken;
     bool     m_authenticated;
 };
