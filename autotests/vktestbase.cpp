@@ -28,7 +28,7 @@
 #define VK_APP_ID   "2446321"
 
 VkTestBase::VkTestBase()
-    : m_vkapi(0)
+    : m_vkapi(new KIPIVkontaktePlugin::VkApi(0))
 {
 }
 
@@ -55,7 +55,6 @@ QString VkTestBase::getSavedToken() const
 
 void VkTestBase::authenticate()
 {
-    m_vkapi = new KIPIVkontaktePlugin::VkApi(0);
     m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
     m_vkapi->setRequiredPermissions(
         Vkontakte::AppPermissions::Photos | Vkontakte::AppPermissions::Offline |
