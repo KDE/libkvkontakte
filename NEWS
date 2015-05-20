@@ -2,11 +2,33 @@
 libkvkontakte 4.11.0 - Release date: 2015-05-24
 
 NEW FEATURES:
+(none)
 
 BUGFIXES FROM KDE BUGZILLA:
 001 ==> 345358 - digiKam crash when vkontakte plugin failed to upload images
 
 OTHER CHANGES:
+001 ==> Deprecate class GetVariableJob, please use UserInfoJob instead
+002 ==> Add unit tests for UserInfoJob and UserInfoFullJob
+003 ==> Add unit tests for job classes working with photo albums
+004 ==> NotesListJob: Fix setting of user ID with current VK API version
+005 ==> Add unit tests for job classes working with notes
+006 ==> Follow VK API changes (renamed methods to database.get[...]ById)
+007 ==> Add unit tests for class CidsNamesJob
+008 ==> Add unit tests for classes GetApplicationPermissionsJob and GetVariableJob
+009 ==> Add unit tests for class FriendListJob
+010 ==> Add unit tests for job classes working with messages
+011 ==> Deprecate unused classes GetInfoJob and GroupListJob
+012 ==> Add unit tests for job classes working with photos
+013 ==> VkontakteJobs: Make more members private
+014 ==> Retry HTTP request after a delay on error "Too many requests per second"
+015 ==> Add unit test for uploading multiple photos in one UploadPhotosJob
+016 ==> Rewrite HTTP multipart request using QHttpMultiPart (the library is now technically LGPLv2)
+017 ==> Add unit test for UserInfoJob without the user_id argument
+018 ==> UserInfoJob: Use VK API method users.get instead of getProfiles
+019 ==> Unit tests: Verify that GetVariableJob returns the same info as UserInfoJob
+020 ==> Fix CMake warning regarding CMP0022
+021 ==> Use vk.com instead of vkontakte.ru everywhere
 
 *****************************************************************************************************
 libvkontakte 1.0.0 was not an exact version. The library was released as part
