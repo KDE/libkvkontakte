@@ -34,22 +34,22 @@
 namespace KIPIVkontaktePlugin
 {
 
-VkAPI::VkAPI(QWidget* const parent)
+VkApi::VkApi(QWidget* const parent)
     : m_parent(parent),
       m_authenticated(false)
 {
 }
 
-VkAPI::~VkAPI()
+VkApi::~VkApi()
 {
 }
 
-void VkAPI::setAppId(const QString &appId)
+void VkApi::setAppId(const QString &appId)
 {
     m_appId = appId;
 }
 
-void VkAPI::setInitialAccessToken(const QString& accessToken)
+void VkApi::setInitialAccessToken(const QString& accessToken)
 {
     // Does nothing if m_accessToken is already set, because this function
     // is only for parameter initialization from a configuration file.
@@ -57,12 +57,12 @@ void VkAPI::setInitialAccessToken(const QString& accessToken)
         m_accessToken = accessToken;
 }
 
-QString VkAPI::accessToken() const
+QString VkApi::accessToken() const
 {
     return m_accessToken;
 }
 
-void VkAPI::startAuthentication(bool forceLogout)
+void VkApi::startAuthentication(bool forceLogout)
 {
     if (forceLogout)
         m_accessToken.clear();
@@ -94,7 +94,7 @@ void VkAPI::startAuthentication(bool forceLogout)
     }
 }
 
-void VkAPI::slotApplicationPermissionCheckDone(KJob* kjob)
+void VkApi::slotApplicationPermissionCheckDone(KJob* kjob)
 {
     Vkontakte::GetApplicationPermissionsJob* const job = dynamic_cast<Vkontakte::GetApplicationPermissionsJob *>(kjob);
     Q_ASSERT(job);
@@ -110,14 +110,14 @@ void VkAPI::slotApplicationPermissionCheckDone(KJob* kjob)
     }
 }
 
-void VkAPI::slotAuthenticationDialogDone(const QString& accessToken)
+void VkApi::slotAuthenticationDialogDone(const QString& accessToken)
 {
     m_accessToken   = accessToken;
     m_authenticated = true;
     emit authenticated();
 }
 
-bool VkAPI::isAuthenticated()
+bool VkApi::isAuthenticated()
 {
     return m_authenticated;
 }

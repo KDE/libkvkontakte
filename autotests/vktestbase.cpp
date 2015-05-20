@@ -55,7 +55,7 @@ QString VkTestBase::getSavedToken() const
 
 void VkTestBase::authenticate()
 {
-    m_vkapi = new KIPIVkontaktePlugin::VkAPI(0);
+    m_vkapi = new KIPIVkontaktePlugin::VkApi(0);
     m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
 
     QString token = getSavedToken();

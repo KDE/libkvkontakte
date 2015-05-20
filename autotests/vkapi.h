@@ -33,14 +33,14 @@ class KJob;
 namespace KIPIVkontaktePlugin
 {
 
-class VkAPI : public QObject
+class VkApi : public QObject
 {
     Q_OBJECT
 
 public:
 
-    VkAPI(QWidget* const parent);
-    ~VkAPI();
+    VkApi(QWidget* const parent);
+    ~VkApi();
 
     void setAppId(const QString& appId);
 

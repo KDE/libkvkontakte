@@ -25,7 +25,7 @@
 #include <QtCore/QObject>
 
 namespace KIPIVkontaktePlugin {
-    class VkAPI;
+    class VkApi;
 }
 
 /*

@@ -24,7 +24,7 @@
 #include <QtCore/QVector>
 
 namespace KIPIVkontaktePlugin {
-    class VkAPI;
+    class VkApi;
 }
 
 class VkTestBase : public QObject
@@ -42,7 +42,7 @@ protected:
 private:
     QString getSavedToken() const;
 
-    KIPIVkontaktePlugin::VkAPI *m_vkapi;
+    KIPIVkontaktePlugin::VkApi *m_vkapi;
 };
 
 #endif // VKTESTBASE_H
