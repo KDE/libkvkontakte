@@ -38,7 +38,7 @@ TestAlbums::TestAlbums()
 
 void TestAlbums::initTestCase()
 {
-    authenticate();
+    authenticate(Vkontakte::AppPermissions::Photos);
 
     // Create albums for testing
     QList<QString> albumNames;

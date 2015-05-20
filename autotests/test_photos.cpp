@@ -41,7 +41,7 @@ TestPhotos::TestPhotos()
 
 void TestPhotos::initTestCase()
 {
-    authenticate();
+    authenticate(AppPermissions::Photos);
 
     // Create album for testing
     CreateAlbumJob* const albumJob = new CreateAlbumJob(

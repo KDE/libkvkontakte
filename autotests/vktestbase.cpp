@@ -53,12 +53,10 @@ QString VkTestBase::getSavedToken() const
     return line.trimmed();
 }
 
-void VkTestBase::authenticate()
+void VkTestBase::authenticate(Vkontakte::AppPermissions::Value permissions)
 {
     m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
-    m_vkapi->setRequiredPermissions(
-        Vkontakte::AppPermissions::Photos | Vkontakte::AppPermissions::Offline |
-        Vkontakte::AppPermissions::Notes | Vkontakte::AppPermissions::Messages);
+    m_vkapi->setRequiredPermissions(permissions);
 
     QString token = getSavedToken();
     if (!token.isEmpty())

@@ -20,6 +20,8 @@
 #ifndef VKTESTBASE_H
 #define VKTESTBASE_H
 
+#include <libkvkontakte/apppermissions.h>
+
 #include <QtCore/QObject>
 #include <QtCore/QVector>
 
@@ -36,7 +38,7 @@ public:
     ~VkTestBase();
 
 protected:
-    void authenticate();
+    void authenticate(Vkontakte::AppPermissions::Value permissions);
     QString accessToken() const;
 
 private:

@@ -34,7 +34,7 @@ TestFrequentRequests::TestFrequentRequests()
 
 void TestFrequentRequests::initTestCase()
 {
-    authenticate();
+    authenticate(Vkontakte::AppPermissions::NoPermissions);
 }
 
 void TestFrequentRequests::testUserInfoFullJob()

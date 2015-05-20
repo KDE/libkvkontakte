@@ -27,6 +27,10 @@
 
 using namespace Vkontakte;
 
+const AppPermissions::Value testPermissions =
+    AppPermissions::Photos | AppPermissions::Offline |
+    AppPermissions::Notes | AppPermissions::Messages;
+
 TestLoginProperties::TestLoginProperties()
     : VkTestBase()
 {
@@ -34,7 +38,7 @@ TestLoginProperties::TestLoginProperties()
 
 void TestLoginProperties::initTestCase()
 {
-    authenticate();
+    authenticate(testPermissions);
 }
 
 void TestLoginProperties::testGetApplicationPermissionsJob()
@@ -43,7 +47,7 @@ void TestLoginProperties::testGetApplicationPermissionsJob()
     job->exec();
     QVERIFY(!job->error());
 
-    QCOMPARE(job->permissions(), 71684);
+    QCOMPARE(job->permissions(), static_cast<int>(testPermissions));
 }
 
 void TestLoginProperties::testGetVariableJob()

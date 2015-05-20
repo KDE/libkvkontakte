@@ -34,7 +34,7 @@ TestMessages::TestMessages()
 
 void TestMessages::initTestCase()
 {
-    authenticate();
+    authenticate(AppPermissions::Messages);
 }
 
 void TestMessages::testMessagesListJob()

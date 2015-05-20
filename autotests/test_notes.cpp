@@ -38,7 +38,7 @@ TestNotes::TestNotes()
 
 void TestNotes::initTestCase()
 {
-    authenticate();
+    authenticate(AppPermissions::Notes);
 
     // Create notes for testing
     QList<QString> noteNames;

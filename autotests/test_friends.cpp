@@ -32,7 +32,7 @@ TestFriends::TestFriends()
 
 void TestFriends::initTestCase()
 {
-    authenticate();
+    authenticate(Vkontakte::AppPermissions::NoPermissions);
 }
 
 void TestFriends::testFriendListJob()

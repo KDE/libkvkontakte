@@ -34,7 +34,7 @@ TestUserInfo::TestUserInfo()
 
 void TestUserInfo::initTestCase()
 {
-    authenticate();
+    authenticate(AppPermissions::NoPermissions);
 }
 
 void TestUserInfo::testUserInfoJob()
