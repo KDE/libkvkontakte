@@ -104,6 +104,7 @@ if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
         photolistjob.h
         groupinfo.h
         grouplistjob.h
+        apppermissions.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
 
 endif()

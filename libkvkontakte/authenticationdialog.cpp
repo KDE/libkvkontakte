@@ -21,6 +21,8 @@
 
 #include "authenticationdialog.moc"
 
+#include "util.h"
+
 #include <KLocalizedString>
 #include <KWebView>
 #include <KMessageBox>
@@ -37,7 +39,7 @@ class AuthenticationDialog::Private
 {
 public:
     QString appId;
-    QStringList permissions;
+    Vkontakte::AppPermissions::Value permissions;
     QString displayMode;
 
     KWebView *webView;
@@ -95,6 +97,11 @@ void AuthenticationDialog::setAppId(const QString &appId)
 
 void AuthenticationDialog::setPermissions(const QStringList &permissions)
 {
+    setPermissions(appPermissionsFromStringList(permissions));
+}
+
+void Vkontakte::AuthenticationDialog::setPermissions(Vkontakte::AppPermissions::Value permissions)
+{
     d->permissions = permissions;
 }
 
@@ -115,7 +122,7 @@ void AuthenticationDialog::start()
                                 "display=%3&"
                                 "response_type=token")
                                 .arg(d->appId)
-                                .arg(d->permissions.join(","))
+                                .arg(appPermissionsToStringList(d->permissions).join(","))
                                 .arg(d->displayMode);
     kDebug() << "Showing" << url;
     d->webView->setUrl(QUrl::fromUserInput(url));

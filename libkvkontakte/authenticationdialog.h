@@ -22,6 +22,8 @@
 #ifndef AUTHENTICATIONDIALOG_H
 #define AUTHENTICATIONDIALOG_H
 
+#include <libkvkontakte/apppermissions.h>
+
 #include <KDE/KDialog>
 
 #include "libkvkontakte_export.h"
@@ -37,7 +39,8 @@ public:
     ~AuthenticationDialog();
 
     void setAppId(const QString &appId);
-    void setPermissions(const QStringList &permissions);
+    void Q_DECL_DEPRECATED setPermissions(const QStringList &permissions);
+    void setPermissions(Vkontakte::AppPermissions::Value permissions);
     void setDisplayMode(const QString &displayMode);
     void start();
 
