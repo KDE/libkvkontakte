@@ -34,13 +34,24 @@
 namespace KIPIVkontaktePlugin
 {
 
-VkApi::VkApi(QWidget* const parent)
-    : m_parent(parent)
-    , m_appId()
-    , m_requiredPermissions(Vkontakte::AppPermissions::NoPermissions)
-    , m_accessToken()
-    , m_authenticated(false)
+class VkApi::Private
 {
+public:
+    QWidget* parent;
+    QString appId;
+    Vkontakte::AppPermissions::Value requiredPermissions;
+    QString accessToken;
+    bool authenticated;
+};
+
+VkApi::VkApi(QWidget* const parent)
+    : d(new Private)
+{
+    d->parent = parent;
+    d->appId = QString();
+    d->requiredPermissions = Vkontakte::AppPermissions::NoPermissions;
+    d->accessToken = QString();
+    d->authenticated = false;
 }
 
 VkApi::~VkApi()
@@ -49,35 +60,35 @@ VkApi::~VkApi()
 
 void VkApi::setAppId(const QString &appId)
 {
-    m_appId = appId;
+    d->appId = appId;
 }
 
 void VkApi::setRequiredPermissions(Vkontakte::AppPermissions::Value permissions)
 {
-    m_requiredPermissions = permissions;
+    d->requiredPermissions = permissions;
 }
 
 void VkApi::setInitialAccessToken(const QString& accessToken)
 {
     // Does nothing if m_accessToken is already set, because this function
     // is only for parameter initialization from a configuration file.
-    if (m_accessToken.isEmpty())
-        m_accessToken = accessToken;
+    if (d->accessToken.isEmpty())
+        d->accessToken = accessToken;
 }
 
 QString VkApi::accessToken() const
 {
-    return m_accessToken;
+    return d->accessToken;
 }
 
 void VkApi::startAuthentication(bool forceLogout)
 {
     if (forceLogout)
-        m_accessToken.clear();
+        d->accessToken.clear();
 
-    if (!m_accessToken.isEmpty())
+    if (!d->accessToken.isEmpty())
     {
-        Vkontakte::GetApplicationPermissionsJob* const job = new Vkontakte::GetApplicationPermissionsJob(m_accessToken);
+        Vkontakte::GetApplicationPermissionsJob* const job = new Vkontakte::GetApplicationPermissionsJob(d->accessToken);
 
         connect(job, SIGNAL(result(KJob*)),
                 this, SLOT(slotApplicationPermissionCheckDone(KJob*)));
@@ -86,9 +97,9 @@ void VkApi::startAuthentication(bool forceLogout)
     }
     else
     {
-        QPointer<Vkontakte::AuthenticationDialog> authDialog = new Vkontakte::AuthenticationDialog(m_parent);
-        authDialog->setAppId(m_appId);
-        authDialog->setPermissions(m_requiredPermissions);
+        QPointer<Vkontakte::AuthenticationDialog> authDialog = new Vkontakte::AuthenticationDialog(d->parent);
+        authDialog->setAppId(d->appId);
+        authDialog->setPermissions(d->requiredPermissions);
 
         connect(authDialog, SIGNAL(authenticated(QString)),
                 this, SLOT(slotAuthenticationDialogDone(QString)));
@@ -116,7 +127,7 @@ void VkApi::slotApplicationPermissionCheckDone(KJob* kjob)
         Vkontakte::AppPermissions::Value availablePermissions =
             static_cast<Vkontakte::AppPermissions::Value>(job->permissions());
 
-        if ((availablePermissions & m_requiredPermissions) != m_requiredPermissions)
+        if ((availablePermissions & d->requiredPermissions) != d->requiredPermissions)
         {
             // Existing permissions are not enough, need to request more permissions
             havePermissions = false;
@@ -125,7 +136,7 @@ void VkApi::slotApplicationPermissionCheckDone(KJob* kjob)
 
     if (havePermissions)
     {
-        m_authenticated = true;
+        d->authenticated = true;
         emit authenticated();
     }
     else
@@ -136,14 +147,14 @@ void VkApi::slotApplicationPermissionCheckDone(KJob* kjob)
 
 void VkApi::slotAuthenticationDialogDone(const QString& accessToken)
 {
-    m_accessToken   = accessToken;
-    m_authenticated = true;
+    d->accessToken   = accessToken;
+    d->authenticated = true;
     emit authenticated();
 }
 
 bool VkApi::isAuthenticated()
 {
-    return m_authenticated;
+    return d->authenticated;
 }
 
 } // namespace KIPIVkontaktePlugin

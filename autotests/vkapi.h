@@ -40,7 +40,6 @@ class VkApi : public QObject
     Q_OBJECT
 
 public:
-
     VkApi(QWidget* const parent);
     ~VkApi();
 
@@ -50,28 +49,20 @@ public:
     void setInitialAccessToken(const QString& accessToken);
     QString accessToken() const;
 
-    // authentication
     void startAuthentication(bool forceLogout);
     bool isAuthenticated();
 
 Q_SIGNALS:
-
     void authenticated();
     void canceled();
 
 protected Q_SLOTS:
-
-    // authentication
     void slotApplicationPermissionCheckDone(KJob* kjob);
     void slotAuthenticationDialogDone(const QString& accessToken);
 
 private:
-
-    QWidget* m_parent;
-    QString  m_appId;
-    Vkontakte::AppPermissions::Value m_requiredPermissions;
-    QString  m_accessToken;
-    bool     m_authenticated;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KIPIVkontaktePlugin
