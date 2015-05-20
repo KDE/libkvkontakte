@@ -18,7 +18,8 @@
  */
 
 #include "vktestbase.h"
-#include "vkapi.h"
+
+#include <libkvkontakte/vkapi.h>
 
 #include <QtCore/QEventLoop>
 #include <QtCore/QFile>
@@ -28,7 +29,7 @@
 #define VK_APP_ID   "2446321"
 
 VkTestBase::VkTestBase()
-    : m_vkapi(new KIPIVkontaktePlugin::VkApi(0))
+    : m_vkapi(new Vkontakte::VkApi(0))
 {
 }
 

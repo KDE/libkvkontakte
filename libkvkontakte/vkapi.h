@@ -29,13 +29,15 @@
 
 #include <QObject>
 
+#include "libkvkontakte_export.h"
+
 class QWidget;
 class KJob;
 
-namespace KIPIVkontaktePlugin
+namespace Vkontakte
 {
 
-class VkApi : public QObject
+class LIBKVKONTAKTE_EXPORT VkApi : public QObject
 {
     Q_OBJECT
 
@@ -65,6 +67,6 @@ private:
     Private * const d;
 };
 
-} // namespace KIPIVkontaktePlugin
+} // namespace Vkontakte
 
 #endif // VKAPI_H

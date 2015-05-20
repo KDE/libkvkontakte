@@ -31,7 +31,7 @@
 #include <libkvkontakte/authenticationdialog.h>
 #include <libkvkontakte/getapplicationpermissionsjob.h>
 
-namespace KIPIVkontaktePlugin
+namespace Vkontakte
 {
 
 class VkApi::Private
@@ -157,4 +157,4 @@ bool VkApi::isAuthenticated()
     return d->authenticated;
 }
 
-} // namespace KIPIVkontaktePlugin
+} // namespace Vkontakte

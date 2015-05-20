@@ -35,6 +35,7 @@ set(libkvkontakte_SRCS
     qintlist.cpp
     util.cpp
     vkontaktejobs.cpp
+    vkapi.cpp
 )
 
 kde4_add_library(kvkontakte SHARED ${libkvkontakte_SRCS})
@@ -105,6 +106,7 @@ if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
         groupinfo.h
         grouplistjob.h
         apppermissions.h
+        vkapi.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
 
 endif()
