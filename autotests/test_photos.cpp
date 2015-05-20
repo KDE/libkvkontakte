@@ -18,7 +18,6 @@
  */
 
 #include "test_photos.h"
-#include "autotestsconfig.h"
 
 #include <libkvkontakte/uploadphotosjob.h>
 #include <libkvkontakte/photolistjob.h>
