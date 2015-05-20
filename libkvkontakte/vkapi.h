@@ -37,6 +37,12 @@ class KJob;
 namespace Vkontakte
 {
 
+/**
+ * @brief Authentication manager for libkvkontakte
+ *
+ * This is a handy interface on top of Vkontakte::AuthenticationDialog
+ * to request authentication on demand and store the API token for later use.
+ */
 class LIBKVKONTAKTE_EXPORT VkApi : public QObject
 {
     Q_OBJECT
@@ -45,10 +51,30 @@ public:
     VkApi(QWidget* const parent);
     ~VkApi();
 
+    /**
+     * @brief Initialize app ID.
+     *
+     * @param appId VK application ID for authentication requests.
+     */
     void setAppId(const QString& appId);
+
+    /**
+     * @brief Set app permissions to request during authentication.
+     *
+     * @param permissions Any combination of AppPermissions::*, use bitwise OR to combine them
+     */
     void setRequiredPermissions(Vkontakte::AppPermissions::Value permissions);
 
+    /**
+     * @brief Set initial access token.
+     *
+     * If an initial access token was set with this method, then before the
+     * normal authentication process VkApi::startAuthentication() will first try
+     * to reuse the given token in order to cut down the number of times the
+     * authentication dialog is opened.
+     */
     void setInitialAccessToken(const QString& accessToken);
+
     QString accessToken() const;
 
     void startAuthentication(bool forceLogout);
