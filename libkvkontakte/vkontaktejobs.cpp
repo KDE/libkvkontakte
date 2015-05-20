@@ -106,7 +106,11 @@ KJob* VkontakteJob::createHttpJob()
     prepareQueryItems();
     foreach(const QueryItem &item, m_queryItems)
         url.addQueryItem(item.first, item.second);
-    url.addQueryItem("access_token", m_accessToken);
+
+    if (!m_accessToken.isEmpty())
+    {
+        url.addQueryItem("access_token", m_accessToken);
+    }
 
     // TODO: Save KUrl to reuse it if we need to retry the HTTP request
 //     m_url = url;
