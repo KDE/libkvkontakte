@@ -32,13 +32,12 @@ TestDatabaseMethods::TestDatabaseMethods()
 
 void TestDatabaseMethods::initTestCase()
 {
-    authenticate();
 }
 
 void TestDatabaseMethods::testCountriesById()
 {
     CidsNamesJob* const job = new CidsNamesJob(
-        "database.getCountriesById", accessToken(), QIntList() << 1 << 2 << 3);
+        "database.getCountriesById", QString(), QIntList() << 1 << 2 << 3);
     job->exec();
     QVERIFY(!job->error());
 
@@ -52,7 +51,7 @@ void TestDatabaseMethods::testCountriesById()
 void TestDatabaseMethods::testCitiesById()
 {
     CidsNamesJob* const job = new CidsNamesJob(
-        "database.getCitiesById", accessToken(), QIntList() << 1 << 2 << 4);
+        "database.getCitiesById", QString(), QIntList() << 1 << 2 << 4);
     job->exec();
     QVERIFY(!job->error());
 
