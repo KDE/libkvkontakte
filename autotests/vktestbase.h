@@ -33,6 +33,7 @@ class VkTestBase : public QObject
 
 public:
     VkTestBase();
+    ~VkTestBase();
 
 protected:
     void authenticate();

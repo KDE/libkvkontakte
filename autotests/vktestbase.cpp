@@ -32,6 +32,14 @@ VkTestBase::VkTestBase()
 {
 }
 
+VkTestBase::~VkTestBase()
+{
+    if (m_vkapi)
+    {
+        delete m_vkapi;
+    }
+}
+
 QString VkTestBase::getSavedToken() const
 {
     QFile file(AUTOTESTS_API_TOKEN_PATH);
