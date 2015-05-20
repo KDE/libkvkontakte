@@ -1,0 +1,4 @@
+LibKVkontakte is a Qt4/KDELibs4-based C++ library implementing job classes for
+asynchronous interation with the VK social networking site (vk.com).
+
+Wiki page: https://community.kde.org/LibKVkontakte
