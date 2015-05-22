@@ -24,7 +24,7 @@
 
 // Qt includes
 
-#include <QPointer>
+#include <QtCore/QPointer>
 
 // LibKvkontakte includes
 
