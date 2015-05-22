@@ -63,4 +63,3 @@ void TestDatabaseMethods::testCitiesById()
 }
 
 QTEST_KDEMAIN(TestDatabaseMethods, GUI)
-#include "test_database.moc"

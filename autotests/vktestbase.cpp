@@ -80,5 +80,3 @@ QString VkTestBase::accessToken() const
 {
     return m_vkapi->accessToken();
 }
-
-#include "vktestbase.moc"

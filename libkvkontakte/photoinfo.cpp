@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "photoinfo.moc"
+#include "photoinfo.h"
 #include "util.h"
 
 #include <KLocalizedString>

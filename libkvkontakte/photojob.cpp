@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "photojob.moc"
+#include "photojob.h"
 
 #include <KIO/Job>
 #include <KDebug>

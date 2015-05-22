@@ -106,4 +106,3 @@ void TestUserInfo::testUserInfoFullJob()
 }
 
 QTEST_KDEMAIN(TestUserInfo, GUI)
-#include "test_userinfo.moc"

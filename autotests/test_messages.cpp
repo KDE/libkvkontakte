@@ -59,4 +59,3 @@ void TestMessages::testDiscussionsListJob()
 }
 
 QTEST_KDEMAIN(TestMessages, GUI)
-#include "test_messages.moc"

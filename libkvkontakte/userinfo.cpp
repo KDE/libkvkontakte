@@ -19,7 +19,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "userinfo.moc"
+#include "userinfo.h"
 #include "util.h"
 
 #include <QtCore/QStringList>

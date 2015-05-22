@@ -124,4 +124,3 @@ void TestAlbums::testDeleteJob()
 }
 
 QTEST_KDEMAIN(TestAlbums, GUI)
-#include "test_albums.moc"

@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "userinfofulljob.moc"
+#include "userinfofulljob.h"
 #include "userinfojob.h"
 #include "cidsnamesjob.h"
 

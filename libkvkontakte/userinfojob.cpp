@@ -19,7 +19,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "userinfojob.moc"
+#include "userinfojob.h"
 
 #include <qjson/qobjecthelper.h>
 #include <KIO/Job>

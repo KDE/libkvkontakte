@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "albuminfo.moc"
+#include "albuminfo.h"
 #include "util.h"
 
 namespace Vkontakte

@@ -80,4 +80,3 @@ void TestLoginProperties::testGetVariableJob()
 }
 
 QTEST_KDEMAIN(TestLoginProperties, GUI)
-#include "test_loginproperties.moc"

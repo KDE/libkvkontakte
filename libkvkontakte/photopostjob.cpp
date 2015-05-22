@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "photopostjob.moc"
+#include "photopostjob.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>

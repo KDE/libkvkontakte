@@ -108,4 +108,3 @@ void TestPhotos::testUploadMultiple()
 }
 
 QTEST_KDEMAIN(TestPhotos, GUI)
-#include "test_photos.moc"

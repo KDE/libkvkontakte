@@ -94,4 +94,3 @@ void TestNotes::testNoteJob()
 }
 
 QTEST_KDEMAIN(TestNotes, GUI)
-#include "test_notes.moc"

@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "messageinfo.moc"
+#include "messageinfo.h"
 #include "util.h"
 
 #include <QtCore/QRegExp>

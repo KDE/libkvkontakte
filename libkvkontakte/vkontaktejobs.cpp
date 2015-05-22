@@ -20,7 +20,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "vkontaktejobs.moc"
+#include "vkontaktejobs.h"
 
 #include <QtCore/QTimer>
 #include <qjson/parser.h>

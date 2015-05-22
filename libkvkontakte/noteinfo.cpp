@@ -19,7 +19,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "noteinfo.moc"
+#include "noteinfo.h"
 #include "util.h"
 
 #include <KLocalizedString>

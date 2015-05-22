@@ -50,4 +50,3 @@ void TestFrequentRequests::testUserInfoFullJob()
 }
 
 QTEST_KDEMAIN(TestFrequentRequests, GUI)
-#include "test_frequentrequests.moc"
