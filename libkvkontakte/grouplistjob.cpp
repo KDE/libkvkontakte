@@ -22,9 +22,6 @@
 #include "grouplistjob.moc"
 
 #include <qjson/qobjecthelper.h>
-//#include <KIO/Job>
-//#include <KDebug>
-//#include <KLocale>
 
 namespace Vkontakte
 {
