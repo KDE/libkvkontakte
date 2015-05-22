@@ -60,7 +60,7 @@ void TestLoginProperties::testGetVariableJob()
     QList<UserInfoPtr> res = job->userInfo();
     QCOMPARE(res.size(), 1);
 
-    UserInfoPtr user = res.first();
+    const UserInfoPtr user = res.at(0);
 
     // Test GetVariableJob
     foreach (int index, QList<int>() << 1280 << 1281) {

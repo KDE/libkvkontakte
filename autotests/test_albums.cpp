@@ -92,7 +92,7 @@ void TestAlbums::testEditJob()
     QList<AlbumInfoPtr> list = listJob->list();
     QCOMPARE(list.size(), 1);
 
-    AlbumInfoPtr album = list.first();
+    const AlbumInfoPtr album = list.at(0);
     QCOMPARE(album->aid(), albumId);
     QCOMPARE(album->title(), newTitle);
     QCOMPARE(album->description(), newDescription);

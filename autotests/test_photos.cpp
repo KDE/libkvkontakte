@@ -63,7 +63,7 @@ void TestPhotos::initTestCase()
     QList<PhotoInfoPtr> list = job->list();
     QCOMPARE(list.size(), 1);
 
-    PhotoInfoPtr photo = list.first();
+    const PhotoInfoPtr photo = list.at(0);
     m_photoId = photo->pid();
 }
 
@@ -77,7 +77,7 @@ void TestPhotos::testPhotoListJob()
     QList<PhotoInfoPtr> list = job->list();
     QCOMPARE(list.size(), 1);
 
-    PhotoInfoPtr photo = list.first();
+    const PhotoInfoPtr photo = list.at(0);
     QCOMPARE(photo->pid(), m_photoId);
 
     // Download the image

@@ -47,7 +47,7 @@ void TestUserInfo::testUserInfoJob()
     QList<UserInfoPtr> res = job->userInfo();
     QCOMPARE(res.size(), 1);
 
-    UserInfoPtr user = res.first();
+    const UserInfoPtr user = res.at(0);
     QCOMPARE(user->uid(), 1);
     QCOMPARE(user->firstName(), QString::fromUtf8("Павел"));
     QCOMPARE(user->lastName(), QString::fromUtf8("Дуров"));
@@ -81,7 +81,7 @@ void TestUserInfo::testSelfUserInfoJob()
     QList<UserInfoPtr> res = job->userInfo();
     QCOMPARE(res.size(), 1);
 
-    UserInfoPtr user = res.first();
+    const UserInfoPtr user = res.at(0);
     QVERIFY(user->uid() > 0);
     QVERIFY(!user->domain().isEmpty());
     // Timezone is returned only for the current user
@@ -98,7 +98,7 @@ void TestUserInfo::testUserInfoFullJob()
     QList<UserInfoPtr> res = job->userInfo();
     QCOMPARE(res.size(), 1);
 
-    UserInfoPtr user = res.first();
+    const UserInfoPtr user = res.at(0);
     QCOMPARE(user->domain(), QString("durov"));
     QCOMPARE(user->firstName(), QString::fromUtf8("Павел"));
     QCOMPARE(user->countryString(), QString::fromUtf8("Россия"));
