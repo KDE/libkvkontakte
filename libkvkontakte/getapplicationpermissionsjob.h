@@ -35,7 +35,7 @@ public:
     int permissions() const;
 
 protected:
-    virtual void handleData(const QVariant &data);
+    virtual void handleData(const QJsonValue &data);
 
 private:
     class Private;

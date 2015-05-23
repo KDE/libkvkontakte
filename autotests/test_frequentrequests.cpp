@@ -19,11 +19,9 @@
 
 #include "test_frequentrequests.h"
 
-#include <libkvkontakte/userinfofulljob.h>
+#include <libkvkontakte/userinfojob.h>
 
-#include <qtest_kde.h>
-
-#include <QtCore/QList>
+#include <QtTest/QtTest>
 
 using namespace Vkontakte;
 
@@ -37,16 +35,16 @@ void TestFrequentRequests::initTestCase()
     authenticate(Vkontakte::AppPermissions::NoPermissions);
 }
 
-void TestFrequentRequests::testUserInfoFullJob()
+void TestFrequentRequests::testUserInfoJob()
 {
     // Send 20 requests without delays
     for (int i = 0; i < 20; ++i)
     {
-        Vkontakte::UserInfoFullJob* const job = new Vkontakte::UserInfoFullJob(
-            accessToken(), 1, true, true);
+        Vkontakte::UserInfoJob* const job = new Vkontakte::UserInfoJob(
+            accessToken(), 1);
         job->exec();
         QVERIFY(!job->error());
     }
 }
 
-QTEST_KDEMAIN(TestFrequentRequests, GUI)
+QTEST_MAIN(TestFrequentRequests)

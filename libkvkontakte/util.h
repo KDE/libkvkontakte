@@ -25,16 +25,15 @@
 
 #include <libkvkontakte/apppermissions.h>
 
-#include <KDE/KDateTime>
-
 #include <QStringList>
 
 /**
  * Convert a QString containing a UNIX timestamp to a KDateTime object
  */
-KDateTime unixTimeToKDateTime(const QString &unixTime);
+// KDateTime unixTimeToKDateTime(const QString &unixTime);
 
 QStringList appPermissionsToStringList(Vkontakte::AppPermissions::Value permissions);
-Vkontakte::AppPermissions::Value appPermissionsFromStringList(QStringList permissions);
+
+QString joinIntegers(const QList<int> &list);
 
 #endif // UTIL_H

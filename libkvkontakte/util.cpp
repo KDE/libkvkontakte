@@ -21,19 +21,15 @@
 
 #include "util.h"
 
-#include <kdeversion.h>
+#include <QtCore/QString>
+#include <QtCore/QMap>
 
-#if KDE_IS_VERSION(4,6,2)
-#include <KDE/KGlobal>
-static const KCatalogLoader loader("libkvkontakte");
-#endif
-
-KDateTime unixTimeToKDateTime(const QString &unixTime)
-{
-    KDateTime res;
-    res.setTime_t(unixTime.toLongLong());
-    return res;
-}
+// KDateTime unixTimeToKDateTime(const QString &unixTime)
+// {
+//     KDateTime res;
+//     res.setTime_t(unixTime.toLongLong());
+//     return res;
+// }
 
 static QMap<Vkontakte::AppPermissions::Value, QString> initAppPermissionStrings()
 {
@@ -82,15 +78,17 @@ QStringList appPermissionsToStringList(Vkontakte::AppPermissions::Value permissi
     return res;
 }
 
-// TODO: remove this function after AuthenticationDialog::setPermissions(QStringList) is removed
-Vkontakte::AppPermissions::Value appPermissionsFromStringList(QStringList permissions)
+QString joinIntegers(const QList<int> &list)
 {
-    Vkontakte::AppPermissions::Value res;
-
-    foreach (Vkontakte::AppPermissions::Value key, appPermissionToString.keys()) {
-        if (permissions.contains(appPermissionToString.value(key))) {
-            res |= key;
+    QString res;
+    foreach (int x, list)
+    {
+        if (!res.isEmpty())
+        {
+            res += ',';
         }
+
+        res += QString::number(x);
     }
 
     return res;

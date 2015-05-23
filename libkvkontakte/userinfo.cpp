@@ -23,401 +23,79 @@
 #include "util.h"
 
 #include <QtCore/QStringList>
-#include <KDebug>
 
 namespace Vkontakte
 {
 
-class UserInfo::Private
+class UserInfo::Private : public QSharedData
 {
 public:
-    int uid; // this could be an integer, but what if something will change?..
-    QString firstName;
-    QString lastName;
-
-    QString nickName;
-
-    int sex;
-
-    bool online;
-
-    QDate birthday;
-
-    int city;
-    QString cityString;
-
-    int country;
-    QString countryString;
-
-    QString photo;
-    QString photoMedium;
-    QString photoMediumRec;
-    QString photoBig;
-    QString photoRec;
-
-    QString domain; // domain / screen_name
-
-    bool hasMobile;
-
-    int rate;
-
-    QString homePhone;
-    QString mobilePhone;
-
-    int university;
-    QString universityName;
-    int faculty;
-    QString facultyName;
-    int graduation; // graduation year
-
-    bool canPost;
-    bool canWritePrivateMessage;
-
-    QVariantMap counters; // TODO: split into a few integers? Use "QMap<QString, int>"?
-
-    int timezone;
+    QJsonObject jsonData;
 };
 
 UserInfo::UserInfo()
     : d(new Private)
 {
-    d->uid = -1;
-    d->sex = -1;
-    d->online = false;
-    d->city = -1;
-    d->country = -1;
-    d->hasMobile = false;
-    d->rate = -1;
-    d->university = -1;
-    d->faculty = -1;
-    d->graduation = -1;
-    d->canPost = false;
-    d->canWritePrivateMessage = false;
-    d->timezone = INVALID_TIMEZONE;
+}
+
+UserInfo::UserInfo(const QJsonObject &jsonData)
+    : d(new Private)
+{
+    d->jsonData = jsonData;
+}
+
+UserInfo::UserInfo(const UserInfo &other)
+{
+    d = other.d;
 }
 
 UserInfo::~UserInfo()
 {
-    delete d;
 }
 
-void UserInfo::setUid(int uid)
+UserInfo &UserInfo::operator=(const UserInfo &other)
 {
-    d->uid = uid;
+    if (this != &other)
+    {
+        d = other.d;
+    }
+
+    return *this;
 }
 
-int UserInfo::uid() const
+int UserInfo::userId() const
 {
-    return d->uid;
-}
-
-void UserInfo::setFirstName(const QString &firstName)
-{
-    d->firstName = firstName;
+    return d->jsonData.value(QStringLiteral("uid")).toInt(-1);
 }
 
 QString UserInfo::firstName() const
 {
-    return d->firstName;
-}
-
-void UserInfo::setLastName(const QString &lastName)
-{
-    d->lastName = lastName;
+    return d->jsonData.value(QStringLiteral("first_name")).toString();
 }
 
 QString UserInfo::lastName() const
 {
-    return d->lastName;
-}
-
-void UserInfo::setNickName(const QString& nickName)
-{
-    d->nickName = nickName;
+    return d->jsonData.value(QStringLiteral("last_name")).toString();
 }
 
 QString UserInfo::nickName() const
 {
-    return d->nickName;
-}
-
-void UserInfo::setSex(int sex)
-{
-    d->sex = sex;
-}
-
-int UserInfo::sex() const
-{
-    return d->sex;
-}
-
-void UserInfo::setOnline(bool online)
-{
-    d->online = online;
-}
-
-bool UserInfo::online() const
-{
-    return d->online;
-}
-
-// "[day].[month].[year]" or "[day].[month]"
-void UserInfo::setBirthday(const QString &birthday)
-{
-    d->birthday = QDate::fromString(birthday, "dd.MM.yyyy");
-    if (!d->birthday.isValid())
-    {
-        // Some users don't tell the year of their birthday.
-        d->birthday = QDate::fromString(birthday + ".0001", "dd.MM.yyyy");
-    }
-}
-
-QString UserInfo::birthdayAsString() const
-{
-    return d->birthday.toString();
-}
-
-QDate UserInfo::birthday() const
-{
-    return d->birthday;
-}
-
-void UserInfo::setCity(int city)
-{
-    d->city = city;
-}
-
-int UserInfo::city() const
-{
-    return d->city;
-}
-
-void UserInfo::setCityString(const QString &cityString)
-{
-    d->cityString = cityString;
-}
-
-QString UserInfo::cityString() const
-{
-    return d->cityString;
-}
-
-void UserInfo::setCountry(int country)
-{
-    d->country = country;
-}
-
-int UserInfo::country() const
-{
-    return d->country;
-}
-
-void UserInfo::setCountryString(const QString &countryString)
-{
-    d->countryString = countryString;
-}
-
-QString UserInfo::countryString() const
-{
-    return d->countryString;
-}
-
-void UserInfo::setPhoto(const QString &photo)
-{
-    d->photo = photo;
-}
-
-QString UserInfo::photo() const
-{
-    return d->photo;
-}
-
-void UserInfo::setPhotoMedium(const QString &photoMedium)
-{
-    d->photoMedium = photoMedium;
-}
-
-QString UserInfo::photoMedium() const
-{
-    return d->photoMedium;
-}
-
-void UserInfo::setPhotoMediumRec(const QString &photoMediumRec)
-{
-    d->photoMediumRec = photoMediumRec;
-}
-
-QString UserInfo::photoMediumRec() const
-{
-    return d->photoMediumRec;
-}
-
-void UserInfo::setPhotoBig(const QString &photoBig)
-{
-    d->photoBig = photoBig;
-}
-
-QString UserInfo::photoBig() const
-{
-    return d->photoBig;
-}
-
-void UserInfo::setPhotoRec(const QString &photoRec)
-{
-    d->photoRec = photoRec;
-}
-
-QString UserInfo::photoRec() const
-{
-    return d->photoRec;
-}
-
-void UserInfo::setDomain(const QString &domain)
-{
-    d->domain = domain;
+    return d->jsonData.value(QStringLiteral("nick_name")).toString();
 }
 
 QString UserInfo::domain() const
 {
-    return d->domain;
+    return d->jsonData.value(QStringLiteral("domain")).toString();
 }
 
-void UserInfo::setHasMobile(bool hasMobile)
+int UserInfo::sex() const
 {
-    d->hasMobile = hasMobile;
+    return d->jsonData.value(QStringLiteral("sex")).toInt(-1);
 }
 
-bool UserInfo::hasMobile() const
+bool UserInfo::online() const
 {
-    return d->hasMobile;
-}
-
-void UserInfo::setRate(int rate)
-{
-    d->rate = rate;
-}
-
-int UserInfo::rate() const
-{
-    return d->rate;
-}
-
-void UserInfo::setHomePhone(const QString &homePhone)
-{
-    d->homePhone = homePhone;
-}
-
-QString UserInfo::homePhone() const
-{
-    return d->homePhone;
-}
-
-void UserInfo::setMobilePhone(const QString &mobilePhone)
-{
-    d->mobilePhone = mobilePhone;
-}
-
-QString UserInfo::mobilePhone() const
-{
-    return d->mobilePhone;
-}
-
-void UserInfo::setUniversity(int university)
-{
-    d->university = university;
-}
-
-int UserInfo::university() const
-{
-    return d->university;
-}
-
-void UserInfo::setUniversityName(const QString &universityName)
-{
-    d->universityName = universityName;
-}
-
-QString UserInfo::universityName() const
-{
-    return d->universityName;
-}
-
-void UserInfo::setFaculty(int faculty)
-{
-    d->faculty = faculty;
-}
-
-int UserInfo::faculty() const
-{
-    return d->faculty;
-}
-
-void UserInfo::setFacultyName(const QString &facultyName)
-{
-    d->facultyName = facultyName;
-}
-
-QString UserInfo::facultyName() const
-{
-    return d->facultyName;
-}
-
-void UserInfo::setGraduation(int graduation)
-{
-    d->graduation = graduation;
-}
-
-int UserInfo::graduation() const
-{
-    return d->graduation;
-}
-
-void UserInfo::setCanPost(bool canPost)
-{
-    d->canPost = canPost;
-}
-
-bool UserInfo::canPost() const
-{
-    return d->canPost;
-}
-
-void UserInfo::setCanWritePrivateMessage(bool canWritePrivateMessage)
-{
-    d->canWritePrivateMessage = canWritePrivateMessage;
-}
-
-bool UserInfo::canWritePrivateMessage() const
-{
-    return d->canWritePrivateMessage;
-}
-
-void UserInfo::setCounters(const QVariantMap &counters)
-{
-    d->counters = counters;
-}
-
-QVariantMap UserInfo::counters() const
-{
-    return d->counters;
-}
-
-void UserInfo::setTimezone(int timezone)
-{
-    d->timezone = timezone;
-}
-
-int UserInfo::timezone() const
-{
-    return d->timezone;
-}
-
-QString UserInfo::profileUrl() const
-{
-    if (domain().isEmpty())
-        return QString("http://vk.com/id") + QString::number(uid());
-    else
-        return QString("http://vk.com/") + domain();
+    return d->jsonData.value(QStringLiteral("online")).toBool(false);
 }
 
 // static

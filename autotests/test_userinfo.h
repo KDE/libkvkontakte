@@ -31,7 +31,6 @@ namespace KIPIVkontaktePlugin {
 /*
  * What is tested here:
  *   class UserInfoJob
- *   class UserInfoFullJob
  */
 class TestUserInfo : public VkTestBase
 {
@@ -45,7 +44,6 @@ private Q_SLOTS:
 
     void testUserInfoJob();
     void testSelfUserInfoJob();
-    void testUserInfoFullJob();
 };
 
 #endif // TEST_USERINFO_H

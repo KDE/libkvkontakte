@@ -42,7 +42,7 @@ public:
 private Q_SLOTS:
     void initTestCase();
 
-    void testUserInfoFullJob();
+    void testUserInfoJob();
 };
 
 #endif // TEST_FREQUENTREQUESTS_H

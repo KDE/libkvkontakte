@@ -21,6 +21,7 @@
 #include "getapplicationpermissionsjob.h"
 
 #include <QtCore/QVariant>
+#include <QtCore/QJsonValue>
 
 namespace Vkontakte
 {
@@ -44,9 +45,11 @@ GetApplicationPermissionsJob::~GetApplicationPermissionsJob()
     delete d;
 }
 
-void GetApplicationPermissionsJob::handleData(const QVariant &data)
+void GetApplicationPermissionsJob::handleData(const QJsonValue &data)
 {
-    d->permissions = data.toInt();
+    d->permissions = data.toInt(-1);
+
+    // TODO: return error (call handleError?) when "data" is not an integer
 }
 
 int GetApplicationPermissionsJob::permissions() const

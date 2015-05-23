@@ -19,10 +19,9 @@
 
 #include "test_userinfo.h"
 
-#include <libkvkontakte/userinfofulljob.h>
+#include <libkvkontakte/userinfojob.h>
 
-#include <qtest_kde.h>
-
+#include <QtTest/QtTest>
 #include <QtCore/QList>
 
 using namespace Vkontakte;
@@ -44,32 +43,34 @@ void TestUserInfo::testUserInfoJob()
     job->exec();
     QVERIFY(!job->error());
 
-    QList<UserInfoPtr> res = job->userInfo();
+    QList<UserInfo> res = job->userInfo();
     QCOMPARE(res.size(), 1);
 
-    const UserInfoPtr user = res.at(0);
-    QCOMPARE(user->uid(), 1);
-    QCOMPARE(user->firstName(), QString::fromUtf8("Павел"));
-    QCOMPARE(user->lastName(), QString::fromUtf8("Дуров"));
-    QCOMPARE(user->nickName(), QString::fromUtf8(""));
-    QCOMPARE(user->sex(), 2);
+    const UserInfo user = res.at(0);
+    QCOMPARE(user.userId(), 1);
+    QCOMPARE(user.firstName(), QString::fromUtf8("Павел"));
+    QCOMPARE(user.lastName(), QString::fromUtf8("Дуров"));
+    QCOMPARE(user.nickName(), QString::fromUtf8(""));
+    QCOMPARE(user.sex(), 2);
     // TODO: verify that "online" status is received from server
-    QCOMPARE(user->birthday(), QDate(1984, 10, 10));
-    QCOMPARE(user->city(), 2); // Saint-Petersburg
-    QCOMPARE(user->country(), 1); // Russia
-    QCOMPARE(user->domain(), QString("durov"));
-    QCOMPARE(user->hasMobile(), true);
-    QCOMPARE(user->homePhone(), QString(""));
-    QCOMPARE(user->mobilePhone(), QString(""));
-    QCOMPARE(user->university(), 1); // SPbSU
-    QCOMPARE(user->universityName(), QString::fromUtf8("СПбГУ")); // SPbSU
-    QCOMPARE(user->faculty(), 0);
-    QCOMPARE(user->facultyName(), QString(""));
-    QCOMPARE(user->graduation(), 2006); // graduation year
-    QCOMPARE(user->canPost(), false);
-    QCOMPARE(user->canWritePrivateMessage(), false);
+//     QCOMPARE(user.birthday(), QDate(1984, 10, 10));
+//     QCOMPARE(user.countryId(), 1); // Russia
+//     QCOMPARE(user.countryString(), QString::fromUtf8("Россия"));
+//     QCOMPARE(user.cityId(), 2); // Saint-Petersburg
+//     QCOMPARE(user.cityString(), QString::fromUtf8("Санкт-Петербург"));
+    QCOMPARE(user.domain(), QString("durov"));
+//     QCOMPARE(user.hasMobile(), true);
+//     QCOMPARE(user.homePhone(), QString(""));
+//     QCOMPARE(user.mobilePhone(), QString(""));
+//     QCOMPARE(user.university(), 1); // SPbSU
+//     QCOMPARE(user.universityName(), QString::fromUtf8("СПбГУ")); // SPbSU
+//     QCOMPARE(user.faculty(), 0);
+//     QCOMPARE(user.facultyName(), QString(""));
+//     QCOMPARE(user.graduation(), 2006); // graduation year
+//     QCOMPARE(user.canPost(), false);
+//     QCOMPARE(user.canWritePrivateMessage(), false);
     // Timezone is returned only for the current user
-    QCOMPARE(user->timezone(), static_cast<int>(UserInfo::INVALID_TIMEZONE));
+//     QCOMPARE(user.timezone(), static_cast<int>(UserInfo::INVALID_TIMEZONE));
 }
 
 void TestUserInfo::testSelfUserInfoJob()
@@ -78,31 +79,14 @@ void TestUserInfo::testSelfUserInfoJob()
     job->exec();
     QVERIFY(!job->error());
 
-    QList<UserInfoPtr> res = job->userInfo();
+    QList<UserInfo> res = job->userInfo();
     QCOMPARE(res.size(), 1);
 
-    const UserInfoPtr user = res.at(0);
-    QVERIFY(user->uid() > 0);
-    QVERIFY(!user->domain().isEmpty());
+    const UserInfo user = res.at(0);
+    QVERIFY(user.userId() > 0);
+    QVERIFY(!user.domain().isEmpty());
     // Timezone is returned only for the current user
-    QVERIFY(user->timezone() != static_cast<int>(UserInfo::INVALID_TIMEZONE));
+//     QVERIFY(user.timezone() != static_cast<int>(UserInfo::INVALID_TIMEZONE));
 }
 
-void TestUserInfo::testUserInfoFullJob()
-{
-    Vkontakte::UserInfoFullJob* const job = new Vkontakte::UserInfoFullJob(
-        accessToken(), 1, true, true);
-    job->exec();
-    QVERIFY(!job->error());
-
-    QList<UserInfoPtr> res = job->userInfo();
-    QCOMPARE(res.size(), 1);
-
-    const UserInfoPtr user = res.at(0);
-    QCOMPARE(user->domain(), QString("durov"));
-    QCOMPARE(user->firstName(), QString::fromUtf8("Павел"));
-    QCOMPARE(user->countryString(), QString::fromUtf8("Россия"));
-    QCOMPARE(user->cityString(), QString::fromUtf8("Санкт-Петербург"));
-}
-
-QTEST_KDEMAIN(TestUserInfo, GUI)
+QTEST_MAIN(TestUserInfo)

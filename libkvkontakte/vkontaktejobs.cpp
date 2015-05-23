@@ -22,11 +22,16 @@
 
 #include "vkontaktejobs.h"
 
-#include <QtCore/QTimer>
-#include <qjson/parser.h>
+#include <KLocalizedString>
 #include <KIO/Job>
-#include <KDebug>
-#include <KLocale>
+#include <KIO/StoredTransferJob>
+
+#include <QtCore/QDebug>
+#include <QtCore/QTimer>
+#include <QtCore/QUrl>
+#include <QtCore/QUrlQuery>
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonObject>
 
 namespace Vkontakte
 {
@@ -70,12 +75,24 @@ void VkontakteJob::addQueryItem(const QString &key, const QString &value)
     m_queryItems.append(item);
 }
 
-bool VkontakteJob::handleError(const QVariant &data)
+bool VkontakteJob::handleError(const QJsonValue &data)
 {
-    const QVariantMap errorMap = data.toMap();
-    int error_code = errorMap["error_code"].toInt();
-    const QString error_msg = errorMap["error_msg"].toString();
-    kWarning() << "An error of type" << error_code << "occurred:" << error_msg;
+    int error_code = -1;
+    QString error_msg;
+
+    if (data.isUndefined())
+    {
+        qWarning() << "Response from server has unexpected format";
+    }
+    else
+    {
+        const QVariantMap errorMap = data.toVariant().toMap();
+
+        error_code = errorMap["error_code"].toInt();
+        error_msg = errorMap["error_msg"].toString();
+
+        qWarning() << "An error of type" << error_code << "occurred:" << error_msg;
+    }
 
     if (error_code == 6)
     {
@@ -88,34 +105,51 @@ bool VkontakteJob::handleError(const QVariant &data)
     else
     {
         setError(KJob::UserDefinedError);
-        setErrorText(i18n(
-            "The VKontakte server returned an error "
-            "of type <i>%1</i> in reply to method %2: <i>%3</i>",
-            error_code, m_method, error_msg));
+
+        if (data.isUndefined())
+        {
+            setErrorText(i18n(
+                "Response from the VKontakte server has unexpected format. "
+                "Please report this problem against product libkvkontakte "
+                "at the <a href=\"%1\">KDE bug tracker</b>.",
+                QStringLiteral("http://bugs.kde.org/")));
+        }
+        else
+        {
+            setErrorText(i18n(
+                "The VKontakte server returned an error "
+                "of type <i>%1</i> in reply to method %2: <i>%3</i>",
+                error_code, m_method, error_msg));
+        }
         return false;
     }
 }
 
 KJob* VkontakteJob::createHttpJob()
 {
-    KUrl url;
-    url.setProtocol("https");
+    QUrl url;
+    url.setScheme("https");
     url.setHost("api.vk.com");
     url.setPath("/method/" + m_method);
 
+    // Collect query items in "query"
+    QUrlQuery query;
+
     prepareQueryItems();
-    foreach(const QueryItem &item, m_queryItems)
-        url.addQueryItem(item.first, item.second);
+    foreach (const QueryItem &item, m_queryItems)
+        query.addQueryItem(item.first, item.second);
 
     if (!m_accessToken.isEmpty())
     {
-        url.addQueryItem("access_token", m_accessToken);
+        query.addQueryItem("access_token", m_accessToken);
     }
+
+    url.setQuery(query);
 
     // TODO: Save KUrl to reuse it if we need to retry the HTTP request
 //     m_url = url;
 
-    kDebug() << "Starting request" << url;
+    qDebug() << "Starting request" << url;
 
     if (m_httpPost)
         return KIO::storedHttpPost(QByteArray(), url, KIO::HideProgressInfo);
@@ -139,37 +173,56 @@ void VkontakteJob::jobFinished(KJob *kjob)
 {
     KIO::StoredTransferJob *job = dynamic_cast<KIO::StoredTransferJob *>(kjob);
     Q_ASSERT(job);
-    if (job && job->error())
+
+    if (job == 0)
+    {
+        setError(-1);
+        setErrorText(i18n(
+            "Internal error: No valid instance of KIO::StoredTransferJob "
+            "passed into VkontakteJob::jobFinished."));
+        qWarning() << "KIO::StoredTransferJob is null";
+    }
+    else if (job->error())
     {
         setError(job->error());
         setErrorText(KIO::buildErrorString(error(), job->errorText()));
-        kWarning() << "Job error: " << job->errorString();
+        qWarning() << "Job error:" << job->errorString();
     }
     else
     {
-        kDebug() << "Got data: " << QString::fromAscii(job->data().data());
-        QJson::Parser parser;
-        bool ok;
-        const QVariant data = parser.parse(job->data(), &ok);
-        if (ok)
+        qDebug() << "Got data:" << job->data();
+
+        QJsonParseError parseError;
+        QJsonDocument data = QJsonDocument::fromJson(job->data(), &parseError);
+        if (parseError.error == QJsonParseError::NoError)
         {
-            const QVariant error = data.toMap()["error"];
-            if (error.isValid())
+            const QJsonObject object = data.object();
+
+            if (!data.isObject() ||
+                (!object.contains("response") && !object.contains("error")))
             {
-                bool willRetry = handleError(error);
+                // Something went wrong, but there is no valid object "error"
+                handleError(QJsonValue::Undefined);
+            }
+            else if (object.contains("error"))
+            {
+                bool willRetry = handleError(object.value("error"));
                 if (willRetry)
                     return;
             }
             else
             {
-                handleData(data.toMap()["response"]);
+                handleData(object.value("response"));
             }
         }
         else
         {
-            kWarning() << "Unable to parse JSON data: " << QString::fromAscii(job->data().data());
-            setError( KJob::UserDefinedError );
-            setErrorText(i18n("Unable to parse data returned by the VKontakte server: %1", parser.errorString()));
+            qWarning() << "Unable to parse JSON data:" << parseError.errorString();
+            qDebug() << "Received data:" << job->data();
+            setError(KJob::UserDefinedError);
+            setErrorText(
+                i18n("Unable to parse data returned by the VKontakte server: %1",
+                parseError.errorString()));
         }
     }
     emitResult();

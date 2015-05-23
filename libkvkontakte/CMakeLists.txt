@@ -1,112 +1,116 @@
 set(libkvkontakte_SRCS
-    authenticationdialog.cpp
     userinfojob.cpp
     userinfo.cpp
-    friendlistjob.cpp
-    photojob.cpp
-    noteslistjob.cpp
-    allnoteslistjob.cpp
-    notejob.cpp
-    getvariablejob.cpp
-    userinfofulljob.cpp
-    cidsnamesjob.cpp
-    getinfojob.cpp
-    messageinfo.cpp
-    discussionslistjob.cpp
-    messageslistjob.cpp
-    noteinfo.cpp
-    noteaddjob.cpp
-    allmessageslistjob.cpp
-    albumlistjob.cpp
-    albuminfo.cpp
-    createalbumjob.cpp
-    editalbumjob.cpp
-    deletealbumjob.cpp
-    getphotouploadserverjob.cpp
-    photopostjob.cpp
-    savephotojob.cpp
-    uploadphotosjob.cpp
-    photoinfo.cpp
-    photolistjob.cpp
+#     friendlistjob.cpp
+#     photojob.cpp
+#     noteslistjob.cpp
+#     allnoteslistjob.cpp
+#     notejob.cpp
+#     getvariablejob.cpp
+#     userinfofulljob.cpp
+#     cidsnamesjob.cpp
+#     getinfojob.cpp
+#     messageinfo.cpp
+#     discussionslistjob.cpp
+#     messageslistjob.cpp
+#     noteinfo.cpp
+#     noteaddjob.cpp
+#     allmessageslistjob.cpp
+#     albumlistjob.cpp
+#     albuminfo.cpp
+#     createalbumjob.cpp
+#     editalbumjob.cpp
+#     deletealbumjob.cpp
+#     getphotouploadserverjob.cpp
+#     photopostjob.cpp
+#     savephotojob.cpp
+#     uploadphotosjob.cpp
+#     photoinfo.cpp
+#     photolistjob.cpp
     getapplicationpermissionsjob.cpp
-    groupinfo.cpp
-    grouplistjob.cpp
+#     groupinfo.cpp
+#     grouplistjob.cpp
 
-    qintlist.cpp
+    authenticationdialog.cpp
     util.cpp
     vkontaktejobs.cpp
     vkapi.cpp
 )
 
-kde4_add_library(kvkontakte SHARED ${libkvkontakte_SRCS})
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+add_library(KF5Vkontakte SHARED ${libkvkontakte_SRCS})
+generate_export_header(KF5Vkontakte
+    BASE_NAME LibKVkontakte
+    EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/libkvkontakte_export.h
+)
+add_library(KF5::Vkontakte ALIAS KF5Vkontakte)
 
-# Yes, QJSON_LIBRARIES and QJSON_LIBRARY are both needed, as otherwise it will break either
-# on Linux or on Mac.
-target_link_libraries(kvkontakte
+target_include_directories(KF5Vkontakte
+    PUBLIC "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>")
+target_include_directories(KF5Vkontakte
+    INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/Vkontakte>")
+
+set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
+
+target_link_libraries(KF5Vkontakte
     PRIVATE
-        ${KDE4_KDECORE_LIBS}
-        ${KDE4_KDEUI_LIBS}
-        ${QT_QTGUI_LIBRARY}
-        ${QT_QTWEBKIT_LIBRARY}
-        ${KDE4_KDEWEBKIT_LIBS}
-        ${KDE4_KIO_LIBS}
-        ${QJSON_LIBRARIES}
-        ${QJSON_LIBRARY}
-        ${qjson_LIBRARIES}
-        ${KDEPIMLIBS_KABC_LIBS}
-        ${KDEPIMLIBS_KPIMUTILS_LIBS}
-        ${KDEPIMLIBS_KMIME_LIBS}
+        KF5::I18n
+        KF5::KIOCore
+        KF5::WebKit
+        KF5::KDELibs4Support
+    PUBLIC
+        Qt5::Core
+        Qt5::Gui
+        KF5::CoreAddons
 )
 
-set_target_properties(kvkontakte PROPERTIES
-    VERSION ${LIBKVKONTAKTE_VERSION}
+set_target_properties(KF5Vkontakte PROPERTIES
+    VERSION ${LIBKVKONTAKTE_VERSION_STRING}
     SOVERSION ${LIBKVKONTAKTE_SOVERSION}
+    EXPORT_NAME Vkontakte
+)
+install(TARGETS KF5Vkontakte
+    EXPORT KF5VkontakteTargets
+    ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-install(TARGETS kvkontakte
-    EXPORT LibKVkontakteExport
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
-)
 
 if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
 
     install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/version.h
-        libkvkontakte_export.h
-        albuminfo.h
-        getapplicationpermissionsjob.h
+#         albuminfo.h
+#         getapplicationpermissionsjob.h
         vkontaktejobs.h
-        authenticationdialog.h
-        albumlistjob.h
-        qintlist.h
-        createalbumjob.h
-        editalbumjob.h
-        uploadphotosjob.h
-        photoinfo.h
+#         authenticationdialog.h
+#         albumlistjob.h
+#         createalbumjob.h
+#         editalbumjob.h
+#         uploadphotosjob.h
+#         photoinfo.h
         userinfo.h
-        messageinfo.h
-        noteinfo.h
-        friendlistjob.h
-        allnoteslistjob.h
-        userinfofulljob.h
+#         messageinfo.h
+#         noteinfo.h
+#         friendlistjob.h
+#         allnoteslistjob.h
+#         userinfofulljob.h
         userinfojob.h
-        photojob.h
-        noteslistjob.h
-        notejob.h
-        noteaddjob.h
-        allmessageslistjob.h
-        messageslistjob.h
-        discussionslistjob.h
-        getvariablejob.h
-        deletealbumjob.h
-        cidsnamesjob.h
-        getinfojob.h
-        photolistjob.h
-        groupinfo.h
-        grouplistjob.h
+#         photojob.h
+#         noteslistjob.h
+#         notejob.h
+#         noteaddjob.h
+#         allmessageslistjob.h
+#         messageslistjob.h
+#         discussionslistjob.h
+#         getvariablejob.h
+#         deletealbumjob.h
+#         cidsnamesjob.h
+#         getinfojob.h
+#         photolistjob.h
+#         groupinfo.h
+#         grouplistjob.h
         apppermissions.h
         vkapi.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/libkvkontakte COMPONENT Devel)
+        ${CMAKE_CURRENT_BINARY_DIR}/libkvkontakte_export.h
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/Vkontakte/libkvkontakte COMPONENT Devel
+    )
 
 endif()

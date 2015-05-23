@@ -20,11 +20,9 @@
  */
 
 #include "userinfojob.h"
+#include "util.h"
 
-#include <qjson/qobjecthelper.h>
-#include <KIO/Job>
-#include <KDebug>
-#include <KLocale>
+#include <QtCore/QJsonArray>
 
 namespace Vkontakte
 {
@@ -32,7 +30,7 @@ namespace Vkontakte
 class UserInfoJob::Private
 {
 public:
-    QList<UserInfoPtr> userInfo;
+    QList<UserInfo> userInfo;
     QStringList fields;
 };
 
@@ -55,12 +53,12 @@ UserInfoJob::UserInfoJob(const QString &accessToken, int uid)
     addQueryItem("user_ids", QString::number(uid));
 }
 
-UserInfoJob::UserInfoJob(const QString &accessToken, const QIntList &uids)
+UserInfoJob::UserInfoJob(const QString &accessToken, const QList<int> &uids)
     : VkontakteJob(accessToken, "users.get")
     , d(new Private)
 {
     setFields(UserInfo::allQueryFields()); // TODO: do not pull extra fields by default
-    addQueryItem("user_ids", uids.join());
+    addQueryItem("user_ids", joinIntegers(uids));
 
     // TODO: make this working for more than 1000 uids
     // ("users.get" allows requesting only 1000 users at once)
@@ -71,7 +69,7 @@ UserInfoJob::~UserInfoJob()
     delete d;
 }
 
-QList<UserInfoPtr> UserInfoJob::userInfo() const
+QList<UserInfo> UserInfoJob::userInfo() const
 {
     return d->userInfo;
 }
@@ -87,17 +85,25 @@ void UserInfoJob::prepareQueryItems()
         addQueryItem("fields", d->fields.join(","));
 }
 
-UserInfoPtr UserInfoJob::handleSingleData(const QVariant &data)
+void UserInfoJob::handleData(const QJsonValue &data)
 {
-     UserInfoPtr userInfo = UserInfoPtr(new UserInfo());
-     QJson::QObjectHelper::qvariant2qobject(data.toMap(), userInfo.data());
-     return userInfo;
-}
+    if (!data.isArray())
+    {
+        // TODO: report error!!!
+        return;
+    }
 
-void UserInfoJob::handleData(const QVariant &data)
-{
-    foreach(const QVariant &item, data.toList())
-        d->userInfo.append(handleSingleData(item));
+    foreach (const QJsonValue &item, data.toArray())
+    {
+        if (!item.isObject())
+        {
+            // TODO: report error!!!
+            d->userInfo.clear();
+            return;
+        }
+
+        d->userInfo.append(UserInfo(item.toObject()));
+    }
 }
 
 } /* namespace Vkontakte */

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010  Thomas McGuire <mcguire@kde.org>
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,14 +23,15 @@
 
 #include "util.h"
 
+#include <KDE/KWebView>
+#include <KDE/KMessageBox>
+
 #include <KLocalizedString>
-#include <KWebView>
-#include <KMessageBox>
-#include <KDebug>
-#include <QVBoxLayout>
-#include <QTimer>
-#include <QLabel>
-#include <QProgressBar>
+
+#include <QtCore/QTimer>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QProgressBar>
 
 namespace Vkontakte
 {
@@ -95,11 +96,6 @@ void AuthenticationDialog::setAppId(const QString &appId)
     d->appId = appId;
 }
 
-void AuthenticationDialog::setPermissions(const QStringList &permissions)
-{
-    setPermissions(appPermissionsFromStringList(permissions));
-}
-
 void Vkontakte::AuthenticationDialog::setPermissions(Vkontakte::AppPermissions::Value permissions)
 {
     d->permissions = permissions;
@@ -124,7 +120,7 @@ void AuthenticationDialog::start()
                                 .arg(d->appId)
                                 .arg(appPermissionsToStringList(d->permissions).join(","))
                                 .arg(d->displayMode);
-    kDebug() << "Showing" << url;
+    qDebug() << "Showing" << url;
     d->webView->setUrl(QUrl::fromUserInput(url));
     show();
 }
@@ -142,7 +138,7 @@ void AuthenticationDialog::showErrorDialog()
 
 void AuthenticationDialog::urlChanged(const QUrl &url)
 {
-    kDebug() << "Navigating to" << url;
+    qDebug() << "Navigating to" << url;
     if (url.host() == "oauth.vk.com" && url.path() == "/blank.html")
     {
         d->error = url.queryItemValue("error");

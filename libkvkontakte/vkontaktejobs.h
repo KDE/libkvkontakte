@@ -23,8 +23,9 @@
 #ifndef VKONTAKTEJOBS_H
 #define VKONTAKTEJOBS_H
 
+#include <KJob>
+
 #include <QtCore/QPointer>
-#include <KDE/KJob>
 
 #include "libkvkontakte_export.h"
 
@@ -78,9 +79,9 @@ protected:
 private:
     /** Check for a return error and set the appropriate error messages */
     // Returns "true" if we will retry the call.
-    bool handleError(const QVariant &data);
+    bool handleError(const QJsonValue &data);
 
-    virtual void handleData(const QVariant &data) = 0;
+    virtual void handleData(const QJsonValue &data) = 0;
 
     /** Called right before sending request to server */
     virtual void prepareQueryItems() {}

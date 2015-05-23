@@ -1,85 +1,74 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(kvkontakte)
 
-# the version number, needed for
-# - the library version
-# - version detection by cmake
-set(LIBKVKONTAKTE_VERSION_MAJOR 4)
-set(LIBKVKONTAKTE_VERSION_MINOR 11)
-set(LIBKVKONTAKTE_VERSION_PATCH 0)
-set(LIBKVKONTAKTE_VERSION "${LIBKVKONTAKTE_VERSION_MAJOR}.${LIBKVKONTAKTE_VERSION_MINOR}.${LIBKVKONTAKTE_VERSION_PATCH}")
+find_package(ECM 1.3.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-# ABI in 4.x releases did not break since the very first version from digiKam SC 2.1.0
-set(LIBKVKONTAKTE_SOVERSION 1)
+set(REQUIRED_QT_VERSION "5.2")
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core Network WebKit Widgets)
 
-if(NOT LIB_INSTALL_DIR)
-	set(LIB_INSTALL_DIR lib${LIB_SUFFIX})
-endif(NOT LIB_INSTALL_DIR)
-set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/LibKVkontakte )
+include(KDEInstallDirs)
+include(KDEFrameworkCompilerSettings)
+include(KDECMakeSettings) # for automoc
 
-# Use a versioned install directory for the headers so multiple versions can be installed in parallel
-set(INCLUDE_INSTALL_DIR include )
+include(FeatureSummary)
+include(GenerateExportHeader)
 
+include(ECMSetupVersion)
 
-# === Closer to the code, close to the body ===
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+set(LIBKVKONTAKTE_VERSION "4.70.0")
+set(LIBKVKONTAKTE_SOVERSION 5)
 
-set(QT_MIN_VERSION  "4.8.0") # Qt 4.8 required for QHttpMultiPart
-set(KDE_MIN_VERSION "4.4.0")
-find_package(Qt4  ${QT_MIN_VERSION}  REQUIRED)
-find_package(KDE4 ${KDE_MIN_VERSION} REQUIRED)
+set(REQUIRED_KF5_VERSION "5.3.0")
+# TODO: is it OK to have SOVERSION != 5 for KF5 libraries?
+ecm_setup_version(${LIBKVKONTAKTE_VERSION}
+    VARIABLE_PREFIX LIBKVKONTAKTE
+    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kf5vkontakte_version.h"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5VkontakteConfigVersion.cmake"
+    SOVERSION 2)
 
-include(KDE4Defaults)
-include(MacroLibrary)
+find_package(KF5KIO ${REQUIRED_KF5_VERSION} REQUIRED)
+find_package(KF5I18n ${REQUIRED_KF5_VERSION} REQUIRED)
+find_package(KF5WebKit ${REQUIRED_KF5_VERSION} REQUIRED)
+find_package(KF5CoreAddons ${REQUIRED_KF5_VERSION} REQUIRED)
+find_package(KF5KDELibs4Support ${REQUIRED_KF5_VERSION} REQUIRED)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
-
-set(QJSON_VERSION_REQUIRED 0.7)
-find_package(QJSON ${QJSON_VERSION_REQUIRED})
-macro_log_feature(QJSON_FOUND "QJSON" "Qt library for handling JSON data" "http://qjson.sourceforge.net/" TRUE "${QJSON_VERSION_REQUIRED}")
-
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
-include_directories(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}
-  ${KDE4_INCLUDES}
-  ${QJSON_INCLUDE_DIR}
-)
 
 add_subdirectory(libkvkontakte)
-# === ------------------------------------- ===
-
-# This "exports" all targets which have been put into the export set "LibKVkontakteExport".
-# This means that cmake generates a file with the given filename, which can later on be loaded
-# by projects using this package.
-# This file contains add_library(bar IMPORTED) statements for each target in the export set, so
-# when loaded later on cmake will create "imported" library targets from these, which can be used
-# in many ways in the same way as a normal library target created via a normal add_library().
-install(EXPORT LibKVkontakteExport DESTINATION ${CMAKECONFIG_INSTALL_DIR} FILE LibKVkontakteTargets.cmake )
-
-# figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
-# runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
-# This relative path will be configured into the LibKVkontakteConfig.cmake
-file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
-
-# Create a LibKVkontakteConfig.cmake file. <name>Config.cmake files are searched by find_package()
-# automatically. We configure that file so that we can put any information we want in it,
-# e.g. version numbers, include directories, etc.
-configure_file(LibKVkontakteConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/LibKVkontakteConfig.cmake @ONLY )
-
-# Additionally, when cmake has found a LibKVkontakteConfig.cmake, it can check for a LibKVkontakteConfigVersion.cmake
-# in the same directory when figuring out the version of the package when a version
-# has been specified in the find_package() call, e.g. find_package(LibKVkontakte 1.0)
-configure_file(LibKVkontakteConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/LibKVkontakteConfigVersion.cmake @ONLY )
-
-# Install these two files into the same directory as the generated exports-file.
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LibKVkontakteConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/LibKVkontakteConfigVersion.cmake
-        DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
-
-
-macro_display_feature_log()
 
 if (BUILD_TESTING)
     add_subdirectory(autotests)
 endif (BUILD_TESTING)
+
+
+# create a Config.cmake and a ConfigVersion.cmake file and install them
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Vkontakte")
+
+include(ECMPackageConfigHelpers)
+
+ecm_configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/KF5VkontakteConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5VkontakteConfig.cmake"
+    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5VkontakteConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5VkontakteConfigVersion.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    COMPONENT Devel
+)
+
+# TODO: is it OK to use the "KF5::" namespace for libraries not included in KDE Frameworks?
+install(EXPORT KF5VkontakteTargets
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    FILE KF5VkontakteTargets.cmake
+    NAMESPACE KF5::
+)
+
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/kf5vkontakte_version.h
+    DESTINATION ${KF5_INCLUDE_INSTALL_DIR} COMPONENT Devel
+)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -22,9 +22,12 @@
 #ifndef USERINFOJOB_H
 #define USERINFOJOB_H
 
-#include "vkontaktejobs.h"
-#include "userinfo.h"
-#include "qintlist.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/userinfo.h>
+
+#include <QtCore/QStringList>
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonObject>
 
 namespace Vkontakte
 {
@@ -52,14 +55,14 @@ public:
     */
     UserInfoJob(const QString &accessToken, int uid);
 
-    UserInfoJob(const QString &accessToken, const QIntList &uids);
+    UserInfoJob(const QString &accessToken, const QList<int> &uids);
 
     ~UserInfoJob();
 
     /**
     * @return A pointer to a userInfo object about the currently authenticated user.
     */
-    QList<UserInfoPtr> userInfo() const;
+    QList<UserInfo> userInfo() const;
 
     void setFields(const QStringList &fields);
 
@@ -68,9 +71,7 @@ protected:
     * @brief Handles the data returned by the VkontakteGetJob
     * @param data A JSON string containing the data.
     */
-    virtual void handleData(const QVariant &data);
-
-    UserInfoPtr handleSingleData(const QVariant &data);
+    virtual void handleData(const QJsonValue &data);
 
     /**
      * @brief Prepares m_queryItems by several addQueryItem calls
