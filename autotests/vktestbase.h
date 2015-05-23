@@ -35,7 +35,7 @@ class VkTestBase : public QObject
 
 public:
     VkTestBase();
-    ~VkTestBase();
+    virtual ~VkTestBase();
 
 protected:
     void authenticate(Vkontakte::AppPermissions::Value permissions);
