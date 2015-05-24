@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,10 @@
 
 #include "deletealbumjob.h"
 
-#include <QVariant>
-#include <KDebug>
 #include <KLocalizedString>
+
+#include <QtCore/QDebug>
+#include <QtCore/QJsonValue>
 
 namespace Vkontakte
 {
@@ -34,14 +35,13 @@ DeleteAlbumJob::DeleteAlbumJob(const QString &accessToken, int aid)
     addQueryItem("aid", QString::number(aid));
 }
 
-void DeleteAlbumJob::handleData(const QVariant &data)
+void DeleteAlbumJob::handleData(const QJsonValue &data)
 {
-    bool ok = false;
-    if (data.toInt(&ok) != 1 || !ok)
+    if (data.toInt(-1) != 1)
     {
         setError(1);
         setErrorText(i18n("Failed to delete album"));
-        kWarning() << "Failed to delete album";
+        qWarning() << "Failed to delete album";
     }
 }
 

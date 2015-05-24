@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,146 +24,70 @@
 namespace Vkontakte
 {
 
-class AlbumInfo::Private
+class AlbumInfo::Private : public QSharedData
 {
 public:
-    int aid;
-    int thumbId;
-    int uid;
-    QString title;
-    QString description;
-    QString dateCreated;
-    QString dateUpdated;
-    int size; // number of photos in the album
-    int privacy;
-    int commentPrivacy;
+    QJsonObject jsonData;
 };
 
 AlbumInfo::AlbumInfo()
     : d(new Private)
 {
-    d->aid = -1;
-    d->thumbId = -1;
-    d->uid = -1;
-    d->size = -1;
+}
 
-    d->privacy = PRIVACY_UNKNOWN;
-    d->commentPrivacy = PRIVACY_UNKNOWN;
+AlbumInfo::AlbumInfo(const QJsonObject &jsonData)
+    : d(new Private)
+{
+    d->jsonData = jsonData;
+}
+
+AlbumInfo::AlbumInfo(const AlbumInfo &other)
+{
+    d = other.d;
 }
 
 AlbumInfo::~AlbumInfo()
 {
-    delete d;
 }
 
-void AlbumInfo::setAid(int aid)
+AlbumInfo &AlbumInfo::operator=(const AlbumInfo &other)
 {
-    d->aid = aid;
+    if (this != &other)
+    {
+        d = other.d;
+    }
+
+    return *this;
 }
 
 int AlbumInfo::aid() const
 {
-    return d->aid;
-}
-
-void AlbumInfo::setThumbId(int thumbId)
-{
-    d->thumbId = thumbId;
-}
-
-int AlbumInfo::thumbId() const
-{
-    return d->thumbId;
-}
-
-void AlbumInfo::setUid(int uid)
-{
-    d->uid = uid;
-}
-
-int AlbumInfo::uid() const
-{
-    return d->uid;
-}
-
-void AlbumInfo::setTitle(const QString &title)
-{
-    d->title = title;
+    return d->jsonData.value(QStringLiteral("aid")).toInt(-1);
 }
 
 QString AlbumInfo::title() const
 {
-    return d->title;
-}
-
-void AlbumInfo::setDescription(const QString &description)
-{
-    d->description = description;
+    return d->jsonData.value(QStringLiteral("title")).toString();
 }
 
 QString AlbumInfo::description() const
 {
-    return d->description;
-}
-
-void AlbumInfo::setDateCreatedString(const QString &dateCreatedString)
-{
-    d->dateCreated = dateCreatedString;
-}
-
-QString AlbumInfo::dateCreatedString() const
-{
-    return d->dateCreated;
-}
-
-KDateTime AlbumInfo::dateCreated() const
-{
-    return unixTimeToKDateTime(d->dateCreated);
-}
-
-void AlbumInfo::setDateUpdatedString(const QString &dateUpdatedString)
-{
-    d->dateUpdated = dateUpdatedString;
-}
-
-QString AlbumInfo::dateUpdatedString() const
-{
-    return d->dateUpdated;
-}
-
-KDateTime AlbumInfo::dateUpdated() const
-{
-    return unixTimeToKDateTime(d->dateUpdated);
-}
-
-void AlbumInfo::setSize(int size)
-{
-    d->size = size;
+    return d->jsonData.value(QStringLiteral("description")).toString();
 }
 
 int AlbumInfo::size() const
 {
-    return d->size;
-}
-
-void AlbumInfo::setPrivacy(int privacy)
-{
-    d->privacy = privacy;
+    return d->jsonData.value(QStringLiteral("size")).toInt(-1);
 }
 
 int AlbumInfo::privacy() const
 {
-    return d->privacy;
-}
-
-void AlbumInfo::setCommentPrivacy(int commentPrivacy)
-{
-    d->commentPrivacy = commentPrivacy;
+    return d->jsonData.value(QStringLiteral("privacy")).toInt(PRIVACY_UNKNOWN);
 }
 
 int AlbumInfo::commentPrivacy() const
 {
-    return d->commentPrivacy;
+    return d->jsonData.value(QStringLiteral("comment_privacy")).toInt(PRIVACY_UNKNOWN);
 }
 
 } /* namespace Vkontakte */

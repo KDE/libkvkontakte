@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,10 @@
  */
 
 #include "albumlistjob.h"
+#include "util.h"
 
-#include <qjson/qobjecthelper.h>
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonObject>
 
 namespace Vkontakte
 {
@@ -28,17 +30,17 @@ namespace Vkontakte
 class AlbumListJob::Private
 {
 public:
-    QList<AlbumInfoPtr> list;
+    QList<AlbumInfo> list;
 };
 
-AlbumListJob::AlbumListJob(const QString &accessToken, int uid, const QIntList &aids)
+AlbumListJob::AlbumListJob(const QString &accessToken, int uid, const QList<int> &aids)
     : VkontakteJob(accessToken, "photos.getAlbums")
     , d(new Private)
 {
     if (uid != -1)
         addQueryItem("uid", QString::number(uid));
     if (!aids.empty())
-        addQueryItem("aids", aids.join());
+        addQueryItem("aids", joinIntegers(aids));
 }
 
 AlbumListJob::~AlbumListJob()
@@ -46,20 +48,28 @@ AlbumListJob::~AlbumListJob()
     delete d;
 }
 
-void AlbumListJob::handleItem(const QVariant &data)
+void AlbumListJob::handleData(const QJsonValue &data)
 {
-    AlbumInfoPtr item(new AlbumInfo());
-    QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    d->list.append(item);
+    if (!data.isArray())
+    {
+        // TODO: report error!!!
+        return;
+    }
+
+    foreach (const QJsonValue &item, data.toArray())
+    {
+        if (!item.isObject())
+        {
+            // TODO: report error!!!
+            d->list.clear();
+            return;
+        }
+
+        d->list.append(AlbumInfo(item.toObject()));
+    }
 }
 
-void AlbumListJob::handleData(const QVariant &data)
-{
-    foreach(const QVariant &item, data.toList())
-        handleItem(item);
-}
-
-QList<AlbumInfoPtr> AlbumListJob::list() const
+QList<AlbumInfo> AlbumListJob::list() const
 {
     return d->list;
 }

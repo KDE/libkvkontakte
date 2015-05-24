@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,9 +21,8 @@
 #ifndef ALBUMLISTJOB_H
 #define ALBUMLISTJOB_H
 
-#include "vkontaktejobs.h"
-#include "qintlist.h"
-#include "albuminfo.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/albuminfo.h>
 
 namespace Vkontakte
 {
@@ -33,13 +32,13 @@ class LIBKVKONTAKTE_EXPORT AlbumListJob : public VkontakteJob
 {
     Q_OBJECT
 public:
-    explicit AlbumListJob(const QString &accessToken, int uid = -1, const QIntList &aids = QIntList());
+    explicit AlbumListJob(const QString &accessToken, int uid = -1, const QList<int> &aids = QList<int>());
     ~AlbumListJob();
 
-    QList<AlbumInfoPtr> list() const;
+    QList<AlbumInfo> list() const;
 
 protected:
-    virtual void handleData(const QVariant &data);
+    virtual void handleData(const QJsonValue &data);
 
     void handleItem(const QVariant &data);
 

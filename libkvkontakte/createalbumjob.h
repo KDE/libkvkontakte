@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,10 +37,10 @@ public:
                    int comment_privacy = AlbumInfo::PRIVACY_UNKNOWN);
     ~CreateAlbumJob();
 
-    AlbumInfoPtr album() const;
+    AlbumInfo album() const;
 
 protected:
-    virtual void handleData(const QVariant &data);
+    virtual void handleData(const QJsonValue &data);
 
 private:
     class Private;

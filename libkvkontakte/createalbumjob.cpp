@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,15 +20,13 @@
 
 #include "createalbumjob.h"
 
-#include <qjson/qobjecthelper.h>
-
 namespace Vkontakte
 {
 
 class CreateAlbumJob::Private
 {
 public:
-    AlbumInfoPtr album;
+    AlbumInfo album;
 };
 
 CreateAlbumJob::CreateAlbumJob(const QString &accessToken,
@@ -51,13 +49,18 @@ CreateAlbumJob::~CreateAlbumJob()
     delete d;
 }
 
-void CreateAlbumJob::handleData(const QVariant &data)
+void CreateAlbumJob::handleData(const QJsonValue &data)
 {
-    d->album = AlbumInfoPtr(new AlbumInfo());
-    QJson::QObjectHelper::qvariant2qobject(data.toMap(), d->album.data());
+    if (!data.isObject())
+    {
+        // TODO: report error!!!
+        return;
+    }
+
+    d->album = AlbumInfo(data.toObject());
 }
 
-AlbumInfoPtr CreateAlbumJob::album() const
+AlbumInfo CreateAlbumJob::album() const
 {
     return d->album;
 }

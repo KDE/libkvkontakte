@@ -19,12 +19,12 @@
 
 #include "test_albums.h"
 
-#include <libkvkontakte/createalbumjob.h>
-#include <libkvkontakte/albumlistjob.h>
-#include <libkvkontakte/editalbumjob.h>
-#include <libkvkontakte/deletealbumjob.h>
+#include "createalbumjob.h"
+#include "albumlistjob.h"
+#include "editalbumjob.h"
+#include "deletealbumjob.h"
 
-#include <qtest_kde.h>
+#include <QtTest/QtTest>
 
 #define ALBUM1_NAME     "__album for unit testing of libkvkontakte #1"
 #define ALBUM2_NAME     "__album for unit testing of libkvkontakte #2"
@@ -52,7 +52,7 @@ void TestAlbums::initTestCase()
         job->exec();
         QVERIFY(!job->error());
 
-        m_albumIds.append(job->album()->aid());
+        m_albumIds.append(job->album().aid());
     }
 }
 
@@ -62,7 +62,7 @@ void TestAlbums::testListJob()
     job->exec();
     QVERIFY(!job->error());
 
-    QList<AlbumInfoPtr> list = job->list();
+    QList<AlbumInfo> list = job->list();
 
     // We created two albums but could remove only one in testDeleteJob(),
     // so at least one album should exist at the moment.
@@ -85,22 +85,22 @@ void TestAlbums::testEditJob()
     }
 
     // Verify that album properties have changed
-    AlbumListJob* const listJob = new AlbumListJob(accessToken(), -1, QIntList() << albumId);
+    AlbumListJob* const listJob = new AlbumListJob(accessToken(), -1, QList<int>() << albumId);
     listJob->exec();
     QVERIFY(!listJob->error());
 
-    QList<AlbumInfoPtr> list = listJob->list();
+    QList<AlbumInfo> list = listJob->list();
     QCOMPARE(list.size(), 1);
 
-    const AlbumInfoPtr album = list.at(0);
-    QCOMPARE(album->aid(), albumId);
-    QCOMPARE(album->title(), newTitle);
-    QCOMPARE(album->description(), newDescription);
-    QCOMPARE(album->privacy(), static_cast<int>(AlbumInfo::PRIVACY_PUBLIC));
+    const AlbumInfo album = list.at(0);
+    QCOMPARE(album.aid(), albumId);
+    QCOMPARE(album.title(), newTitle);
+    QCOMPARE(album.description(), newDescription);
+    QCOMPARE(album.privacy(), static_cast<int>(AlbumInfo::PRIVACY_PUBLIC));
 
     // Privacy mode for comments is not returned by the VK server,
     // so it is not our fault.
-//     QCOMPARE(album->commentPrivacy(), static_cast<int>(AlbumInfo::PRIVACY_FRIENDS));
+//     QCOMPARE(album.commentPrivacy(), static_cast<int>(AlbumInfo::PRIVACY_FRIENDS));
 }
 
 void TestAlbums::testDeleteJob()
@@ -115,12 +115,12 @@ void TestAlbums::testDeleteJob()
     }
 
     // Verify that the album does not exist anymore
-    AlbumListJob* const listJob = new AlbumListJob(accessToken(), -1, QIntList() << albumId);
+    AlbumListJob* const listJob = new AlbumListJob(accessToken(), -1, QList<int>() << albumId);
     listJob->exec();
     QVERIFY(!listJob->error());
 
-    QList<AlbumInfoPtr> list = listJob->list();
+    QList<AlbumInfo> list = listJob->list();
     QCOMPARE(list.size(), 0);
 }
 
-QTEST_KDEMAIN(TestAlbums, GUI)
+QTEST_MAIN(TestAlbums)

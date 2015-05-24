@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,10 @@
 
 #include "editalbumjob.h"
 
-#include <QtCore/QVariant>
-#include <KDebug>
 #include <KLocalizedString>
+
+#include <QtCore/QDebug>
+#include <QtCore/QJsonValue>
 
 namespace Vkontakte
 {
@@ -43,14 +44,13 @@ EditAlbumJob::EditAlbumJob(const QString &accessToken,
         addQueryItem("comment_privacy", QString::number(comment_privacy));
 }
 
-void EditAlbumJob::handleData(const QVariant &data)
+void EditAlbumJob::handleData(const QJsonValue &data)
 {
-    bool ok = false;
-    if (data.toInt(&ok) != 1 || !ok)
+    if (data.toInt(-1) != 1)
     {
         setError(1);
         setErrorText(i18n("Failed to edit album"));
-        kWarning() << "Failed to edit album";
+        qWarning() << "Failed to edit album";
     }
 }
 
