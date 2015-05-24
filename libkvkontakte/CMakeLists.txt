@@ -1,6 +1,14 @@
 set(libkvkontakte_SRCS
-    userinfojob.cpp
+    vkapi.cpp
+    getapplicationpermissionsjob.cpp
+    authenticationdialog.cpp
+    util.cpp
+
+    vkontaktejobs.cpp
+
     userinfo.cpp
+    userinfojob.cpp
+
 #     friendlistjob.cpp
 #     photojob.cpp
 #     noteslistjob.cpp
@@ -27,14 +35,8 @@ set(libkvkontakte_SRCS
 #     uploadphotosjob.cpp
 #     photoinfo.cpp
 #     photolistjob.cpp
-    getapplicationpermissionsjob.cpp
 #     groupinfo.cpp
 #     grouplistjob.cpp
-
-    authenticationdialog.cpp
-    util.cpp
-    vkontaktejobs.cpp
-    vkapi.cpp
 )
 
 add_library(KF5Vkontakte SHARED ${libkvkontakte_SRCS})
@@ -77,22 +79,27 @@ install(TARGETS KF5Vkontakte
 if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
 
     install(FILES
+        vkapi.h
+        apppermissions.h
+
+        vkontaktejobs.h
+
+        userinfo.h
+        userinfojob.h
+
 #         albuminfo.h
 #         getapplicationpermissionsjob.h
-        vkontaktejobs.h
 #         authenticationdialog.h
 #         albumlistjob.h
 #         createalbumjob.h
 #         editalbumjob.h
 #         uploadphotosjob.h
 #         photoinfo.h
-        userinfo.h
 #         messageinfo.h
 #         noteinfo.h
 #         friendlistjob.h
 #         allnoteslistjob.h
 #         userinfofulljob.h
-        userinfojob.h
 #         photojob.h
 #         noteslistjob.h
 #         notejob.h
@@ -107,8 +114,6 @@ if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
 #         photolistjob.h
 #         groupinfo.h
 #         grouplistjob.h
-        apppermissions.h
-        vkapi.h
         ${CMAKE_CURRENT_BINARY_DIR}/libkvkontakte_export.h
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/Vkontakte/libkvkontakte COMPONENT Devel
     )
