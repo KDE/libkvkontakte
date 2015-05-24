@@ -47,10 +47,36 @@ public:
 
     UserInfo &operator=(const UserInfo &other);
 
+    /**
+     * @brief Returns integer user ID at VK.
+     *
+     * UserInfoJob (the "users.get" method) always returns this, regardless of 
+     * the requested additional fields.
+     *
+     * Returns -1 for uninitialized object or on server error.
+     */
     int userId() const;
 
+    /**
+     * @brief Returns user's first name in the default language.
+     *
+     * UserInfoJob (the "users.get" method) always returns this, regardless of 
+     * the requested additional fields.
+     *
+     * Returns empty string for uninitialized object or on server error.
+     */
     QString firstName() const;
+
+    /**
+     * @brief Returns user's last name in the default language.
+     *
+     * UserInfoJob (the "users.get" method) always returns this, regardless of 
+     * the requested additional fields.
+     *
+     * Returns empty string for uninitialized object or on server error.
+     */
     QString lastName() const;
+
     QString nickName() const;
     QString domain() const;
 
