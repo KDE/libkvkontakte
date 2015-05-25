@@ -19,13 +19,12 @@
 
 #include "test_photos.h"
 
-#include <libkvkontakte/uploadphotosjob.h>
-#include <libkvkontakte/photolistjob.h>
-#include <libkvkontakte/photojob.h>
-#include <libkvkontakte/createalbumjob.h>
+#include "uploadphotosjob.h"
+#include "photolistjob.h"
+#include "photojob.h"
+#include "createalbumjob.h"
 
-#include <qtest_kde.h>
-
+#include <QtTest/QtTest>
 #include <QtGui/QImage>
 
 #define ALBUM1_NAME     "__album for unit testing of libkvkontakte #1"
@@ -50,7 +49,7 @@ void TestPhotos::initTestCase()
     albumJob->exec();
     QVERIFY(!albumJob->error());
 
-    m_albumId = albumJob->album()->aid();
+    m_albumId = albumJob->album().aid();
 
     // Upload photo for testing
     UploadPhotosJob* const job = new UploadPhotosJob(
@@ -60,28 +59,28 @@ void TestPhotos::initTestCase()
     job->exec();
     QVERIFY(!job->error());
 
-    QList<PhotoInfoPtr> list = job->list();
+    QList<PhotoInfo> list = job->list();
     QCOMPARE(list.size(), 1);
 
-    const PhotoInfoPtr photo = list.at(0);
-    m_photoId = photo->pid();
+    const PhotoInfo photo = list.at(0);
+    m_photoId = photo.pid();
 }
 
 void TestPhotos::testPhotoListJob()
 {
     PhotoListJob* const job = new PhotoListJob(
-        accessToken(), 0, m_albumId, QIntList() << m_photoId);
+        accessToken(), 0, m_albumId, QList<int>() << m_photoId);
     job->exec();
     QVERIFY(!job->error());
 
-    QList<PhotoInfoPtr> list = job->list();
+    QList<PhotoInfo> list = job->list();
     QCOMPARE(list.size(), 1);
 
-    const PhotoInfoPtr photo = list.at(0);
-    QCOMPARE(photo->pid(), m_photoId);
+    const PhotoInfo photo = list.at(0);
+    QCOMPARE(photo.pid(), m_photoId);
 
     // Download the image
-    PhotoJob* const photoJob = new PhotoJob(photo->src());
+    PhotoJob* const photoJob = new PhotoJob(photo.urlMaxResolution());
     photoJob->exec();
     QVERIFY(!photoJob->error());
 
@@ -103,8 +102,8 @@ void TestPhotos::testUploadMultiple()
     job->exec();
     QVERIFY(!job->error());
 
-    QList<PhotoInfoPtr> list = job->list();
+    QList<PhotoInfo> list = job->list();
     QCOMPARE(list.size(), count);
 }
 
-QTEST_KDEMAIN(TestPhotos, GUI)
+QTEST_MAIN(TestPhotos)

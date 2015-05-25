@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,9 @@
 #include "photojob.h"
 
 #include <KIO/Job>
-#include <KDebug>
+
+#include <QtCore/QDebug>
+#include <QtGui/QImage>
 
 namespace Vkontakte
 {
@@ -46,7 +48,7 @@ PhotoJob::~PhotoJob()
 
 void PhotoJob::start()
 {
-    kDebug() << "Starting photo download" << d->url;
+    qDebug() << "Starting photo download" << d->url;
     KIO::StoredTransferJob * const job = KIO::storedGet(d->url, KIO::Reload, KIO::HideProgressInfo);
     m_job = job;
     connect(job, SIGNAL(result(KJob*)), this, SLOT(jobFinished(KJob*)));
@@ -61,7 +63,7 @@ void PhotoJob::jobFinished(KJob *kjob)
     {
         setError(job->error());
         setErrorText(KIO::buildErrorString(error(), job->errorText()));
-        kWarning() << "Job error: " << job->errorString();
+        qWarning() << "Job error:" << job->errorString();
     }
     else
         d->photo = QImage::fromData(job->data());

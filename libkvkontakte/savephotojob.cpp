@@ -20,7 +20,7 @@
 
 #include "savephotojob.h"
 
-#include <qjson/qobjecthelper.h>
+#include <QtCore/QJsonArray>
 
 namespace Vkontakte
 {
@@ -78,20 +78,33 @@ QString SavePhotoJob::getMethod(Vkontakte::UploadPhotosJob::Dest dest)
     }
 }
 
-void SavePhotoJob::handleItem(const QVariant &data)
+void SavePhotoJob::handleItem(const QJsonValue &item)
 {
-    PhotoInfoPtr item(new PhotoInfo());
-    QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    m_list.append(item);
+    if (!item.isObject())
+    {
+        // TODO: report error!!!
+        m_list.clear();
+        return;
+    }
+
+    m_list.append(PhotoInfo(item.toObject()));
 }
 
-void SavePhotoJob::handleData(const QVariant &data)
+void SavePhotoJob::handleData(const QJsonValue &data)
 {
     switch (m_dest)
     {
         case Vkontakte::UploadPhotosJob::DEST_ALBUM:
-            foreach(const QVariant &item, data.toList())
+            if (!data.isArray())
+            {
+                // TODO: report error!!!
+                return;
+            }
+
+            foreach (const QJsonValue &item, data.toArray())
+            {
                 handleItem(item);
+            }
             break;
         case Vkontakte::UploadPhotosJob::DEST_PROFILE:
         case Vkontakte::UploadPhotosJob::DEST_WALL:
@@ -102,7 +115,7 @@ void SavePhotoJob::handleData(const QVariant &data)
     }
 }
 
-QList<PhotoInfoPtr> SavePhotoJob::list() const
+QList<PhotoInfo> SavePhotoJob::list() const
 {
     return m_list;
 }

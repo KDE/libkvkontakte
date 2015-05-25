@@ -102,12 +102,23 @@ void GetPhotoUploadServerJob::prepareQueryItems()
     }
 }
 
-void GetPhotoUploadServerJob::handleData(const QVariant &data)
+void GetPhotoUploadServerJob::handleData(const QJsonValue &data)
 {
-    m_uploadUrl = data.toMap()["upload_url"].toString();
+    if (!data.isObject())
+    {
+        return;
+    }
+
+    // TODO: simplify this code
+    QJsonObject object = data.toObject();
+    if (object.contains(QStringLiteral("upload_url")) &&
+        object.value(QStringLiteral("upload_url")).isString())
+    {
+        m_uploadUrl = QUrl(object.value(QStringLiteral("upload_url")).toString());
+    }
 }
 
-QString GetPhotoUploadServerJob::uploadUrl() const
+QUrl GetPhotoUploadServerJob::uploadUrl() const
 {
     return m_uploadUrl;
 }

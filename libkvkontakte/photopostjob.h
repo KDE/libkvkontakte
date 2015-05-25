@@ -41,16 +41,14 @@ class PhotoPostJob : public KJob
     Q_OBJECT
 public:
     // files.size <= 5
-    PhotoPostJob(Vkontakte::UploadPhotosJob::Dest dest, const QString &url, const QStringList &files);
+    PhotoPostJob(Vkontakte::UploadPhotosJob::Dest dest, const QUrl &url, const QStringList &files);
 
     virtual void start();
     QVariantMap response() const;
 
 protected:
     /** Check for a return error and set the appropriate error messages */
-    void handleError(const QVariant &data);
-
-    virtual void handleData(const QVariant &data);
+    void handleError(const QJsonValue &data);
 
 private Q_SLOTS:
     void parseNetworkResponse(QNetworkReply *reply);
@@ -59,7 +57,7 @@ private:
     bool appendFile(QHttpMultiPart *multiPart, const QString &header, const QString &path);
 
     UploadPhotosJob::Dest m_dest;
-    QString m_url;
+    QUrl m_url;
     QStringList m_files;
     bool m_ok;
     QVariantMap m_response;

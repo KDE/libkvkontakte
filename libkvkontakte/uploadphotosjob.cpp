@@ -23,7 +23,7 @@
 #include "photopostjob.h"
 #include "savephotojob.h"
 
-#include <KDebug>
+#include <QtCore/QDebug>
 
 namespace Vkontakte
 {
@@ -42,8 +42,8 @@ public:
 
     UploadPhotosJob::Dest dest;
 
-    QString uploadUrl;
-    QList<PhotoInfoPtr> list;
+    QUrl uploadUrl;
+    QList<PhotoInfo> list;
 
     QList<PhotoPostJob *> pendingPostJobs;
     int workingPostJobs;
@@ -95,7 +95,7 @@ void UploadPhotosJob::serverJobFinished(KJob *kjob)
     if (job->error()) {
         setError(job->error());
         setErrorText(job->errorText());
-        kWarning() << "Job error: " << job->errorString();
+        qWarning() << "Job error: " << job->errorString();
 
         // It is safe to emit result here because there are no jobs
         // running in parallel with this one.
@@ -157,7 +157,7 @@ void UploadPhotosJob::postJobFinished(KJob *kjob)
     if (job->error()) {
         setError(job->error());
         setErrorText(job->errorText());
-        kWarning() << "Job error: " << job->errorString();
+        qWarning() << "Job error: " << job->errorString();
     }
 
     if (error()) {
@@ -198,7 +198,7 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
     if (job->error()) {
         setError(job->error());
         setErrorText(job->errorText());
-        kWarning() << "Job error: " << job->errorString();
+        qWarning() << "Job error: " << job->errorString();
     }
 
     if (error()) {
@@ -224,7 +224,7 @@ void UploadPhotosJob::saveJobFinished(KJob *kjob)
     m_jobs.removeAll(job);
 }
 
-QList<PhotoInfoPtr> UploadPhotosJob::list() const
+QList<PhotoInfo> UploadPhotosJob::list() const
 {
     return d->list;
 }

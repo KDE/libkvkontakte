@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,7 +23,6 @@
 
 #include "vkontaktejobs.h"
 #include "photoinfo.h"
-#include "qintlist.h"
 
 namespace Vkontakte
 {
@@ -33,19 +32,17 @@ class LIBKVKONTAKTE_EXPORT PhotoListJob : public VkontakteJob
     Q_OBJECT
 public:
     PhotoListJob(const QString &accessToken,
-                 int uid, int aid, const QIntList &pids = QIntList());
+                 int uid, int aid, const QList<int> &pids = QList<int>());
     ~PhotoListJob();
 
-    QList<PhotoInfoPtr> list() const;
+    QList<PhotoInfo> list() const;
 
 protected:
     /**
-    * @brief Handles the data returned by the VkontakteGetJob
-    * @param data A JSON string containing the data.
+    * @brief Handles the data returned by VkontakteJob
+    * @param data JSON value containing an array of photos.
     */
-    virtual void handleData(const QVariant &data);
-
-    void handleItem(const QVariant &data);
+    virtual void handleData(const QJsonValue &data);
 
 private:
     class Private;

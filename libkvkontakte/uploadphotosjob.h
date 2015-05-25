@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,8 +23,8 @@
 
 #include <QtCore/QVariantMap>
 
-#include "vkontaktejobs.h"
-#include "photoinfo.h"
+#include <libkvkontakte/vkontaktejobs.h>
+#include <libkvkontakte/photoinfo.h>
 
 namespace Vkontakte
 {
@@ -45,7 +45,7 @@ public:
 
     virtual void start();
 
-    QList<PhotoInfoPtr> list() const;
+    QList<PhotoInfo> list() const;
 
 protected:
     static const int MAX_POST_JOBS;

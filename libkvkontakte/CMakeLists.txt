@@ -15,8 +15,15 @@ set(libkvkontakte_SRCS
     editalbumjob.cpp
     deletealbumjob.cpp
 
+    photoinfo.cpp
+    photolistjob.cpp
+    photojob.cpp
+    getphotouploadserverjob.cpp
+    photopostjob.cpp
+    savephotojob.cpp
+    uploadphotosjob.cpp
+
 #     friendlistjob.cpp
-#     photojob.cpp
 #     noteslistjob.cpp
 #     allnoteslistjob.cpp
 #     notejob.cpp
@@ -30,12 +37,6 @@ set(libkvkontakte_SRCS
 #     noteinfo.cpp
 #     noteaddjob.cpp
 #     allmessageslistjob.cpp
-#     getphotouploadserverjob.cpp
-#     photopostjob.cpp
-#     savephotojob.cpp
-#     uploadphotosjob.cpp
-#     photoinfo.cpp
-#     photolistjob.cpp
 #     groupinfo.cpp
 #     grouplistjob.cpp
 )
@@ -94,9 +95,10 @@ if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
         editalbumjob.h
         deletealbumjob.h
 
+        uploadphotosjob.h
+
 #         getapplicationpermissionsjob.h
 #         authenticationdialog.h
-#         uploadphotosjob.h
 #         photoinfo.h
 #         messageinfo.h
 #         noteinfo.h

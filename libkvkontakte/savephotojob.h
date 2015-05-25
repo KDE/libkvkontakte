@@ -21,11 +21,12 @@
 #ifndef SAVEPHOTOJOB_H
 #define SAVEPHOTOJOB_H
 
-#include <QtCore/QVariantMap>
-
 #include "vkontaktejobs.h"
 #include "photoinfo.h"
 #include "uploadphotosjob.h"
+
+#include <QtCore/QVariantMap>
+#include <QtCore/QJsonValue>
 
 namespace Vkontakte
 {
@@ -40,16 +41,16 @@ public:
                  UploadPhotosJob::Dest dest,
                  const QVariantMap &photoIdData, int gid = -1);
 
-    QList<PhotoInfoPtr> list() const;
+    QList<PhotoInfo> list() const;
 
 protected:
     QString getMethod(Vkontakte::UploadPhotosJob::Dest dest);
-    virtual void handleData(const QVariant &data);
-    void handleItem(const QVariant &data);
+    void handleItem(const QJsonValue &item);
+    virtual void handleData(const QJsonValue &data);
 
 private:
     UploadPhotosJob::Dest m_dest;
-    QList<PhotoInfoPtr> m_list;
+    QList<PhotoInfo> m_list;
 };
 
 } /* namespace Vkontakte */

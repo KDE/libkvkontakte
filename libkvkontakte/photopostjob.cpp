@@ -20,22 +20,23 @@
 
 #include "photopostjob.h"
 
+#include <KIO/Job>
+#include <KLocalizedString>
+
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QMimeDatabase>
+#include <QtCore/QMimeType>
+#include <QtCore/QJsonDocument>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QHttpMultiPart>
 
-#include <qjson/parser.h>
-#include <KIO/Job>
-#include <KDebug>
-#include <KLocale>
-#include <KMimeType>
-
 namespace Vkontakte
 {
 
-PhotoPostJob::PhotoPostJob(Vkontakte::UploadPhotosJob::Dest dest, const QString &url, const QStringList &files)
+PhotoPostJob::PhotoPostJob(Vkontakte::UploadPhotosJob::Dest dest,
+                           const QUrl &url, const QStringList &files)
 {
     m_url = url;
     m_files = files;
@@ -48,23 +49,47 @@ PhotoPostJob::PhotoPostJob(Vkontakte::UploadPhotosJob::Dest dest, const QString 
         m_ok = false;
 }
 
-void PhotoPostJob::handleError(const QVariant &data)
+void PhotoPostJob::handleError(const QJsonValue &data)
 {
-    const QVariantMap errorMap = data.toMap();
-    int error_code = errorMap["error_code"].toInt();
-    const QString error_msg = errorMap["error_msg"].toString();
-    kWarning() << "An error of type" << error_code << "occurred:" << error_msg;
+    int error_code = -1;
+    QString error_msg;
+
+    if (data.isUndefined())
+    {
+        qWarning() << "Response from server has unexpected format";
+    }
+    else
+    {
+        const QVariantMap errorMap = data.toVariant().toMap();
+
+        error_code = errorMap["error_code"].toInt();
+        error_msg = errorMap["error_msg"].toString();
+
+        qWarning() << "An error of type" << error_code << "occurred:" << error_msg;
+    }
+
     setError(KJob::UserDefinedError);
-    setErrorText(i18n(
-        "The VKontakte server returned an error "
-        "of type <i>%1</i> in reply to uploading to URL %2: <i>%3</i>",
-        error_code, m_url, error_msg));
+
+    if (data.isUndefined())
+    {
+        setErrorText(i18n(
+            "Response from the VKontakte server has unexpected format. "
+            "Please report this problem against product libkvkontakte "
+            "at the <a href=\"%1\">KDE bug tracker</b>.",
+            QStringLiteral("http://bugs.kde.org/")));
+    }
+    else
+    {
+        setErrorText(i18n(
+            "The VKontakte server returned an error "
+            "of type <i>%1</i> in reply to uploading to URL %2: <i>%3</i>",
+            error_code, m_url.toString(), error_msg));
+    }
 }
 
-bool PhotoPostJob::appendFile(QHttpMultiPart* multiPart, const QString& header, const QString& path)
+bool PhotoPostJob::appendFile(QHttpMultiPart *multiPart, const QString &header, const QString &path)
 {
-    KMimeType::Ptr ptr = KMimeType::findByUrl(path);
-    QString mime = ptr->name();
+    QString mime = QMimeDatabase().mimeTypeForUrl(QUrl(path)).name();
     if (mime.isEmpty())
         return false;
 
@@ -132,7 +157,7 @@ void PhotoPostJob::start()
     connect(manager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(parseNetworkResponse(QNetworkReply*)));
 
-    kDebug() << "Starting POST request" << m_url;
+    qDebug() << "Starting POST request" << m_url;
     QNetworkReply *reply = manager->post(QNetworkRequest(m_url), multiPart);
     multiPart->setParent(reply); // delete the multiPart with the reply
 }
@@ -149,32 +174,40 @@ void PhotoPostJob::parseNetworkResponse(QNetworkReply *reply)
     else
     {
         QByteArray ba = reply->readAll();
-        kDebug() << "Got data: " << QString::fromAscii(ba.constData());
-        QJson::Parser parser;
-        bool ok;
-        const QVariant data = parser.parse(ba, &ok);
-        if (ok)
+        qDebug() << "Got data:" << ba;
+
+        QJsonParseError parseError;
+        QJsonDocument data = QJsonDocument::fromJson(ba, &parseError);
+        if (parseError.error == QJsonParseError::NoError)
         {
-            const QVariant error = data.toMap()["error"];
-            if (error.isValid())
-                handleError(error);
+            const QJsonObject object = data.object();
+
+            if (!data.isObject())
+            {
+                // Something went wrong, but there is no valid object "error"
+                handleError(QJsonValue::Undefined);
+            }
+            else if (object.contains("error"))
+            {
+                handleError(object.value("error"));
+            }
             else
-                handleData(data);
+            {
+                // Handle data
+                m_response = object.toVariantMap();
+            }
         }
         else
         {
-            kWarning() << "Unable to parse JSON data: " << QString::fromAscii(ba.data());
+            qWarning() << "Unable to parse JSON data:" << ba;
             setError(KJob::UserDefinedError);
-            setErrorText(i18n("Unable to parse data returned by the VKontakte server: %1", parser.errorString()));
+            setErrorText(
+                i18n("Unable to parse data returned by the VKontakte server: %1",
+                     parseError.errorString()));
         }
     }
 
     emitResult();
-}
-
-void PhotoPostJob::handleData(const QVariant &data)
-{
-    m_response = data.toMap();
 }
 
 QVariantMap PhotoPostJob::response() const

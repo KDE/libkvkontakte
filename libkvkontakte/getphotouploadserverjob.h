@@ -37,16 +37,16 @@ public:
 
     void initUploadAlbum(int aid, int gid = -1);
 
-    QString uploadUrl() const;
+    QUrl uploadUrl() const;
 
 protected:
     static QString getMethod(enum UploadPhotosJob::Dest dest);
     virtual void prepareQueryItems();
-    virtual void handleData(const QVariant &data);
+    virtual void handleData(const QJsonValue &data);
 
 private:
     UploadPhotosJob::Dest m_dest;
-    QString m_uploadUrl;
+    QUrl m_uploadUrl;
 
     int m_aid;
     int m_gid;

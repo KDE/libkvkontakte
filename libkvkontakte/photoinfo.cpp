@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,142 +21,76 @@
 #include "photoinfo.h"
 #include "util.h"
 
-#include <KLocalizedString>
-
 namespace Vkontakte
 {
 
-class PhotoInfo::Private
+class PhotoInfo::Private : public QSharedData
 {
 public:
-    int pid;
-    int aid;
-    int uid;
-    QString src;
-    QString srcSmall;
-    QString srcBig;
-    QString srcXBig;
-    QString srcXXBig;
-    QString text;
-    QString dateCreated;
+    QJsonObject jsonData;
 };
 
 PhotoInfo::PhotoInfo()
     : d(new Private)
 {
-    d->pid = -1;
-    d->aid = -1;
-    d->uid = -1;
+}
+
+PhotoInfo::PhotoInfo(const QJsonObject &jsonData)
+    : d(new Private)
+{
+    d->jsonData = jsonData;
+}
+
+PhotoInfo::PhotoInfo(const PhotoInfo &other)
+{
+    d = other.d;
 }
 
 PhotoInfo::~PhotoInfo()
 {
-    delete d;
 }
 
-void PhotoInfo::setPid(int pid)
+PhotoInfo &PhotoInfo::operator=(const PhotoInfo &other)
 {
-    d->pid = pid;
+    if (this != &other)
+    {
+        d = other.d;
+    }
+
+    return *this;
 }
 
 int PhotoInfo::pid() const
 {
-    return d->pid;
+    return d->jsonData.value(QStringLiteral("pid")).toInt(-1);
 }
 
-void PhotoInfo::setAid(int aid)
+QUrl PhotoInfo::urlMaxResolution() const
 {
-    d->aid = aid;
-}
+    // Photo URLs in the order of decresing size
+    QStringList srcKeys;
+    srcKeys.append(QStringLiteral("src_xxxbig"));
+    srcKeys.append(QStringLiteral("src_xxbig"));
+    srcKeys.append(QStringLiteral("src_xbig"));
+    srcKeys.append(QStringLiteral("src_big"));
+    srcKeys.append(QStringLiteral("src"));
+    srcKeys.append(QStringLiteral("src_small"));
 
-int PhotoInfo::aid() const
-{
-    return d->aid;
-}
+    foreach (const QString &key, srcKeys)
+    {
+        if (!d->jsonData.contains(key))
+        {
+            continue;
+        }
 
-void PhotoInfo::setUid(int uid)
-{
-    d->uid = uid;
-}
+        QJsonValue value = d->jsonData.value(key);
+        if (value.isString())
+        {
+            return QUrl(value.toString());
+        }
+    }
 
-int PhotoInfo::uid() const
-{
-    return d->uid;
-}
-
-void PhotoInfo::setSrc(const QString &src)
-{
-    d->src = src;
-}
-
-QString PhotoInfo::src() const
-{
-    return d->src;
-}
-
-void PhotoInfo::setSrcSmall(const QString &srcSmall)
-{
-    d->srcSmall = srcSmall;
-}
-
-QString PhotoInfo::srcSmall() const
-{
-    return d->srcSmall;
-}
-
-void PhotoInfo::setSrcBig(const QString &srcBig)
-{
-    d->srcBig = srcBig;
-}
-
-QString PhotoInfo::srcBig() const
-{
-    return d->srcBig;
-}
-
-void PhotoInfo::setSrcXBig(const QString &srcXBig)
-{
-    d->srcXBig = srcXBig;
-}
-
-QString PhotoInfo::srcXBig() const
-{
-    return d->srcXBig;
-}
-
-void PhotoInfo::setSrcXXBig(const QString &srcXXBig)
-{
-    d->srcXXBig = srcXXBig;
-}
-
-QString PhotoInfo::srcXXBig() const
-{
-    return d->srcXXBig;
-}
-
-void PhotoInfo::setText(const QString &text)
-{
-    d->text = text;
-}
-
-QString PhotoInfo::text() const
-{
-    return d->text;
-}
-
-void PhotoInfo::setDateCreatedString(const QString &dateCreatedString)
-{
-    d->dateCreated = dateCreatedString;
-}
-
-QString PhotoInfo::dateCreatedString() const
-{
-    return d->dateCreated;
-}
-
-KDateTime PhotoInfo::dateCreated() const
-{
-    return unixTimeToKDateTime(d->dateCreated);
+    return QUrl();
 }
 
 } /* namespace Vkontakte */

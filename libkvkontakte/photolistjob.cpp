@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,9 @@
  */
 
 #include "photolistjob.h"
+#include "util.h"
 
-#include <qjson/qobjecthelper.h>
+#include <QtCore/QJsonArray>
 
 namespace Vkontakte
 {
@@ -28,7 +29,7 @@ namespace Vkontakte
 class PhotoListJob::Private
 {
 public:
-    QList<PhotoInfoPtr> list;
+    QList<PhotoInfo> list;
 };
 
 // http://vk.com/dev/photos.get
@@ -36,14 +37,14 @@ public:
 // The API also allows to set "limit" and "offset", but that
 // does not seem to be useful.
 PhotoListJob::PhotoListJob(const QString &accessToken,
-                           int uid, int aid, const QIntList &pids)
+                           int uid, int aid, const QList<int> &pids)
     : VkontakteJob(accessToken, "photos.get")
     , d(new Private)
 {
     addQueryItem("uid", QString::number(uid));
     addQueryItem("aid", QString::number(aid));
     if (!pids.empty())
-        addQueryItem("pids", pids.join());
+        addQueryItem("pids", joinIntegers(pids));
 }
 
 PhotoListJob::~PhotoListJob()
@@ -51,20 +52,28 @@ PhotoListJob::~PhotoListJob()
     delete d;
 }
 
-void PhotoListJob::handleItem(const QVariant &data)
+void PhotoListJob::handleData(const QJsonValue &data)
 {
-    PhotoInfoPtr item(new PhotoInfo());
-    QJson::QObjectHelper::qvariant2qobject(data.toMap(), item.data());
-    d->list.append(item);
+    if (!data.isArray())
+    {
+        // TODO: report error!!!
+        return;
+    }
+
+    foreach (const QJsonValue &item, data.toArray())
+    {
+        if (!item.isObject())
+        {
+            // TODO: report error!!!
+            d->list.clear();
+            return;
+        }
+
+        d->list.append(PhotoInfo(item.toObject()));
+    }
 }
 
-void PhotoListJob::handleData(const QVariant &data)
-{
-    foreach(const QVariant &item, data.toList())
-        handleItem(item);
-}
-
-QList<PhotoInfoPtr> PhotoListJob::list() const
+QList<PhotoInfo> PhotoListJob::list() const
 {
     return d->list;
 }

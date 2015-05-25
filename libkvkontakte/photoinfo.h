@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,9 @@
 #ifndef PHOTOINFO_H
 #define PHOTOINFO_H
 
-#include <KDE/KDateTime>
+#include <QtCore/QJsonObject>
+#include <QtCore/QSharedDataPointer>
+#include <QtCore/QUrl>
 
 #include "libkvkontakte_export.h"
 
@@ -29,74 +31,30 @@ namespace Vkontakte
 {
 
 // http://vk.com/dev/photos.get
-class LIBKVKONTAKTE_EXPORT PhotoInfo : public QObject
+class LIBKVKONTAKTE_EXPORT PhotoInfo
 {
-    Q_OBJECT
-
-    // pid, aid, owner_id, src, src_small, src_big, text, created
-    // When save_big=1: src_xbig, src_xxbig
-    Q_PROPERTY(int pid WRITE setPid READ pid)
-    Q_PROPERTY(int aid WRITE setAid READ aid)
-    Q_PROPERTY(int owner_id WRITE setUid READ uid)
-    Q_PROPERTY(QString src WRITE setSrc READ src)
-    Q_PROPERTY(QString src_small WRITE setSrcSmall READ srcSmall)
-    Q_PROPERTY(QString src_big WRITE setSrcBig READ srcBig)
-    Q_PROPERTY(QString src_xbig WRITE setSrcXBig READ srcXBig)
-    Q_PROPERTY(QString src_xxbig WRITE setSrcXXBig READ srcXXBig)
-    Q_PROPERTY(QString text WRITE setText READ text)
-    Q_PROPERTY(QString created WRITE setDateCreatedString READ dateCreatedString)
-
 public:
     PhotoInfo();
+    PhotoInfo(const PhotoInfo &other);
+    PhotoInfo(const QJsonObject &jsonData);
     ~PhotoInfo();
 
-    void setPid(int pid);
+    PhotoInfo &operator=(const PhotoInfo &other);
+
+    /**
+     * @brief Returns the integer ID of the photo
+     */
     int pid() const;
 
-    void setAid(int aid);
-    int aid() const;
-
-    void setUid(int uid);
-    int uid() const;
-
-    void setSrc(const QString &src);
-    QString src() const;
-
-    void setSrcSmall(const QString &srcSmall);
-    QString srcSmall() const;
-
-    void setSrcBig(const QString &srcBig);
-    QString srcBig() const;
-
-    void setSrcXBig(const QString &srcXBig);
-    QString srcXBig() const;
-
-    void setSrcXXBig(const QString &srcXXBig);
-    QString srcXXBig() const;
-
-    void setText(const QString &text);
-    QString text() const;
-
     /**
-     * Set the creation time of the note
-     * @param createdTime Time as UNIX timestamp
+     * @brief Return URL to the image version of maximum resolution
      */
-    void setDateCreatedString(const QString &dateCreatedString);
-    /**
-     * Returns the creation date/time as a UNIX timestamp
-     */
-    QString dateCreatedString() const;
-    /**
-     * Returns the creation date/time in KDateTime
-     */
-    KDateTime dateCreated() const;
+    QUrl urlMaxResolution() const;
 
 private:
     class Private;
-    Private * const d;
+    QSharedDataPointer<Private> d;
 };
-
-typedef QSharedPointer<PhotoInfo> PhotoInfoPtr;
 
 } /* namespace Vkontakte */
 
