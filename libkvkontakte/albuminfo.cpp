@@ -31,7 +31,7 @@ public:
 };
 
 AlbumInfo::AlbumInfo()
-    : d(new Private)
+    : d()
 {
 }
 
@@ -58,6 +58,11 @@ AlbumInfo &AlbumInfo::operator=(const AlbumInfo &other)
     }
 
     return *this;
+}
+
+bool AlbumInfo::isEmpty() const
+{
+    return !d;
 }
 
 int AlbumInfo::aid() const

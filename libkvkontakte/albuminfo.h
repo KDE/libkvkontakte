@@ -49,6 +49,8 @@ public:
 
     AlbumInfo &operator=(const AlbumInfo &other);
 
+    bool isEmpty() const;
+
     int aid() const;
     QString title() const;
     QString description() const;
