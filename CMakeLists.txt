@@ -33,6 +33,7 @@ find_package(KF5WebKit ${REQUIRED_KF5_VERSION} REQUIRED)
 find_package(KF5CoreAddons ${REQUIRED_KF5_VERSION} REQUIRED)
 find_package(KF5KDELibs4Support ${REQUIRED_KF5_VERSION} REQUIRED)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(libkvkontakte)
 
