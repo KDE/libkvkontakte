@@ -95,11 +95,11 @@ if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
         editalbumjob.h
         deletealbumjob.h
 
+        photoinfo.h
         uploadphotosjob.h
 
 #         getapplicationpermissionsjob.h
 #         authenticationdialog.h
-#         photoinfo.h
 #         messageinfo.h
 #         noteinfo.h
 #         friendlistjob.h
