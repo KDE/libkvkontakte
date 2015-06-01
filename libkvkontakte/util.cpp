@@ -85,7 +85,7 @@ QStringList appPermissionsToStringList(Vkontakte::AppPermissions::Value permissi
 // TODO: remove this function after AuthenticationDialog::setPermissions(QStringList) is removed
 Vkontakte::AppPermissions::Value appPermissionsFromStringList(QStringList permissions)
 {
-    Vkontakte::AppPermissions::Value res;
+    Vkontakte::AppPermissions::Value res = Vkontakte::AppPermissions::NoPermissions;
 
     foreach (Vkontakte::AppPermissions::Value key, appPermissionToString.keys()) {
         if (permissions.contains(appPermissionToString.value(key))) {
