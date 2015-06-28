@@ -25,10 +25,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QVector>
 
-namespace KIPIVkontaktePlugin {
-    class VkApi;
-}
-
 /*
  * What is tested here:
  *   class AlbumListJob

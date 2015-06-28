@@ -24,10 +24,6 @@
 
 #include <QtCore/QObject>
 
-namespace KIPIVkontaktePlugin {
-    class VkApi;
-}
-
 /*
  * What is tested here:
  *   class UserInfoJob

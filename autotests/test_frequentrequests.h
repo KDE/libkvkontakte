@@ -24,10 +24,6 @@
 
 #include <QtCore/QObject>
 
-namespace KIPIVkontaktePlugin {
-    class VkApi;
-}
-
 /*
  * Here we verify that everything works if several requests are sent
  * at a frequency of more than 3 requests per second.
