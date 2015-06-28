@@ -1,4 +1,21 @@
 *****************************************************************************************************
+libkvkontakte 4.12.0 - Release date: 2015-06-28
+
+NEW FEATURES:
+001 ==> Add new class VkApi to manage authentication
+
+BUGFIXES FROM KDE BUGZILLA:
+(none)
+
+OTHER CHANGES:
+001 ==> Relicensed all the code to LGPLv2.1+
+002 ==> Use method account.getAppPermissions instead of deprecated method getUserSettings
+003 ==> Add enum AppPermissions::Value for application permissions, to replace string lists
+004 ==> VkontakteJob: Do not pass empty auth token to VK API
+005 ==> autotests: Request only necessary VK app permissions in each unit test
+006 ==> autotests: Prefer QList::at(0) over QList::first() to avoid deep copying
+
+*****************************************************************************************************
 libkvkontakte 4.11.0 - Release date: 2015-05-24
 
 NEW FEATURES:
