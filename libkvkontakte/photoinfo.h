@@ -21,9 +21,9 @@
 #ifndef PHOTOINFO_H
 #define PHOTOINFO_H
 
-#include <KDE/KDateTime>
-
 #include "libkvkontakte_export.h"
+
+#include <KDE/KDateTime>
 
 namespace Vkontakte
 {

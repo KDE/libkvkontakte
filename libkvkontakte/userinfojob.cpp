@@ -21,10 +21,11 @@
 
 #include "userinfojob.h"
 
-#include <qjson/qobjecthelper.h>
 #include <KIO/Job>
 #include <KDebug>
 #include <KLocale>
+
+#include <qjson/qobjecthelper.h>
 
 namespace Vkontakte
 {

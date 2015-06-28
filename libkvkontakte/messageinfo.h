@@ -21,9 +21,9 @@
 #ifndef MESSAGEINFO_H
 #define MESSAGEINFO_H
 
-#include <KDE/KDateTime>
-
 #include "libkvkontakte_export.h"
+
+#include <KDE/KDateTime>
 
 namespace Vkontakte
 {

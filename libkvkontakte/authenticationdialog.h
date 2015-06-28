@@ -22,11 +22,11 @@
 #ifndef AUTHENTICATIONDIALOG_H
 #define AUTHENTICATIONDIALOG_H
 
+#include "libkvkontakte_export.h"
+
 #include <libkvkontakte/apppermissions.h>
 
 #include <KDE/KDialog>
-
-#include "libkvkontakte_export.h"
 
 namespace Vkontakte
 {

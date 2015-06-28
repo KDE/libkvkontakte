@@ -23,13 +23,13 @@
 #ifndef VKAPI_H
 #define VKAPI_H
 
+#include "libkvkontakte_export.h"
+
+// LibKvkontakte includes
 #include <libkvkontakte/apppermissions.h>
 
 // Qt includes
-
 #include <QObject>
-
-#include "libkvkontakte_export.h"
 
 class QWidget;
 class KJob;

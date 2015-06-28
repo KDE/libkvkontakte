@@ -21,11 +21,11 @@
 #ifndef SAVEPHOTOJOB_H
 #define SAVEPHOTOJOB_H
 
-#include <QtCore/QVariantMap>
-
 #include "vkontaktejobs.h"
 #include "photoinfo.h"
 #include "uploadphotosjob.h"
+
+#include <QtCore/QVariantMap>
 
 namespace Vkontakte
 {

@@ -27,6 +27,7 @@
 #include <KWebView>
 #include <KMessageBox>
 #include <KDebug>
+
 #include <QVBoxLayout>
 #include <QTimer>
 #include <QLabel>

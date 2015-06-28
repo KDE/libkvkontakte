@@ -20,9 +20,10 @@
 
 #include "editalbumjob.h"
 
-#include <QtCore/QVariant>
 #include <KDebug>
 #include <KLocalizedString>
+
+#include <QtCore/QVariant>
 
 namespace Vkontakte
 {

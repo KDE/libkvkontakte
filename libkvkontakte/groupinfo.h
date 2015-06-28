@@ -21,10 +21,9 @@
 #ifndef GROUPINFO_H
 #define GROUPINFO_H
 
-#include <QtCore/QSharedPointer>
-//#include <KDE/KDateTime>
-
 #include "libkvkontakte_export.h"
+
+#include <QtCore/QSharedPointer>
 
 namespace Vkontakte
 {

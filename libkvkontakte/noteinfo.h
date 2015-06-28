@@ -22,9 +22,9 @@
 #ifndef NOTEINFO_H
 #define NOTEINFO_H
 
-#include <KDE/KDateTime>
-
 #include "libkvkontakte_export.h"
+
+#include <KDE/KDateTime>
 
 namespace Vkontakte
 {

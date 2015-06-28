@@ -21,9 +21,9 @@
 #ifndef GETVARIABLEJOB_H
 #define GETVARIABLEJOB_H
 
-#include <QtCore/QVariant>
-
 #include "vkontaktejobs.h"
+
+#include <QtCore/QVariant>
 
 namespace Vkontakte
 {

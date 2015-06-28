@@ -21,9 +21,9 @@
 #ifndef ALBUMINFO_H
 #define ALBUMINFO_H
 
-#include <KDE/KDateTime>
-
 #include "libkvkontakte_export.h"
+
+#include <KDE/KDateTime>
 
 namespace Vkontakte
 {

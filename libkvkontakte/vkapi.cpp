@@ -22,14 +22,12 @@
 
 #include "vkapi.h"
 
-// Qt includes
-
-#include <QtCore/QPointer>
-
 // LibKvkontakte includes
-
 #include <libkvkontakte/authenticationdialog.h>
 #include <libkvkontakte/getapplicationpermissionsjob.h>
+
+// Qt includes
+#include <QtCore/QPointer>
 
 namespace Vkontakte
 {

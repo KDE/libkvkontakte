@@ -22,10 +22,11 @@
 #ifndef USERINFO_H
 #define USERINFO_H
 
-#include <QtCore/QVariantMap>
+#include "libkvkontakte_export.h"
+
 #include <KDE/KDateTime>
 
-#include "libkvkontakte_export.h"
+#include <QtCore/QVariantMap>
 
 namespace Vkontakte
 {

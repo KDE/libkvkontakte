@@ -20,9 +20,10 @@
 
 #include "deletealbumjob.h"
 
-#include <QVariant>
 #include <KDebug>
 #include <KLocalizedString>
+
+#include <QVariant>
 
 namespace Vkontakte
 {

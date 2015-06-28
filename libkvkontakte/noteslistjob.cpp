@@ -20,8 +20,9 @@
 
 #include "noteslistjob.h"
 
-#include <QtCore/QVariant>
 #include <qjson/qobjecthelper.h>
+
+#include <QtCore/QVariant>
 
 namespace Vkontakte
 {

@@ -22,11 +22,13 @@
 
 #include "vkontaktejobs.h"
 
-#include <QtCore/QTimer>
-#include <qjson/parser.h>
 #include <KIO/Job>
 #include <KDebug>
 #include <KLocale>
+
+#include <qjson/parser.h>
+
+#include <QtCore/QTimer>
 
 namespace Vkontakte
 {

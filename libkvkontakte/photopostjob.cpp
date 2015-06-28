@@ -20,17 +20,18 @@
 
 #include "photopostjob.h"
 
+#include <KIO/Job>
+#include <KDebug>
+#include <KLocale>
+#include <KMimeType>
+
+#include <qjson/parser.h>
+
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QHttpMultiPart>
-
-#include <qjson/parser.h>
-#include <KIO/Job>
-#include <KDebug>
-#include <KLocale>
-#include <KMimeType>
 
 namespace Vkontakte
 {

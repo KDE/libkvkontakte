@@ -21,11 +21,11 @@
 #ifndef PHOTOPOSTJOB_H
 #define PHOTOPOSTJOB_H
 
-#include <QtCore/QStringList>
-#include <QtCore/QVariantMap>
-
 #include "vkontaktejobs.h"
 #include "uploadphotosjob.h"
+
+#include <QtCore/QStringList>
+#include <QtCore/QVariantMap>
 
 class QHttpMultiPart;
 class QNetworkReply;

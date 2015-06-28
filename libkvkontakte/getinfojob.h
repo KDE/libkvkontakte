@@ -21,9 +21,9 @@
 #ifndef GETINFOJOB_H
 #define GETINFOJOB_H
 
-#include <QtCore/QVariantMap>
-
 #include "vkontaktejobs.h"
+
+#include <QtCore/QVariantMap>
 
 namespace Vkontakte
 {
