@@ -34,7 +34,7 @@
 namespace Vkontakte
 {
 
-class VkApi::Private
+class Q_DECL_HIDDEN VkApi::Private
 {
 public:
     QWidget* parent;

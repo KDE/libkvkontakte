@@ -27,7 +27,7 @@
 namespace Vkontakte
 {
 
-class NoteInfo::Private
+class Q_DECL_HIDDEN NoteInfo::Private
 {
 public:
     int nid;          /* Vkontakte id of the note. */

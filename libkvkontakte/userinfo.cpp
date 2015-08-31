@@ -27,7 +27,7 @@
 namespace Vkontakte
 {
 
-class UserInfo::Private : public QSharedData
+class Q_DECL_HIDDEN UserInfo::Private : public QSharedData
 {
 public:
     QJsonObject jsonData;

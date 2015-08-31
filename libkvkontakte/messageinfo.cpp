@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-class MessageInfo::Private
+class Q_DECL_HIDDEN MessageInfo::Private
 {
 public:
     QString date;

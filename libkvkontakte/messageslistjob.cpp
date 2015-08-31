@@ -25,7 +25,7 @@
 namespace Vkontakte
 {
 
-class MessagesListJob::Private
+class Q_DECL_HIDDEN MessagesListJob::Private
 {
 public:
     int out;

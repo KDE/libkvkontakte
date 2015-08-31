@@ -23,7 +23,7 @@
 namespace Vkontakte
 {
 
-class GroupInfo::Private
+class Q_DECL_HIDDEN GroupInfo::Private
 {
 public:
     int gid;

@@ -23,7 +23,7 @@
 namespace Vkontakte
 {
 
-class GetVariableJob::Private
+class Q_DECL_HIDDEN GetVariableJob::Private
 {
 public:
     QVariant variable;

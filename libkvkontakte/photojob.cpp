@@ -28,7 +28,7 @@
 namespace Vkontakte
 {
 
-class PhotoJob::Private
+class Q_DECL_HIDDEN PhotoJob::Private
 {
 public:
     QUrl url;

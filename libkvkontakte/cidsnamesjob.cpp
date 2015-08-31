@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-class CidsNamesJob::Private
+class Q_DECL_HIDDEN CidsNamesJob::Private
 {
 public:
     QIntList cids;

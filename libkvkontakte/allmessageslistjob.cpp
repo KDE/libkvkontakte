@@ -27,7 +27,7 @@
 namespace Vkontakte
 {
 
-class AllMessagesListJob::Private
+class Q_DECL_HIDDEN AllMessagesListJob::Private
 {
 public:
     QString accessToken;         /** Vkontakte Access token */

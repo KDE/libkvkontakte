@@ -25,7 +25,7 @@
 namespace Vkontakte
 {
 
-class NoteJob::Private
+class Q_DECL_HIDDEN NoteJob::Private
 {
 public:
     NoteInfoPtr noteInfo;

@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-class PhotoListJob::Private
+class Q_DECL_HIDDEN PhotoListJob::Private
 {
 public:
     QList<PhotoInfo> list;

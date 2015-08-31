@@ -36,7 +36,7 @@
 namespace Vkontakte
 {
 
-class AuthenticationDialog::Private
+class Q_DECL_HIDDEN AuthenticationDialog::Private
 {
 public:
     QString appId;

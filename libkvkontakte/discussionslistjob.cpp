@@ -25,7 +25,7 @@
 namespace Vkontakte
 {
 
-class DiscussionsListJob::Private
+class Q_DECL_HIDDEN DiscussionsListJob::Private
 {
 public:
     int totalCount; // number of all discussions, not only discussions retrieved in this request

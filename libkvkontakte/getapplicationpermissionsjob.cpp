@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-class GetApplicationPermissionsJob::Private
+class Q_DECL_HIDDEN GetApplicationPermissionsJob::Private
 {
 public:
     int permissions;

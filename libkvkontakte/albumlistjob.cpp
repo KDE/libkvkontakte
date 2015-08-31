@@ -27,7 +27,7 @@
 namespace Vkontakte
 {
 
-class AlbumListJob::Private
+class Q_DECL_HIDDEN AlbumListJob::Private
 {
 public:
     QList<AlbumInfo> list;

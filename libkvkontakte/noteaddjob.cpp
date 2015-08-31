@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-class NoteAddJob::Private
+class Q_DECL_HIDDEN NoteAddJob::Private
 {
 public:
     int nid;

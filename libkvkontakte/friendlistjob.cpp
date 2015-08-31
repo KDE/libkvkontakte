@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-class FriendListJob::Private
+class Q_DECL_HIDDEN FriendListJob::Private
 {
 public:
     QList<UserInfoPtr> list;

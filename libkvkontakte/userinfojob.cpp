@@ -27,7 +27,7 @@
 namespace Vkontakte
 {
 
-class UserInfoJob::Private
+class Q_DECL_HIDDEN UserInfoJob::Private
 {
 public:
     QList<UserInfo> userInfo;

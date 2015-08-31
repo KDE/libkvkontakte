@@ -23,7 +23,7 @@
 namespace Vkontakte
 {
 
-class GetInfoJob::Private
+class Q_DECL_HIDDEN GetInfoJob::Private
 {
 public:
     QVariantMap info;

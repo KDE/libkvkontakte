@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-class NotesListJob::Private
+class Q_DECL_HIDDEN NotesListJob::Private
 {
 public:
     int totalCount; // number of all notes, not only notes retrieved in this request

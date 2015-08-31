@@ -26,7 +26,7 @@
 namespace Vkontakte
 {
 
-class GroupListJob::Private
+class Q_DECL_HIDDEN GroupListJob::Private
 {
 public:
     QList<GroupInfoPtr> list;

@@ -23,7 +23,7 @@
 namespace Vkontakte
 {
 
-class CreateAlbumJob::Private
+class Q_DECL_HIDDEN CreateAlbumJob::Private
 {
 public:
     AlbumInfo album;
