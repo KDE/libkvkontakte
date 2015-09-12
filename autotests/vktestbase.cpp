@@ -43,7 +43,7 @@ VkTestBase::~VkTestBase()
 
 QString VkTestBase::getSavedToken() const
 {
-    QFile file(AUTOTESTS_API_TOKEN_PATH);
+    QFile file(QStringLiteral(AUTOTESTS_API_TOKEN_PATH));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         return QString();
@@ -56,7 +56,7 @@ QString VkTestBase::getSavedToken() const
 
 void VkTestBase::authenticate(Vkontakte::AppPermissions::Value permissions)
 {
-    m_vkapi->setAppId(VK_APP_ID); // TODO: library should better not crash if setAppId is not called
+    m_vkapi->setAppId(QStringLiteral(VK_APP_ID)); // TODO: library should better not crash if setAppId is not called
     m_vkapi->setRequiredPermissions(permissions);
 
     QString token = getSavedToken();

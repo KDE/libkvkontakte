@@ -62,8 +62,8 @@ void PhotoPostJob::handleError(const QJsonValue &data)
     {
         const QVariantMap errorMap = data.toVariant().toMap();
 
-        error_code = errorMap["error_code"].toInt();
-        error_msg = errorMap["error_msg"].toString();
+        error_code = errorMap[QStringLiteral("error_code")].toInt();
+        error_msg = errorMap[QStringLiteral("error_msg")].toString();
 
         qWarning() << "An error of type" << error_code << "occurred:" << error_msg;
     }
@@ -97,7 +97,8 @@ bool PhotoPostJob::appendFile(QHttpMultiPart *multiPart, const QString &header, 
 
     QHttpPart imagePart;
     imagePart.setHeader(QNetworkRequest::ContentDispositionHeader,
-                        QVariant(QString("form-data; name=\"%1\"; filename=\"%2\"").arg(header).arg(fileInfo.fileName())));
+                        QVariant(QStringLiteral("form-data; name=\"%1\"; filename=\"%2\"")
+                            .arg(header).arg(fileInfo.fileName())));
     imagePart.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(fileInfo.size()));
     imagePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant(mime));
     QFile *file = new QFile(path);
@@ -119,7 +120,7 @@ void PhotoPostJob::start()
     if (!m_ok)
     {
         setError(UserDefinedError);
-        setErrorText("Internal error");
+        setErrorText(QStringLiteral("Internal error"));
         emitResult();
     }
 
@@ -129,7 +130,7 @@ void PhotoPostJob::start()
         case Vkontakte::UploadPhotosJob::DEST_ALBUM:
             // "file1" .. "file5"
             for (int i = 0; i < m_files.size(); i ++)
-                if (!appendFile(multiPart, QString("file%1").arg(i + 1), m_files[i]))
+                if (!appendFile(multiPart, QStringLiteral("file%1").arg(i + 1), m_files[i]))
                 {
                     m_ok = false;
                     break;
@@ -138,7 +139,7 @@ void PhotoPostJob::start()
         case Vkontakte::UploadPhotosJob::DEST_PROFILE:
         case Vkontakte::UploadPhotosJob::DEST_WALL:
             // "photo"
-            if (!appendFile(multiPart, QString("photo"), m_files[0]))
+            if (!appendFile(multiPart, QStringLiteral("photo"), m_files[0]))
                 m_ok = false;
             break;
         default:
@@ -149,7 +150,7 @@ void PhotoPostJob::start()
     if (!m_ok)
     {
         setError(UserDefinedError);
-        setErrorText("Could not attach file");
+        setErrorText(QStringLiteral("Could not attach file"));
         emitResult();
     }
 
@@ -187,9 +188,9 @@ void PhotoPostJob::parseNetworkResponse(QNetworkReply *reply)
                 // Something went wrong, but there is no valid object "error"
                 handleError(QJsonValue::Undefined);
             }
-            else if (object.contains("error"))
+            else if (object.contains(QStringLiteral("error")))
             {
-                handleError(object.value("error"));
+                handleError(object.value(QStringLiteral("error")));
             }
             else
             {

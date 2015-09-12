@@ -34,13 +34,13 @@ public:
 };
 
 AlbumListJob::AlbumListJob(const QString &accessToken, int uid, const QList<int> &aids)
-    : VkontakteJob(accessToken, "photos.getAlbums")
+    : VkontakteJob(accessToken, QStringLiteral("photos.getAlbums"))
     , d(new Private)
 {
     if (uid != -1)
-        addQueryItem("uid", QString::number(uid));
+        addQueryItem(QStringLiteral("uid"), QString::number(uid));
     if (!aids.empty())
-        addQueryItem("aids", joinIntegers(aids));
+        addQueryItem(QStringLiteral("aids"), joinIntegers(aids));
 }
 
 AlbumListJob::~AlbumListJob()

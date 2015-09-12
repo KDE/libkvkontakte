@@ -88,8 +88,8 @@ bool VkontakteJob::handleError(const QJsonValue &data)
     {
         const QVariantMap errorMap = data.toVariant().toMap();
 
-        error_code = errorMap["error_code"].toInt();
-        error_msg = errorMap["error_msg"].toString();
+        error_code = errorMap[QStringLiteral("error_code")].toInt();
+        error_msg = errorMap[QStringLiteral("error_msg")].toString();
 
         qWarning() << "An error of type" << error_code << "occurred:" << error_msg;
     }
@@ -128,9 +128,9 @@ bool VkontakteJob::handleError(const QJsonValue &data)
 KJob* VkontakteJob::createHttpJob()
 {
     QUrl url;
-    url.setScheme("https");
-    url.setHost("api.vk.com");
-    url.setPath("/method/" + m_method);
+    url.setScheme(QStringLiteral("https"));
+    url.setHost(QStringLiteral("api.vk.com"));
+    url.setPath(QStringLiteral("/method/") + m_method);
 
     // Collect query items in "query"
     QUrlQuery query;
@@ -141,7 +141,7 @@ KJob* VkontakteJob::createHttpJob()
 
     if (!m_accessToken.isEmpty())
     {
-        query.addQueryItem("access_token", m_accessToken);
+        query.addQueryItem(QStringLiteral("access_token"), m_accessToken);
     }
 
     url.setQuery(query);
@@ -199,20 +199,20 @@ void VkontakteJob::jobFinished(KJob *kjob)
             const QJsonObject object = data.object();
 
             if (!data.isObject() ||
-                (!object.contains("response") && !object.contains("error")))
+                (!object.contains(QStringLiteral("response")) && !object.contains(QStringLiteral("error"))))
             {
                 // Something went wrong, but there is no valid object "error"
                 handleError(QJsonValue::Undefined);
             }
-            else if (object.contains("error"))
+            else if (object.contains(QStringLiteral("error")))
             {
-                bool willRetry = handleError(object.value("error"));
+                bool willRetry = handleError(object.value(QStringLiteral("error")));
                 if (willRetry)
                     return;
             }
             else
             {
-                handleData(object.value("response"));
+                handleData(object.value(QStringLiteral("response")));
             }
         }
         else

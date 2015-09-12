@@ -26,8 +26,8 @@
 
 #include <QtTest/QtTest>
 
-#define ALBUM1_NAME     "__album for unit testing of libkvkontakte #1"
-#define ALBUM2_NAME     "__album for unit testing of libkvkontakte #2"
+#define ALBUM1_NAME     (QStringLiteral("__album for unit testing of libkvkontakte #1"))
+#define ALBUM2_NAME     (QStringLiteral("__album for unit testing of libkvkontakte #2"))
 
 using namespace Vkontakte;
 
@@ -47,7 +47,7 @@ void TestAlbums::initTestCase()
 
     foreach (const QString &name, albumNames) {
         CreateAlbumJob* const job = new CreateAlbumJob(
-            accessToken(), name, QString("Description for %1").arg(name),
+            accessToken(), name, QStringLiteral("Description for %1").arg(name),
             AlbumInfo::PRIVACY_PRIVATE, AlbumInfo::PRIVACY_PRIVATE);
         job->exec();
         QVERIFY(!job->error());
@@ -72,8 +72,8 @@ void TestAlbums::testListJob()
 void TestAlbums::testEditJob()
 {
     const int albumId = m_albumIds[0];
-    const QString newTitle("what's up?");
-    const QString newDescription("my description");
+    const QString newTitle(QStringLiteral("what's up?"));
+    const QString newDescription(QStringLiteral("my description"));
 
     // Change album title, description and permissions
     {

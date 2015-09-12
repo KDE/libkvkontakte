@@ -24,14 +24,14 @@
 
 #include <libkvkontakte/apppermissions.h>
 
-#include <KDE/KDialog>
+#include <QtWidgets/QDialog>
 
 #include "libkvkontakte_export.h"
 
 namespace Vkontakte
 {
 
-class LIBKVKONTAKTE_EXPORT AuthenticationDialog : public KDialog
+class LIBKVKONTAKTE_EXPORT AuthenticationDialog : public QDialog
 {
     Q_OBJECT
 public:

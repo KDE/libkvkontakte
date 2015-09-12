@@ -27,7 +27,7 @@
 #include <QtTest/QtTest>
 #include <QtGui/QImage>
 
-#define ALBUM1_NAME     "__album for unit testing of libkvkontakte #1"
+#define ALBUM1_NAME     (QStringLiteral("__album for unit testing of libkvkontakte #1"))
 
 using namespace Vkontakte;
 
@@ -44,7 +44,7 @@ void TestPhotos::initTestCase()
 
     // Create album for testing
     CreateAlbumJob* const albumJob = new CreateAlbumJob(
-        accessToken(), ALBUM1_NAME, QString("Description for %1").arg(ALBUM1_NAME),
+        accessToken(), ALBUM1_NAME, QStringLiteral("Description for %1").arg(ALBUM1_NAME),
         AlbumInfo::PRIVACY_PRIVATE, AlbumInfo::PRIVACY_PRIVATE);
     albumJob->exec();
     QVERIFY(!albumJob->error());
@@ -54,7 +54,7 @@ void TestPhotos::initTestCase()
     // Upload photo for testing
     UploadPhotosJob* const job = new UploadPhotosJob(
         accessToken(),
-        QStringList() << QString(AUTOTESTS_DATA_DIR) + "/image1.png",
+        QStringList() << QStringLiteral(AUTOTESTS_DATA_DIR) + QStringLiteral("/image1.png"),
         true, m_albumId);
     job->exec();
     QVERIFY(!job->error());
@@ -95,7 +95,7 @@ void TestPhotos::testUploadMultiple()
 
     QStringList files;
     for (int i = 0; i < count; ++i)
-        files << QString(AUTOTESTS_DATA_DIR) + "/image1.png";
+        files << QStringLiteral(AUTOTESTS_DATA_DIR) + QStringLiteral("/image1.png");
 
     UploadPhotosJob* const job = new UploadPhotosJob(
         accessToken(), files, true, m_albumId);

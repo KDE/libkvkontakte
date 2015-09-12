@@ -35,7 +35,7 @@ public:
 // http://vk.com/dev/account.getAppPermissions
 // http://vk.com/dev/permissions
 GetApplicationPermissionsJob::GetApplicationPermissionsJob(const QString &accessToken)
-    : VkontakteJob(accessToken, "account.getAppPermissions")
+    : VkontakteJob(accessToken, QStringLiteral("account.getAppPermissions"))
     , d(new Private)
 {
 }

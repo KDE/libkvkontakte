@@ -22,7 +22,7 @@
 #include "uploadphotosjob.h"
 
 #include <QtCore/QVariant>
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 namespace Vkontakte
 {
@@ -67,13 +67,13 @@ void GetPhotoUploadServerJob::prepareQueryItems()
             if (m_aid == -1)
             {
                 setError(KJob::UserDefinedError);
-                setErrorText("m_aid not set.");
-                kWarning() << "m_aid not set.";
+                setErrorText(QStringLiteral("m_aid not set."));
+                qWarning() << "m_aid not set.";
             }
 
-            addQueryItem("aid", QString::number(m_aid));
+            addQueryItem(QStringLiteral("aid"), QString::number(m_aid));
             if (m_gid != -1)
-                addQueryItem("gid", QString::number(m_gid));
+                addQueryItem(QStringLiteral("gid"), QString::number(m_gid));
             break;
 
         case Vkontakte::UploadPhotosJob::DEST_PROFILE:
@@ -84,20 +84,20 @@ void GetPhotoUploadServerJob::prepareQueryItems()
             if (m_uid != -1 && m_gid != -1)
             {
                 setError(KJob::UserDefinedError);
-                setErrorText("Only one parameter m_uid or m_gid should be set.");
-                kWarning() << "Only one parameter m_uid or m_gid should be set.";
+                setErrorText(QStringLiteral("Only one parameter m_uid or m_gid should be set."));
+                qWarning() << "Only one parameter m_uid or m_gid should be set.";
             }
 
             if (m_uid != -1)
-                addQueryItem("uid", QString::number(m_uid));
+                addQueryItem(QStringLiteral("uid"), QString::number(m_uid));
             if (m_gid != -1)
-                addQueryItem("gid", QString::number(m_gid));
+                addQueryItem(QStringLiteral("gid"), QString::number(m_gid));
             break;
 
         default:
             setError(KJob::UserDefinedError);
-            setErrorText("Unsupported m_dest.");
-            kWarning() << "Unsupported m_dest.";
+            setErrorText(QStringLiteral("Unsupported m_dest."));
+            qWarning() << "Unsupported m_dest.";
             break;
     }
 }

@@ -31,17 +31,17 @@ namespace Vkontakte
 EditAlbumJob::EditAlbumJob(const QString &accessToken,
                            int aid, const QString &title, const QString &description,
                            int privacy, int comment_privacy)
-    : VkontakteJob(accessToken, "photos.editAlbum", true)
+    : VkontakteJob(accessToken, QStringLiteral("photos.editAlbum"), true)
     , d(0)
 {
-    addQueryItem("aid", QString::number(aid));
-    addQueryItem("title", title);
+    addQueryItem(QStringLiteral("aid"), QString::number(aid));
+    addQueryItem(QStringLiteral("title"), title);
     if (!description.isEmpty())
-        addQueryItem("description", description);
+        addQueryItem(QStringLiteral("description"), description);
     if (privacy != AlbumInfo::PRIVACY_UNKNOWN)
-        addQueryItem("privacy", QString::number(privacy));
+        addQueryItem(QStringLiteral("privacy"), QString::number(privacy));
     if (comment_privacy != AlbumInfo::PRIVACY_UNKNOWN)
-        addQueryItem("comment_privacy", QString::number(comment_privacy));
+        addQueryItem(QStringLiteral("comment_privacy"), QString::number(comment_privacy));
 }
 
 void EditAlbumJob::handleData(const QJsonValue &data)

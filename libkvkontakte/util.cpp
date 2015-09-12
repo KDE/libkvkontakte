@@ -31,9 +31,9 @@
 //     return res;
 // }
 
-static QMap<Vkontakte::AppPermissions::Value, QString> initAppPermissionStrings()
+static QMap<Vkontakte::AppPermissions::Value, const char*> initAppPermissionStrings()
 {
-    QMap<Vkontakte::AppPermissions::Value, QString> map;
+    QMap<Vkontakte::AppPermissions::Value, const char*> map;
 
     // http://vk.com/dev/permissions
     map.insert(Vkontakte::AppPermissions::Notify,        "notify");
@@ -63,7 +63,7 @@ static QMap<Vkontakte::AppPermissions::Value, QString> initAppPermissionStrings(
 }
 
 // This could be a QList<QPair<A, B> >, but with QMap we can write this shorter
-static QMap<Vkontakte::AppPermissions::Value, QString> appPermissionToString = initAppPermissionStrings();
+static QMap<Vkontakte::AppPermissions::Value, const char*> appPermissionToString = initAppPermissionStrings();
 
 QStringList appPermissionsToStringList(Vkontakte::AppPermissions::Value permissions)
 {
@@ -71,7 +71,7 @@ QStringList appPermissionsToStringList(Vkontakte::AppPermissions::Value permissi
 
     foreach (Vkontakte::AppPermissions::Value key, appPermissionToString.keys()) {
         if (permissions & key) {
-            res << appPermissionToString.value(key);
+            res << QString::fromUtf8(appPermissionToString.value(key));
         }
     }
 
@@ -85,7 +85,7 @@ QString joinIntegers(const QList<int> &list)
     {
         if (!res.isEmpty())
         {
-            res += ',';
+            res += QLatin1Char(',');
         }
 
         res += QString::number(x);

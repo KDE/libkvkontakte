@@ -58,7 +58,7 @@ void TestUserInfo::testUserInfoJob()
 //     QCOMPARE(user.countryString(), QString::fromUtf8("Россия"));
 //     QCOMPARE(user.cityId(), 2); // Saint-Petersburg
 //     QCOMPARE(user.cityString(), QString::fromUtf8("Санкт-Петербург"));
-    QCOMPARE(user.domain(), QString("durov"));
+    QCOMPARE(user.domain(), QStringLiteral("durov"));
 //     QCOMPARE(user.hasMobile(), true);
 //     QCOMPARE(user.homePhone(), QString(""));
 //     QCOMPARE(user.mobilePhone(), QString(""));

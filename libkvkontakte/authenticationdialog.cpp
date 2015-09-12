@@ -23,15 +23,17 @@
 
 #include "util.h"
 
-#include <KDE/KWebView>
-#include <KDE/KMessageBox>
+#include <KWebView>
+#include <KMessageBox>
 
 #include <KLocalizedString>
 
 #include <QtCore/QTimer>
+#include <QtCore/QUrlQuery>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QProgressBar>
+#include <QtWidgets/QDialogButtonBox>
 
 namespace Vkontakte
 {
@@ -51,22 +53,17 @@ public:
 };
 
 AuthenticationDialog::AuthenticationDialog(QWidget *parent)
-    : KDialog(parent)
+    : QDialog(parent)
     , d(new Private)
 {
-    d->displayMode = "page";
+    d->displayMode = QStringLiteral("page");
 
-    setButtons(KDialog::Cancel);
-    setCaption(i18nc("@title:window", "Authenticate with VKontakte"));
+    setWindowTitle(i18nc("@title:window", "Authenticate with VKontakte"));
     setAttribute(Qt::WA_DeleteOnClose, true);
 
-    QWidget *widget = new QWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(widget);
     QWidget *progressWidget = new QWidget(this);
     QHBoxLayout *progressLayout = new QHBoxLayout(progressWidget);
     progressLayout->setMargin(0);
-    layout->setMargin(0);
-    setMainWidget(widget);
     d->webView = new KWebView(this);
 
     d->progressBar = new QProgressBar(this);
@@ -75,10 +72,19 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     progressLayout->addWidget(progressLabel);
     progressLayout->addWidget(d->progressBar);
 
+    // Buttons
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel, this);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    // Layout
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(progressWidget);
     layout->addWidget(d->webView);
+    layout->addWidget(buttonBox);
+    setLayout(layout);
 
-    connect(this, SIGNAL(cancelClicked()), SIGNAL(canceled()));
+
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &AuthenticationDialog::canceled);
     connect(d->webView, SIGNAL(urlChanged(QUrl)), this, SLOT(urlChanged(QUrl)));
     connect(d->webView, SIGNAL(loadStarted()), progressWidget, SLOT(show()));
     connect(d->webView, SIGNAL(loadFinished(bool)), progressWidget, SLOT(hide()));
@@ -111,15 +117,16 @@ void AuthenticationDialog::start()
 {
     Q_ASSERT(!d->appId.isEmpty());
 
-    const QString url = QString("http://oauth.vk.com/authorize?"
-                                "client_id=%1&"
-                                "scope=%2&"
-                                "redirect_uri=http://oauth.vk.com/blank.html&"
-                                "display=%3&"
-                                "response_type=token")
-                                .arg(d->appId)
-                                .arg(appPermissionsToStringList(d->permissions).join(","))
-                                .arg(d->displayMode);
+    const QString url = QStringLiteral(
+        "http://oauth.vk.com/authorize?"
+        "client_id=%1&"
+        "scope=%2&"
+        "redirect_uri=http://oauth.vk.com/blank.html&"
+        "display=%3&"
+        "response_type=token")
+        .arg(d->appId)
+        .arg(appPermissionsToStringList(d->permissions).join(QStringLiteral(",")))
+        .arg(d->displayMode);
     qDebug() << "Showing" << url;
     d->webView->setUrl(QUrl::fromUserInput(url));
     show();
@@ -139,10 +146,12 @@ void AuthenticationDialog::showErrorDialog()
 void AuthenticationDialog::urlChanged(const QUrl &url)
 {
     qDebug() << "Navigating to" << url;
-    if (url.host() == "oauth.vk.com" && url.path() == "/blank.html")
+    if (url.host() == QStringLiteral("oauth.vk.com") && url.path() == QStringLiteral("/blank.html"))
     {
-        d->error = url.queryItemValue("error");
-        d->errorDescription = url.queryItemValue("error_description").replace('+', ' ');
+        const QUrlQuery query(url);
+
+        d->error = query.queryItemValue(QStringLiteral("error"));
+        d->errorDescription = query.queryItemValue(QStringLiteral("error_description")).replace(QLatin1Char('+'), QLatin1Char(' '));
         if (!d->error.isEmpty() || !d->errorDescription.isEmpty())
         {
             QTimer::singleShot(0, this, SLOT(showErrorDialog()));
@@ -151,9 +160,10 @@ void AuthenticationDialog::urlChanged(const QUrl &url)
 
         // The URL comes in the form "bla#access_token=bla&expires_in=foo", we need to convert from
         // # to ?
-        const QUrl fixedURL = QUrl::fromUserInput(url.toString().replace('#', '?'));
-        const QString accessToken = fixedURL.queryItemValue("access_token");
-        const QString tokenExpiresIn = fixedURL.queryItemValue("expires_in"); // TODO: use this for something?
+        const QUrl fixedURL = QUrl::fromUserInput(url.toString().replace(QLatin1Char('#'), QLatin1Char('?')));
+        const QUrlQuery fixedQuery(fixedURL);
+        const QString accessToken = fixedQuery.queryItemValue(QStringLiteral("access_token"));
+        const QString tokenExpiresIn = fixedQuery.queryItemValue(QStringLiteral("expires_in")); // TODO: use this for something?
         if (!accessToken.isEmpty())
         {
             emit authenticated(accessToken);

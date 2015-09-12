@@ -38,13 +38,13 @@ public:
 // does not seem to be useful.
 PhotoListJob::PhotoListJob(const QString &accessToken,
                            int uid, int aid, const QList<int> &pids)
-    : VkontakteJob(accessToken, "photos.get")
+    : VkontakteJob(accessToken, QStringLiteral("photos.get"))
     , d(new Private)
 {
-    addQueryItem("uid", QString::number(uid));
-    addQueryItem("aid", QString::number(aid));
+    addQueryItem(QStringLiteral("uid"), QString::number(uid));
+    addQueryItem(QStringLiteral("aid"), QString::number(aid));
     if (!pids.empty())
-        addQueryItem("pids", joinIntegers(pids));
+        addQueryItem(QStringLiteral("pids"), joinIntegers(pids));
 }
 
 PhotoListJob::~PhotoListJob()

@@ -35,26 +35,26 @@ SavePhotoJob::SavePhotoJob(const QString &accessToken,
     switch (dest)
     {
         case Vkontakte::UploadPhotosJob::DEST_ALBUM:
-            addQueryItem("aid", photoIdData["aid"].toString());
-            addQueryItem("server", photoIdData["server"].toString());
-            addQueryItem("photos_list", photoIdData["photos_list"].toString());
-            addQueryItem("hash", photoIdData["hash"].toString());
+            addQueryItem(QStringLiteral("aid"), photoIdData[QStringLiteral("aid")].toString());
+            addQueryItem(QStringLiteral("server"), photoIdData[QStringLiteral("server")].toString());
+            addQueryItem(QStringLiteral("photos_list"), photoIdData[QStringLiteral("photos_list")].toString());
+            addQueryItem(QStringLiteral("hash"), photoIdData[QStringLiteral("hash")].toString());
 
             // TODO: may be "gid" will also be in "photoIdData", so this argument is unnecessary?
             if (gid != -1)
-                addQueryItem("gid", QString::number(gid));
+                addQueryItem(QStringLiteral("gid"), QString::number(gid));
             break;
         case Vkontakte::UploadPhotosJob::DEST_PROFILE:
-            addQueryItem("server", photoIdData["server"].toString());
-            addQueryItem("photo", photoIdData["photos"].toString());
-            addQueryItem("hash", photoIdData["hash"].toString());
+            addQueryItem(QStringLiteral("server"), photoIdData[QStringLiteral("server")].toString());
+            addQueryItem(QStringLiteral("photo"), photoIdData[QStringLiteral("photos")].toString());
+            addQueryItem(QStringLiteral("hash"), photoIdData[QStringLiteral("hash")].toString());
             break;
         case Vkontakte::UploadPhotosJob::DEST_WALL:
             // TODO: support optional parameters "uid" and "gid" (for posting to other users' and groups' walls)
             // TODO: for posting onto a wall, we must also call the "wall.post" VK method
-            addQueryItem("server", photoIdData["server"].toString());
-            addQueryItem("photo", photoIdData["photo"].toString());
-            addQueryItem("hash", photoIdData["hash"].toString());
+            addQueryItem(QStringLiteral("server"), photoIdData[QStringLiteral("server")].toString());
+            addQueryItem(QStringLiteral("photo"), photoIdData[QStringLiteral("photo")].toString());
+            addQueryItem(QStringLiteral("hash"), photoIdData[QStringLiteral("hash")].toString());
             break;
         default:
             // TODO: handle unknown destination error

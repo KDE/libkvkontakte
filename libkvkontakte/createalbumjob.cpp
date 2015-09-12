@@ -32,16 +32,16 @@ public:
 CreateAlbumJob::CreateAlbumJob(const QString &accessToken,
                                const QString &title, const QString &description,
                                int privacy, int comment_privacy)
-    : VkontakteJob(accessToken, "photos.createAlbum", true)
+    : VkontakteJob(accessToken, QStringLiteral("photos.createAlbum"), true)
     , d(new Private)
 {
-    addQueryItem("title", title);
+    addQueryItem(QStringLiteral("title"), title);
     if (!description.isEmpty())
-        addQueryItem("description", description);
+        addQueryItem(QStringLiteral("description"), description);
     if (privacy != AlbumInfo::PRIVACY_UNKNOWN)
-        addQueryItem("privacy", QString::number(privacy));
+        addQueryItem(QStringLiteral("privacy"), QString::number(privacy));
     if (comment_privacy != AlbumInfo::PRIVACY_UNKNOWN)
-        addQueryItem("comment_privacy", QString::number(comment_privacy));
+        addQueryItem(QStringLiteral("comment_privacy"), QString::number(comment_privacy));
 }
 
 CreateAlbumJob::~CreateAlbumJob()

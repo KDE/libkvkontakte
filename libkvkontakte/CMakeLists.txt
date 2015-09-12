@@ -60,7 +60,7 @@ target_link_libraries(KF5Vkontakte
         KF5::I18n
         KF5::KIOCore
         KF5::WebKit
-        KF5::KDELibs4Support
+        KF5::WidgetsAddons
     PUBLIC
         Qt5::Core
         Qt5::Gui
