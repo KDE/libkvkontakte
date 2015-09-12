@@ -18,7 +18,7 @@ target_link_libraries(testhelper Qt5::Core Qt5::Test KF5::Vkontakte)
 function(add_vk_test name)
     ecm_add_test(
         ${name}.cpp
-        LINK_LIBRARIES testhelper Qt5::Test KF5::Vkontakte
+        LINK_LIBRARIES testhelper Qt5::Test Qt5::Widgets KF5::Vkontakte
     )
 endfunction(add_vk_test)
 
