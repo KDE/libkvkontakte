@@ -20,7 +20,7 @@
 #ifndef VKTESTBASE_H
 #define VKTESTBASE_H
 
-#include <libkvkontakte/apppermissions.h>
+#include "apppermissions.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QVector>

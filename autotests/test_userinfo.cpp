@@ -19,7 +19,7 @@
 
 #include "test_userinfo.h"
 
-#include <libkvkontakte/userinfojob.h>
+#include "userinfojob.h"
 
 #include <QtTest/QtTest>
 #include <QtCore/QList>

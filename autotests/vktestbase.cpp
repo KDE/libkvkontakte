@@ -19,7 +19,7 @@
 
 #include "vktestbase.h"
 
-#include <libkvkontakte/vkapi.h>
+#include "vkapi.h"
 
 #include <QtCore/QEventLoop>
 #include <QtCore/QFile>

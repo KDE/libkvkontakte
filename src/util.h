@@ -23,7 +23,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include <libkvkontakte/apppermissions.h>
+#include "apppermissions.h"
 
 #include <QStringList>
 

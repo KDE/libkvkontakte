@@ -22,8 +22,8 @@
 #ifndef USERINFOJOB_H
 #define USERINFOJOB_H
 
-#include <libkvkontakte/vkontaktejobs.h>
-#include <libkvkontakte/userinfo.h>
+#include "vkontaktejobs.h"
+#include "userinfo.h"
 
 #include <QtCore/QStringList>
 #include <QtCore/QJsonDocument>

@@ -19,9 +19,9 @@
 
 #include "test_loginproperties.h"
 
-#include <libkvkontakte/getapplicationpermissionsjob.h>
-#include <libkvkontakte/getvariablejob.h>
-#include <libkvkontakte/userinfojob.h>
+#include "getapplicationpermissionsjob.h"
+#include "getvariablejob.h"
+#include "userinfojob.h"
 
 #include <qtest_kde.h>
 

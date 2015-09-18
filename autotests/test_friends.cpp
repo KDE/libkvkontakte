@@ -19,7 +19,7 @@
 
 #include "test_friends.h"
 
-#include <libkvkontakte/friendlistjob.h>
+#include "friendlistjob.h"
 
 #include <qtest_kde.h>
 

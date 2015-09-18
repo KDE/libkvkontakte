@@ -19,7 +19,7 @@
 
 #include "test_database.h"
 
-#include <libkvkontakte/cidsnamesjob.h>
+#include "cidsnamesjob.h"
 
 #include <qtest_kde.h>
 

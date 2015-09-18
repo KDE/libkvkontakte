@@ -28,8 +28,8 @@
 
 // LibKvkontakte includes
 
-#include <libkvkontakte/authenticationdialog.h>
-#include <libkvkontakte/getapplicationpermissionsjob.h>
+#include "authenticationdialog.h"
+#include "getapplicationpermissionsjob.h"
 
 namespace Vkontakte
 {

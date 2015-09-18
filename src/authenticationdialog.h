@@ -22,7 +22,7 @@
 #ifndef AUTHENTICATIONDIALOG_H
 #define AUTHENTICATIONDIALOG_H
 
-#include <libkvkontakte/apppermissions.h>
+#include "apppermissions.h"
 
 #include <QtWidgets/QDialog>
 

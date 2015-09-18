@@ -19,9 +19,9 @@
 
 #include "test_messages.h"
 
-#include <libkvkontakte/messageslistjob.h>
-#include <libkvkontakte/allmessageslistjob.h>
-#include <libkvkontakte/discussionslistjob.h>
+#include "messageslistjob.h"
+#include "allmessageslistjob.h"
+#include "discussionslistjob.h"
 
 #include <qtest_kde.h>
 

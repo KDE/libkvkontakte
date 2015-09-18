@@ -34,7 +34,7 @@ find_package(KF5CoreAddons ${REQUIRED_KF5_VERSION} REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_subdirectory(libkvkontakte)
+add_subdirectory(src)
 
 if (BUILD_TESTING)
     add_subdirectory(autotests)

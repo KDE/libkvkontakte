@@ -23,7 +23,7 @@
 #ifndef VKAPI_H
 #define VKAPI_H
 
-#include <libkvkontakte/apppermissions.h>
+#include "apppermissions.h"
 
 // Qt includes
 

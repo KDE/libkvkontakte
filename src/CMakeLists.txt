@@ -119,7 +119,7 @@ if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
 #         groupinfo.h
 #         grouplistjob.h
         ${CMAKE_CURRENT_BINARY_DIR}/libkvkontakte_export.h
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/Vkontakte/libkvkontakte COMPONENT Devel
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/Vkontakte COMPONENT Devel
     )
 
 endif()

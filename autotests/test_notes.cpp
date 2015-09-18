@@ -19,10 +19,10 @@
 
 #include "test_notes.h"
 
-#include <libkvkontakte/noteaddjob.h>
-#include <libkvkontakte/noteslistjob.h>
-#include <libkvkontakte/allnoteslistjob.h>
-#include <libkvkontakte/notejob.h>
+#include "noteaddjob.h"
+#include "noteslistjob.h"
+#include "allnoteslistjob.h"
+#include "notejob.h"
 
 #include <qtest_kde.h>
 
