@@ -61,6 +61,8 @@ ecm_generate_headers(vk_CAMELCASE_HEADERS
         PhotoInfo
         UploadPhotosJob
 
+
+    PREFIX           Vkontakte
     REQUIRED_HEADERS vk_HEADERS
 )
 
