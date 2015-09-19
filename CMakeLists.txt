@@ -15,6 +15,7 @@ include(FeatureSummary)
 include(GenerateExportHeader)
 
 include(ECMSetupVersion)
+include(ECMGenerateHeaders)
 
 set(LIBKVKONTAKTE_VERSION "4.70.0")
 set(LIBKVKONTAKTE_SOVERSION 5)

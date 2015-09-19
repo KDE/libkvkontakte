@@ -1,4 +1,4 @@
-set(libkvkontakte_SRCS
+set(vk_SRCS
     vkapi.cpp
     getapplicationpermissionsjob.cpp
     authenticationdialog.cpp
@@ -41,12 +41,34 @@ set(libkvkontakte_SRCS
 #     grouplistjob.cpp
 )
 
-add_library(KF5Vkontakte SHARED ${libkvkontakte_SRCS})
+add_library(KF5Vkontakte SHARED ${vk_SRCS})
+add_library(KF5::Vkontakte ALIAS KF5Vkontakte)
+
+ecm_generate_headers(vk_CAMELCASE_HEADERS
+    HEADER_NAMES
+        VkApi
+        AppPermissions
+
+        UserInfo
+        UserInfoJob
+
+        AlbumInfo
+        AlbumListJob
+        CreateAlbumJob
+        EditAlbumJob
+        DeleteAlbumJob
+
+        PhotoInfo
+        UploadPhotosJob
+
+    PREFIX Vkontakte
+    REQUIRED_HEADERS vk_HEADERS
+)
+
 generate_export_header(KF5Vkontakte
     BASE_NAME LibKVkontakte
     EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/libkvkontakte_export.h
 )
-add_library(KF5::Vkontakte ALIAS KF5Vkontakte)
 
 target_include_directories(KF5Vkontakte
     PUBLIC "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>")
@@ -77,47 +99,13 @@ install(TARGETS KF5Vkontakte
     ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-
 if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
 
     install(FILES
-        vkapi.h
-        apppermissions.h
-
+        ${vk_HEADERS}
+        ${vk_CAMELCASE_HEADERS}
         vkontaktejobs.h
 
-        userinfo.h
-        userinfojob.h
-
-        albuminfo.h
-        albumlistjob.h
-        createalbumjob.h
-        editalbumjob.h
-        deletealbumjob.h
-
-        photoinfo.h
-        uploadphotosjob.h
-
-#         getapplicationpermissionsjob.h
-#         authenticationdialog.h
-#         messageinfo.h
-#         noteinfo.h
-#         friendlistjob.h
-#         allnoteslistjob.h
-#         userinfofulljob.h
-#         photojob.h
-#         noteslistjob.h
-#         notejob.h
-#         noteaddjob.h
-#         allmessageslistjob.h
-#         messageslistjob.h
-#         discussionslistjob.h
-#         getvariablejob.h
-#         cidsnamesjob.h
-#         getinfojob.h
-#         photolistjob.h
-#         groupinfo.h
-#         grouplistjob.h
         ${CMAKE_CURRENT_BINARY_DIR}/libkvkontakte_export.h
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/Vkontakte COMPONENT Devel
     )
