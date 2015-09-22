@@ -10,6 +10,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core Network WebKit Widg
 include(KDEInstallDirs)
 include(KDEFrameworkCompilerSettings)
 include(KDECMakeSettings) # for automoc
+include(KDECompilerSettings)
 
 include(FeatureSummary)
 include(GenerateExportHeader)
