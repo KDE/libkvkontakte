@@ -93,20 +93,17 @@ set_target_properties(KF5Vkontakte PROPERTIES
     SOVERSION ${LIBKVKONTAKTE_SOVERSION}
     EXPORT_NAME Vkontakte
 )
+
 install(TARGETS KF5Vkontakte
     EXPORT KF5VkontakteTargets
     ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-if (NOT DIGIKAMSC_COMPILE_LIBKVKONTAKTE)
+install(FILES
+    ${vk_HEADERS}
+    ${vk_CAMELCASE_HEADERS}
+    vkontaktejobs.h
 
-    install(FILES
-        ${vk_HEADERS}
-        ${vk_CAMELCASE_HEADERS}
-        vkontaktejobs.h
-
-        ${CMAKE_CURRENT_BINARY_DIR}/libkvkontakte_export.h
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/Vkontakte COMPONENT Devel
-    )
-
-endif()
+    ${CMAKE_CURRENT_BINARY_DIR}/libkvkontakte_export.h
+    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/Vkontakte COMPONENT Devel
+)
