@@ -1,3 +1,5 @@
+cmake_policy(SET CMP0063 NEW)
+
 include(ECMAddTests)
 
 find_package(Qt5Test ${REQUIRED_QT_VERSION} CONFIG QUIET)
