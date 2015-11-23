@@ -63,7 +63,7 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
 
     QWidget *progressWidget = new QWidget(this);
     QHBoxLayout *progressLayout = new QHBoxLayout(progressWidget);
-    progressLayout->setMargin(0);
+    progressLayout->setContentsMargins(QMargins());
     d->webView = new KWebView(this);
 
     d->progressBar = new QProgressBar(this);
