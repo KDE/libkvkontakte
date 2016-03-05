@@ -1,7 +1,3 @@
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
-
 include(ECMAddTests)
 
 find_package(Qt5Test ${REQUIRED_QT_VERSION} CONFIG QUIET)
