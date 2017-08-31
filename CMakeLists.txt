@@ -18,17 +18,15 @@ include(GenerateExportHeader)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 
-set(LIBKVKONTAKTE_VERSION "4.70.0")
-set(LIBKVKONTAKTE_SOVERSION 5)
+set(LIBKVKONTAKTE_VERSION "5.0.0")
 
-set(REQUIRED_KF5_VERSION "5.3.0")
-# TODO: is it OK to have SOVERSION != 5 for KF5 libraries?
 ecm_setup_version(${LIBKVKONTAKTE_VERSION}
     VARIABLE_PREFIX LIBKVKONTAKTE
     VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kf5vkontakte_version.h"
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5VkontakteConfigVersion.cmake"
     SOVERSION 2)
 
+set(REQUIRED_KF5_VERSION "5.3.0")
 find_package(KF5KIO ${REQUIRED_KF5_VERSION} REQUIRED)
 find_package(KF5I18n ${REQUIRED_KF5_VERSION} REQUIRED)
 find_package(KF5WebKit ${REQUIRED_KF5_VERSION} REQUIRED)
