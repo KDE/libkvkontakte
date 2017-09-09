@@ -40,7 +40,7 @@ public:
     AlbumInfo album() const;
 
 protected:
-    virtual void handleData(const QJsonValue &data);
+    void handleData(const QJsonValue &data) Q_DECL_OVERRIDE;
 
 private:
     class Private;

@@ -41,7 +41,7 @@ public:
     QVariant variable() const;
 
 protected:
-    virtual void handleData(const QVariant &data);
+    void handleData(const QVariant &data) Q_DECL_OVERRIDE;
     
 private:
     class Private;

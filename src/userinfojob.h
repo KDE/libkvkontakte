@@ -71,12 +71,12 @@ protected:
     * @brief Handles the data returned by the VkontakteGetJob
     * @param data A JSON string containing the data.
     */
-    virtual void handleData(const QJsonValue &data);
+    void handleData(const QJsonValue &data) Q_DECL_OVERRIDE;
 
     /**
      * @brief Prepares m_queryItems by several addQueryItem calls
      **/
-    virtual void prepareQueryItems();
+    void prepareQueryItems() Q_DECL_OVERRIDE;
 
 private:
     class Private;

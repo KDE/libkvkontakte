@@ -38,7 +38,7 @@ class LIBKVKONTAKTE_EXPORT KJobWithSubjob : public KJob
 {
 protected:
     /** Kill the currentjobs and its subjobs */
-    virtual bool doKill();
+    bool doKill() Q_DECL_OVERRIDE;
 
     QPointer<KJob> m_job; /** Pointer to the running job */
 };
@@ -47,7 +47,7 @@ class LIBKVKONTAKTE_EXPORT KJobWithSubjobs : public KJob
 {
 protected:
     /** Kill the currentjobs and its subjobs */
-    virtual bool doKill();
+    bool doKill() Q_DECL_OVERRIDE;
 
     QList<KJob *> m_jobs; /** Pointers to running jobs */
 };
@@ -68,7 +68,7 @@ public:
      * */
     VkontakteJob(const QString &accessToken, const QString &method, bool httpPost = false);
 
-    virtual void start();
+    void start() Q_DECL_OVERRIDE;
 
     enum JobErrorType { AuthenticationProblem = KJob::UserDefinedError + 42 };
 

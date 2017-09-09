@@ -35,7 +35,7 @@ public:
     PhotoJob(const QUrl &urlString);
     ~PhotoJob();
 
-    virtual void start();
+    void start() Q_DECL_OVERRIDE;
     QImage photo() const;
 
 private Q_SLOTS:

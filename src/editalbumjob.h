@@ -36,7 +36,7 @@ public:
                  int comment_privacy = AlbumInfo::PRIVACY_UNKNOWN);
 
 protected:
-    virtual void handleData(const QJsonValue &data);
+    void handleData(const QJsonValue &data) Q_DECL_OVERRIDE;
 
 private:
     class Private;

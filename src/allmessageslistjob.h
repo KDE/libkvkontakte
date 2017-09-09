@@ -44,7 +44,7 @@ public:
                        int filters = 0, int timeOffset = 0);
     ~AllMessagesListJob();
 
-    virtual void start();
+    void start() Q_DECL_OVERRIDE;
 
     QList<MessageInfoPtr> list() const;
     int count() const;

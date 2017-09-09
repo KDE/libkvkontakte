@@ -33,7 +33,7 @@ public:
     AllNotesListJob(const QString &accessToken, int uid);
     ~AllNotesListJob();
 
-    virtual void start();
+    void start() Q_DECL_OVERRIDE;
 
     QList<NoteInfoPtr> list() const;
     int count() const;

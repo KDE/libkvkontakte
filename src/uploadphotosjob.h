@@ -43,7 +43,7 @@ public:
                     const QStringList &files, bool saveBig, int aid, int gid = -1);
     ~UploadPhotosJob();
 
-    virtual void start();
+    void start() Q_DECL_OVERRIDE;
 
     QList<PhotoInfo> list() const;
 
