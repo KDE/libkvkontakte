@@ -34,11 +34,6 @@ find_package(KF5CoreAddons ${REQUIRED_KF5_VERSION} REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-# Remove Wsuggest-override GCC flag which generate a lots of compile warnings
-while(CMAKE_CXX_FLAGS MATCHES "-Wsuggest-override")
-    string(REPLACE "-Wsuggest-override" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-endwhile()
-
 add_subdirectory(src)
 
 if (BUILD_TESTING)
