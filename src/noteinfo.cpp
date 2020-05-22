@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2011  Roeland Jago Douma <unix@rullzer.com>
  * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2020  Gilles Caulier <caulier.gilles@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -120,9 +121,9 @@ QString NoteInfo::dateString() const
     return d->date;
 }
 
-KDateTime NoteInfo::date() const
+QDateTime NoteInfo::date() const
 {
-    return unixTimeToKDateTime(d->date);
+    return unixTimeToQDateTime(d->date);
 }
 
 void NoteInfo::setNcom (int ncom)

@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2011  Thomas McGuire <mcguire@kde.org>
  * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2020  Gilles Caulier <caulier.gilles@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,15 +22,16 @@
 
 #include "util.h"
 
+#include <QDateTime>
 #include <QtCore/QString>
 #include <QtCore/QMap>
 
-// KDateTime unixTimeToKDateTime(const QString &unixTime)
-// {
-//     KDateTime res;
-//     res.setTime_t(unixTime.toLongLong());
-//     return res;
-// }
+QDateTime unixTimeToQDateTime(const QString& unixTime)
+{
+    QDateTime res;
+    res.setTime_t(unixTime.toLongLong());
+    return res;
+}
 
 static QMap<Vkontakte::AppPermissions::Value, const char*> initAppPermissionStrings()
 {

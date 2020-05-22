@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2011  Roeland Jago Douma <unix@rullzer.com>
  * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2020  Gilles Caulier <caulier.gilles@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +23,7 @@
 #ifndef NOTEINFO_H
 #define NOTEINFO_H
 
-#include <KDE/KDateTime>
+#include <QDateTime>
 
 #include "libkvkontakte_export.h"
 
@@ -97,9 +98,9 @@ public:
      */
     QString dateString() const;
     /**
-     * Returns the creation date/time in KDateTime
+     * Returns the creation date/time in QDateTime
      */
-    KDateTime date() const;
+    QDateTime date() const;
 
     void setNcom(int ncom);
     int ncom() const;

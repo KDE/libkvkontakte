@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2020  Gilles Caulier <caulier.gilles@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,7 @@
 #ifndef MESSAGEINFO_H
 #define MESSAGEINFO_H
 
-#include <KDE/KDateTime>
+#include <QDateTime>
 
 #include "libkvkontakte_export.h"
 
@@ -62,9 +63,9 @@ public:
      */
     QString dateString() const;
     /**
-     * Returns the creation date/time in KDateTime
+     * Returns the creation date/time in QDateTime
      */
-    KDateTime date() const;
+    QDateTime date() const;
 
     void setUid(int uid);
     int uid() const;
