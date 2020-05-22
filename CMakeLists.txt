@@ -5,7 +5,7 @@ find_package(ECM 5.18.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 set(REQUIRED_QT_VERSION "5.2")
-find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core Network WebKit Widgets)
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Core Network WebEngineWidgets Widgets)
 
 include(KDEInstallDirs)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
@@ -29,7 +29,6 @@ ecm_setup_version(${LIBKVKONTAKTE_VERSION}
 set(REQUIRED_KF5_VERSION "5.3.0")
 find_package(KF5KIO ${REQUIRED_KF5_VERSION} REQUIRED)
 find_package(KF5I18n ${REQUIRED_KF5_VERSION} REQUIRED)
-find_package(KF5WebKit ${REQUIRED_KF5_VERSION} REQUIRED)
 find_package(KF5CoreAddons ${REQUIRED_KF5_VERSION} REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

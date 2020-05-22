@@ -78,9 +78,9 @@ set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
 target_link_libraries(KF5Vkontakte
     PRIVATE
+        Qt5::WebEngineWidgets
         KF5::I18n
         KF5::KIOCore
-        KF5::WebKit
         KF5::WidgetsAddons
     PUBLIC
         Qt5::Core

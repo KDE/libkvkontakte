@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2010  Thomas McGuire <mcguire@kde.org>
  * Copyright (C) 2011, 2015  Alexander Potashev <aspotashev@gmail.com>
+ * Copyright (C) 2020  Gilles Caulier <caulier.gilles@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,19 +22,22 @@
 
 #include "authenticationdialog.h"
 
-#include "util.h"
+#include <QWebEngineView>
+#include <QWebEnginePage>
+#include <QWebEngineProfile>
+#include <QWebEngineCookieStore>
 
-#include <KWebView>
-#include <KMessageBox>
+#include <QMessageBox>
+#include <QTimer>
+#include <QUrlQuery>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QProgressBar>
+#include <QDialogButtonBox>
 
 #include <KLocalizedString>
 
-#include <QtCore/QTimer>
-#include <QtCore/QUrlQuery>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QProgressBar>
-#include <QtWidgets/QDialogButtonBox>
+#include "util.h"
 
 namespace Vkontakte
 {
@@ -45,7 +49,8 @@ public:
     Vkontakte::AppPermissions::Value permissions;
     QString displayMode;
 
-    KWebView *webView;
+    QWebEngineView*    webView;
+
     QProgressBar *progressBar;
 
     QString error;
@@ -64,7 +69,9 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     QWidget *progressWidget = new QWidget(this);
     QHBoxLayout *progressLayout = new QHBoxLayout(progressWidget);
     progressLayout->setContentsMargins(QMargins());
-    d->webView = new KWebView(this);
+
+    d->webView = new QWebEngineView(this);
+    d->webView->page()->profile()->cookieStore()->deleteAllCookies();
 
     d->progressBar = new QProgressBar(this);
     d->progressBar->setRange(0, 100);
@@ -83,13 +90,23 @@ AuthenticationDialog::AuthenticationDialog(QWidget *parent)
     layout->addWidget(buttonBox);
     setLayout(layout);
 
+    connect(buttonBox, &QDialogButtonBox::rejected,
+            this, &AuthenticationDialog::canceled);
 
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &AuthenticationDialog::canceled);
-    connect(d->webView, SIGNAL(urlChanged(QUrl)), this, SLOT(urlChanged(QUrl)));
-    connect(d->webView, SIGNAL(loadStarted()), progressWidget, SLOT(show()));
-    connect(d->webView, SIGNAL(loadFinished(bool)), progressWidget, SLOT(hide()));
-    connect(d->webView, SIGNAL(loadProgress(int)), d->progressBar, SLOT(setValue(int)));
-    connect(d->webView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
+    connect(d->webView, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(urlChanged(QUrl)));
+
+    connect(d->webView, SIGNAL(loadStarted()),
+            progressWidget, SLOT(show()));
+
+    connect(d->webView, SIGNAL(loadFinished(bool)),
+            progressWidget, SLOT(hide()));
+
+    connect(d->webView, SIGNAL(loadProgress(int)),
+            d->progressBar, SLOT(setValue(int)));
+
+    connect(d->webView, SIGNAL(loadFinished(bool)),
+            this, SLOT(loadFinished(bool)));
 }
 
 AuthenticationDialog::~AuthenticationDialog()
@@ -137,8 +154,8 @@ void AuthenticationDialog::showErrorDialog()
     hide();
     const QString details = i18n("<b>VKontakte Error Description:</b> %1<br>"
                                  "<b>VKontakte Error:</b> %2<br>", d->errorDescription, d->error);
-    KMessageBox::detailedSorry(this, i18n("Authentication with VKontakte was not successful."),
-                               details, i18nc("@title:window", "Authentication Problem"));
+    QMessageBox::warning(this, i18n("Authentication with VKontakte was not successful."),
+                         details, i18nc("@title:window", "Authentication Problem"));
     emit canceled();
     close();
 }
@@ -178,9 +195,9 @@ void AuthenticationDialog::loadFinished(bool ok)
     {
         hide();
 
-        KMessageBox::error(parentWidget(),
-                           i18n("There was a network error when trying to authenticate with VKontakte web service."),
-                           i18nc("@title:window", "Network Error"));
+        QMessageBox::critical(parentWidget(),
+                              i18n("There was a network error when trying to authenticate with VKontakte web service."),
+                              i18nc("@title:window", "Network Error"));
 
         emit canceled();
         close();
