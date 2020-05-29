@@ -34,6 +34,7 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QDialogButtonBox>
+#include <QNetworkCookieJar>
 
 #include <KLocalizedString>
 
