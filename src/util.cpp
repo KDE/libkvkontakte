@@ -29,7 +29,8 @@
 QDateTime unixTimeToQDateTime(const QString& unixTime)
 {
     QDateTime res;
-    res.setTime_t(unixTime.toLongLong());
+    res.setSecsSinceEpoch(unixTime.toLongLong());
+
     return res;
 }
 
