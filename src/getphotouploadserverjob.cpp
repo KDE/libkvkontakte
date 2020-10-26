@@ -21,8 +21,8 @@
 #include "getphotouploadserverjob.h"
 #include "uploadphotosjob.h"
 
-#include <QtCore/QVariant>
-#include <QtCore/QDebug>
+#include <QVariant>
+#include <QDebug>
 
 namespace Vkontakte
 {

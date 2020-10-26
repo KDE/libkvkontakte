@@ -25,8 +25,8 @@
 #include "photoinfo.h"
 #include "uploadphotosjob.h"
 
-#include <QtCore/QVariantMap>
-#include <QtCore/QJsonValue>
+#include <QVariantMap>
+#include <QJsonValue>
 
 namespace Vkontakte
 {

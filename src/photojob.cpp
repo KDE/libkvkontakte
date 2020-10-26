@@ -22,8 +22,8 @@
 
 #include <KIO/Job>
 
-#include <QtCore/QDebug>
-#include <QtGui/QImage>
+#include <QDebug>
+#include <QImage>
 
 namespace Vkontakte
 {

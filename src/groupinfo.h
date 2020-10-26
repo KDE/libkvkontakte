@@ -21,7 +21,7 @@
 #ifndef GROUPINFO_H
 #define GROUPINFO_H
 
-#include <QtCore/QSharedPointer>
+#include <QSharedPointer>
 //#include <KDE/KDateTime>
 
 #include "libkvkontakte_export.h"

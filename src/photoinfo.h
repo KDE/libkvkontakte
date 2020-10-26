@@ -21,9 +21,9 @@
 #ifndef PHOTOINFO_H
 #define PHOTOINFO_H
 
-#include <QtCore/QJsonObject>
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QUrl>
+#include <QJsonObject>
+#include <QSharedDataPointer>
+#include <QUrl>
 
 #include "libkvkontakte_export.h"
 

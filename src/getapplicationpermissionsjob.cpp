@@ -20,8 +20,8 @@
 
 #include "getapplicationpermissionsjob.h"
 
-#include <QtCore/QVariant>
-#include <QtCore/QJsonValue>
+#include <QVariant>
+#include <QJsonValue>
 
 namespace Vkontakte
 {

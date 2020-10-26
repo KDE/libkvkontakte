@@ -22,8 +22,8 @@
 
 #include <KLocalizedString>
 
-#include <QtCore/QDebug>
-#include <QtCore/QJsonValue>
+#include <QDebug>
+#include <QJsonValue>
 
 namespace Vkontakte
 {

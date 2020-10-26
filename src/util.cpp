@@ -23,8 +23,8 @@
 #include "util.h"
 
 #include <QDateTime>
-#include <QtCore/QString>
-#include <QtCore/QMap>
+#include <QString>
+#include <QMap>
 
 QDateTime unixTimeToQDateTime(const QString& unixTime)
 {

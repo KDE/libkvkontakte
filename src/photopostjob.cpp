@@ -23,14 +23,14 @@
 #include <KIO/Job>
 #include <KLocalizedString>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QMimeDatabase>
-#include <QtCore/QMimeType>
-#include <QtCore/QJsonDocument>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QHttpMultiPart>
+#include <QFile>
+#include <QFileInfo>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QJsonDocument>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QHttpMultiPart>
 
 namespace Vkontakte
 {

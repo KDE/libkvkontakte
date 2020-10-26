@@ -25,7 +25,7 @@
 
 #include <KJob>
 
-#include <QtCore/QPointer>
+#include <QPointer>
 
 #include "libkvkontakte_export.h"
 

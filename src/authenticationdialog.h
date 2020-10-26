@@ -24,7 +24,7 @@
 
 #include "apppermissions.h"
 
-#include <QtWidgets/QDialog>
+#include <QDialog>
 
 #include "libkvkontakte_export.h"
 

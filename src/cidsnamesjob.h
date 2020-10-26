@@ -21,7 +21,7 @@
 #ifndef CIDSNAMESJOB_H
 #define CIDSNAMESJOB_H
 
-#include <QtCore/QMap>
+#include <QMap>
 
 #include "vkontaktejobs.h"
 #include "qintlist.h"

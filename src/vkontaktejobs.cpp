@@ -26,12 +26,12 @@
 #include <KIO/Job>
 #include <KIO/StoredTransferJob>
 
-#include <QtCore/QDebug>
-#include <QtCore/QTimer>
-#include <QtCore/QUrl>
-#include <QtCore/QUrlQuery>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
+#include <QDebug>
+#include <QTimer>
+#include <QUrl>
+#include <QUrlQuery>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace Vkontakte
 {

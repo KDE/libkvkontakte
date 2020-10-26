@@ -21,8 +21,8 @@
 #include "albumlistjob.h"
 #include "util.h"
 
-#include <QtCore/QJsonArray>
-#include <QtCore/QJsonObject>
+#include <QJsonArray>
+#include <QJsonObject>
 
 namespace Vkontakte
 {

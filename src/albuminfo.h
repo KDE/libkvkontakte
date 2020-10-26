@@ -21,8 +21,8 @@
 #ifndef ALBUMINFO_H
 #define ALBUMINFO_H
 
-#include <QtCore/QJsonObject>
-#include <QtCore/QSharedDataPointer>
+#include <QJsonObject>
+#include <QSharedDataPointer>
 
 #include "libkvkontakte_export.h"
 

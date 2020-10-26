@@ -22,7 +22,7 @@
 #include "messageinfo.h"
 #include "util.h"
 
-#include <QtCore/QRegExp>
+#include <QRegExp>
 
 namespace Vkontakte
 {

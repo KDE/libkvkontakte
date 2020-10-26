@@ -25,9 +25,9 @@
 #include "vkontaktejobs.h"
 #include "userinfo.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
+#include <QStringList>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace Vkontakte
 {

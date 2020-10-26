@@ -20,8 +20,8 @@
 
 #include "cidsnamesjob.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include <QMap>
+#include <QVariant>
 
 namespace Vkontakte
 {

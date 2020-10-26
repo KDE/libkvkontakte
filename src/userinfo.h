@@ -22,9 +22,9 @@
 #ifndef USERINFO_H
 #define USERINFO_H
 
-#include <QtCore/QMetaType>
-#include <QtCore/QJsonObject>
-#include <QtCore/QSharedDataPointer>
+#include <QMetaType>
+#include <QJsonObject>
+#include <QSharedDataPointer>
 
 #include "libkvkontakte_export.h"
 

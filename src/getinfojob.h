@@ -21,7 +21,7 @@
 #ifndef GETINFOJOB_H
 #define GETINFOJOB_H
 
-#include <QtCore/QVariantMap>
+#include <QVariantMap>
 
 #include "vkontaktejobs.h"
 
