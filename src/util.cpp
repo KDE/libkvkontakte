@@ -28,10 +28,7 @@
 
 QDateTime unixTimeToQDateTime(const QString& unixTime)
 {
-    QDateTime res;
-    res.setSecsSinceEpoch(unixTime.toLongLong());
-
-    return res;
+    return QDateTime::fromSecsSinceEpoch(unixTime.toLongLong());
 }
 
 static QMap<Vkontakte::AppPermissions::Value, const char*> initAppPermissionStrings()
